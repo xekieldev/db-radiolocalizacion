@@ -1,6 +1,8 @@
 <script setup>
 import { useApi } from '../composables/api'
 import FormRow from '../components/FormRow.vue'
+import Mapa from '../components/Mapa.vue'
+
 
 const submitHandler = async (fields) => {
   console.log(fields)
@@ -44,8 +46,7 @@ const area = [{
 <template>
   <form-kit type="form" @submit="submitHandler">
     <form-row>
-      <form-kit type="text" label="Expediente" name="expediente" validation="required| text"
-        validation-visibility="live" />
+      <form-kit type="text" label="Expediente" name="expediente" validation="required| text" validation-visibility="live" />
     </form-row>
     <form-row>
       <form-kit type="date" label="Fecha" name="fecha" />
@@ -59,13 +60,13 @@ const area = [{
       <form-kit type="text" label="Señal distintiva/Identificación" name="claseEmision" />
     </form-row>
     <form-row>
-      <form-kit type="text" label="Localidad" name="localidad" />
-      <form-kit type="text" label="Provincia" name="provincia" />
+      <form-kit type="text" label="Localidad" name="localidad" validation="required| text"/>
+      <form-kit type="text" label="Provincia" name="provincia" validation="required| text" />
     </form-row>
     <form-row>
-      <form-kit type="text" label="Domicilio" name="domicilio" />
-      <form-kit type="number" label="Latitud" name="latitud" />
-      <form-kit type="number" label="Longitud" name="longitud" />
+      <form-kit type="text" label="Domicilio" name="domicilio" validation="required| text"/>
+      <form-kit type="number" label="Latitud" name="latitud" validation="required| number"/>
+      <form-kit type="number" label="Longitud" name="longitud" validation="required| number"/>
 
     </form-row>
     <form-row>
@@ -89,6 +90,7 @@ const area = [{
     </form-row>
 
   </form-kit>
+  <mapa :position="[47.313220, -1.319482]"></mapa>
 </template>
 
   
@@ -99,5 +101,11 @@ const area = [{
     display: flex;
     align-items: center;
   }
-}</style>
+
+  /* input[name="expediente"] {
+    display: flex;
+    background-color: aquamarine;
+  } */
+}
+</style>
   
