@@ -1,17 +1,15 @@
 <script setup>
-import { useApi } from '../composables/api'
-import FormRow from '../components/FormRow.vue'
-import Mapa from '../components/Mapa.vue'
+import FormRow from './FormRow.vue'
 
-
-const submitHandler = async (fields) => {
-  console.log(fields)
-  const api = useApi()
-  const all = await api.list()
-  console.log(all)
-  api.create(fields)
-
+const emit = defineEmits(['onSubmit'])
+const props = defineProps({
+  context: String,
+  title: String,
+})
+function submitHandler(fields) {
+  emit('onSubmit', fields)
 }
+
 const area = [{
   value: 'AGCCTYL',
   label: 'AGCCTYL'
@@ -41,13 +39,17 @@ const area = [{
   label: 'Com. Rivadavia'
 }]
 
+
+
 </script>
 
 <template>
-  <form-kit type="form" @submit="submitHandler">
+
+  <h2>{{title}}</h2>
+  <form-kit type="form" @submit="submitHandler" submit-label="Cargar">
     <form-row>
-      <form-kit type="text" label="Expediente" name="expediente" :validation="[['required'], ['matches', /^EX-\d{4}-\d{8}-\s{2}-[A-Z]{3}-[A-Z]{5}#[A-Z]{6}$/,
-        /^IF-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{5}#[A-Z]{6}$/,/^NO-\d{4}-\d{8}-[A-Z]{3,8}-[A-Z]{3,10}#?[A-Z]{6}?$/]]"
+      <form-kit type="text" label="Expediente" name="expediente" :validation="[['required'], ['matches', /^EX-\d{4}-\d{6,10}-\s{2,3}-[A-Z]{3,7}-[A-Z]{3,10}#[A-Z]{2,8}$/,
+        /^IF-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{5}#[A-Z]{6}$/,/^NO-\d{4}-\d{8}-[A-Z]{3,8}-[A-Z]{3,10}#?[A-Z]{6}?$/,/^[A-Z]{5,20}\s?E?\s?\s\d{1,8}\/\d{4}$/]]"
         validation-visibility="live" />
     </form-row>
     <form-row>
@@ -55,9 +57,9 @@ const area = [{
       <form-kit type="time" label="Hora" name="hora" />
       <form-kit type="select" label="CCTE/Área" name="area" :options="area" />
     </form-row>
-    <form-row>
+    <!--form-row>
       <form-kit type="text" label="Servicio" name="servicio" />
-      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.001" validation-visibility="live" />
+      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.001" validation-visibility="live" v-if="props.context === 'Radiolocalizacion'"/>
       <form-kit type="text" label="Clase de Emisión" name="claseEmision" />
       <form-kit type="text" label="Señal distintiva/Identificación" name="claseEmision" />
     </form-row>
@@ -74,7 +76,7 @@ const area = [{
     <form-row>
       <form-kit type="textarea" label="Observaciones" name="observacionesDom" />
 
-    </form-row>
+    </form-row-->
 
     <form-row>
       <form-kit type="text" label="Sistema Irradiante" name="irradiante" />
@@ -92,22 +94,10 @@ const area = [{
     </form-row>
 
   </form-kit>
-  <mapa :position="[47.313220, -1.319482]"></mapa>
 </template>
 
   
 <style>
-@media (min-width: 1024px) {
-  .form {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
 
-  /* input[name="expediente"] {
-    display: flex;
-    background-color: aquamarine;
-  } */
-}
 </style>
   
