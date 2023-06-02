@@ -7,19 +7,17 @@ const citiesData = citiesDataRaw.localidades
 console.log(citiesData)
 console.log(provincesData)
 
-const ciudades = citiesData.map(ctemp => ctemp.nombre)
-console.log(ciudades)
-
 export function useTerritory() {
   const provinces = ref([])
   const cities = ref([])
   
   function getTerritories() {
     provinces.value = provincesData.map(p => ({ label: p.nombre, value: p.id }))
-    cities.value = citiesData.filter(c => c.provinceId === 0).map(c => ({ label: c.nombre, value: c.id }))
+    cities.value = citiesData.filter(c => c.provincia.id === "54").map(c => ({ label: c.nombre, value: c.id }))
   }
   
   function getProvinceCities(provinceId) {
+    debbuger
     cities.value = citiesData.filter(c => c.provincia.id === provinceId).map(c => ({ label: c.nombre, value: c.id }))
   }
   
