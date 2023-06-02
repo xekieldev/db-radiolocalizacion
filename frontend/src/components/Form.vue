@@ -41,7 +41,7 @@ const area = [{
   label: 'Com. Rivadavia'
 }]
 
-const values = ref({ province: 0, city: 0 })
+const values = ref({ province: "54", city: "06021010000" })
 
 const { provinces, cities, getProvinceCities } = useTerritory()
 
