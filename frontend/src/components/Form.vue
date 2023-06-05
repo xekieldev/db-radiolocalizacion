@@ -8,6 +8,7 @@ import { usePolarization } from '../composables/polarization'
 import { useService } from '../composables/service'
 import { useTechnician } from '../composables/technician'
 import { useUnit } from '../composables/unit'
+import { useStationType } from '../composables/stationtype'
 
 
 const emit = defineEmits(['onSubmit'])
@@ -37,6 +38,7 @@ const { tipoPolarizacion } = usePolarization()
 const { servicio } = useService()
 const { tecnico } = useTechnician()
 const { unidad } = useUnit()
+const { emplazamiento } = useStationType()
 
 </script>
 
@@ -56,12 +58,14 @@ const { unidad } = useUnit()
       <form-kit type="select" label="CCTE/Área" name="area" :options="area" placeholder="Área" />
     </form-row>
     <form-row>
+      <form-kit type="select" label="Tipo de Emplazamiento" name="emplazamiento" :options="emplazamiento" placeholder="Emplazamiento" validation-label="servicio"
+      validation-visibility="live" />
       <form-kit type="select" label="Servicio" name="servicio" :options="servicio" placeholder="Servicio" validation-label="servicio"
         validation-visibility="live" />
-      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.001" suffix="MHz" validation-visibility="live"
+      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.00001" suffix="MHz" validation-visibility="live"
         v-if="props.context === 'Radiolocalizacion'" />
-        <form-kit type="select" label="Unidad" name="unidad" :options="unidad"/>
-      <form-kit type="text" label="Clase de Emisión" name="claseEmision"/>
+        <form-kit type="select" label="Unidad" name="unidad" :options="unidad" v-if="props.context === 'Radiolocalizacion'"/>
+      <form-kit type="text" label="Clase de Emisión" name="claseEmision" v-if="props.context === 'Radiolocalizacion'"/>
       <form-kit type="text" label="Señal distintiva/Identificación" name="claseEmision" />
     </form-row>
     <form-row>
@@ -72,8 +76,8 @@ const { unidad } = useUnit()
     </form-row>
     <form-row>
       <form-kit type="text" label="Domicilio" name="domicilio" validation="required| text" />
-      <form-kit type="number" label="Latitud" name="latitud" validation="required| number" />
-      <form-kit type="number" label="Longitud" name="longitud" validation="required| number" />
+      <form-kit type="number" label="Latitud" name="latitud" step="0.00001" validation="required| number" />
+      <form-kit type="number" label="Longitud" name="longitud" step="0.00001" validation="required| number" />
 
     </form-row>
     <form-row>
@@ -81,15 +85,16 @@ const { unidad } = useUnit()
     </form-row>
 
     <form-row>
-      <form-kit type="text" label="Sistema Irradiante" name="irradiante" />
-      <form-kit type="select" label="Polarización" name="polarizacion" :options="tipoPolarizacion" placeholder="Polarización"/>
-      <form-kit type="text" label="Cantidad" name="cantidad" />
-      <form-kit type="text" label="Altura Media" name="altura" />
+      <form-kit type="text" label="Sistema Irradiante" name="irradiante" v-if="props.context === 'Radiolocalizacion'"/>
+      <form-kit type="select" label="Polarización" name="polarizacion" :options="tipoPolarizacion" placeholder="Polarización" v-if="props.context === 'Radiolocalizacion'"/>
+      <form-kit type="text" label="Cantidad" name="cantidad" v-if="props.context === 'Radiolocalizacion'"/>
+      <form-kit type="text" label="Altura Media" name="altura" help="Altura en metros" v-if="props.context === 'Radiolocalizacion'"/>
 
     </form-row>
     <form-row>
       <form-kit type="select" label="Tipo de Vínculo" name="tipoVinculo" :options="tipoVinculo" placeholder="Vínculo" />
-      <form-kit type="text" label="Frecuencia Vínculo" name="frecuenciaVinc" step="0.001" validation-visibility="live"/>
+      <form-kit type="text" label="Frecuencia Vínculo" name="frecuenciaVinc" step="0.00001" validation-visibility="live"/>
+      <form-kit type="select" label="Unidad" name="unidad" :options="unidad"/>
       <form-kit type="text" label="Sistema Irradiante" name="irradianteVinc" />
       <form-kit type="select" label="Polarización" name="polarizacionVinc" :options="tipoPolarizacion" placeholder="Polarización"/>
     </form-row>
@@ -99,7 +104,7 @@ const { unidad } = useUnit()
     </form-row>
 
   </form-kit>
-  <p>Value: {{ values }}</p>
+  <!-- <p>Value: {{ values }}</p> -->
 </template>
 
   

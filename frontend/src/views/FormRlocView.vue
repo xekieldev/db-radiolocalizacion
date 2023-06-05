@@ -1,6 +1,6 @@
 <script setup>
 import { useLocalStorage } from '../composables/localstorage'
-import Fest from '../components/Form.vue'
+import Frloc from '../components/Form.vue'
 import { onBeforeMount, reactive } from 'vue'
 
 // El 1000 es la cantidad de milisegundos que se tardarán
@@ -38,14 +38,10 @@ async function save(fields) {
 </script>
 
 <template>
-  <fest
+  <frloc
     @on-submit="save"
-    title="Planilla de Radiolocalización" 
+    title="Datos de Radiolocalización" 
     context="Radiolocalizacion"/>
-    <div class="status">
-      <span><strong>Loading:</strong> {{ loading }}</span>
-      <span><strong>Items:</strong> {{ items}}</span>
-    </div>
 </template>
 
 <style scoped>

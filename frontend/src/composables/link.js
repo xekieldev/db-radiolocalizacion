@@ -1,10 +1,13 @@
 export function useLink() {
     const tipoVinculo = [{
-        value: 'Radioeéctrico',
+        value: 'Radioeléctrico',
         label: 'Radioeléctrico'
     }, {
         value: 'Físico',
         label: 'Físico'
+    }, {
+        value: 'No Aplica',
+        label: 'No Aplica'
     }]
 
     return { tipoVinculo }

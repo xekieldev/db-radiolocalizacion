@@ -5,7 +5,7 @@ import formtc from "../components/FormTM.vue"
 <template>
     <formtc
    @on-submit="save"
-    title="Planilla de Mediciones Externas"/>
+    title="Mediciones Externas"/>
 </template>
 
 <style scoped></style>

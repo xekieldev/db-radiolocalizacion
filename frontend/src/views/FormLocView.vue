@@ -1,11 +1,7 @@
 <script setup>
 import { useLocalStorage } from '../composables/localstorage'
+import Floc from '../components/Form.vue'
 import { onBeforeMount, reactive } from 'vue'
-
-// const ls = useLocalStorage()
-// debugger
-// const data = ls.list()
-// console.log(data)
 
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
@@ -28,35 +24,26 @@ onBeforeMount(async () => {
 })
 
 async function save(fields) {
-    try {
-        const newData = await create(fields)
-        items.splice(0, items.length)
-        const data = await list()
-        items.push(...data)
-
-    } catch (error) {
-
-    }
-
+  try {
+    const newData = await create(fields)
+    items.splice(0, items.length)
+    const data = await list()
+    items.push(...data)
+    
+  } catch (error) {
+  
+  }
+  
 }
-
-
 </script>
+
 <template>
-    <ul>
-        <li v-for="item in items">Expediente: {{ item.expediente }} - Área: {{ item.area }}</li>
-        <p>Detalle local storage</p>
-        <div class="status">
-            <span><strong>Loading:</strong> {{ loading }}</span>
-            <br>
-            <span><strong>Items:</strong><br> {{ items }}</span>
-            <br>
-        </div>
-    </ul>
+  <floc
+    @on-submit="save"
+    title="Datos de Localización" 
+    context="Localizacion"/>
 </template>
 
 <style scoped>
-.status{
-    background-color: lightyellow;
-}
+
 </style>

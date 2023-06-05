@@ -4,10 +4,10 @@ import citiesDataRaw from "../../../data/localidades.json"
 
 function capitalizeWords(str) {
   return str
-      .toLowerCase()
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 
@@ -29,7 +29,7 @@ export function useTerritory() {
     provinces.value = provincesData.map(p => ({ label: p.nombre.toUpperCase(), value: p.id }))
     cities.value = citiesData.filter(c => c.provincia.id === "54").map(c => ({ label: c.nombre, value: c.id }))
   }
-  
+
   function getProvinceCities(provinceId) {
     cities.value = citiesData.filter(c => c.provincia.id === provinceId).map(c => ({ label: c.nombre, value: c.id }))
   }

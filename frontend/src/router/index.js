@@ -34,12 +34,19 @@ const router = createRouter({
       component: () => import('../components/Mapa.vue')
     },
     {
-      path: '/sheet',
-      name: 'sheet',
+      path: '/rloc',
+      name: 'rloc',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/FormRlocView.vue')
+    },{
+      path: '/loc',
+      name: 'loc',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FormLocView.vue')
     },
     {
       path: '/list',
