@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@formkit/vue": "^0.16.5",
+    "@formkit/vue": "^0.17.0",
     "axios": "^1.4.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"

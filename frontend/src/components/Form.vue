@@ -2,6 +2,13 @@
 import FormRow from './FormRow.vue'
 import { ref, unref, watch, reactive } from 'vue'
 import { useTerritory } from '../composables/territory'
+import { useLink } from '../composables/link'
+import { useArea } from '../composables/area'
+import { usePolarization } from '../composables/polarization'
+import { useService } from '../composables/service'
+import { useTechnician } from '../composables/technician'
+import { useUnit } from '../composables/unit'
+
 
 const emit = defineEmits(['onSubmit'])
 const props = defineProps({
@@ -11,54 +18,6 @@ const props = defineProps({
 function submitHandler(fields) {
   emit('onSubmit', fields)
 }
-const tipoVinculo = [{
-  value: 'Radioeéctrico',
-  label: 'Radioeléctrico'
-}, {
-  value: 'Físico',
-  label: 'Físico'
-}]
-
-const tipoPolarizacion = [{
-  value: 'Vertical',
-  label: 'Vertical'
-}, {
-  value: 'Horizontal',
-  label: 'Horizontal'
-}, {
-  value: 'Circular',
-  label: 'Circular'
-}
-]
-
-const area = [{
-  value: 'AGCCTYL',
-  label: 'AGCCTYL'
-},
-{
-  value: 'Buenos Aires',
-  label: 'Buenos Aires'
-},
-{
-  value: 'Cordoba',
-  label: 'Córdoba'
-},
-{
-  value: 'Salta',
-  label: 'Salta'
-},
-{
-  value: 'Posadas',
-  label: 'Posadas'
-},
-{
-  value: 'Neuquen',
-  label: 'Neuquén'
-},
-{
-  value: 'Comodoro Rivadavia',
-  label: 'Com. Rivadavia'
-}]
 
 const province = ref("54")
 const city = ref("06021010000")
@@ -71,6 +30,13 @@ watch(province, (newValue, oldValue) => {
   }
 })
 const values = { province, city }
+
+const { tipoVinculo } = useLink()
+const { area } = useArea()
+const { tipoPolarizacion } = usePolarization()
+const { servicio } = useService()
+const { tecnico } = useTechnician()
+const { unidad } = useUnit()
 
 </script>
 
@@ -87,20 +53,21 @@ const values = { province, city }
     <form-row>
       <form-kit type="date" label="Fecha" name="fecha" />
       <form-kit type="time" label="Hora" name="hora" />
-      <form-kit type="select" label="CCTE/Área" name="area" :options="area" />
+      <form-kit type="select" label="CCTE/Área" name="area" :options="area" placeholder="Área" />
     </form-row>
     <form-row>
-      <form-kit type="text" label="Servicio" name="servicio" validation-label="servicio"
+      <form-kit type="select" label="Servicio" name="servicio" :options="servicio" placeholder="Servicio" validation-label="servicio"
         validation-visibility="live" />
-      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.001" validation-visibility="live"
+      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.001" suffix="MHz" validation-visibility="live"
         v-if="props.context === 'Radiolocalizacion'" />
-      <form-kit type="text" label="Clase de Emisión" name="claseEmision" />
+        <form-kit type="select" label="Unidad" name="unidad" :options="unidad"/>
+      <form-kit type="text" label="Clase de Emisión" name="claseEmision"/>
       <form-kit type="text" label="Señal distintiva/Identificación" name="claseEmision" />
     </form-row>
     <form-row>
-      <form-kit type="select" label="Provincia" v-model="province" name="province" :options="provinces"
+      <form-kit type="select" label="Provincia" v-model="province" name="province" :options="provinces" 
         validation="required| text" />
-      <form-kit type="select" label="Localidad" v-model="city" name="city" :options="cities"
+      <form-kit type="select" label="Localidad" v-model="city" name="city" :options="cities" 
         validation="required| text" />
     </form-row>
     <form-row>
@@ -115,17 +82,20 @@ const values = { province, city }
 
     <form-row>
       <form-kit type="text" label="Sistema Irradiante" name="irradiante" />
-      <form-kit type="select" label="Polarización" name="polarizacion" :options="tipoPolarizacion"/>
+      <form-kit type="select" label="Polarización" name="polarizacion" :options="tipoPolarizacion" placeholder="Polarización"/>
       <form-kit type="text" label="Cantidad" name="cantidad" />
       <form-kit type="text" label="Altura Media" name="altura" />
 
     </form-row>
     <form-row>
-      <form-kit type="select" label="Tipo de Vínculo" name="tipoVinculo" :options="tipoVinculo" />
+      <form-kit type="select" label="Tipo de Vínculo" name="tipoVinculo" :options="tipoVinculo" placeholder="Vínculo" />
       <form-kit type="text" label="Frecuencia Vínculo" name="frecuenciaVinc" step="0.001" validation-visibility="live"/>
       <form-kit type="text" label="Sistema Irradiante" name="irradianteVinc" />
-      <form-kit type="select" label="Polarización" name="polarizacionVinc" :options="tipoPolarizacion"/>
-
+      <form-kit type="select" label="Polarización" name="polarizacionVinc" :options="tipoPolarizacion" placeholder="Polarización"/>
+    </form-row>
+    <form-row>
+      <form-kit type="select" label="Técnico" name="tecnico" :options="tecnico" placeholder="Técnico 1"/>
+      <form-kit type="select" label="Técnico" name="tecnico" :options="tecnico" placeholder="Técnico 2"/>
     </form-row>
 
   </form-kit>
