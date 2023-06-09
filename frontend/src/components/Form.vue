@@ -93,7 +93,7 @@ const { emplazamiento } = useStationType()
     </form-row>
     <form-row>
       <form-kit type="select" label="Tipo de Vínculo" name="tipoVinculo" :options="tipoVinculo" placeholder="Vínculo" />
-      <form-kit type="text" label="Frecuencia Vínculo" name="frecuenciaVinc" step="0.00001" validation-visibility="live"/>
+      <form-kit type="number" label="Frecuencia Vínculo" name="frecuenciaVinc" step="0.00001" validation-visibility="live"/>
       <form-kit type="select" label="Unidad" name="unidad" :options="unidad"/>
       <form-kit type="text" label="Sistema Irradiante" name="irradianteVinc" />
       <form-kit type="select" label="Polarización" name="polarizacionVinc" :options="tipoPolarizacion" placeholder="Polarización"/>

@@ -45,7 +45,7 @@ const { tecnico} = useTechnician()
     </form-row>
     <form-row>
       <form-kit type="number" label="Distancia" name="distancia" help="Distancia en metros"/>
-      <form-kit type="number" label="Azimut" name="azimut" />
+      <form-kit type="number" label="Azimut" name="azimut" help="Azimut en grados decimales"/>
     </form-row>
     <form-row>
       <form-kit type="number" label="Frecuencia Característica" name="frecuenciaCaract" step="0.001"
