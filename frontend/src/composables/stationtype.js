@@ -1,5 +1,8 @@
 export function useStationType() {
     const emplazamiento = [{
+        value: 'Estudio y Planta Transmisora',
+        label: 'Estudio y Planta Transmisora'
+    }, {
         value: 'Planta Transmisora',
         label: 'Planta Transmisora'
     }, {

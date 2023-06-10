@@ -3,6 +3,7 @@ import { useLocalStorage } from '../composables/localstorage'
 import Frloc from '../components/Form.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/Mapa.vue'
+import { useRlocFormData } from '../composables/rloc-form-data'
 
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
@@ -16,6 +17,7 @@ const { create, list, loading } = useLocalStorage(1000)
 // el valor de la variable se actualiza automáticamente en el
 // template sin necesidad de que su valor sea reasignado
 const items = reactive([])
+const { lat, lng } = useRlocFormData()
 
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
@@ -43,7 +45,7 @@ async function save(fields) {
     @on-submit="save"
     title="Datos de Radiolocalización" 
     context="Radiolocalizacion"/>
-  <mapa :position="[47.313220, -1.319482]"></mapa>
+  <mapa :position="[ lat, lng ]"></mapa>
 
 </template>
 

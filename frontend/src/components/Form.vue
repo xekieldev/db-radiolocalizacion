@@ -9,6 +9,8 @@ import { useService } from '../composables/service'
 import { useTechnician } from '../composables/technician'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
+import { useRlocFormData } from '../composables/rloc-form-data'
+
 
 
 const emit = defineEmits(['onSubmit'])
@@ -39,6 +41,8 @@ const { servicio } = useService()
 const { tecnico } = useTechnician()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
+// const { lat, lng } = useRlocFormData()
+const store = useRlocFormData()
 
 </script>
 
@@ -76,8 +80,8 @@ const { emplazamiento } = useStationType()
     </form-row>
     <form-row>
       <form-kit type="text" label="Domicilio" name="domicilio" validation="required| text" />
-      <form-kit type="number" label="Latitud" name="latitud" step="0.00001" validation="required| number" />
-      <form-kit type="number" label="Longitud" name="longitud" step="0.00001" validation="required| number" />
+      <form-kit type="number" label="Latitud" name="lat" step="0.00001" v-model="store.lat" validation="required| number" />
+      <form-kit type="number" label="Longitud" name="lng" step="0.00001" v-model="store.lng" validation="required| number" />
 
     </form-row>
     <form-row>
