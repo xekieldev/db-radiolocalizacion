@@ -66,7 +66,7 @@ const store = useRlocFormData()
       validation-visibility="live" />
       <form-kit type="select" label="Servicio" name="servicio" :options="servicio" placeholder="Servicio" validation-label="servicio"
         validation-visibility="live" />
-      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.00001" suffix="MHz" validation-visibility="live"
+      <form-kit type="number" label="Frecuencia" name="frecuencia" step="0.000001" suffix="MHz" validation-visibility="live"
         v-if="props.context === 'Radiolocalizacion'" />
         <form-kit type="select" label="Unidad" name="unidad" :options="unidad" v-if="props.context === 'Radiolocalizacion'"/>
       <form-kit type="text" label="Clase de Emisión" name="claseEmision" v-if="props.context === 'Radiolocalizacion'"/>
@@ -80,8 +80,8 @@ const store = useRlocFormData()
     </form-row>
     <form-row>
       <form-kit type="text" label="Domicilio" name="domicilio" validation="required| text" />
-      <form-kit type="number" label="Latitud" name="lat" step="0.00001" v-model="store.lat" validation="required| number" />
-      <form-kit type="number" label="Longitud" name="lng" step="0.00001" v-model="store.lng" validation="required| number" />
+      <form-kit type="number" label="Latitud" name="lat" step="0.000001" v-model="store.lat" validation="required| number" />
+      <form-kit type="number" label="Longitud" name="lng" step="0.000001" v-model="store.lng" validation="required| number" />
 
     </form-row>
     <form-row>

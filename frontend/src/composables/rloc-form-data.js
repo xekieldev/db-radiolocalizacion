@@ -13,8 +13,8 @@ export const useRlocFormData = defineStore('rlocFormData', {
     // const lat = ref(-29)
     // const lng = ref(-66)
 
-    return { lat : 0,
-             lng : 0
+    return { lat : -34.6037,
+             lng : -58.3816
             }
     },
 })
