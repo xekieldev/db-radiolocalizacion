@@ -10,6 +10,7 @@ import { useTechnician } from '../composables/technician'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
 import { useRlocFormData } from '../composables/rloc-form-data'
+import { useFileValidation } from '../composables/filevalidation'
 
 
 
@@ -43,6 +44,7 @@ const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
 // const { lat, lng } = useRlocFormData()
 const store = useRlocFormData()
+const { fileRegEx1, fileRegEx2, fileRegEx3, fileRegEx4, fileRegEx5 } = useFileValidation()
 
 </script>
 
@@ -50,11 +52,7 @@ const store = useRlocFormData()
   <h2>{{ title }}</h2>
   <form-kit type="form" @submit="submitHandler" submit-label="Cargar">
     <form-row>
-      <form-kit type="text" label="Expediente" name="expediente" :validation="[['required'], ['matches', /^EX-\d{4}-\d{6,10}-\s{2,3}-[A-Z]{3,7}-[A-Z]{3,10}#[A-Z]{2,8}$/,
-        /^IF-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{5}#[A-Z]{6}$/,
-        /^NO-\d{4}-\d{8}-[A-Z]{3,8}-[A-Z]{3,10}#?[A-Z]{6}?$/,
-        /^[A-Z]{5,20}\s?E?\s?\s\d{1,8}\/\d{4}$/,
-        /^A\s{1}definir$/]]" validation-visibility="live" />
+      <form-kit type="text" label="Expediente" name="expediente" :validation="[['required'], ['matches', fileRegEx1, fileRegEx2, fileRegEx3, fileRegEx4, fileRegEx5]]" validation-visibility="live" />
     </form-row>
     <form-row>
       <form-kit type="date" label="Fecha" name="fecha" />
@@ -82,6 +80,7 @@ const store = useRlocFormData()
       <form-kit type="text" label="Domicilio" name="domicilio" validation="required| text" />
       <form-kit type="number" label="Latitud" name="lat" step="0.000001" v-model="store.lat" validation="required| number" />
       <form-kit type="number" label="Longitud" name="lng" step="0.000001" v-model="store.lng" validation="required| number" />
+      <form-kit v-model="store.zoom" type="range" label="Zoom" min="14" max="18" />
 
     </form-row>
     <form-row>
