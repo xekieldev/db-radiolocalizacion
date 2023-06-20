@@ -71,7 +71,7 @@ const { validateFile } = useFileValidation()
       <form-kit type="select" label="Unidad" name="unidad" :options="unidad"
         v-if="props.context === 'Radiolocalizacion'" />
       <form-kit type="text" label="Clase de Emisión" name="claseEmision" v-if="props.context === 'Radiolocalizacion'" />
-      <form-kit type="text" label="Señal distintiva/Identificación" name="claseEmision"
+      <form-kit type="text" label="Señal distintiva/Identificación" name="identificacion"
         @keyup="this.value = this.value.toUpperCase()" />
     </form-row>
     <form-row>
@@ -123,6 +123,5 @@ const { validateFile } = useFileValidation()
   
 <style scoped>
 
-text-transform: uppercase;
 </style>
   
