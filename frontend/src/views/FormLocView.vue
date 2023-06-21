@@ -7,7 +7,7 @@ import Mapa from '../components/MapMain.vue'
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
-const { create, list, loading } = useLocalStorage(1000)
+const { create, list } = useLocalStorage(1000)
 
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
@@ -34,7 +34,6 @@ async function save(fields) {
   } catch (error) {
   
   }
-  
 }
 </script>
 
