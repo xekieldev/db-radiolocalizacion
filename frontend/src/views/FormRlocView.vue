@@ -1,6 +1,6 @@
 <script setup>
 import { useLocalStorage } from '../composables/localstorage'
-import Frloc from '../components/Form.vue'
+import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/Map.vue'
 import { useRlocFormData } from '../composables/rloc-form-data'

@@ -1,6 +1,6 @@
 <script setup>
 import { useLocalStorage } from '../composables/localstorage'
-import Floc from '../components/Form.vue'
+import Floc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Map from '../components/Map.vue'
 

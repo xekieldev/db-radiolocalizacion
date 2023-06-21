@@ -1,6 +1,6 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { ref, unref, watch, reactive } from 'vue'
+import { ref, watch } from 'vue'
 import { useTerritory } from '../composables/territory'
 import { useLink } from '../composables/link'
 import { useArea } from '../composables/area'
@@ -33,7 +33,6 @@ watch(province, (newValue, oldValue) => {
     city.value = cities.value[0]
   }
 })
-const values = { province, city }
 
 const { tipoVinculo } = useLink()
 const { area } = useArea()
@@ -42,7 +41,6 @@ const { servicio } = useService()
 const { tecnico } = useTechnician()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
-// const { lat, lng } = useRlocFormData()
 const store = useRlocFormData()
 const { validateFile } = useFileValidation()
 
@@ -270,7 +268,6 @@ const { validateFile } = useFileValidation()
       />
     </form-row>
   </form-kit>
-  <!-- <p>Value: {{ values }}</p> -->
 </template>
 
   
