@@ -1,7 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
 import FormRow from '../components/FormRow.vue'
-import Mapa from '../components/Map.vue'
+import Mapa from '../components/MapMain.vue'
 
 
 const submitHandler = async (fields) => {

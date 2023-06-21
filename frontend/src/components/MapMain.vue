@@ -1,5 +1,5 @@
 <template>
-  <div style="height:600px; width:800px">
+  <div class="map-container">
     <l-map
       ref="map"
       v-model:zoom="store.zoom"
@@ -32,12 +32,11 @@ import { useRlocFormData } from '../composables/rloc-form-data'
 
 const store = useRlocFormData()
 
-const props = defineProps({
-  position: Array
-})
-
-const zoom = 18
-
 </script>
 
-<style></style>
+<style scoped>
+.map-container {
+  height: 600px;
+  width: 800px;
+}
+</style>
