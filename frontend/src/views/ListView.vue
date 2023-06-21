@@ -44,7 +44,10 @@ async function save(fields) {
 </script>
 <template>
   <ul>
-    <li v-for="item in items">
+    <li
+      v-for="item in items"
+      :key="item"
+    >
       Expediente: {{ item.expediente }} - Área: {{ item.area }}
     </li>
     <p>Detalle local storage</p>
