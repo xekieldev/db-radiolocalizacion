@@ -2,24 +2,8 @@ import { ref } from 'vue'
 import provincesDataRaw from "../../../data/provincias.json"
 import citiesDataRaw from "../../../data/localidades.json"
 
-function capitalizeWords(str) {
-  return str
-    .toLowerCase()
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
-
-
 const provincesData = provincesDataRaw.provincias
 const citiesData = citiesDataRaw.localidades
-// console.log(citiesData.map(capitalizeWords(citiesData.nombre)))
-
-// const e = "HOLA"
-// console.log(capitalizeWords(e))
-// console.log(citiesData)
-// console.log(provincesData)
 
 export function useTerritory() {
   const provinces = ref([])
