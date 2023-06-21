@@ -5,19 +5,39 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <div class="wrapper">
-
     <header>
-      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+      <img
+        alt="Vue logo"
+        class="logo"
+        src="@/assets/logo.svg"
+        width="125"
+        height="125"
+      >
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/form">Form</RouterLink>
-        <RouterLink to="/map">Map</RouterLink>
-        <RouterLink to="/rloc">Rloc</RouterLink>
-        <RouterLink to="/loc">Loc</RouterLink>
-        <RouterLink to="/list">List</RouterLink>
-        <RouterLink to="/tech">Tech</RouterLink>
-
+        <RouterLink to="/">
+          Home
+        </RouterLink>
+        <RouterLink to="/about">
+          About
+        </RouterLink>
+        <RouterLink to="/form">
+          Form
+        </RouterLink>
+        <RouterLink to="/map">
+          Map
+        </RouterLink>
+        <RouterLink to="/rloc">
+          Rloc
+        </RouterLink>
+        <RouterLink to="/loc">
+          Loc
+        </RouterLink>
+        <RouterLink to="/list">
+          List
+        </RouterLink>
+        <RouterLink to="/tech">
+          Tech
+        </RouterLink>
       </nav>
     </header>
 

@@ -2,7 +2,7 @@
 import { useLocalStorage } from '../composables/localstorage'
 import Frloc from '../components/Form.vue'
 import { onBeforeMount, reactive } from 'vue'
-import Mapa from '../components/Mapa.vue'
+import Mapa from '../components/Map.vue'
 import { useRlocFormData } from '../composables/rloc-form-data'
 
 // El 1000 es la cantidad de milisegundos que se tardarán
@@ -42,11 +42,11 @@ async function save(fields) {
 
 <template>
   <frloc
+    title="Datos de Radiolocalización"
+    context="Radiolocalizacion" 
     @on-submit="save"
-    title="Datos de Radiolocalización" 
-    context="Radiolocalizacion"/>
-  <mapa :position="[ lat, lng ]"></mapa>
-
+  />
+  <mapa :position="[ lat, lng ]" />
 </template>
 
 <style scoped>

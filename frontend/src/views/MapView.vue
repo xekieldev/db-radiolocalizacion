@@ -1,12 +1,10 @@
 <script setup>
 import { useApi } from '../composables/api'
-import Mapa from '../components/Mapa.vue'
+import Mapa from '../components/Map.vue'
 </script>
 
 <template>
- 
-  <mapa :position="[47.313220, -1.319482]"></mapa>
-   
+  <mapa :position="[47.313220, -1.319482]" />
 </template>
   
   
