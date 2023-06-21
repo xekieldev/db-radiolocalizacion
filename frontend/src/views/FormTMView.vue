@@ -3,9 +3,10 @@ import formtc from "../components/FormTM.vue"
 
 </script>
 <template>
-    <formtc
-   @on-submit="save"
-    title="Mediciones Externas"/>
+  <formtc
+    title="Mediciones Externas"
+    @on-submit="save"
+  />
 </template>
 
 <style scoped></style>

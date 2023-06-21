@@ -2,7 +2,7 @@
 import { useLocalStorage } from '../composables/localstorage'
 import Floc from '../components/Form.vue'
 import { onBeforeMount, reactive } from 'vue'
-import Mapa from '../components/Mapa.vue'
+import Map from '../components/Map.vue'
 
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
@@ -40,10 +40,11 @@ async function save(fields) {
 
 <template>
   <floc
+    title="Datos de Localización"
+    context="Localizacion" 
     @on-submit="save"
-    title="Datos de Localización" 
-    context="Localizacion"/>
-  <mapa :position="[47.313220, -1.319482]"></mapa>
+  />
+  <map :position="[47.313220, -1.319482]" />
 </template>
 
 <style scoped>
