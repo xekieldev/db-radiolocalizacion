@@ -2,7 +2,7 @@
 import { useLocalStorage } from '../composables/localstorage'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
-import Mapa from '../components/Map.vue'
+import Mapa from '../components/MapMain.vue'
 import { useRlocFormData } from '../composables/rloc-form-data'
 
 // El 1000 es la cantidad de milisegundos que se tardarán
