@@ -34,7 +34,7 @@ async function save(fields) {
     items.push(...data)
     
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
   
 }
