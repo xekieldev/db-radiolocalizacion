@@ -18,21 +18,21 @@ const { create, list } = useLocalStorage(1000)
 const items = reactive([])
 
 onBeforeMount(async () => {
-    // El await acá es necesario para representar que se está
-    // haciendo una llamada a un método asíncrono
-    const data = await list()
-    items.push(...data)
+  // El await acá es necesario para representar que se está
+  // haciendo una llamada a un método asíncrono
+  const data = await list()
+  items.push(...data)
 })
 
 async function save(fields) {
   try {
-    const newData = await create(fields)
+    await create(fields)
     items.splice(0, items.length)
     const data = await list()
     items.push(...data)
-    
+
   } catch (error) {
-  
+    console.log(error)
   }
 }
 </script>
@@ -40,12 +40,10 @@ async function save(fields) {
 <template>
   <floc
     title="Datos de Localización"
-    context="Localizacion" 
+    context="Localizacion"
     @on-submit="save"
   />
   <mapa :position="[47.313220, -1.319482]" />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

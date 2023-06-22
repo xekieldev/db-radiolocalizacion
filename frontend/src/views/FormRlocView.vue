@@ -28,13 +28,13 @@ onBeforeMount(async () => {
 
 async function save(fields) {
   try {
-    const newData = await create(fields)
+    await create(fields)
     items.splice(0, items.length)
     const data = await list()
     items.push(...data)
     
   } catch (error) {
-  
+    console.log(error)
   }
   
 }
