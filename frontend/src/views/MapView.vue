@@ -1,5 +1,4 @@
 <script setup>
-import { useApi } from '../composables/api'
 import Mapa from '../components/MapMain.vue'
 </script>
 

@@ -10,7 +10,7 @@ import { onBeforeMount, reactive } from 'vue'
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
-const { create, list, loading } = useLocalStorage(1000)
+const { list, loading } = useLocalStorage(1000)
 
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
@@ -26,19 +26,6 @@ onBeforeMount(async () => {
     const data = await list()
     items.push(...data)
 })
-
-async function save(fields) {
-    try {
-        const newData = await create(fields)
-        items.splice(0, items.length)
-        const data = await list()
-        items.push(...data)
-
-    } catch (error) {
-
-    }
-
-}
 
 
 </script>
