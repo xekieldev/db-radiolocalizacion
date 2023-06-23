@@ -12,6 +12,143 @@ import { useStationType } from '../composables/stationtype'
 import { useRlocFormData } from '../composables/rloc-form-data'
 import { useFileValidation } from '../composables/filevalidation'
 
+const { tipoPolarizacion } = usePolarization()
+
+  let schemas = {
+    'Radioeléctrico' : [{ 
+        "$formkit": "number",
+        "key": "1",
+        "name": "frecuenciaVinc",
+        "label": "Frecuencia vínculo",
+        "step": "0.00001"
+      },{
+        "$formkit": "select",
+        "key": "1",
+        "type":"select",
+        "label":"Unidad",
+        "name":"unidad",
+        "options":{ 
+                    "KHz": "KHz",
+                    "MHz": "MHz",
+                    "GHz": "GHz",
+                  
+                  }
+      },{
+        "$formkit": "text",
+        "key": "1",
+        "type": "text",
+        "label": "Sistema Irradiante",
+        "name": "irradianteVinc"
+        },{
+        "$formkit": "select",
+        "key": "1",
+        "type":"select",
+        "label": "Polarización",
+        "name":"polarizacionVinc",
+        "options": tipoPolarizacion,
+        "placeholder":"Polarización"
+
+        }],
+     'Físico' : [{ 
+        "$formkit": "number",
+        "key": "2",
+        "name": "frecuenciaVinc",
+        "label": "Frecuencia vínculo",
+        "step": "0.00001",
+        "disabled": "disabled"
+      },{
+        "$formkit": "select",
+        "key": "2",
+        "type":"select",
+        "label":"Unidad",
+        "name":"unidad",
+        "options":{ 
+                    "KHz": "KHz",
+                    "MHz": "MHz",
+                    "GHz": "GHz",
+                  
+                  },
+        "disabled": "disabled"
+
+      },{
+        "$formkit": "text",
+        "key": "2",
+        "type": "text",
+        "label": "Sistema Irradiante",
+        "name": "irradianteVinc",
+        "disabled": "disabled"
+        },{
+        "$formkit": "select",
+        "key": "2",
+         "type":"select",
+         "label": "Polarización",
+         "name":"polarizacionVinc",
+         "options": { 
+                    "Vertical": "Vertical",
+                    "Horizontal": "Horizontal",
+                    "Circular": "Circular",
+                    },
+         "placeholder":"Polarización",
+        "disabled": "disabled"
+
+        }],
+      'No Aplica' : [{ 
+        "$formkit": "number",
+        "key": "3",
+        "name": "frecuenciaVinc",
+        "label": "Frecuencia vínculo",
+        "step": "0.00001",
+        "disabled": "disabled"
+      },{
+        "$formkit": "select",
+        "key": "3",
+        "type":"select",
+        "label":"Unidad",
+        "name":"unidad",
+        "options":{ 
+                    "KHz": "KHz",
+                    "MHz": "MHz",
+                    "GHz": "GHz",
+                  
+                  },
+        "disabled": "disabled"
+
+      },{
+        "$formkit": "text",
+        "key": "3",
+        "type": "text",
+        "label": "Sistema Irradiante",
+        "name": "irradianteVinc",
+        "disabled": "disabled"
+        },{
+        "$formkit": "select",
+        "key": "3",
+         "type":"select",
+         "label": "Polarización",
+         "name":"polarizacionVinc",
+         "options": { 
+                    "Vertical": "Vertical",
+                    "Horizontal": "Horizontal",
+                    "Circular": "Circular",
+                    },
+         "placeholder":"Polarización",
+        "disabled": "disabled"
+
+        }],
+
+  };
+  const schema = ref('Radioeléctrico')
+  const simul_param_schema = ref()
+  simul_param_schema.value = schemas['Radioeléctrico']
+  watch (schema, (schema) => {
+    if (schema) {
+        simul_param_schema.value = schemas[schema]
+        }
+    },
+    {immediate: true}
+  )
+ 
+
 
 
 const emit = defineEmits(['onSubmit'])
@@ -36,7 +173,7 @@ watch(province, (newValue, oldValue) => {
 
 const { tipoVinculo } = useLink()
 const { area } = useArea()
-const { tipoPolarizacion } = usePolarization()
+// const { tipoPolarizacion } = usePolarization()
 const { servicio } = useService()
 const { tecnico } = useTechnician()
 const { unidad } = useUnit()
@@ -53,14 +190,19 @@ const { validateFile } = useFileValidation()
     type="form"
     submit-label="Cargar"
     @submit="submitHandler"
+    :config="{ validationVisibility: 'submit',
+               validation:'required', 
+               validationMessages:{ required:'Campo obligatorio', 
+                                    validateFile:'Formato incorrecto',
+                                  }
+              }"
   >
     <form-row>
       <form-kit
         type="text"
         label="Expediente"
         name="expediente"
-        validation-visibility="live"
-        validation="validateFile"
+        validation="required | validateFile"
         :validation-rules="{ validateFile }"
       />
     </form-row>
@@ -68,7 +210,7 @@ const { validateFile } = useFileValidation()
       <form-kit
         type="date"
         label="Fecha"
-        name="fecha"
+        name="fecha" 
       />
       <form-kit
         type="time"
@@ -80,7 +222,7 @@ const { validateFile } = useFileValidation()
         label="CCTE/Área"
         name="area"
         :options="area"
-        placeholder="Área"
+        placeholder="Área" 
       />
     </form-row>
     <form-row>
@@ -90,8 +232,6 @@ const { validateFile } = useFileValidation()
         name="emplazamiento"
         :options="emplazamiento"
         placeholder="Emplazamiento"
-        validation-label="servicio"
-        validation-visibility="live"
       />
       <form-kit
         type="select"
@@ -99,8 +239,6 @@ const { validateFile } = useFileValidation()
         name="servicio"
         :options="servicio"
         placeholder="Servicio"
-        validation-label="servicio"
-        validation-visibility="live"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -109,7 +247,6 @@ const { validateFile } = useFileValidation()
         name="frecuencia"
         step="0.000001"
         suffix="MHz"
-        validation-visibility="live"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -138,7 +275,6 @@ const { validateFile } = useFileValidation()
         label="Provincia"
         name="province"
         :options="provinces"
-        validation="required| text"
       />
       <form-kit
         v-model="city"
@@ -146,7 +282,6 @@ const { validateFile } = useFileValidation()
         label="Localidad"
         name="city"
         :options="cities"
-        validation="required| text"
       />
     </form-row>
     <form-row>
@@ -154,7 +289,6 @@ const { validateFile } = useFileValidation()
         type="text"
         label="Domicilio"
         name="domicilio"
-        validation="required| text"
       />
       <form-kit
         v-model="store.lat"
@@ -162,7 +296,6 @@ const { validateFile } = useFileValidation()
         label="Latitud"
         name="lat"
         step="0.000001"
-        validation="required| number"
       />
       <form-kit
         v-model="store.lng"
@@ -170,7 +303,6 @@ const { validateFile } = useFileValidation()
         label="Longitud"
         name="lng"
         step="0.000001"
-        validation="required| number"
       />
       <form-kit
         v-model="store.zoom"
@@ -185,6 +317,7 @@ const { validateFile } = useFileValidation()
         type="textarea"
         label="Observaciones"
         name="observacionesDom"
+        validation="false"
       />
     </form-row>
 
@@ -221,6 +354,20 @@ const { validateFile } = useFileValidation()
       <form-kit
         type="select"
         label="Tipo de Vínculo"
+        :options="[
+        'Físico',
+        'Radioeléctrico',
+        'No apica'
+      ]"
+      v-model="schema"
+  />
+  <form-kit-schema :schema="simul_param_schema"/>
+    </form-row>
+
+    <!-- <form-row>
+      <form-kit
+        type="select"
+        label="Tipo de Vínculo"
         name="tipoVinculo"
         :options="tipoVinculo"
         placeholder="Vínculo"
@@ -230,7 +377,6 @@ const { validateFile } = useFileValidation()
         label="Frecuencia Vínculo"
         name="frecuenciaVinc"
         step="0.00001"
-        validation-visibility="live"
       />
       <form-kit
         type="select"
@@ -250,7 +396,7 @@ const { validateFile } = useFileValidation()
         :options="tipoPolarizacion"
         placeholder="Polarización"
       />
-    </form-row>
+    </form-row> -->
     <form-row>
       <form-kit
         type="select"
