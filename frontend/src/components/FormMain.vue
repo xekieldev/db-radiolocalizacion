@@ -13,7 +13,6 @@ import { useRlocFormData } from '../composables/rloc-form-data'
 import { useFileValidation } from '../composables/filevalidation'
 
 
-
 const emit = defineEmits(['onSubmit'])
 const props = defineProps({
   context: String,
@@ -43,6 +42,7 @@ const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
 const store = useRlocFormData()
 const { validateFile } = useFileValidation()
+const linkType = ref('Radioeléctrico')
 
 
 </script>
@@ -51,7 +51,13 @@ const { validateFile } = useFileValidation()
   <h2>{{ title }}</h2>
   <form-kit
     type="form"
-    submit-label="Cargar"
+    submit-label="Guardar"
+    :config="{ validationVisibility: 'submit',
+               validation:'required', 
+               validationMessages:{ required:'Campo obligatorio', 
+                                    validateFile:'Formato incorrecto',
+               }
+    }"
     @submit="submitHandler"
   >
     <form-row>
@@ -59,8 +65,7 @@ const { validateFile } = useFileValidation()
         type="text"
         label="Expediente"
         name="expediente"
-        validation-visibility="live"
-        validation="validateFile"
+        validation="required | validateFile"
         :validation-rules="{ validateFile }"
       />
     </form-row>
@@ -68,7 +73,7 @@ const { validateFile } = useFileValidation()
       <form-kit
         type="date"
         label="Fecha"
-        name="fecha"
+        name="fecha" 
       />
       <form-kit
         type="time"
@@ -80,7 +85,7 @@ const { validateFile } = useFileValidation()
         label="CCTE/Área"
         name="area"
         :options="area"
-        placeholder="Área"
+        placeholder="Área" 
       />
     </form-row>
     <form-row>
@@ -90,8 +95,6 @@ const { validateFile } = useFileValidation()
         name="emplazamiento"
         :options="emplazamiento"
         placeholder="Emplazamiento"
-        validation-label="servicio"
-        validation-visibility="live"
       />
       <form-kit
         type="select"
@@ -99,8 +102,6 @@ const { validateFile } = useFileValidation()
         name="servicio"
         :options="servicio"
         placeholder="Servicio"
-        validation-label="servicio"
-        validation-visibility="live"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -109,7 +110,6 @@ const { validateFile } = useFileValidation()
         name="frecuencia"
         step="0.000001"
         suffix="MHz"
-        validation-visibility="live"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -138,7 +138,6 @@ const { validateFile } = useFileValidation()
         label="Provincia"
         name="province"
         :options="provinces"
-        validation="required| text"
       />
       <form-kit
         v-model="city"
@@ -146,7 +145,6 @@ const { validateFile } = useFileValidation()
         label="Localidad"
         name="city"
         :options="cities"
-        validation="required| text"
       />
     </form-row>
     <form-row>
@@ -154,7 +152,6 @@ const { validateFile } = useFileValidation()
         type="text"
         label="Domicilio"
         name="domicilio"
-        validation="required| text"
       />
       <form-kit
         v-model="store.lat"
@@ -162,7 +159,6 @@ const { validateFile } = useFileValidation()
         label="Latitud"
         name="lat"
         step="0.000001"
-        validation="required| number"
       />
       <form-kit
         v-model="store.lng"
@@ -170,14 +166,6 @@ const { validateFile } = useFileValidation()
         label="Longitud"
         name="lng"
         step="0.000001"
-        validation="required| number"
-      />
-      <form-kit
-        v-model="store.zoom"
-        type="range"
-        label="Zoom"
-        min="14"
-        max="18"
       />
     </form-row>
     <form-row>
@@ -185,6 +173,7 @@ const { validateFile } = useFileValidation()
         type="textarea"
         label="Observaciones"
         name="observacionesDom"
+        validation="false"
       />
     </form-row>
 
@@ -217,8 +206,10 @@ const { validateFile } = useFileValidation()
         help="Altura en metros"
       />
     </form-row>
+    
     <form-row>
       <form-kit
+        v-model="linkType"
         type="select"
         label="Tipo de Vínculo"
         name="tipoVinculo"
@@ -230,18 +221,23 @@ const { validateFile } = useFileValidation()
         label="Frecuencia Vínculo"
         name="frecuenciaVinc"
         step="0.00001"
-        validation-visibility="live"
+        :disabled="linkType !== 'Radioeléctrico'"
+        :validation="linkType === 'Radioeléctrico' && 'required'"
       />
       <form-kit
         type="select"
         label="Unidad"
         name="unidad"
         :options="unidad"
+        :disabled="linkType !== 'Radioeléctrico'"
+        :validation="linkType === 'Radioeléctrico' && 'required'"
       />
       <form-kit
         type="text"
         label="Sistema Irradiante"
         name="irradianteVinc"
+        :disabled="linkType !== 'Radioeléctrico'"
+        :validation="linkType === 'Radioeléctrico' && 'required'"
       />
       <form-kit
         type="select"
@@ -249,8 +245,10 @@ const { validateFile } = useFileValidation()
         name="polarizacionVinc"
         :options="tipoPolarizacion"
         placeholder="Polarización"
+        :disabled="linkType !== 'Radioeléctrico'"
+        :validation="linkType === 'Radioeléctrico' && 'required'"
       />
-    </form-row>
+    </form-row> 
     <form-row>
       <form-kit
         type="select"
