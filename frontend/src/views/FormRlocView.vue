@@ -49,14 +49,13 @@ async function save(fields) {
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     @on-submit="save"
-    
   />
   <form-kit
-        v-model="store.zoom"
-        type="range"
-        label="Zoom"
-        min="14"
-        max="18"
+    v-model="store.zoom"
+    type="range"
+    label="Zoom"
+    min="14"
+    max="18"
   />
   <mapa :position="[ store.lat, store.lng ]" />
 </template>

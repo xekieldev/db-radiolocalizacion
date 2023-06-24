@@ -52,13 +52,13 @@ const linkType = ref('Radioeléctrico')
   <form-kit
     type="form"
     submit-label="Guardar"
-    @submit="submitHandler"
     :config="{ validationVisibility: 'submit',
                validation:'required', 
                validationMessages:{ required:'Campo obligatorio', 
                                     validateFile:'Formato incorrecto',
-                                  }
-              }"
+               }
+    }"
+    @submit="submitHandler"
   >
     <form-row>
       <form-kit
@@ -207,14 +207,14 @@ const linkType = ref('Radioeléctrico')
       />
     </form-row>
     
-   <form-row>
+    <form-row>
       <form-kit
+        v-model="linkType"
         type="select"
         label="Tipo de Vínculo"
         name="tipoVinculo"
         :options="tipoVinculo"
         placeholder="Vínculo"
-        v-model="linkType"
       />
       <form-kit
         type="number"
