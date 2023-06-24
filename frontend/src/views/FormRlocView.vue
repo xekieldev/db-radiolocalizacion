@@ -17,7 +17,11 @@ const { create, list } = useLocalStorage(1000)
 // el valor de la variable se actualiza automáticamente en el
 // template sin necesidad de que su valor sea reasignado
 const items = reactive([])
-const { lat, lng } = useRlocFormData()
+// const { lat, lng, zoom } = useRlocFormData()
+const store = useRlocFormData()
+
+
+
 
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
@@ -45,8 +49,16 @@ async function save(fields) {
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     @on-submit="save"
+    
   />
-  <mapa :position="[ lat, lng ]" />
+  <form-kit
+        v-model="store.zoom"
+        type="range"
+        label="Zoom"
+        min="14"
+        max="18"
+  />
+  <mapa :position="[ store.lat, store.lng ]" />
 </template>
 
 <style scoped>
