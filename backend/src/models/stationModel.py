@@ -1,8 +1,8 @@
-from app import db, app, ma
+from app import db, ma
 # defino la clase producto y los tipos de dato de la tabla
 
 
-class Producto(db.Model):   # la clase Producto hereda de db.Model
+class Station(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100))
@@ -18,15 +18,19 @@ class Producto(db.Model):   # la clase Producto hereda de db.Model
         self.imagen = imagen
 
 
-with app.app_context():
-    db.create_all()  # crea las tablas si no estan creadas, sino sigue
+
 
 
 #  ************************************************************
-class ProductoSchema(ma.Schema):
+class StationSchema(ma.Schema):
     class Meta:
         fields = ('id', 'nombre', 'precio', 'stock', 'imagen')
 
 
-producto_schema = ProductoSchema()            # para crear un producto
-productos_schema = ProductoSchema(many=True)  # multiples registros
+station_schema = StationSchema()            # para crear un producto
+stations_schema = StationSchema(many=True)  # multiples registros
+
+
+def init_app(app):
+    with app.app_context():
+        db.create_all()  # crea las tablas si no estan creadas, sino sigue
