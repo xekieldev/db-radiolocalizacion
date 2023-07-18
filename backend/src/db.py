@@ -1,52 +1,39 @@
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
 
-import click
-from flask import current_app
-from flask import g
+# create the extension
+db = SQLAlchemy()
 
+class Station(db.Model):   # la clase Producto hereda de db.Model
+    # define los campos de la tabla
+    id = db.Column(db.Integer, primary_key=True)
+    expediente = db.Column(db.String(50))
+    fecha = db.Column(db.String(10))
+    hora = db.Column(db.String(5))
+    area = db.Column(db.String(20))
 
-def get_db():
-    """Connect to the application's configured database. The connection
-    is unique for each request and will be reused if this is called
-    again.
-    """
-    if "db" not in g:
-        g.db = sqlite3.connect(
-            current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-
-    return g.db
-
-
-def close_db(e=None):
-    """If this request connected to the database, close the
-    connection.
-    """
-    db = g.pop("db", None)
-
-    if db is not None:
-        db.close()
+    def __init__(self, expediente, fecha, hora, area):  # crea el  constructor de la clase
+        # no hace falta el id porque lo crea sola mysql por ser auto_incremento
+        self.expediente = expediente
+        self.fecha = fecha
+        self.hora = hora
+        self.area = area
 
 
-def init_db():
-    """Clear existing data and create new tables."""
-    db = get_db()
-
-    with current_app.open_resource("schema.sql") as f:
-        db.executescript(f.read().decode("utf8"))
 
 
-@click.command("init-db")
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo("Initialized the database.")
+
+# #  ************************************************************
+# class StationSchema(ma.Schema):
+#     class Meta:
+#         fields = ('id', 'nombre', 'precio', 'stock', 'imagen')
+
+
+# station_schema = StationSchema()            # para crear un producto
+# stations_schema = StationSchema(many=True)  # multiples registros
 
 
 def init_app(app):
-    """Register database functions with the Flask app. This is called by
-    the application factory.
-    """
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///radioloc.sqlite"
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()  # crea las tablas si no estan creadas, sino sigue
