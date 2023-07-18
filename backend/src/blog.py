@@ -7,7 +7,7 @@ from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
 
-from src.db import get_db
+# from src.db import get_db
 
 bp = Blueprint("blog", __name__)
 
