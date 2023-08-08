@@ -38,9 +38,16 @@ def create_app(test_config=None):
     # apply the blueprints to the app
     from src import technician
     from src import location
+    from src import filex
+    from src import station
+    from src import tech_measurement
+
 
     app.register_blueprint(technician.bp)
     app.register_blueprint(location.bp)
+    app.register_blueprint(filex.bp)
+    app.register_blueprint(station.bp)
+    app.register_blueprint(tech_measurement.bp)
 
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with
