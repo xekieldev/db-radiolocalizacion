@@ -89,12 +89,11 @@ const linkType = ref('Radioeléctrico')
       />
     </form-row>
     <form-row>
-      <form-kit
-        type="select"
-        label="Tipo de Emplazamiento"
-        name="emplazamiento"
-        :options="emplazamiento"
-        placeholder="Emplazamiento"
+    <form-kit
+        type="text"
+        label="Señal distintiva/Identificación"
+        name="identificacion"
+        @keyup="value = value.toUpperCase()"
       />
       <form-kit
         type="select"
@@ -103,6 +102,15 @@ const linkType = ref('Radioeléctrico')
         :options="servicio"
         placeholder="Servicio"
       />
+      <form-kit
+        type="select"
+        label="Tipo de Emplazamiento"
+        name="emplazamiento"
+        :options="emplazamiento"
+        placeholder="Emplazamiento"
+      />
+    </form-row>
+    <form-row>
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
         type="number"
@@ -123,12 +131,6 @@ const linkType = ref('Radioeléctrico')
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
-      />
-      <form-kit
-        type="text"
-        label="Señal distintiva/Identificación"
-        name="identificacion"
-        @keyup="value = value.toUpperCase()"
       />
     </form-row>
     <form-row>

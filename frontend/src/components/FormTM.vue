@@ -129,7 +129,7 @@ const { tecnico} = useTechnician()
       <form-kit
         type="number"
         label="Anchura de banda"
-        name="claseEmision"
+        name="anchoBanda"
       />
       <form-kit
         type="select"
@@ -149,7 +149,7 @@ const { tecnico} = useTechnician()
       <form-kit
         type="number"
         label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="mic"
+        name="micNoEsencial1"
         help="Valor de referencia en el punto de medición"
       />
     </form-row>   
@@ -164,7 +164,7 @@ const { tecnico} = useTechnician()
       <form-kit
         type="number"
         label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="mic"
+        name="micNoEsencial2"
         help="Valor de referencia en el punto de medición"
       />
     </form-row> 
@@ -179,7 +179,7 @@ const { tecnico} = useTechnician()
       <form-kit
         type="number"
         label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="mic"
+        name="micNoEsencial3"
         help="Valor de referencia en el punto de medición"
       />
     </form-row> 
