@@ -26,7 +26,7 @@ filexs_schema = FilexSchema( many = True )
 @bp.route('/file/<id>', methods = ['GET'])
 def get_file(id):
     try:
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         filex = Filex.query.get(id)
         return filex_schema.dump(filex)
     except:
@@ -46,15 +46,17 @@ def get_all_files():
 
 @bp.route("/file", methods=["POST"])
 def filex():
+    # import pdb; pdb.set_trace()
+    
     try:
         expediente = request.json.get('expediente')
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
         area = request.json.get('area')
-        id_technician1 = request.json.get('id_technician1')
-        id_technician2 = request.json.get('id_technician2')
+        # id_technician1 = request.json.get('id_technician1')
+        # id_technician2 = request.json.get('id_technician2')
         # technicians = request.json.get('technicians')
-        filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, id_technician1 = id_technician1, id_technician2 = id_technician2 ) #, technicians = technicians)
+        filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area)#, id_technician1 = id_technician1, id_technician2 = id_technician2 ) #, technicians = technicians)
         r = db.session.add(filex)
         db.session.commit()
         response = {"id": filex.id }
