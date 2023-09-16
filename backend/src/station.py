@@ -16,7 +16,9 @@ bp = Blueprint("station", __name__)
 class StationSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision", "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc", "unidadVinc", "irradianteVinc", "polarizacionVinc", "id_location")
+        fields = ("identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
+                   "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc",
+                     "unidadVinc", "irradianteVinc", "polarizacionVinc", "id_location")
 
 station_schema = StationSchema()
 stations_schema = StationSchema(many=True)
@@ -45,7 +47,7 @@ def get_all_stations():
 @bp.route("/station", methods = ['POST'])
 def station():
     try:
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         identificacion = request.json.get('identificacion')
         emplazamiento = request.json.get('emplazamiento')
@@ -72,5 +74,7 @@ def station():
 
         return response, 201 
     except Exception as e:
-        response = {"message": "input error"}
+        # import pdb; pdb.set_trace()
+
+        response = {"message": e._message()}
         return response, 400

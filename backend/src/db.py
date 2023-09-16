@@ -8,6 +8,17 @@ from sqlalchemy.orm import relationship
 db = SQLAlchemy()
 ma = Marshmallow()
 
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
+from sqlite3 import Connection as SQLite3Connection
+
+@event.listens_for(Engine, "connect") #This method gives you an error in case you try to post an invalid foreign key
+def _set_sqlite_pragma(dbapi_connection, connection_record):
+    if isinstance(dbapi_connection, SQLite3Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON;")
+        cursor.close()
+
 technician_file = db.Table(
     "technician_file",
     db.Model.metadata,
@@ -54,8 +65,6 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     location = db.orm.relationship("Location")
     id_location = db.Column(db.Integer, db.ForeignKey("Location.id"))
 
-
-    
 class Location(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
     __tablename__= "Location"

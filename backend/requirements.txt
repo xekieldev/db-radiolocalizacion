@@ -1,0 +1,13 @@
+blinker==1.6.2
+click==8.1.5
+colorama==0.4.6
+Flask==2.3.2
+Flask-SQLAlchemy==3.0.5
+greenlet==2.0.2
+itsdangerous==2.1.2
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+-e git+https://github.com/xekieldev/db-radiolocalizacion.git@3b0c1e9f2e6a68ac17e398a452ec2f0416b48c7e#egg=radioloc_api&subdirectory=backend
+SQLAlchemy==2.0.19
+typing_extensions==4.7.1
+Werkzeug==2.3.6
