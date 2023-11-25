@@ -66,3 +66,45 @@ Run with coverage report::
     $ coverage run -m pytest
     $ coverage report
     $ coverage html  # open htmlcov/index.html in a browser
+
+
+API design
+======
+
+POST /file
+0- Validar los inputs
+1- Agregar un nuevo filex
+2- Agregar una nueva estación relacionado con el filex del pto. 1
+3- Responder código HTTP
+
+GET /file/<id>
+0- Buscar por id en filex
+1- Buscar la estación
+2- Buscar técnico
+3- Combinar todos los objetos
+4- Responder todos los campos del expediente
+
+GET /file?includeDeleted (Listar todo)
+0- Obtener todos los filex con status=vigente
+1- Armar una lista de objetos filex (JSON)
+2- Armar respuesta HTTP con el JSON
+
+POST /file/<id>/tech-measurement
+0- Validar los inputs
+1- Agregar un nuevo tech-measurement relacionado al id del path
+2- Responder código HTTP
+
+GET /file/<id>/tech-measurement
+0- Buscar por id en tech-measurement
+1- Armar un JSON
+2- Responder JSON en respuesta HTTP
+
+PUT /file/<id>
+	Este endpoint implementa el borrado cuando recibe status=borrar
+
+
+PUT /file/<id>/tech-measurement
+POST /technician
+GET /technician/<id>
+DELETE /technician/<id>
+GET /technician (Listar todo)

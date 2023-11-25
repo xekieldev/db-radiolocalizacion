@@ -39,7 +39,9 @@ class Filex(db.Model):   # la clase Producto hereda de db.Model
     # id_technician1 = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
     # id_technician2 = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
     # technicians = db.relationship('Technician', backref='file', lazy = True)
+    # status crear columna
     technicians = db.orm.relationship("Technician", secondary="technician_file")
+
     
 class Station(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
