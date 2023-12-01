@@ -46,7 +46,7 @@ def create_app(test_config=None):
 
 
     app.register_blueprint(technician.bp)
-    app.register_blueprint(location.bp)
+    # app.register_blueprint(location.bp)
     app.register_blueprint(filex.bp)
     app.register_blueprint(station.bp)
     app.register_blueprint(tech_measurement.bp)

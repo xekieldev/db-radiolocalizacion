@@ -3,6 +3,7 @@ from flask_marshmallow import Marshmallow
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+from sqlalchemy import CheckConstraint
 
 # create the extension
 db = SQLAlchemy()
@@ -26,6 +27,13 @@ technician_file = db.Table(
     db.Column("id_technician", db.Integer, db.ForeignKey("Technician.id")),
 )
 
+technician_tech_measurement = db.Table(
+    "technician_tech_measurement",
+    db.Model.metadata,
+    db.Column("id_tech_measurement", db.Integer, db.ForeignKey("TechMeasurement.id")),
+    db.Column("id_technician", db.Integer, db.ForeignKey("Technician.id")),
+)
+
 class Filex(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
     __tablename__= "File"
@@ -34,6 +42,7 @@ class Filex(db.Model):   # la clase Producto hereda de db.Model
     fecha = db.Column(db.String(10))
     hora = db.Column(db.String(5))
     area = db.Column(db.String(20))
+    status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
     # id_station = db.Column(db.Integer, db.ForeignKey('Station.id'), nullable = False)
     # stations = db.relationship('Station', backref='file', lazy = True)
     # id_technician1 = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
@@ -41,6 +50,11 @@ class Filex(db.Model):   # la clase Producto hereda de db.Model
     # technicians = db.relationship('Technician', backref='file', lazy = True)
     # status crear columna
     technicians = db.orm.relationship("Technician", secondary="technician_file")
+    
+   
+    __table_args__ = (
+        CheckConstraint("status IN ('Available', 'Deleted')", name='estado_valido'),
+    )
 
     
 class Station(db.Model):   # la clase Producto hereda de db.Model
@@ -64,13 +78,8 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     polarizacionVinc = db.Column(db.String(15))
     # id_location = db.Column(db.Integer, db.ForeignKey('Location.id'), nullable = False)
     # locations = db.relationship('Location', backref = 'station', lazy = True)
-    location = db.orm.relationship("Location")
-    id_location = db.Column(db.Integer, db.ForeignKey("Location.id"))
-
-class Location(db.Model):   # la clase Producto hereda de db.Model
-    # define los campos de la tabla
-    __tablename__= "Location"
-    id = db.Column(db.Integer, primary_key = True)
+    # location = db.orm.relationship("Location")
+    # id_location = db.Column(db.Integer, db.ForeignKey("Location.id"))
     provincia = db.Column(db.String(30))
     localidad = db.Column(db.String(30))
     domicilio = db.Column(db.String(50))
@@ -78,16 +87,24 @@ class Location(db.Model):   # la clase Producto hereda de db.Model
     longitud = db.Column(db.Float)
     observaciones = db.Column(db.String(300))
 
+# class Location(db.Model):   # la clase Producto hereda de db.Model
+    # # define los campos de la tabla
+    # __tablename__= "Location"
+    # id = db.Column(db.Integer, primary_key = True)
+    # provincia = db.Column(db.String(30))
+    # localidad = db.Column(db.String(30))
+    # domicilio = db.Column(db.String(50))
+    # latitud = db.Column(db.Float)
+    # longitud = db.Column(db.Float)
+    # observaciones = db.Column(db.String(300))
+
 class TechMeasurement(db.Model):
     __tablename__= 'TechMeasurement'
     id = db.Column(db.Integer, primary_key = True)
-    id_file = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
-    # files = db.relationship('File', backref = 'TechMeasurements', lazy = True)
     fecha = db.Column(db.String(10))
     hora = db.Column(db.String(5))
     area = db.Column(db.String(20))
-    id_location = db.Column(db.Integer, db.ForeignKey('Location.id'), nullable = False)
-    # locations = db.relationship('Location', backref = 'tecnMeasurements', lazy = True)
+    file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
     distancia = db.Column(db.Float)
     azimut = db.Column(db.Integer)
     mic = db.Column(db.Float)
@@ -101,8 +118,7 @@ class TechMeasurement(db.Model):
     noEsencial3 = db.Column(db.Float)
     micNoEsencial3 = db.Column(db.Float)
     resultadoComprob = db.Column(db.String(300))
-    id_technician = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
-    # technicians = db.relationship('Technician', backref='file', lazy = True)
+    
 
 
 class Technician (db.Model):

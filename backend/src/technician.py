@@ -42,7 +42,7 @@ def technician():
 
 
 @bp.route('/technician/<id>', methods = ['GET'])
-def get_technician(id):
+def get_technician(id): 
     try:
         # import pdb; pdb.set_trace()
         technician = Technician.query.get(id)
