@@ -18,7 +18,7 @@ bp = Blueprint("tech_measurement", __name__)
 class TechMeasurementSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "id_file", "fecha", "hora", "area", "id_location", "distancia", "azimut", "mic", "claseEmision", "anchoBanda", "unidad", "noEsencial1", "micNoEsencial1", "noEsencial2", "micNoEsencial2", "noEsencial3", "micNoEsencial3", "resultadoComprob", "id_technician")
+        fields = ("id", "fecha", "hora", "area", "distancia", "azimut", "mic", "claseEmision", "anchoBanda", "unidad", "noEsencial1", "micNoEsencial1", "noEsencial2", "micNoEsencial2", "noEsencial3", "micNoEsencial3", "resultadoComprob")
 
 tech_measurement_schema = TechMeasurementSchema()
 tech_measurements_schema = TechMeasurementSchema( many = True )
@@ -51,11 +51,11 @@ def technician():
         # apellido = request.json.get('apellido')
         import pdb; pdb.set_trace()
 
-        id_file = request.json.get('id_file')
+        # id_file = request.json.get('id_file')
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
         area = request.json.get('area')
-        id_location = request.json.get('id_location')
+        # id_location = request.json.get('id_location')
         distancia = request.json.get('distancia')
         azimut = request.json.get('azimut')
         mic = request.json.get('mic')
@@ -69,9 +69,9 @@ def technician():
         noEsencial3 = request.json.get('noEsencial2')
         micNoEsencial3 = request.json.get('micNoEsencial3')
         resultadoComprob = request.json.get('resultadoComprob')
-        id_technician = request.json.get('id_technician')
+        # id_technician = request.json.get('id_technician')
 
-        tech_measurement = TechMeasurement(id_file = id_file, fecha = fecha, hora = hora, area = area, id_location = id_location, distancia = distancia, azimut = azimut, mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob, id_technician = id_technician)
+        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, area = area, distancia = distancia, azimut = azimut, mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob)
         r = db.session.add(tech_measurement)
         db.session.commit()
         response = {"id": tech_measurement.id }

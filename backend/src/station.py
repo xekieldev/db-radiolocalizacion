@@ -18,7 +18,8 @@ class StationSchema(ma.Schema):
         # Fields to expose
         fields = ("identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
                    "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc",
-                     "unidadVinc", "irradianteVinc", "polarizacionVinc", "id_location")
+                     "unidadVinc", "irradianteVinc", "polarizacionVinc", "provincia", "localidad",
+                       "domicilio", "latitud", "longitud", "observaciones")
 
 station_schema = StationSchema()
 stations_schema = StationSchema(many=True)
@@ -64,9 +65,15 @@ def station():
         unidadVinc = request.json.get('unidadVinc')
         irradianteVinc = request.json.get('irradianteVinc')
         polarizacionVinc = request.json.get('polarizacionVinc')
-        id_location = request.json.get('id_location')
+        provincia = request.json.get('provincia')
+        localidad = request.json.get('localidad')
+        domicilio = request.json.get('domicilio')
+        latitud = request.json.get('latitud')
+        longitud = request.json.get('longitud')
+        observaciones = request.json.get('observaciones')
+        # id_location = request.json.get('id_location')
         
-        station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, id_location = id_location )
+        station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
         
         r = db.session.add(station)
         db.session.commit()
