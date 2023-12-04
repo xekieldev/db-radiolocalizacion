@@ -45,7 +45,8 @@ class Filex(db.Model):   # la clase Producto hereda de db.Model
     status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
     # id_station = db.Column(db.Integer, db.ForeignKey('Station.id'), nullable = False)
     # stations = db.relationship('Station', backref='file', lazy = True)
-    # id_technician1 = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
+    id_technician1 = db.Column(db.Integer)
+    id_technician2 = db.Column(db.Integer)
     # id_technician2 = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
     # technicians = db.relationship('Technician', backref='file', lazy = True)
     # status crear columna
@@ -118,6 +119,8 @@ class TechMeasurement(db.Model):
     noEsencial3 = db.Column(db.Float)
     micNoEsencial3 = db.Column(db.Float)
     resultadoComprob = db.Column(db.String(300))
+    id_technician1 = db.Column(db.Integer)
+    id_technician2 = db.Column(db.Integer)
     
 
 
