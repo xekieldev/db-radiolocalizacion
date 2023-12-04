@@ -6,8 +6,8 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
-from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, ma
-from sqlalchemy import exc
+from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, technician_file, ma
+from sqlalchemy import exc, insert, text
 from src.technician import get_technician
 
 
@@ -66,11 +66,11 @@ def filex():
         area = request.json.get('area')
         status = request.json.get('status')
         # import pdb; pdb.set_trace()
-
-        # id_technician1 = request.json.get('id_technician1')
+        id_technician1 = request.json.get('id_technician1')
+        id_technician2 = request.json.get('id_technician2')
         # id_technician2 = request.json.get('id_technician2')
         # technicians = request.json.get('technicians')
-        filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, status = status)#, id_technician1 = id_technician1, id_technician2 = id_technician2 ) #, technicians = technicians)
+        filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, status = status, id_technician1 = id_technician1, id_technician2 = id_technician2)#, id_technician2 = id_technician2 ) #, technicians = technicians)
         r = db.session.add(filex)
 
         identificacion = request.json.get('identificacion')
@@ -94,14 +94,25 @@ def filex():
         latitud = request.json.get('latitud')
         longitud = request.json.get('longitud')
         observaciones = request.json.get('observaciones')
-        # id_location = request.json.get('id_location')
-        
+                
         station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
-        # stat = station()
-        # import pdb; pdb.set_trace()
         r = db.session.add(station)
 
         db.session.commit()
+        
+        stmt1 = (
+        insert(technician_file).
+        values(id_file = filex.id, id_technician = request.json.get('id_technician1'))
+        )
+        stmt2 = (
+        insert(technician_file).
+        values(id_file = filex.id, id_technician = request.json.get('id_technician2'))
+        )
+        session = db.session
+        session.execute(stmt1)
+        session.execute(stmt2)
+        session.commit()
+        
         response = {"id_file": filex.id,
                     "id_station": station.id }
         # import pdb; pdb.set_trace()
@@ -144,7 +155,7 @@ def get_available_files():
         else:
             # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
             filex_available = Filex.query.filter_by(status='Available').all()
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         return filexs_schema.dump(filex_available)
 
@@ -187,19 +198,33 @@ def tech_measurement(id):
         noEsencial3 = request.json.get('noEsencial2')
         micNoEsencial3 = request.json.get('micNoEsencial3')
         resultadoComprob = request.json.get('resultadoComprob')
+        id_technician1 = request.json.get('id_technician1')
+        id_technician2 = request.json.get('id_technician2')
 
-        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, area = area, file_id = file_id, distancia = distancia, azimut = azimut, mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob)
+
+        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, area = area, file_id = file_id, distancia = distancia, azimut = azimut, mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
        
         r = db.session.add(tech_measurement)
-        # s = db.session.add(technician_tech_measurement)
         db.session.commit()
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
+        stmt1 = (
+        insert(technician_tech_measurement).
+        values(id_tech_measurement = tech_measurement.id, id_technician = request.json.get('id_technician1'))
+        )
+        stmt2 = (
+        insert(technician_tech_measurement).
+        values(id_tech_measurement = tech_measurement.id, id_technician = request.json.get('id_technician2'))
+        )
+        session = db.session
+        session.execute(stmt1)
+        session.execute(stmt2)
+        session.commit()
        
         response = {"id": tech_measurement.id }
 
         return response, 201 
     except exc.SQLAlchemyError as e:
-        print(f"Error de SQLAlchemy: {e}")
+        # print(f"Error de SQLAlchemy: {e}")
         response = { "message": "database error" }
         return response, 500
     except:
@@ -211,7 +236,7 @@ def tech_measurement(id):
 def get_tech_measurement(id):
     try:
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         return tech_measurements_schema.dump(tech_measurement)
     except:

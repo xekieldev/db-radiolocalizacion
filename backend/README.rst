@@ -75,7 +75,8 @@ POST /file
 0- Validar los inputs
 1- Agregar un nuevo filex
 2- Agregar una nueva estación relacionado con el filex del pto. 1
-3- Responder código HTTP
+3- Agregar de pecho file.id y technician_id (desde el request) a tabla technician_file
+4- Responder código HTTP
 
 GET /file/<id>
 0- Buscar por id en filex
