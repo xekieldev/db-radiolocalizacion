@@ -6,43 +6,22 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
-from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, technician_file, ma
-from sqlalchemy import exc, insert, text
-from src.technician import get_technician
-
+from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, technician_file, Technician, ma
+from sqlalchemy import exc, insert
+from src.technician import technicians_schema
+from src.station import station_schema
+from src.tech_measurement import tech_measurements_schema
 
 
 bp = Blueprint("filex", __name__)
-
-
 class FilexSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "expediente", "fecha", "hora", "area", "status")#, "id_technician1", "id_technician2" ) #, "technicians")
+        fields = ("id", "expediente", "fecha", "hora", "area", "status")
 
 filex_schema = FilexSchema()
 filexs_schema = FilexSchema( many = True )
 
-class StationSchema(ma.Schema):
-    class Meta:
-        # Fields to expose
-        fields = ("identificacion", "emplazamiento")#, "servicio", "frecuencia", "unidad", "claseEmision",
-                #    "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc",
-                #      "unidadVinc", "irradianteVinc", "polarizacionVinc", "id_location")
-
-station_schema = StationSchema()
-stations_schema = StationSchema(many=True)
-
-
-class TechMeasurementSchema(ma.Schema):
-    class Meta:
-        # Fields to expose
-        fields = ("id", "id_file", "fecha", "hora", "area", "distancia", "azimut", "mic", "claseEmision", "anchoBanda", "unidad", "noEsencial1", "micNoEsencial1", "noEsencial2", "micNoEsencial2", "noEsencial3", "micNoEsencial3", "resultadoComprob", "id_technician")
-
-tech_measurement_schema = TechMeasurementSchema()
-tech_measurements_schema = TechMeasurementSchema( many = True )
-
-    
 @bp.route("/file/", methods = ['GET'])
 def get_all_files():
     try:
@@ -65,13 +44,11 @@ def filex():
         hora = request.json.get('hora')
         area = request.json.get('area')
         status = request.json.get('status')
-        # import pdb; pdb.set_trace()
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
-        # id_technician2 = request.json.get('id_technician2')
-        # technicians = request.json.get('technicians')
+        
         filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, status = status, id_technician1 = id_technician1, id_technician2 = id_technician2)#, id_technician2 = id_technician2 ) #, technicians = technicians)
-        r = db.session.add(filex)
+        db.session.add(filex)
 
         identificacion = request.json.get('identificacion')
         emplazamiento = request.json.get('emplazamiento')
@@ -96,7 +73,7 @@ def filex():
         observaciones = request.json.get('observaciones')
                 
         station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
-        r = db.session.add(station)
+        db.session.add(station)
 
         db.session.commit()
         
@@ -128,17 +105,19 @@ def filex():
 @bp.route('/file/<id>', methods = ['GET'])
 def get_file(id):
     try:
-        # import pdb; pdb.set_trace()
         filex = Filex.query.get(id)
         station = Station.query.get(id)
-        technicianF = get_technician(id)
+        technicians = (db.session.query(Technician).join(technician_file).filter(technician_file.c.id_file==id))
+        # technicians_ids = query.all()
         combined_return = { 
                         "filex": filex_schema.dump(filex), 
                         "station": station_schema.dump(station),
-                        "technician": technicianF
+                        "technicians": technicians_schema.dump(technicians)
         }
         return combined_return
-    except:
+    except Exception as e:
+        # import pdb; pdb.set_trace()
+        print(e)
         response = {"message": "input error"}
         return response, 400
 
@@ -236,9 +215,18 @@ def tech_measurement(id):
 def get_tech_measurement(id):
     try:
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
-        # import pdb; pdb.set_trace()
+        technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==id))
 
-        return tech_measurements_schema.dump(tech_measurement)
-    except:
+        # import pdb; pdb.set_trace()
+        combined_return = {
+                            "Tech Measurements": tech_measurements_schema.dump(tech_measurement),
+                            "Technicians":  technicians_schema.dump(technicians)
+
+        }
+        return combined_return
+    except Exception as e:
+        print(e)
+        import pdb; pdb.set_trace()
+
         response = {"message": "input error"}
         return response, 400
