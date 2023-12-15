@@ -1,8 +1,9 @@
 <script setup>
 // import { useLocalStorage } from '../composables/localstorage'
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive } from 'vue'
-import { RouterLink } from 'vue-router'
+import { onMounted, reactive } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+
 
 
 // const ls = useLocalStorage()
@@ -13,7 +14,8 @@ import { RouterLink } from 'vue-router'
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
-const { list, loading } = useApi()
+const { getFile, loading } = useApi()
+const { currentRoute } = useRouter()
 
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
@@ -23,38 +25,19 @@ const { list, loading } = useApi()
 // template sin necesidad de que su valor sea reasignado
 const items = reactive([])
 
-onBeforeMount(async () => {
+onMounted(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
-    const data = await list()
-    items.push(...data)
+// debugger
+    const data = await getFile(currentRoute.value.params.id)
+    items.push(data)
 })
 
 
 </script>
 <template>
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>Expediente</th>
-      <th>Área</th>
-    </tr>
-    <tr
-      v-for="item in items"
-      :key="item"
-    >
-     <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> 
-     <td>{{ item.expediente }}</td> 
-     <td>{{ item.area }}</td> 
-    </tr>
-    <!-- <p>Detalle local storage</p> -->
-    <div class="status">
-      <span><strong>Loading:</strong> {{ loading }}</span>
-      <!-- <br>
-      <span><strong>Items:</strong><br> {{ items }}</span>
-      <br> -->
-    </div>
-  </table>
+  {{ items }}
+  <RouterLink to="/list">Volver</RouterLink>
 </template>
 
 <style scoped>
