@@ -1,20 +1,28 @@
 import axios from 'axios'
+import { ref } from 'vue'
 
 export function useApi() {
+    var loading = ref(false);
     const axiosInstance = axios.create({
         baseURL: 'http://127.0.0.1:5000',
     })
 
-    function create(fields) {
-        return axiosInstance.post('/tramites', { fecha: fields.fecha.replaceAll('-', '/') })
+    async function list() {
+        loading.value = true
+        const response = await axiosInstance.get('/file?includeDeleted=true')
+        loading.value = false
+        return response && response.data 
     }
     
-    function list() {
-        return axiosInstance.get('/tramites')
+    async function getFile(id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/file/${id}`)
+        loading.value = false
+        return response && response.data 
     }
-
     return {
-        create,
         list,
+        loading,
+        getFile,
     }
 }
