@@ -13,6 +13,13 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+
+    async function create(data) {
+        loading.value = true
+        const response = await axiosInstance.post('/file', data)
+        loading.value = false
+        return response && response.data 
+    }
     
     async function getFile(id) {
         loading.value = true
@@ -20,9 +27,17 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+    async function getStation(id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/technician/${id}`)
+        loading.value = false
+        return response && response.data 
+    }
     return {
         list,
         loading,
         getFile,
+        getStation,
+        create,
     }
 }

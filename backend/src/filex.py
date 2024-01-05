@@ -17,7 +17,7 @@ bp = Blueprint("filex", __name__)
 class FilexSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "expediente", "fecha", "hora", "area", "status")
+        fields = ("id", "expediente", "fecha", "hora", "area")
 
 filex_schema = FilexSchema()
 filexs_schema = FilexSchema( many = True )
@@ -109,11 +109,10 @@ def get_file(id):
         station = Station.query.get(id)
         technicians = (db.session.query(Technician).join(technician_file).filter(technician_file.c.id_file==id))
         # technicians_ids = query.all()
-        combined_return = { 
-                        "filex": filex_schema.dump(filex), 
-                        "station": station_schema.dump(station),
-                        "technicians": technicians_schema.dump(technicians)
-        }
+        # combined_return = [ filex_schema.dump(filex), station_schema.dump(station), technicians_schema.dump(technicians) ]
+        combined_return = {"file": filex_schema.dump(filex),
+                           "station": station_schema.dump(station),
+                           "technicians": technicians_schema.dump(technicians)}
         return combined_return
     except Exception as e:
         # import pdb; pdb.set_trace()

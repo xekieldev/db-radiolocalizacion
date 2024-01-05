@@ -40,7 +40,7 @@ def create_app(test_config=None):
 
     # apply the blueprints to the app
     from src import technician
-    from src import location
+    # from src import location
     from src import filex
     # import pdb; pdb.set_trace()
     

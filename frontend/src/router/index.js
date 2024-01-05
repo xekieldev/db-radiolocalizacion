@@ -70,7 +70,23 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FileView.vue')
+      component: () => import('../views/FileDisplayView.vue')
+    },
+    {
+      path: '/file/:id/edit',
+      name: 'editFile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FileEditView.vue')
+    },
+    {
+      path: '/file/create',
+      name: 'createFile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FileCreateView.vue')
     }
 
   ]

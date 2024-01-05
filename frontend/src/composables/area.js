@@ -12,8 +12,8 @@ export function useArea() {
         label: 'Córdoba'
       },
       {
-        value: 'Salta',
-        label: 'Salta'
+        value: 'CCTE Salta',
+        label: 'CCTE Salta'
       },
       {
         value: 'Posadas',
