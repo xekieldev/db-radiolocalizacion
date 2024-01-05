@@ -1,6 +1,6 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useTerritory } from '../composables/territory'
 import { useLink } from '../composables/link'
 import { useArea } from '../composables/area'
@@ -11,12 +11,14 @@ import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
 import { useRlocFormData } from '../composables/rloc-form-data'
 import { useFileValidation } from '../composables/filevalidation'
+import { getNode } from '@formkit/core'
 
 
 const emit = defineEmits(['onSubmit'])
 const props = defineProps({
   context: String,
   title: String,
+  file: Object,
 })
 function submitHandler(fields) {
   emit('onSubmit', fields)
@@ -49,6 +51,7 @@ const linkType = ref('Radioeléctrico')
 
 <template>
   <h2>{{ title }}</h2>
+  <h3>{{ file.expediente }}</h3>
   <form-kit
     type="form"
     submit-label="Guardar"
@@ -65,6 +68,7 @@ const linkType = ref('Radioeléctrico')
         type="text"
         label="Expediente"
         name="expediente"
+        v-model="file.expediente"
         validation="required | validateFile"
         :validation-rules="{ validateFile }"
       />
@@ -82,8 +86,10 @@ const linkType = ref('Radioeléctrico')
       />
       <form-kit
         type="select"
+        id="area"
         label="CCTE/Área"
         name="area"
+        v-model="file.area"
         :options="area"
         placeholder="Área" 
       />

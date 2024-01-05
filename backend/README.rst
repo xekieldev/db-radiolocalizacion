@@ -101,7 +101,11 @@ GET /file/<id>/tech-measurement
 2- Responder JSON en respuesta HTTP
 
 PUT /file/<id>
-	Este endpoint implementa el borrado cuando recibe status=borrar
+	Este endpoint implementa la edición pisando el objeto referenciado por <id>, pisando todos sus valores
+
+DELETE /file/<id>
+	Este endpoint implementa el borrado solo cambiando el atributo status=deleted
+
 
 
 PUT /file/<id>/tech-measurement
