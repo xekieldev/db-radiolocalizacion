@@ -20,6 +20,13 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+
+    async function edit(id, data) {
+        loading.value = true
+        const response = await axiosInstance.put(`/file/${id}/edit`, data)
+        loading.value = false
+        return response && response.data 
+    }
     
     async function getFile(id) {
         loading.value = true
@@ -27,9 +34,15 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
-    async function getStation(id) {
+    // async function getStation(id) {
+    //     loading.value = true
+    //     const response = await axiosInstance.get(`/technician/${id}`)
+    //     loading.value = false
+    //     return response && response.data 
+    // }
+    async function getTechnicians() {
         loading.value = true
-        const response = await axiosInstance.get(`/technician/${id}`)
+        const response = await axiosInstance.get(`/technician/`)
         loading.value = false
         return response && response.data 
     }
@@ -37,7 +50,9 @@ export function useApi() {
         list,
         loading,
         getFile,
-        getStation,
+        // getStation,
         create,
+        edit,
+        getTechnicians,
     }
 }

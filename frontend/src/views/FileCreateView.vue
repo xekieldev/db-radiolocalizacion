@@ -12,7 +12,7 @@ import { RouterLink, useRouter } from 'vue-router'
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
 // const { create, list } = useLocalStorage(1000)
-const { create } = useApi()
+const { create , getTechnicians} = useApi()
 const router = useRouter()
 
 
@@ -26,8 +26,13 @@ const router = useRouter()
 const file = reactive({})
 const station = reactive([])
 const technicians = reactive([])
+const techniciansValues = reactive([])
+
+
 
 console.log("Ahora: ", file)
+console.log('Técnicos: ', technicians)
+
 
 
 
@@ -40,6 +45,9 @@ const store = useRlocFormData()
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
+    const techResponse = await getTechnicians()
+    Object.assign(techniciansValues, techResponse)
+
 
 })
 
@@ -60,6 +68,10 @@ async function save(fields) {
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     :file="file"
+    :station="station"
+    :technicians="technicians"
+    :technicians-values="techniciansValues"
+    
     @on-submit="save"
   />
   <form-kit

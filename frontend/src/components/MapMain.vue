@@ -17,7 +17,7 @@
       <l-marker :lat-lng="[store.lat, store.lng]">
         <l-icon
           :icon-size="[60, 60]"
-          icon-url="../img/antena.png"
+          icon-url="../../img/antena.png"
         />
         <l-popup>Coordenadas: {{ store.lat }}, {{ store.lng }} <br> Nivel de Zoom: {{ store.zoom }}</l-popup>
       </l-marker>

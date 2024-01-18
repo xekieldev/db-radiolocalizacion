@@ -19,19 +19,30 @@ const props = defineProps({
   context: String,
   title: String,
   file: Object,
+  station: Object,
+  technicians: Object,
+  techniciansValues: Array,
 })
+
+console.log("station localidad", props.station)
+console.log("technician values: ", props.technicians)
+
+
 function submitHandler(fields) {
   emit('onSubmit', fields)
 }
 
-const province = ref("54")
-const city = ref("06021010000")
+const province = ref(props.station.provincia)
+const city = ref(props.station.localidad)
 const { provinces, cities, getProvinceCities } = useTerritory()
 
 watch(province, (newValue, oldValue) => {
+  console.log("hola")
+  props.station.provincia = newValue
   getProvinceCities(newValue)
   if (newValue != oldValue) {
-    city.value = cities.value[0]
+    city.value.value = cities.value[0]
+    props.station.localidad = city.value.value
   }
 })
 
@@ -51,7 +62,7 @@ const linkType = ref('Radioeléctrico')
 
 <template>
   <h2>{{ title }}</h2>
-  <h3>{{ file.expediente }}</h3>
+  <!-- <h3>{{ file.expediente }}</h3> -->
   <form-kit
     type="form"
     submit-label="Guardar"
@@ -78,11 +89,13 @@ const linkType = ref('Radioeléctrico')
         type="date"
         label="Fecha"
         name="fecha" 
+        v-model="file.fecha"
       />
       <form-kit
         type="time"
         label="Hora"
         name="hora"
+        v-model="file.hora"
       />
       <form-kit
         type="select"
@@ -99,7 +112,7 @@ const linkType = ref('Radioeléctrico')
         type="text"
         label="Señal distintiva/Identificación"
         name="identificacion"
-        @keyup="value = value.toUpperCase()"
+        v-model="station.identificacion"
       />
       <form-kit
         type="select"
@@ -107,6 +120,7 @@ const linkType = ref('Radioeléctrico')
         name="servicio"
         :options="servicio"
         placeholder="Servicio"
+        v-model="station.servicio"
       />
       <form-kit
         type="select"
@@ -114,6 +128,7 @@ const linkType = ref('Radioeléctrico')
         name="emplazamiento"
         :options="emplazamiento"
         placeholder="Emplazamiento"
+        v-model="station.emplazamiento"
       />
     </form-row>
     <form-row>
@@ -124,6 +139,7 @@ const linkType = ref('Radioeléctrico')
         name="frecuencia"
         step="0.000001"
         suffix="MHz"
+        v-model="station.frecuencia"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -131,28 +147,32 @@ const linkType = ref('Radioeléctrico')
         label="Unidad"
         name="unidad"
         :options="unidad"
+        v-model="station.unidad"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
+        v-model="station.claseEmision"
       />
     </form-row>
     <form-row>
       <form-kit
-        v-model="province"
+        :options="provinces"
         type="select"
         label="Provincia"
-        name="province"
-        :options="provinces"
+        name="provincia"
+        v-model="province"
+        
       />
       <form-kit
-        v-model="city"
+        :options="cities"
         type="select"
         label="Localidad"
-        name="city"
-        :options="cities"
+        name="localidad"
+        v-model="city"
+        
       />
     </form-row>
     <form-row>
@@ -160,6 +180,7 @@ const linkType = ref('Radioeléctrico')
         type="text"
         label="Domicilio"
         name="domicilio"
+        v-model="station.domicilio"
       />
       <form-kit
         v-model="store.lat"
@@ -182,6 +203,7 @@ const linkType = ref('Radioeléctrico')
         label="Observaciones"
         name="observacionesDom"
         validation="false"
+        v-model="station.observaciones"
       />
     </form-row>
 
@@ -191,6 +213,7 @@ const linkType = ref('Radioeléctrico')
         type="text"
         label="Sistema Irradiante"
         name="irradiante"
+        v-model="station.irradiante"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -199,12 +222,14 @@ const linkType = ref('Radioeléctrico')
         name="polarizacion"
         :options="tipoPolarizacion"
         placeholder="Polarización"
+        v-model="station.polarizacion"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
         type="text"
         label="Cantidad"
         name="cantidad"
+        v-model="station.cantidad"
       />
       <form-kit
         v-if="props.context === 'Radiolocalizacion'"
@@ -212,12 +237,13 @@ const linkType = ref('Radioeléctrico')
         label="Altura Media"
         name="altura"
         help="Altura en metros"
+        v-model="station.altura"
       />
     </form-row>
     
     <form-row>
       <form-kit
-        v-model="linkType"
+        v-model="linkType" 
         type="select"
         label="Tipo de Vínculo"
         name="tipoVinculo"
@@ -231,14 +257,16 @@ const linkType = ref('Radioeléctrico')
         step="0.00001"
         :disabled="linkType !== 'Radioeléctrico'"
         :validation="linkType === 'Radioeléctrico' && 'required'"
+        v-model="station.frecuenciaVinc"
       />
       <form-kit
         type="select"
         label="Unidad"
-        name="unidad"
+        name="unidadVinc"
         :options="unidad"
         :disabled="linkType !== 'Radioeléctrico'"
         :validation="linkType === 'Radioeléctrico' && 'required'"
+        v-model="station.unidadVinc"
       />
       <form-kit
         type="text"
@@ -246,6 +274,7 @@ const linkType = ref('Radioeléctrico')
         name="irradianteVinc"
         :disabled="linkType !== 'Radioeléctrico'"
         :validation="linkType === 'Radioeléctrico' && 'required'"
+        v-model="station.irradianteVinc"
       />
       <form-kit
         type="select"
@@ -255,22 +284,27 @@ const linkType = ref('Radioeléctrico')
         placeholder="Polarización"
         :disabled="linkType !== 'Radioeléctrico'"
         :validation="linkType === 'Radioeléctrico' && 'required'"
+        v-model="station.polarizacionVinc"
       />
     </form-row> 
     <form-row>
       <form-kit
         type="select"
         label="Técnico"
-        name="tecnico"
-        :options="tecnico"
-        placeholder="Técnico 1"
+        name="tecnico1"
+        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+        placeholder="Técnico 1"    
+        :value="technician&&technician[0].id"
+
       />
       <form-kit
         type="select"
         label="Técnico"
-        name="tecnico"
-        :options="tecnico"
-        placeholder="Técnico 2"
+        name="tecnico2"
+        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+        placeholder="Técnico 2" 
+        :value="technician&&technician[1].id"
+
       />
     </form-row>
   </form-kit>

@@ -14,7 +14,7 @@ import { RouterLink, useRouter } from 'vue-router'
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
-const { getFile, loading } = useApi()
+const { getFile, loading, getTechnicians } = useApi()
 const { currentRoute } = useRouter()
 
 // El reactive es para que la variable items se actualice
@@ -26,16 +26,23 @@ const { currentRoute } = useRouter()
 const file = reactive({})
 const station = reactive({})
 const technicians = reactive({})
+const techniciansValues = reactive({})
 
 onMounted(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
 // debugger
     const response = await getFile(currentRoute.value.params.id)
+    const techResponse = await getTechnicians()
+
     Object.assign(file, response.file)
     Object.assign(station, response.station)
     Object.assign(technicians, response.technicians)
-    console.log("file new", file)
+    Object.assign(techniciansValues, techResponse)
+    console.log("file: ", file)
+    console.log("station", station)
+    console.log('technicians', technicians)
+    
 
     // file =data
     
