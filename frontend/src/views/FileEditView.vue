@@ -12,8 +12,10 @@ import { RouterLink, useRouter } from 'vue-router'
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
 // const { create, list } = useLocalStorage(1000)
-const { getFile } = useApi()
+const { getFile, getTechnicians, edit } = useApi()
 const { currentRoute } = useRouter()
+const router = useRouter()
+
 
 
 // El reactive es para que la variable items se actualice
@@ -25,6 +27,9 @@ const { currentRoute } = useRouter()
 const file = reactive({})
 const station = reactive([])
 const technicians = reactive([])
+const techniciansValues = reactive([])
+
+
 
 console.log("Ahora: ", file)
 
@@ -40,14 +45,31 @@ onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
     const response = await getFile(currentRoute.value.params.id)
+    const techResponse = await getTechnicians()
     Object.assign(file, response.file)
     Object.assign(station, response.station)
     Object.assign(technicians, response.technicians)
+    Object.assign(techniciansValues, techResponse)
     // debugger
     console.log("file to preload", file)
     // console.log(Object.entries(file)[1][1])
+    
 
 })
+
+async function save(fields) {
+  try {
+    const id = currentRoute.value.params.id
+    // console.log("id del path: ", id)
+    const response = await edit(id, fields)
+    console.log("id respuesta: ", response.id_file)
+    
+    router.push(`/file/${response.id_file}/edit`)
+  } catch (error) {
+    console.error(error)
+  }
+  
+}
 
 // async function save(fields) {
 //   try {
@@ -70,6 +92,12 @@ onBeforeMount(async () => {
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     :file="file"
+    :station="station"
+    :technicians="technicians"
+    :technicians-values="techniciansValues"
+    
+    @on-submit="save"
+
   />
   <form-kit
     v-model="store.zoom"

@@ -13,12 +13,12 @@ import { RouterLink, RouterView } from 'vue-router'
         height="125"
       >
       <nav>
-        <RouterLink to="/">
+        <!-- <RouterLink to="/">
           Home
         </RouterLink>
         <RouterLink to="/about">
           About
-        </RouterLink>
+        </RouterLink> -->
         <RouterLink to="/form">
           Form
         </RouterLink>
