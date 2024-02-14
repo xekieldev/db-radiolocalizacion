@@ -1,18 +1,16 @@
 <script setup>
-// import { useLocalStorage } from '../composables/localstorage'
 import { useApi} from '../composables/api'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/MapMain.vue'
 import { useRlocFormData } from '../composables/rloc-form-data'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
-// const { create, list } = useLocalStorage(1000)
-const { getFile, getTechnicians, edit } = useApi()
+const { getFile, getAllTechnicians, edit } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 
@@ -26,69 +24,38 @@ const router = useRouter()
 // template sin necesidad de que su valor sea reasignado
 const file = reactive({})
 const station = reactive([])
-const technicians = reactive([])
 const techniciansValues = reactive([])
+const technicians = reactive([])
 
-
-
-console.log("Ahora: ", file)
-
-
-
-// const { lat, lng, zoom } = useRlocFormData()
 const store = useRlocFormData()
-
-
-
 
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
-    const response = await getFile(currentRoute.value.params.id)
-    const techResponse = await getTechnicians()
+    const response = await getFile(currentRoute.value.params.id)  
+    const techResponse = await getAllTechnicians()
     Object.assign(file, response.file)
     Object.assign(station, response.station)
-    Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
-    // debugger
-    console.log("file to preload", file)
-    // console.log(Object.entries(file)[1][1])
-    
-
+    Object.assign(technicians, response.technicians)
 })
 
 async function save(fields) {
   try {
     const id = currentRoute.value.params.id
-    // console.log("id del path: ", id)
     const response = await edit(id, fields)
-    console.log("id respuesta: ", response.id_file)
     
-    router.push(`/file/${response.id_file}/edit`)
+    router.push(`/file/${response.id_file}`)
   } catch (error) {
     console.error(error)
   }
   
 }
 
-// async function save(fields) {
-//   try {
-//     await create(fields)
-//     items.splice(0, items.length)
-//     const data = await list()
-//     items.push(...data)
-//     console.log("To pre load:", items)
-    
-    
-//   } catch (error) {
-//     console.error(error)
-//   }
-  
-// }
 </script>
 
 <template>
-  <frloc
+  <frloc v-if="station.localidad && station.provincia"
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     :file="file"
@@ -99,14 +66,14 @@ async function save(fields) {
     @on-submit="save"
 
   />
-  <form-kit
+  <!-- <form-kit
     v-model="store.zoom"
     type="range"
     label="Zoom"
     min="14"
     max="18"
   />
-  <mapa :position="[ store.lat, store.lng ]" />
+  <mapa :position="[ store.lat, store.lng ]" /> -->
 </template>
 
 <style scoped>

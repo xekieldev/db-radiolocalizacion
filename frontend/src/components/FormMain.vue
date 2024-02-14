@@ -1,6 +1,6 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, reactive, onBeforeMount } from 'vue'
 import { useTerritory } from '../composables/territory'
 import { useLink } from '../composables/link'
 import { useArea } from '../composables/area'
@@ -12,7 +12,16 @@ import { useStationType } from '../composables/stationtype'
 import { useRlocFormData } from '../composables/rloc-form-data'
 import { useFileValidation } from '../composables/filevalidation'
 import { getNode } from '@formkit/core'
+import { useRoute, useRouter } from 'vue-router'
+import { useApi} from '../composables/api'
+import Heading from './Heading.vue'
 
+
+
+const route = useRoute()
+const { currentRoute } = useRouter()
+
+const { getFile } = useApi()
 
 const emit = defineEmits(['onSubmit'])
 const props = defineProps({
@@ -24,33 +33,59 @@ const props = defineProps({
   techniciansValues: Array,
 })
 
-console.log("station localidad", props.station)
-console.log("technician values: ", props.technicians)
+const filePath = reactive({})
+const initialTechnicians = reactive([{id: "1"}, { id: "5"}])
+const fileId = ref('')
+
 
 
 function submitHandler(fields) {
   emit('onSubmit', fields)
 }
 
+
+onBeforeMount( async ()=> {
+  try{
+    fileId.value = currentRoute.value.query.from.slice(6,)
+    // console.log(fileId)
+    const response = await getFile(fileId.value)  
+    Object.assign(filePath , response.file)
+
+    // console.log("fileP: ", filePath)
+  } catch {
+  fileId.value = null
+  }
+})
+
+console.log("localidad", props.station.localidad)
+
 const province = ref(props.station.provincia)
 const city = ref(props.station.localidad)
 const { provinces, cities, getProvinceCities } = useTerritory()
 
+// getProvinceCities(province)
+// city.value = cities.value[0].value
+// props.station.localidad = city.value.value
+    
+
+
 watch(province, (newValue, oldValue) => {
-  console.log("hola")
   props.station.provincia = newValue
-  getProvinceCities(newValue)
-  if (newValue != oldValue) {
-    city.value.value = cities.value[0]
-    props.station.localidad = city.value.value
-  }
+  console.log("Valores ",newValue, oldValue)
+  
+  
+  // getProvinceCities(newValue)
+  // if (newValue != oldValue) {
+  //   city.value = cities.value[0].value
+  //   props.station.localidad = city.value.value
+    
+  // }
 })
 
 const { tipoVinculo } = useLink()
 const { area } = useArea()
 const { tipoPolarizacion } = usePolarization()
 const { servicio } = useService()
-const { tecnico } = useTechnician()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
 const store = useRlocFormData()
@@ -61,8 +96,7 @@ const linkType = ref('Radioeléctrico')
 </script>
 
 <template>
-  <h2>{{ title }}</h2>
-  <!-- <h3>{{ file.expediente }}</h3> -->
+  <heading>{{ title }}</heading>
   <form-kit
     type="form"
     submit-label="Guardar"
@@ -79,9 +113,21 @@ const linkType = ref('Radioeléctrico')
         type="text"
         label="Expediente"
         name="expediente"
+        v-model="filePath.expediente"
+        validation="required | validateFile"
+        :validation-rules="{ validateFile }"
+        v-if="fileId != null || fileId != undefined"
+        :disabled="true"
+
+      />
+      <form-kit
+        type="text"
+        label="Expediente"
+        name="expediente"
         v-model="file.expediente"
         validation="required | validateFile"
         :validation-rules="{ validateFile }"
+        v-else
       />
     </form-row>
     <form-row>
@@ -89,13 +135,42 @@ const linkType = ref('Radioeléctrico')
         type="date"
         label="Fecha"
         name="fecha" 
+        v-model="filePath.fecha"
+        v-if="fileId != null || fileId != undefined"
+        :disabled="true"
+      />
+      <form-kit
+        type="date"
+        label="Fecha"
+        name="fecha" 
         v-model="file.fecha"
+        v-else
+      />
+      <form-kit
+        type="time"
+        label="Hora"
+        name="hora"
+        v-model="filePath.hora"
+        v-if="fileId != null || fileId != undefined"
+        :disabled="true"
       />
       <form-kit
         type="time"
         label="Hora"
         name="hora"
         v-model="file.hora"
+        v-else
+      />
+      <form-kit
+        type="select"
+        id="area"
+        label="CCTE/Área"
+        name="area"
+        v-model="filePath.area"
+        :options="area"
+        placeholder="Área"
+        v-if="fileId != null || fileId != undefined"
+        :disabled="true"
       />
       <form-kit
         type="select"
@@ -105,6 +180,7 @@ const linkType = ref('Radioeléctrico')
         v-model="file.area"
         :options="area"
         placeholder="Área" 
+        v-else
       />
     </form-row>
     <form-row>
@@ -129,6 +205,20 @@ const linkType = ref('Radioeléctrico')
         :options="emplazamiento"
         placeholder="Emplazamiento"
         v-model="station.emplazamiento"
+        v-if="fileId != null || fileId != undefined"
+        value="Estudio"
+        :disabled="true"
+
+      />
+      <form-kit
+        type="select"
+        label="Tipo de Emplazamiento"
+        name="emplazamiento"
+        :options="emplazamiento"
+        placeholder="Emplazamiento"
+        v-model="station.emplazamiento"
+        v-else
+
       />
     </form-row>
     <form-row>
@@ -164,10 +254,11 @@ const linkType = ref('Radioeléctrico')
         label="Provincia"
         name="provincia"
         v-model="province"
+
         
       />
       <form-kit
-        :options="cities"
+        :options="cities.filter(c => (province && c.province === province.value))"
         type="select"
         label="Localidad"
         name="localidad"
@@ -177,23 +268,24 @@ const linkType = ref('Radioeléctrico')
     </form-row>
     <form-row>
       <form-kit
+        outer-class="field-domicilio"
         type="text"
         label="Domicilio"
         name="domicilio"
         v-model="station.domicilio"
       />
       <form-kit
-        v-model="store.lat"
+        v-model="station.latitud"
         type="number"
         label="Latitud"
-        name="lat"
+        name="latitud"
         step="0.000001"
       />
       <form-kit
-        v-model="store.lng"
+        v-model="station.longitud"
         type="number"
         label="Longitud"
-        name="lng"
+        name="longitud"
         step="0.000001"
       />
     </form-row>
@@ -201,7 +293,7 @@ const linkType = ref('Radioeléctrico')
       <form-kit
         type="textarea"
         label="Observaciones"
-        name="observacionesDom"
+        name="observaciones"
         validation="false"
         v-model="station.observaciones"
       />
@@ -243,7 +335,7 @@ const linkType = ref('Radioeléctrico')
     
     <form-row>
       <form-kit
-        v-model="linkType" 
+        v-model="station.tipoVinculo" 
         type="select"
         label="Tipo de Vínculo"
         name="tipoVinculo"
@@ -255,8 +347,8 @@ const linkType = ref('Radioeléctrico')
         label="Frecuencia Vínculo"
         name="frecuenciaVinc"
         step="0.00001"
-        :disabled="linkType !== 'Radioeléctrico'"
-        :validation="linkType === 'Radioeléctrico' && 'required'"
+        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
+        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
         v-model="station.frecuenciaVinc"
       />
       <form-kit
@@ -264,16 +356,16 @@ const linkType = ref('Radioeléctrico')
         label="Unidad"
         name="unidadVinc"
         :options="unidad"
-        :disabled="linkType !== 'Radioeléctrico'"
-        :validation="linkType === 'Radioeléctrico' && 'required'"
+        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
+        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
         v-model="station.unidadVinc"
       />
       <form-kit
         type="text"
         label="Sistema Irradiante"
         name="irradianteVinc"
-        :disabled="linkType !== 'Radioeléctrico'"
-        :validation="linkType === 'Radioeléctrico' && 'required'"
+        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
+        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
         v-model="station.irradianteVinc"
       />
       <form-kit
@@ -282,8 +374,8 @@ const linkType = ref('Radioeléctrico')
         name="polarizacionVinc"
         :options="tipoPolarizacion"
         placeholder="Polarización"
-        :disabled="linkType !== 'Radioeléctrico'"
-        :validation="linkType === 'Radioeléctrico' && 'required'"
+        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
+        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
         v-model="station.polarizacionVinc"
       />
     </form-row> 
@@ -291,19 +383,43 @@ const linkType = ref('Radioeléctrico')
       <form-kit
         type="select"
         label="Técnico"
-        name="tecnico1"
+        name="id_technician1"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
-        placeholder="Técnico 1"    
-        :value="technician&&technician[0].id"
+        placeholder="Técnico 1"
+        v-if="technicians && technicians.length > 1"    
+        v-model="technicians[0].id"
+        value
+
+  
+      />
+      <form-kit
+        type="select"
+        label="Técnico"
+        name="id_technician1"
+        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+        placeholder="Técnico 1"
+        v-else
+        v-model="initialTechnicians[0].id"
 
       />
       <form-kit
         type="select"
         label="Técnico"
-        name="tecnico2"
+        name="id_technician2"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
-        placeholder="Técnico 2" 
-        :value="technician&&technician[1].id"
+        placeholder="Técnico 2"
+        v-if="technicians && technicians.length > 1"    
+        v-model="technicians[1].id"
+  
+      />
+      <form-kit
+        type="select"
+        label="Técnico"
+        name="id_technician2"
+        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+        placeholder="Técnico 2"
+        v-else
+        v-model="initialTechnicians[1].id"
 
       />
     </form-row>
@@ -312,6 +428,9 @@ const linkType = ref('Radioeléctrico')
 
   
 <style scoped>
-
+.field-domicilio {
+  /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
+  flex: 0 0 70%;
+}
 </style>
   

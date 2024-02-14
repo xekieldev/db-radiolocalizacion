@@ -3,17 +3,21 @@
 </script>
 
 <template>
-  <div class="form-row-container">
+  <div class="container1">
     <slot />
   </div>
 </template>
 
 <style scoped>
-.form-row-container{
+.container1{
   /* background-color: red; */
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 5px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
   
 }
 

@@ -6,20 +6,17 @@ import { RouterLink, RouterView } from 'vue-router'
   <div class="wrapper">
     <header>
       <img
-        alt="Vue logo"
+        alt="ENACOM logo"
         class="logo"
-        src="@/assets/logo.svg"
-        width="125"
-        height="125"
+        src="../../img/Logo.png"
+        width="100"
+        height="100"
       >
       <nav>
-        <!-- <RouterLink to="/">
+        <RouterLink to="/">
           Home
         </RouterLink>
-        <RouterLink to="/about">
-          About
-        </RouterLink> -->
-        <RouterLink to="/form">
+        <!-- <RouterLink to="/form">
           Form
         </RouterLink>
         <RouterLink to="/map">
@@ -30,12 +27,18 @@ import { RouterLink, RouterView } from 'vue-router'
         </RouterLink>
         <RouterLink to="/loc">
           Loc
-        </RouterLink>
+        </RouterLink> -->
         <RouterLink to="/list">
-          List
+          Listado
         </RouterLink>
-        <RouterLink to="/tech">
+        <!-- <RouterLink to="/tech">
           Tech
+        </RouterLink> -->
+        <RouterLink to="/list_technicians">
+          Técnicos
+        </RouterLink>
+        <RouterLink to="/about">
+          About
         </RouterLink>
       </nav>
     </header>
@@ -47,8 +50,10 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 .wrapper {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
+  width: 900px;
+  margin: 0 auto;
 
 }
 
@@ -65,7 +70,7 @@ header {
 
 nav {
   width: 100%;
-  font-size: 12px;
+  font-size: 15px;
   text-align: center;
   margin-top: 2rem;
 }

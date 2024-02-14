@@ -22,8 +22,13 @@ export function useApi() {
     }
 
     async function edit(id, data) {
+        const payload = { ...data }
+        Object.keys(data).forEach( key => { 
+            if (typeof data[key] === 'string' || data[key] instanceof String)
+                payload[key] = data[key].toUpperCase()
+        })
         loading.value = true
-        const response = await axiosInstance.put(`/file/${id}/edit`, data)
+        const response = await axiosInstance.put(`/file/${id}/edit`, payload)
         loading.value = false
         return response && response.data 
     }
@@ -34,15 +39,44 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
-    // async function getStation(id) {
-    //     loading.value = true
-    //     const response = await axiosInstance.get(`/technician/${id}`)
-    //     loading.value = false
-    //     return response && response.data 
-    // }
-    async function getTechnicians() {
+   
+    async function getAllTechnicians() {
         loading.value = true
         const response = await axiosInstance.get(`/technician/`)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function getTechnician(id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/technician/${id}`)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function create_technician(data) {
+        loading.value = true
+        const response = await axiosInstance.post('/technician', data)
+        loading.value = false
+        return response && response.data 
+    }
+    async function delete_technician(id) {
+        loading.value = true
+        const response = await axiosInstance.delete(`/technician/${id}/delete_technician`)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function create_tech_measurement(id, data) {
+        loading.value = true
+        const response = await axiosInstance.post(`/file/${id}/create_tech_measurement`, data)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function getTechMeasurement(id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/file/${id}/tech_measurement`)
         loading.value = false
         return response && response.data 
     }
@@ -50,9 +84,13 @@ export function useApi() {
         list,
         loading,
         getFile,
-        // getStation,
         create,
         edit,
-        getTechnicians,
+        getAllTechnicians,
+        getTechnician,
+        delete_technician,
+        create_technician,
+        create_tech_measurement,
+        getTechMeasurement,
     }
 }

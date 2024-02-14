@@ -1,8 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
 from sqlalchemy import CheckConstraint
 
 # create the extension
@@ -41,15 +38,10 @@ class Filex(db.Model):   # la clase Producto hereda de db.Model
     expediente = db.Column(db.String(50), nullable = False)
     fecha = db.Column(db.String(10))
     hora = db.Column(db.String(5))
-    area = db.Column(db.String(20))
+    area = db.Column(db.String(25))
     status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
-    # id_station = db.Column(db.Integer, db.ForeignKey('Station.id'), nullable = False)
-    # stations = db.relationship('Station', backref='file', lazy = True)
     id_technician1 = db.Column(db.Integer)
     id_technician2 = db.Column(db.Integer)
-    # id_technician2 = db.Column(db.Integer, db.ForeignKey('Technician.id'), nullable = False)
-    # technicians = db.relationship('Technician', backref='file', lazy = True)
-    # status crear columna
     technicians = db.orm.relationship("Technician", secondary="technician_file")
     
    
@@ -77,27 +69,12 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     unidadVinc = db.Column(db.String(3))
     irradianteVinc = db.Column(db.String(10))
     polarizacionVinc = db.Column(db.String(15))
-    # id_location = db.Column(db.Integer, db.ForeignKey('Location.id'), nullable = False)
-    # locations = db.relationship('Location', backref = 'station', lazy = True)
-    # location = db.orm.relationship("Location")
-    # id_location = db.Column(db.Integer, db.ForeignKey("Location.id"))
     provincia = db.Column(db.String(30))
     localidad = db.Column(db.String(30))
     domicilio = db.Column(db.String(50))
     latitud = db.Column(db.Float)
     longitud = db.Column(db.Float)
     observaciones = db.Column(db.String(300))
-
-# class Location(db.Model):   # la clase Producto hereda de db.Model
-    # # define los campos de la tabla
-    # __tablename__= "Location"
-    # id = db.Column(db.Integer, primary_key = True)
-    # provincia = db.Column(db.String(30))
-    # localidad = db.Column(db.String(30))
-    # domicilio = db.Column(db.String(50))
-    # latitud = db.Column(db.Float)
-    # longitud = db.Column(db.Float)
-    # observaciones = db.Column(db.String(300))
 
 class TechMeasurement(db.Model):
     __tablename__= 'TechMeasurement'
@@ -123,23 +100,12 @@ class TechMeasurement(db.Model):
     id_technician2 = db.Column(db.Integer)
     
 
-
 class Technician (db.Model):
     __tablename__ = 'Technician'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     nombre = db.Column(db.String(50), nullable = False)
     apellido = db.Column(db.String(50), nullable = False)
     
-
-
-# #  ************************************************************
-# class StationSchema(ma.Schema):
-#     class Meta:
-#         fields = ('id', 'nombre', 'precio', 'stock', 'imagen')
-
-
-# station_schema = StationSchema()            # para crear un producto
-# stations_schema = StationSchema(many=True)  # multiples registros
 
 def init_app(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///radioloc.sqlite"
