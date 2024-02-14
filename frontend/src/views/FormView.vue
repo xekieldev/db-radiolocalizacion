@@ -138,7 +138,7 @@ const area = [{
       <form-kit
         type="textarea"
         label="Observaciones"
-        name="observacionesDom"
+        name="observaciones"
       />
     </form-row>
 

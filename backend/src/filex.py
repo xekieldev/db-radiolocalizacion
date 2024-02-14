@@ -1,13 +1,7 @@
 from flask import Blueprint
-from flask import flash
-from flask import g
-from flask import redirect
-from flask import render_template
 from flask import request
-from flask import url_for
-from werkzeug.exceptions import abort
 from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, technician_file, Technician, ma
-from sqlalchemy import exc, insert, update, delete
+from sqlalchemy import exc, insert, delete
 from src.technician import technicians_schema
 from src.station import station_schema
 from src.tech_measurement import tech_measurements_schema
@@ -26,7 +20,6 @@ filexs_schema = FilexSchema( many = True )
 def get_all_files():
     try:
         all_files = Filex.query.all()
-        # import pdb; pdb.set_trace()
         return filexs_schema.dump(all_files)
     except:
         response = {"message": "server error"}
@@ -36,7 +29,6 @@ def get_all_files():
 
 @bp.route("/file", methods=["POST"])
 def filex():
-    # import pdb; pdb.set_trace()
     
     try:
         expediente = request.json.get('expediente')
@@ -92,7 +84,6 @@ def filex():
         
         response = {"id_file": filex.id,
                     "id_station": station.id }
-        # import pdb; pdb.set_trace()
         return response, 201 
     except exc.SQLAlchemyError:
         response = { "message": "database error" }
@@ -108,14 +99,11 @@ def get_file(id):
         filex = Filex.query.get(id)
         station = Station.query.get(id)
         technicians = (db.session.query(Technician).join(technician_file).filter(technician_file.c.id_file==id))
-        # technicians_ids = query.all()
-        # combined_return = [ filex_schema.dump(filex), station_schema.dump(station), technicians_schema.dump(technicians) ]
         combined_return = {"file": filex_schema.dump(filex),
                            "station": station_schema.dump(station),
                            "technicians": technicians_schema.dump(technicians)}
         return combined_return
     except Exception as e:
-        # import pdb; pdb.set_trace()
         print(e)
         response = {"message": "input error"}
         return response, 400
@@ -250,7 +238,6 @@ def delete_file(id):
     try:
         filex = Filex.query.get(id)
         filex.status = 'Deleted'
-        # import pdb; pdb.set_trace()
         db.session.commit()
         response = {'id_file': filex.id}
         return response
@@ -260,7 +247,7 @@ def delete_file(id):
         return response, 400
 
 
-@bp.route("/file/<id>/tech_measurement", methods=["POST"])
+@bp.route("/file/<id>/create_tech_measurement", methods=["POST"])
 def tech_measurement(id):
     try:
         fecha = request.json.get('fecha')
@@ -288,7 +275,6 @@ def tech_measurement(id):
        
         r = db.session.add(tech_measurement)
         db.session.commit()
-        # import pdb; pdb.set_trace()
         stmt1 = (
         insert(technician_tech_measurement).
         values(id_tech_measurement = tech_measurement.id, id_technician = request.json.get('id_technician1'))
@@ -306,7 +292,6 @@ def tech_measurement(id):
 
         return response, 201 
     except exc.SQLAlchemyError as e:
-        # print(f"Error de SQLAlchemy: {e}")
         response = { "message": "database error" }
         return response, 500
     except:
@@ -318,18 +303,16 @@ def tech_measurement(id):
 def get_tech_measurement(id):
     try:
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
-        technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==id))
+        technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==tech_measurements_schema.dump(tech_measurement)[0]['id']))
 
-        # import pdb; pdb.set_trace()
         combined_return = {
-                            "Tech Measurements": tech_measurements_schema.dump(tech_measurement),
-                            "Technicians":  technicians_schema.dump(technicians)
+                            "techMeasurement": tech_measurements_schema.dump(tech_measurement),
+                            "technicians":  technicians_schema.dump(technicians)
 
         }
         return combined_return
     except Exception as e:
         print(e)
-        import pdb; pdb.set_trace()
 
         response = {"message": "input error"}
         return response, 400

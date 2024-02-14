@@ -57,6 +57,14 @@ const router = createRouter({
       component: () => import('../views/ListView.vue')
     },
     {
+      path: '/list_technicians',
+      name: 'listTechnicians',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ListTechniciansView.vue')
+    },
+    {
       path: '/tech',
       name: 'tech',
       // route level code-splitting
@@ -87,6 +95,38 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/FileCreateView.vue')
+    },
+    {
+      path: '/technician/create_technician',
+      name: 'createTechnician',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FormNewTechnicianView.vue')
+    },
+    {
+      path: '/file/:id/create_tech_measurement',
+      name: 'createTechMeasurement',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FormTMView.vue')
+    },
+    {
+      path: '/technician/:id/delete_technician',
+      name: 'deleteTechnician',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FormDeleteTechnicianView.vue')
+    },
+    {
+      path: '/file/:id/tech_measurement',
+      name: 'tech_measurement',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/TechMeasurementDisplayView.vue')
     }
 
   ]

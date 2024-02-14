@@ -31,7 +31,6 @@ def technician():
         r = db.session.add(technician)
         db.session.commit()
         response = {"id": technician.id }
-        # import pdb; pdb.set_trace()
         return response, 201 
     except exc.SQLAlchemyError:
         response = { "message": "database error" }
@@ -63,7 +62,7 @@ def get_all_technicians():
         return response, 500
 
 
-@bp.route("/technician/<id>", methods = ['DELETE'])
+@bp.route("/technician/<id>/delete_technician", methods = ['DELETE'])
 def delete_technician(id):
     try:
         technician=Technician.query.get(id)

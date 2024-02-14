@@ -3,17 +3,20 @@
 </script>
 
 <template>
-  <div class="form-row-container">
+  <div class="heading-container">
     <slot />
   </div>
 </template>
 
 <style scoped>
-.form-row-container{
+.heading-container{
   /* background-color: red; */
   display: flex;
+  font-size: 25px;
+  justify-content: center;
+  width: 100%;
   flex-direction: row;
-  gap: 10px;
+  padding: 5px;
   
 }
 
