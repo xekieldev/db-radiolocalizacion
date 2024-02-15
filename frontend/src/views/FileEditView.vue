@@ -22,7 +22,7 @@ const router = useRouter()
 // el valor de la variable se actualiza automáticamente en el
 // template sin necesidad de que su valor sea reasignado
 const file = reactive({})
-const station = reactive([])
+const station = reactive({})
 const techniciansValues = reactive([])
 const technicians = reactive([])
 
@@ -36,6 +36,8 @@ onBeforeMount(async () => {
     Object.assign(techniciansValues, techResponse)
     Object.assign(technicians, response.technicians)
 })
+
+console.log("lakhjd", typeof(station))
 
 async function save(fields) {
   try {

@@ -22,10 +22,12 @@ export function useApi() {
     }
 
     async function edit(id, data) {
+        const caseOmit = ['unidadVinc', 'unidad']
         const payload = { ...data }
         Object.keys(data).forEach( key => { 
             if (typeof data[key] === 'string' || data[key] instanceof String)
-                payload[key] = data[key].toUpperCase()
+                if (!caseOmit.includes(key))
+                    payload[key] = data[key].toUpperCase()
         })
         loading.value = true
         const response = await axiosInstance.put(`/file/${id}/edit`, payload)
