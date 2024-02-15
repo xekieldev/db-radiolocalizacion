@@ -3,7 +3,6 @@ import { useApi} from '../composables/api'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/MapMain.vue'
-import { useRlocFormData } from '../composables/rloc-form-data'
 import { useRouter } from 'vue-router'
 
 
@@ -25,8 +24,6 @@ const file = reactive({})
 const station = reactive([])
 const technicians = reactive([])
 const techniciansValues = reactive([])
-
-const store = useRlocFormData()
 
 
 
