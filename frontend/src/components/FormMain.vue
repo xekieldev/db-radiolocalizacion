@@ -338,8 +338,8 @@ const linkType = ref('Radioeléctrico')
         label="Frecuencia Vínculo"
         name="frecuenciaVinc"
         step="0.00001"
-        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
-        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
+        :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
+        :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
         v-model="station.frecuenciaVinc"
       />
       <form-kit
@@ -347,16 +347,16 @@ const linkType = ref('Radioeléctrico')
         label="Unidad"
         name="unidadVinc"
         :options="unidad"
-        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
-        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
+        :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
+        :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
         v-model="station.unidadVinc"
       />
       <form-kit
         type="text"
         label="Sistema Irradiante"
         name="irradianteVinc"
-        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
-        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
+        :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
+        :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
         v-model="station.irradianteVinc"
       />
       <form-kit
@@ -365,8 +365,8 @@ const linkType = ref('Radioeléctrico')
         name="polarizacionVinc"
         :options="tipoPolarizacion"
         placeholder="Polarización"
-        :disabled="station.tipoVinculo !== 'Radioeléctrico'"
-        :validation="station.tipoVinculo === 'Radioeléctrico' && 'required'"
+        :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
+        :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
         v-model="station.polarizacionVinc"
       />
     </form-row> 
