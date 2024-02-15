@@ -3,6 +3,7 @@ import { useApi } from '../composables/api'
 import { onBeforeMount, reactive, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
+import MyButton from '../components/MyButton.vue';
 
 
 // El 1000 es la cantidad de milisegundos que se tardarán
@@ -90,7 +91,8 @@ async function del(id) {
 .technicians-list-container {
   display: flex;
   flex-direction: column;
-  max-width: 900px;
+  /* max-width: 900px; */
+  width: 100%;
   justify-content: center;
 }
 .status{

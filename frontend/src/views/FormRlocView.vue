@@ -3,7 +3,7 @@ import { useLocalStorage } from '../composables/localstorage'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/MapMain.vue'
-import { useRlocFormData } from '../composables/rloc-form-data'
+//import { useRlocFormData } from '../composables/rloc-form-data'
 
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
@@ -18,7 +18,7 @@ const { create, list } = useLocalStorage(1000)
 // template sin necesidad de que su valor sea reasignado
 const items = reactive([])
 // const { lat, lng, zoom } = useRlocFormData()
-const store = useRlocFormData()
+//const store = useRlocFormData()
 
 
 
@@ -50,14 +50,14 @@ async function save(fields) {
     context="Radiolocalizacion" 
     @on-submit="save"
   />
-  <form-kit
+  <!-- <form-kit
     v-model="store.zoom"
     type="range"
     label="Zoom"
     min="14"
     max="18"
   />
-  <mapa :position="[ store.lat, store.lng ]" />
+  <mapa :position="[ store.lat, store.lng ]" /> -->
 </template>
 
 <style scoped>

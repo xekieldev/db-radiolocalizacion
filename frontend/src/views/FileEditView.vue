@@ -3,7 +3,6 @@ import { useApi} from '../composables/api'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/MapMain.vue'
-import { useRlocFormData } from '../composables/rloc-form-data'
 import { useRouter } from 'vue-router'
 
 
@@ -26,8 +25,6 @@ const file = reactive({})
 const station = reactive([])
 const techniciansValues = reactive([])
 const technicians = reactive([])
-
-const store = useRlocFormData()
 
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
@@ -55,7 +52,7 @@ async function save(fields) {
 </script>
 
 <template>
-  <frloc v-if="station.localidad && station.provincia"
+  <frloc v-if="station.provincia"
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     :file="file"
@@ -66,14 +63,6 @@ async function save(fields) {
     @on-submit="save"
 
   />
-  <!-- <form-kit
-    v-model="store.zoom"
-    type="range"
-    label="Zoom"
-    min="14"
-    max="18"
-  />
-  <mapa :position="[ store.lat, store.lng ]" /> -->
 </template>
 
 <style scoped>

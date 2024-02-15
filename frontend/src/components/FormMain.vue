@@ -1,17 +1,14 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { ref, watch, onMounted, reactive, onBeforeMount } from 'vue'
+import { ref, watch, reactive, onBeforeMount } from 'vue'
 import { useTerritory } from '../composables/territory'
 import { useLink } from '../composables/link'
 import { useArea } from '../composables/area'
 import { usePolarization } from '../composables/polarization'
 import { useService } from '../composables/service'
-import { useTechnician } from '../composables/technician'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
-import { useRlocFormData } from '../composables/rloc-form-data'
 import { useFileValidation } from '../composables/filevalidation'
-import { getNode } from '@formkit/core'
 import { useRoute, useRouter } from 'vue-router'
 import { useApi} from '../composables/api'
 import Heading from './Heading.vue'
@@ -63,23 +60,18 @@ const province = ref(props.station.provincia)
 const city = ref(props.station.localidad)
 const { provinces, cities, getProvinceCities } = useTerritory()
 
-// getProvinceCities(province)
-// city.value = cities.value[0].value
-// props.station.localidad = city.value.value
-    
-
-
 watch(province, (newValue, oldValue) => {
   props.station.provincia = newValue
-  console.log("Valores ",newValue, oldValue)
   
-  
-  // getProvinceCities(newValue)
-  // if (newValue != oldValue) {
-  //   city.value = cities.value[0].value
-  //   props.station.localidad = city.value.value
+  getProvinceCities(newValue)
+  if (newValue !== oldValue) {
+    // console.log(cities && cities.value && cities.value.length && cities.value[0].value)
     
-  // }
+    city.value = cities.value[0].value
+    props.station.localidad = city.value.value
+  }
+  console.log('ready')
+  
 })
 
 const { tipoVinculo } = useLink()
@@ -88,7 +80,6 @@ const { tipoPolarizacion } = usePolarization()
 const { servicio } = useService()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
-const store = useRlocFormData()
 const { validateFile } = useFileValidation()
 const linkType = ref('Radioeléctrico')
 
@@ -258,7 +249,7 @@ const linkType = ref('Radioeléctrico')
         
       />
       <form-kit
-        :options="cities.filter(c => (province && c.province === province.value))"
+        :options="cities"
         type="select"
         label="Localidad"
         name="localidad"

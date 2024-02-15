@@ -1,13 +1,16 @@
 <script setup>
 import { useApi } from '../composables/api'
 import { onBeforeMount, reactive } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
+import MyButton from '../components/MyButton.vue';
 
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
 const { list, loading } = useApi()
+
+const router = useRouter()
 
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
@@ -16,6 +19,13 @@ const { list, loading } = useApi()
 // el valor de la variable se actualiza automáticamente en el
 // template sin necesidad de que su valor sea reasignado
 const items = reactive([])
+
+function editItem(item) {  
+  router.push(`/file/${item}/edit`)
+}
+function createItem() {  
+  router.push('/file/create')
+}
 
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
@@ -30,7 +40,7 @@ onBeforeMount(async () => {
 <template>
   <heading>Listado de estaciones</heading>
   <div class="list-container">
-      <RouterLink to="/file/create">Agregar Radiolocalización</RouterLink>
+      <my-button @on-tap="createItem" label="Agregar Radiolocalización" />
     <table>
       <tr>
         <th>id</th>
@@ -47,7 +57,7 @@ onBeforeMount(async () => {
       <td>{{ item.expediente }}</td> 
       <td>{{ item.area }}</td> 
       <td>{{ item.fecha +" "+item.hora}}</td> 
-      <td><RouterLink :to="'file/'+item.id+'/edit'">Editar</RouterLink></td> 
+      <td><my-button @on-tap="() => editItem(item.id)" label="Editar"/></td> 
 
       </tr>
 
@@ -62,7 +72,8 @@ onBeforeMount(async () => {
 .list-container{
   display: flex;
   flex-direction: column;
-  max-width: 900px;
+  /* max-width: 900px; */
+  width: 100%;
   justify-content: center;
 }
 .status{
@@ -83,4 +94,9 @@ th{
 tr:nth-child(odd) {
   background-color: #ebeded;
 }
+/* a{
+  color: rgb(0, 123, 255);
+  text-decoration: none;
+  font-weight: 500; 
+} */
 </style>
