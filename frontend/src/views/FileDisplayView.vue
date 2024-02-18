@@ -8,6 +8,7 @@ import Mapa from '../components/MapMain.vue'
 import DisplayRow from '../components/DisplayRow.vue'
 import PropValue from '../components/PropValue.vue'
 import Heading from '../components/Heading.vue'
+import MyButton from '../components/MyButton.vue'
 
 
 
@@ -24,15 +25,20 @@ const currentPath = ref('')
 
 const redirectToCreate = () => {
   // console.log("currentPath.value: ", router.currentRoute.value.path)
-
   currentPath.value = router.currentRoute.value.path
-
-  
-
-  // Ahora puedes navegar a la nueva ruta y pasar la ruta actual como un parámetro de consulta
+  // Ahora se puede navegar a la nueva ruta y pasar la ruta actual como un parámetro de consulta
   router.push({ path: '/file/create', query: { from: currentPath.value } })
 }
 
+function viewItem(item) {  
+  router.push(`/file/${item}/tech_measurement`)
+}
+function editItem(item) {  
+  router.push(`/file/${item}/edit`)
+}
+function goBack() {  
+  router.push(`/list`)
+}
 
 
 
@@ -68,28 +74,30 @@ console.log(technicians)
 
 </script>
 <template>
-  <div class="tab-container">
-    <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink>
-    <RouterLink class="tab" :to="'/file/'+ file.id +'/tech_measurement'">Ver Mediciones Técnicas</RouterLink>
-    <a class="tab" @click="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA'">Agregar Estudio</a>
+  <my-button @on-tap="goBack" class="primary go-back-btn" label="Volver" />
+  <!-- <my-button @on-tap="() => editItem(file.id)" label="Editar"/> -->
+  <heading>Radiolocalización de Estaciones</heading>
+
+  <div class="buttons-container">
+    <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
+    <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/tech_measurement'">Ver Mediciones Técnicas</RouterLink> -->
+    <my-button @on-tap="() => viewItem(file.id)" class="secondary tech-meas-btn" label="Mediciones Técnicas"/>
+    <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == ('PLANTA TRANSMISORA' || 'Planta Transmisora')" class="secondary estudio-btn" label="Agregar Estudio"/>
+    <!-- <a class="tab" @click="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA'">Agregar Estudio</a> -->
   </div>
-  <br>
   <div class="container">
-    <heading>Radiolocalización de Estaciones</heading> <br>
     <display-row> 
+      <prop-value class="prop" label="id" :value="file.id"/>
       <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
       <prop-value class="prop" label="Area" :value="file.area"/>
       <prop-value class="prop" label="Fecha y hora" :value="file.fecha +' '+ file.hora"/>
-      
-      <!-- <prop-value class="prop" label="Expediente" :value="station.expediente"/>
-      <prop-value class="prop" label="Expediente" :value="station.expediente"/>
-      <prop-value class="prop" label="Expediente" :value="station.expediente"/> -->
     </display-row>
     <display-row>
       <prop-value class="prop double" label="Identificación" :value="station.identificacion"/>
       <prop-value class="prop" label="Frecuencia" :value="station.frecuencia +' '+ station.unidad"/>
       <prop-value class="prop" label="Clase de Emision" :value="station.claseEmision"/>
       <prop-value class="prop" label="Servicio" :value="station.servicio"/>
+      <prop-value class="prop" label="Emplazamiento" :value="station.emplazamiento"/>
     </display-row>
     <display-row>
       <prop-value class="prop double" label="Domicilio" :value="station.domicilio"/>
@@ -129,9 +137,11 @@ console.log(technicians)
 
 
   </div>
+  <div class="buttons-container">
+    <my-button @on-tap="() => editItem(file.id)" class="tertiary go-back-btn" label="Editar"/>
+    <my-button @on-tap="goBack" class="primary go-back-btn" label="Volver"/>
+  </div>
 
-  <RouterLink to="/list">Volver</RouterLink>
-  <RouterLink :to="'/file/'+file.id+'/edit'">Editar</RouterLink>
 </template>
 
 <style scoped>
@@ -140,50 +150,14 @@ console.log(technicians)
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-  /* border: solid; */
 }
 
 .status{
     background-color: lightyellow;
 }
-
-.tab-container {
-  display: flex;
-  width: 500px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  margin-left: 46%;
-}
-.tab {
-  flex: 1;
-  text-align: center;
-  padding: 5px 20px;
-  border: 1px solid #ccc;
-  border-bottom: none; 
-  border-radius: 5px 5px 0 0;
-  background-color: #f2f2f2;
-  text-decoration: none;
-  color: #333;
-  position: relative; 
-  z-index: 1; 
-}
-
 .prop:hover {
-  background-color: #e0e0e0;
+  background-color: #bdc0c2;
 }
-
-.tab:before {
-  content: ''; 
-  position: absolute;
-  top: 100%; 
-  left: 0;
-  width: 100%;
-  height: 5px; 
-  background-color: rgba(0, 0, 0, 0.1); 
-  z-index: -1; 
-  border-radius: 5px 5px 0 0; 
-}
-
 .prop{
   flex-grow: 1;
   border-radius: 10px 0 0;
@@ -193,5 +167,26 @@ console.log(technicians)
 }
 .technicians{
   border-bottom: 1px solid #cbcdce;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: end;
+  /* margin-bottom: 5px; */
+  margin: 5px;
+}
+
+.tech-meas-btn {
+  align-self:flex-end;
+
+}
+.estidio-btn {
+  align-self: flex-end;
+}
+
+.go-back-btn {
+  align-self:flex-end; 
 }
 </style>
