@@ -12,7 +12,12 @@ import MyButton from '../components/MyButton.vue';
 const { getAllTechnicians, delete_technician, loading } = useApi()
 const router = useRouter()
 
-
+function createItem() {  
+  router.push('/technician/create_technician')
+}
+function deleteItem() {  
+  router.push('/technician/create_technician')
+}
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
 // inicializa como una lista vacía y más abajo se hace la llamada
@@ -58,14 +63,16 @@ async function del(id) {
 
 </script>
 <template>
-  <heading>Técnicos</heading>
+  <heading>Gestión de Técnicos</heading>
   <div class="technicians-list-container">
-     <RouterLink to="/technician/create_technician">Agregar Nuevo Técnico</RouterLink>
+     <!-- <RouterLink to="/technician/create_technician">Agregar Nuevo Técnico</RouterLink> -->
+     <my-button @on-tap="createItem" class="secondary right" label="Nuevo Técnico" />
   <table>
     <tr>
       <th>id</th>
       <th>Nombre</th>
       <th>Apellido</th>
+      <th>Área/CCTE</th>
       <th>Acciones</th>
     </tr>
     <tr
@@ -75,8 +82,11 @@ async function del(id) {
      <td>{{ item.id }}</td> 
      <td>{{ item.nombre }}</td> 
      <td>{{ item.apellido }}</td> 
-     <td><a @click="confirmar(item.id)" v-if="status[item.id]!=1">Borrar</a>
-     <a @click="del(item.id)" v-if="status[item.id]===1" class="danger">Confirmar?  </a></td>
+     <td>CCTE</td>
+     <td>
+          <my-button @on-tap="confirmar(item.id)" v-if="status[item.id]!=1" class="primary center" label="Borrar"/>
+          <my-button @on-tap="del(item.id)" v-if="status[item.id]===1" class="tertiary center" label="¿Confirmar?"/>
+      </td>
     </tr>
     
     <div class="status">
@@ -100,6 +110,7 @@ async function del(id) {
 }
 table{
   justify-content: center; 
+  margin-top: 5px;
   
 }
 th, td{
@@ -109,12 +120,23 @@ th, td{
 th{
   font-weight: 700;
   background-color: #cbcdce;
+  border-radius: 10px 0 0;
+
 }
 tr:nth-child(odd) {
   background-color: #ebeded;
+  border-radius: 10px 0 0;
+
 }
-.danger{
+
+
+.danger {
   color: red;
   font-weight: 700;
+  border: 1px solid red;
 }
+.danger:hover {
+  background-color: red;
+}
+
 </style>

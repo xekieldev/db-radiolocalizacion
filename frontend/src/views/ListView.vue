@@ -26,6 +26,9 @@ function editItem(item) {
 function createItem() {  
   router.push('/file/create')
 }
+function viewItem(item) {  
+  router.push(`/file/${item}`)
+}
 
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
@@ -38,9 +41,9 @@ onBeforeMount(async () => {
 
 </script>
 <template>
-  <heading>Listado de estaciones</heading>
+  <heading>Listado de Expedientes</heading>
   <div class="list-container">
-      <my-button @on-tap="createItem" label="Agregar Radiolocalización" />
+      <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" />
     <table>
       <tr>
         <th>id</th>
@@ -53,11 +56,12 @@ onBeforeMount(async () => {
         v-for="item in items"
         :key="item"
       >
-      <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> 
+      <!-- <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> -->
+      <td><my-button @on-tap="() => viewItem(item.id)" class="primary center" :label="item.id"/></td>
       <td>{{ item.expediente }}</td> 
       <td>{{ item.area }}</td> 
       <td>{{ item.fecha +" "+item.hora}}</td> 
-      <td><my-button @on-tap="() => editItem(item.id)" label="Editar"/></td> 
+      <td><my-button @on-tap="() => editItem(item.id)" class="primary center" label="Editar"/></td> 
 
       </tr>
 
@@ -81,6 +85,7 @@ onBeforeMount(async () => {
 }
 table{
   justify-content: center; 
+  margin-top: 5px;
   
 }
 th, td{
@@ -90,13 +95,13 @@ th, td{
 th{
   font-weight: 700;
   background-color: #cbcdce;
+  border-radius: 10px 0 0;
+
 }
 tr:nth-child(odd) {
   background-color: #ebeded;
+  border-radius: 10px 0 0;
+
 }
-/* a{
-  color: rgb(0, 123, 255);
-  text-decoration: none;
-  font-weight: 500; 
-} */
+  
 </style>

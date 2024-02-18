@@ -50,8 +50,8 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 .wrapper {
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  flex-direction: column;
   width: 900px;
   margin: 0 auto;
 
