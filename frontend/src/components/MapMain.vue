@@ -45,11 +45,11 @@ const store = useRlocFormData()
   <div class="map-container">
     <l-map
       ref="map"
-      :zoom="19"
+      :zoom=19
       :center="[position[0] , position[1]]"
       :use-global-leaflet="false"
       :options="{ zoomControl: true }"
-      :min-zoom="1"
+      :min-zoom=1
       draggable="false"
       dragging="false"
       
@@ -58,11 +58,11 @@ const store = useRlocFormData()
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
         name="OpenStreetMap"
-        max-zoom="20"
+        max-zoom=20
       />
       <l-marker :lat-lng="[position[0] , position[1] ]">
         <l-icon
-          :icon-size="[60, 60]"
+          :icon-size="[50, 50]"
           icon-url="../../img/antena.png"
         />
         <l-popup>Coordenadas: {{ position[0] }}, {{ position[1] }}</l-popup>

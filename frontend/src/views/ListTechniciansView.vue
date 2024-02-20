@@ -82,7 +82,7 @@ async function del(id) {
      <td>{{ item.id }}</td> 
      <td>{{ item.nombre }}</td> 
      <td>{{ item.apellido }}</td> 
-     <td>CCTE</td>
+     <td>{{ item.area }}</td>
      <td>
           <my-button @on-tap="confirmar(item.id)" v-if="status[item.id]!=1" class="primary center" label="Borrar"/>
           <my-button @on-tap="del(item.id)" v-if="status[item.id]===1" class="tertiary center" label="¿Confirmar?"/>

@@ -35,6 +35,8 @@ onBeforeMount(async () => {
     Object.assign(station, response.station)
     Object.assign(techniciansValues, techResponse)
     Object.assign(technicians, response.technicians)
+    console.log(file)
+    
 })
 
 console.log("lakhjd", typeof(station))
@@ -42,7 +44,11 @@ console.log("lakhjd", typeof(station))
 async function save(fields) {
   try {
     const id = currentRoute.value.params.id
+    console.log("Id Edit: ", id)
+    
     const response = await edit(id, fields)
+    console.log(response)
+    
     
     router.push(`/file/${response.id_file}`)
   } catch (error) {

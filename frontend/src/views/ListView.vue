@@ -8,9 +8,10 @@ import MyButton from '../components/MyButton.vue';
 // El 1000 es la cantidad de milisegundos que se tardarán
 // en responder los métodos. Esto es para emular la naturaleza
 // asíncrona que vas a tener cuando uses un API HTTP.
-const { list, loading } = useApi()
+const { list, loading, deleteFile } = useApi()
 
 const router = useRouter()
+const currentRoute = useRouter()
 
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
@@ -30,12 +31,30 @@ function viewItem(item) {
   router.push(`/file/${item}`)
 }
 
+async function deleteItem(item) {  
+  console.log("id?", item)
+  
+  const response = await deleteFile(item)
+  window.location.reload()
+
+  
+}
+
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
-    const data = await list()
-    items.push(...data)
-
+    console.log("Path", router.currentRoute.value.query.includeDeleted)
+    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
+      const data = await list()
+      items.push(...data)
+      console.log("data: ", data)
+    } else {
+        const data = await list(true)
+        items.push(...data)
+        console.log("data else: ", data)
+    }
+    
+    
 })
 
 
@@ -50,6 +69,7 @@ onBeforeMount(async () => {
         <th>Expediente</th>
         <th>Área</th>
         <th>Fecha y hora</th>
+        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th>
         <th>Acciones</th>
       </tr>
       <tr
@@ -57,11 +77,17 @@ onBeforeMount(async () => {
         :key="item"
       >
       <!-- <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> -->
-      <td><my-button @on-tap="() => viewItem(item.id)" class="primary center" :label="item.id"/></td>
+      <td><my-button @on-tap="() => viewItem(item.id)" class="primary center" :label="(item.id.toString())"/></td>
       <td>{{ item.expediente }}</td> 
       <td>{{ item.area }}</td> 
       <td>{{ item.fecha +" "+item.hora}}</td> 
-      <td><my-button @on-tap="() => editItem(item.id)" class="primary center" label="Editar"/></td> 
+      <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td>
+      <td> 
+        <div class="action-buttons-container">
+          <my-button @on-tap="() => editItem(item.id)" class="primary center" label="Editar"/>
+          <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/>
+        </div>
+      </td> 
 
       </tr>
 
@@ -102,6 +128,13 @@ tr:nth-child(odd) {
   background-color: #ebeded;
   border-radius: 10px 0 0;
 
+}
+
+.action-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  margin: 0;
 }
   
 </style>

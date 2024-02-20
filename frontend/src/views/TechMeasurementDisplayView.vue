@@ -34,6 +34,8 @@ const file = reactive({})
 const techMeasurement = reactive({})
 const technicians = reactive({})
 const idPath = ref(currentRoute.value.params.id)
+console.log("idPath: ", idPath)
+
 
 
 onMounted(async () => {
@@ -60,41 +62,13 @@ onMounted(async () => {
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
     <my-button @on-tap="() => viewItem(file.id)" class="primary right" label="Agregar Mediciones Técnicas"/>
 
-  <!-- <div v-for="value, index in techMeasurement">
-  <dl>{{`Medición Técnica ${parseInt(index,10)+1}`}}</dl>
-  <dl v-for="[key, value] in Object.entries(value)">
-    <dt>{{key}}</dt>
-    <dd>{{ value !== null ? value : '---' }}</dd>
-
-  </dl>
-
-  </div>
-  <h3>Técnicos</h3>
-  <div v-for="value, index in technicians">
-  <dl>{{`Técnico ${parseInt(index,10)+1}`}}</dl>
-  <dl v-for="[key, value] in Object.entries(value)">
-    <dt>{{key}}</dt>
-    <dd>{{ value !== null ? value : '---' }}</dd>
-
-  </dl>
-
-  </div> -->
-
-  <!-- <display-row v-if="techMeasurement[0].id"> 
-    <prop-value class="prop" label="id Expediente" :value="file.id"/>
-    <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
-    <prop-value class="prop" label="Area" :value="file.area"/>
-    <prop-value class="prop" label="Fecha y hora" :value="file.fecha +' '+ file.hora"/>
-  </display-row> -->
+ 
   <div v-for="value, index in techMeasurement">
   <display-row > 
       <prop-value class="prop technicians"  label="id" :value="techMeasurement[index].id"/>
       <prop-value class="prop technicians"  label="Fecha y hora" :value=" techMeasurement[index].fecha + ' ' + techMeasurement[index].hora"/>
       <prop-value class="prop technicians"  label="Area" :value=" techMeasurement[index].area"/>
-      <!-- <prop-value class="prop technicians"  label="Localidad" :value=" techMeasurement[index].localidad"/>
-      <prop-value class="prop technicians"  label="Domicilio" :value=" techMeasurement[index].domicilio"/>
-      <prop-value class="prop technicians"  label="Latitud" :value=" techMeasurement[index].latitud"/>
-      <prop-value class="prop technicians"  label="Longitud" :value=" techMeasurement[index].longitud"/> -->
+    
 
   </display-row>
   <display-row > 

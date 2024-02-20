@@ -1,11 +1,14 @@
 <script setup>
 import FormRow from './FormRow.vue'
+import { useArea } from '../composables/area';
 
 const emit = defineEmits(['onSubmit'])
 const props = defineProps({
   context: String,
   title: String,
 })
+const { area } = useArea()
+
 
 
 function submitHandler(fields) {
@@ -34,6 +37,14 @@ function submitHandler(fields) {
         type="text"
         label="Apellido"
         name="apellido" 
+      />
+    </form-row>
+    <form-row>
+      <form-kit
+        type="select"
+        :options="area"
+        label="CCTE/Área"
+        name="area" 
       />
     </form-row>
   </form-kit>

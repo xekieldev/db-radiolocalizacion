@@ -7,9 +7,13 @@ export function useApi() {
         baseURL: 'http://127.0.0.1:5000',
     })
 
-    async function list() {
+    async function list(includeDeleted = false) {
         loading.value = true
-        const response = await axiosInstance.get('/file?includeDeleted=true')
+        const response = await axiosInstance.get('/file', {
+            params: {
+                includeDeleted: includeDeleted
+            }
+        })
         loading.value = false
         return response && response.data 
     }
@@ -22,7 +26,7 @@ export function useApi() {
     }
 
     async function edit(id, data) {
-        const caseOmit = ['unidadVinc', 'unidad']
+        const caseOmit = ['unidadVinc', 'unidad', 'status']
         const payload = { ...data }
         Object.keys(data).forEach( key => { 
             if (typeof data[key] === 'string' || data[key] instanceof String)
@@ -40,6 +44,13 @@ export function useApi() {
         const response = await axiosInstance.get(`/file/${id}`)
         loading.value = false
         return response && response.data 
+    }
+
+    async function deleteFile(id) {
+        loading.value = true
+        const response = await axiosInstance.delete(`/file/${id}`)
+        loading.value = false
+        return response && response.data
     }
    
     async function getAllTechnicians() {
@@ -86,6 +97,7 @@ export function useApi() {
         list,
         loading,
         getFile,
+        deleteFile,
         create,
         edit,
         getAllTechnicians,
