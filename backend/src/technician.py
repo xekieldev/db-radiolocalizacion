@@ -16,7 +16,7 @@ bp = Blueprint("technician", __name__)
 class TechnicianSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "nombre", "apellido")
+        fields = ("id", "nombre", "apellido", "area")
 
 technician_schema = TechnicianSchema()
 technicians_schema = TechnicianSchema( many = True )
@@ -27,7 +27,8 @@ def technician():
     try:
         nombre = request.json.get('nombre')
         apellido = request.json.get('apellido')
-        technician = Technician(nombre = nombre, apellido = apellido)
+        area = request.json.get('area')
+        technician = Technician(nombre = nombre, apellido = apellido, area = area)
         r = db.session.add(technician)
         db.session.commit()
         response = {"id": technician.id }

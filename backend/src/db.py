@@ -105,6 +105,7 @@ class Technician (db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     nombre = db.Column(db.String(50), nullable = False)
     apellido = db.Column(db.String(50), nullable = False)
+    area = db.Column(db.String(20), nullable = False)
     
 
 def init_app(app):

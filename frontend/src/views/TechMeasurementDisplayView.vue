@@ -60,7 +60,7 @@ onMounted(async () => {
   
   <heading>Mediciones Técnicas Externas</heading>
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
-    <my-button @on-tap="() => viewItem(file.id)" class="primary right" label="Agregar Mediciones Técnicas"/>
+    <my-button @on-tap="() => viewItem(idPath)" class="primary right" label="Agregar Mediciones Técnicas"/>
 
  
   <div v-for="value, index in techMeasurement">

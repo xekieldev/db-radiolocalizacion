@@ -11,7 +11,7 @@ bp = Blueprint("filex", __name__)
 class FilexSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "expediente", "fecha", "hora", "area")
+        fields = ("id", "expediente", "fecha", "hora", "area", "status")
 
 filex_schema = FilexSchema()
 filexs_schema = FilexSchema( many = True )
@@ -141,7 +141,7 @@ def edit_file(id):
             fecha = request.json.get('fecha')
             hora = request.json.get('hora')
             area = request.json.get('area')
-            # status = request.json.get('status')
+            status = request.json.get('status')
             id_technician1 = request.json.get('id_technician1')
             id_technician2 = request.json.get('id_technician2')
             
@@ -149,7 +149,7 @@ def edit_file(id):
             filex.fecha = fecha
             filex.hora = hora
             filex.area = area
-            # filex.status = status
+            filex.status = status
             filex.id_technician1 = id_technician1
             filex.id_technician2 = id_technician2
 
