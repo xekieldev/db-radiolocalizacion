@@ -28,7 +28,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/loc">
           Loc
         </RouterLink> -->
-        <RouterLink to="/list">
+        <RouterLink to="/list?includeDeleted=false">
           Listado
         </RouterLink>
         <!-- <RouterLink to="/tech">

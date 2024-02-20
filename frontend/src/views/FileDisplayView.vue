@@ -65,7 +65,7 @@ onMounted(async () => {
     Object.assign(station, response.station)
     Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
-console.log(technicians)
+console.log(file)
 
     station.provincia = getNameByCode("province", response.station.provincia)
     station.localidad = getNameByCode("city", response.station.localidad)    
@@ -89,7 +89,7 @@ console.log(technicians)
     <display-row> 
       <prop-value class="prop" label="id" :value="file.id"/>
       <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
-      <prop-value class="prop" label="Area" :value="file.area"/>
+      <prop-value class="prop" label="CCTE/Area" :value="file.area"/>
       <prop-value class="prop" label="Fecha y hora" :value="file.fecha +' '+ file.hora"/>
     </display-row>
     <display-row>
@@ -133,6 +133,10 @@ console.log(technicians)
       <prop-value class="prop technicians" v-for="value, index in technicians" label="Técnico" :value=" technicians[index].apellido + ', ' + technicians[index].nombre"/>
 
     </display-row>
+    <!-- <display-row> -->
+      <prop-value class="prop status" label="Status" :value="file.status"/>
+
+    <!-- </display-row> -->
 
 
 
@@ -188,5 +192,9 @@ console.log(technicians)
 
 .go-back-btn {
   align-self:flex-end; 
+}
+
+.status {
+  align-self: flex-start;
 }
 </style>

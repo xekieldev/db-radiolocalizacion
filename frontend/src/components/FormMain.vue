@@ -120,6 +120,14 @@ const linkType = ref('Radioeléctrico')
         :validation-rules="{ validateFile }"
         v-else
       />
+      <form-kit
+        type="text"
+        label="Status"
+        name="status"
+        v-model="file.status"
+        value="Available"
+        :disabled="true"
+      />
     </form-row>
     <form-row>
       <form-kit
