@@ -121,7 +121,6 @@ def get_available_files():
         else:
             # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
             filex_available = Filex.query.filter_by(status='Available').all()
-        # import pdb; pdb.set_trace()
 
         return filexs_schema.dump(filex_available)
 
@@ -256,6 +255,8 @@ def tech_measurement(id):
         file_id = id
         distancia = request.json.get('distancia')
         azimut = request.json.get('azimut')
+        frecuenciaCaract = request.json.get('frecuenciaCaract')
+        unidadFC = request.json.get('unidadFC')
         mic = request.json.get('mic')
         claseEmision = request.json.get('claseEmision')
         anchoBanda =  request.json.get('anchoBanda')
@@ -271,7 +272,7 @@ def tech_measurement(id):
         id_technician2 = request.json.get('id_technician2')
 
 
-        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, area = area, file_id = file_id, distancia = distancia, azimut = azimut, mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
+        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, area = area, file_id = file_id, distancia = distancia, azimut = azimut, frecuenciaCaract = frecuenciaCaract, unidadFC = unidadFC,  mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
        
         r = db.session.add(tech_measurement)
         db.session.commit()
@@ -303,6 +304,8 @@ def tech_measurement(id):
 def get_tech_measurement(id):
     try:
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
+        
+        # Rehacer query: https://stackoverflow.com/questions/8603088/sqlalchemy-in-clause
         technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==tech_measurements_schema.dump(tech_measurement)[0]['id']))
 
         combined_return = {

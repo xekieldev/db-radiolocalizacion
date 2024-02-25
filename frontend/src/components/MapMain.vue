@@ -58,7 +58,7 @@ const store = useRlocFormData()
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
         name="OpenStreetMap"
-        max-zoom=20
+        :max-zoom= 19
       />
       <l-marker :lat-lng="[position[0] , position[1] ]">
         <l-icon
