@@ -34,10 +34,14 @@ function viewItem(item) {
   router.push(`/file/${item}/tech_measurement`)
 }
 function editItem(item) {  
-  router.push(`/file/${item}/edit`)
+  // router.push(`/file/${item}/edit`)
+  router.push({ name: 'editFile', params: { id: item } })
+
 }
 function goBack() {  
-  router.push(`/list`)
+  // router.push(`/list`)
+  router.push({ name: 'list', query: { includeDeleted: 'false' }})
+
 }
 
 
@@ -74,28 +78,31 @@ console.log(file)
 
 </script>
 <template>
-  <my-button @on-tap="goBack" class="primary go-back-btn" label="Volver" />
-  <!-- <my-button @on-tap="() => editItem(file.id)" label="Editar"/> -->
+  <div class="buttons-container">
+    <my-button @on-tap="goBack" class="primary right" label="Volver" />
+    <!-- <my-button @on-tap="() => editItem(file.id)" label="Editar"/> -->
+  </div>
+
   <heading>Radiolocalización de Estaciones</heading>
 
   <div class="buttons-container">
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/tech_measurement'">Ver Mediciones Técnicas</RouterLink> -->
-    <my-button @on-tap="() => viewItem(file.id)" class="secondary tech-meas-btn" label="Mediciones Técnicas"/>
-    <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == ('PLANTA TRANSMISORA' || 'Planta Transmisora')" class="secondary estudio-btn" label="Agregar Estudio"/>
+    <my-button @on-tap="() => viewItem(file.id)" class="secondary right" label="Mediciones Técnicas"/>
+    <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == ('PLANTA TRANSMISORA' || 'Planta Transmisora')" class="secondary right" label="Agregar Estudio"/>
     <!-- <a class="tab" @click="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA'">Agregar Estudio</a> -->
   </div>
   <div class="container">
     <display-row> 
       <prop-value class="prop" label="id" :value="file.id"/>
       <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
-      <prop-value class="prop" label="CCTE/Area" :value="file.area"/>
+      <prop-value class="prop" label="CCTE/Área" :value="file.area"/>
       <prop-value class="prop" label="Fecha y hora" :value="file.fecha +' '+ file.hora"/>
     </display-row>
     <display-row>
       <prop-value class="prop double" label="Identificación" :value="station.identificacion"/>
       <prop-value class="prop" label="Frecuencia" :value="station.frecuencia +' '+ station.unidad"/>
-      <prop-value class="prop" label="Clase de Emision" :value="station.claseEmision"/>
+      <prop-value class="prop" label="Clase de Emisión" :value="station.claseEmision"/>
       <prop-value class="prop" label="Servicio" :value="station.servicio"/>
       <prop-value class="prop" label="Emplazamiento" :value="station.emplazamiento"/>
     </display-row>
@@ -110,7 +117,7 @@ console.log(file)
       <prop-value class="prop" label="Sistema Irradiante" :value="station.irradiante"/>
       <prop-value class="prop" label="Cantidad" :value="station.cantidad"/>
       <prop-value class="prop" label="Polarización" :value="station.polarizacion"/>
-      <prop-value class="prop" label="Altura" :value="station.altura"/>
+      <prop-value class="prop" label="Altura [m]" :value="station.altura"/>
     </display-row>
     <display-row>
       <prop-value class="prop" label="Vínculo" :value="station.tipoVinculo"/>
@@ -124,7 +131,9 @@ console.log(file)
 
     </display-row>
     <display-row>
-      <prop-value class="prop" label="Observaciones" :value="station.observaciones"/>
+      <prop-value class="prop" v-if="station.observaciones" label="Observaciones" :value="station.observaciones"/>
+      <prop-value class="prop" v-else label="Observaciones" value="---"/>
+
 
     </display-row>
     <mapa class="mapa" v-if="station.latitud" :position="[ station.latitud, station.longitud ]" />
@@ -142,8 +151,8 @@ console.log(file)
 
   </div>
   <div class="buttons-container">
-    <my-button @on-tap="() => editItem(file.id)" class="tertiary go-back-btn" label="Editar"/>
-    <my-button @on-tap="goBack" class="primary go-back-btn" label="Volver"/>
+    <my-button @on-tap="() => editItem(file.id)" class="tertiary right" label="Editar"/>
+    <my-button @on-tap="goBack" class="primary right" label="Volver"/>
   </div>
 
 </template>
@@ -178,20 +187,7 @@ console.log(file)
   flex-direction: row;
   gap: 10px;
   justify-content: end;
-  /* margin-bottom: 5px; */
   margin: 5px;
-}
-
-.tech-meas-btn {
-  align-self:flex-end;
-
-}
-.estidio-btn {
-  align-self: flex-end;
-}
-
-.go-back-btn {
-  align-self:flex-end; 
 }
 
 .status {

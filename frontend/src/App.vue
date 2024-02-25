@@ -29,8 +29,14 @@ import { RouterLink, RouterView } from 'vue-router'
           Loc
         </RouterLink> -->
         <RouterLink to="/list?includeDeleted=false">
-          Listado
+          Expedientes
         </RouterLink>
+        <RouterLink to="/station">
+          Estaciones
+        </RouterLink>
+        <!-- <RouterLink to="/search">
+          Buscar
+        </RouterLink> -->
         <!-- <RouterLink to="/tech">
           Tech
         </RouterLink> -->
@@ -60,6 +66,8 @@ import { RouterLink, RouterView } from 'vue-router'
 header {
   display: flex;
   flex-direction: row;
+  background: linear-gradient(to right, rgba(202, 202, 202, 0), #cacaca, rgba(202, 202, 202, 0));
+  width: 100%;
 
 }
 
@@ -71,8 +79,9 @@ header {
 nav {
   width: 100%;
   font-size: 15px;
-  text-align: center;
+  text-align: left;
   margin-top: 2rem;
+  margin-left: 50px;
 }
 
 nav a.router-link-exact-active {
@@ -87,7 +96,15 @@ nav a {
   display: inline-block;
   padding: 0 1rem;
   border-left: 1px solid var(--color-border);
+  color: black;
+  text-decoration: none;
+  font-weight: 700;
 }
+
+nav a:hover {
+  color: rgb(255, 136, 0);
+}
+
 
 nav a:first-of-type {
   border: 0;

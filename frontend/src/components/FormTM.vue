@@ -137,6 +137,12 @@ const { unidad } = useUnit()
         validation-visibility="live"
       />
       <form-kit
+        type="select"
+        label="Unidad"
+        name="unidadFC"
+        :options="unidad"
+      />
+      <form-kit
         type="number"
         label="Intensidad de Campo Radioeléctrico [dBuV/m]"
         name="mic"

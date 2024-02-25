@@ -47,13 +47,25 @@ onBeforeMount(async () => {
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
       const data = await list()
       items.push(...data)
-      console.log("data: ", data)
+      console.log("filtrado", items.filter(check))
+      function check(item) {
+      console.log(item.area)
+
+      return item.area == "POSADAS"
+    }
+
+      // console.log("data: ", data)
     } else {
         const data = await list(true)
         items.push(...data)
-        console.log("data else: ", data)
+        // console.log("data else: ", data)
+        console.log("filtrado", items.filter(check))
     }
-    
+    function check(item) {
+      console.log(item.id)
+      
+      return item.id == "2"
+    }
     
 })
 

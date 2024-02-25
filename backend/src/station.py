@@ -16,7 +16,7 @@ bp = Blueprint("station", __name__)
 class StationSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
+        fields = ("id", "identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
                    "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc",
                      "unidadVinc", "irradianteVinc", "polarizacionVinc", "provincia", "localidad",
                        "domicilio", "latitud", "longitud", "observaciones")
@@ -24,25 +24,25 @@ class StationSchema(ma.Schema):
 station_schema = StationSchema()
 stations_schema = StationSchema(many=True)
 
-# @bp.route('/station/<id>', methods = ['GET'])
-# def get_station(id):
-#     try:
-#         # import pdb; pdb.set_trace()
-#         station = Station.query.get(id)
-#         return station_schema.dump(station)
-#     except:
-#         response = {"message": "input error"}
-#         return response, 400
+@bp.route('/station/<id>', methods = ['GET'])
+def get_station(id):
+    try:
+        # import pdb; pdb.set_trace()
+        station = Station.query.get(id)
+        return station_schema.dump(station)
+    except:
+        response = {"message": "input error"}
+        return response, 400
     
-# @bp.route("/station/", methods = ['GET'])
-# def get_all_stations():
-#     try:
-#         all_stations = Station.query.all()
-#         # import pdb; pdb.set_trace()
-#         return stations_schema.dump(all_stations)
-#     except:
-#         response = {"message": "server error"}
-#         return response, 500
+@bp.route("/station/", methods = ['GET'])
+def get_all_stations():
+    try:
+        all_stations = Station.query.all()
+        # import pdb; pdb.set_trace()
+        return stations_schema.dump(all_stations)
+    except:
+        response = {"message": "server error"}
+        return response, 500
 
 
 # @bp.route("/station", methods = ['POST'])

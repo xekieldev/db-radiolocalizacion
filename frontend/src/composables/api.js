@@ -93,6 +93,21 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+
+    async function listStations() {
+        loading.value = true
+        const response = await axiosInstance.get('/station')
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function getStation() {
+        loading.value = true
+        const response = await axiosInstance.get(`/station/${id}`)
+        loading.value = false
+        return response && response.data 
+    }
+
     return {
         list,
         loading,
@@ -106,5 +121,7 @@ export function useApi() {
         create_technician,
         create_tech_measurement,
         getTechMeasurement,
+        listStations,
+        getStation,
     }
 }

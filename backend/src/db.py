@@ -85,6 +85,8 @@ class TechMeasurement(db.Model):
     file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
     distancia = db.Column(db.Float)
     azimut = db.Column(db.Integer)
+    frecuenciaCaract = db.Column(db.Integer)
+    unidadFC = db.Column(db.String(3))
     mic = db.Column(db.Float)
     claseEmision = db.Column(db.String(5))
     anchoBanda =  db.Column(db.Float)

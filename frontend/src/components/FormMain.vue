@@ -121,6 +121,7 @@ const linkType = ref('Radioeléctrico')
         v-else
       />
       <form-kit
+        outer-class="field-status"
         type="text"
         label="Status"
         name="status"
@@ -430,6 +431,10 @@ const linkType = ref('Radioeléctrico')
 .field-domicilio {
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
   flex: 0 0 70%;
+}
+
+.field-status {
+  flex: 0 0 10%;
 }
 </style>
   
