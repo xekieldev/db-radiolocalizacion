@@ -95,6 +95,6 @@ console.log(props.position)
 <style scoped>
 .map-container {
   height: 500px;
-  width: 900px;
+  width: 100%;
 }
 </style>

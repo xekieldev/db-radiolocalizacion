@@ -17,6 +17,7 @@
   width: 100%;
   flex-direction: row;
   padding: 5px;
+  margin: 10px;
   
 }
 
