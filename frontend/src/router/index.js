@@ -97,6 +97,14 @@ const router = createRouter({
       component: () => import('../views/FileCreateView.vue')
     },
     {
+      path: '/file/createLoc',
+      name: 'createLocFile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FileCreateLocView.vue')
+    },
+    {
       path: '/technician/create_technician',
       name: 'createTechnician',
       // route level code-splitting

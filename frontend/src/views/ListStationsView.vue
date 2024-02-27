@@ -104,6 +104,7 @@ async function searchStations() {
         <th>Identificación</th>
         <th>Servicio</th>
         <th>Frecuencia</th>
+        <th>Emplazamiento</th>
         <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
         <th>Domicilio</th>
         <th>Localidad (Provincia)</th>
@@ -118,7 +119,8 @@ async function searchStations() {
       <!-- <td>{{ item.id }}</td> -->
       <td>{{ item.identificacion }}</td> 
       <td>{{ item.servicio }}</td> 
-      <td>{{ item.frecuencia +" "+item.unidad}}</td> 
+      <td>{{ item.frecuencia +" "+item.unidad}}</td>
+      <td>{{ item.emplazamiento }}</td>
       <td>{{ item.domicilio }}</td>
       <td>{{ item.localidad + " (" + item.provincia +")" }} </td>
       <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
@@ -180,7 +182,7 @@ tr:nth-child(odd) {
 .field-search {
   display: flex;
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
-  flex: 0 0 30%;
+  flex: 0 0 20%;
   margin: 0;
   
 }

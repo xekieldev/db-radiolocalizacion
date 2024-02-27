@@ -72,9 +72,9 @@ onBeforeMount(async () => {
 
 </script>
 <template>
-  <heading>Listado de Expedientes</heading>
+  <heading>Gestión de Expedientes</heading>
   <div class="list-container">
-      <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" />
+      <!-- <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" /> -->
     <table>
       <tr>
         <th>id</th>
@@ -117,6 +117,7 @@ onBeforeMount(async () => {
   /* max-width: 900px; */
   width: 100%;
   justify-content: center;
+  font-size: 14px;
 }
 .status{
     background-color: lightyellow;

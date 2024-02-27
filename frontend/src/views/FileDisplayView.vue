@@ -26,12 +26,19 @@ const currentPath = ref('')
 const redirectToCreate = () => {
   // console.log("currentPath.value: ", router.currentRoute.value.path)
   currentPath.value = router.currentRoute.value.path
-  // Ahora se puede navegar a la nueva ruta y pasar la ruta actual como un parámetro de consulta
-  router.push({ path: '/file/create', query: { from: currentPath.value } })
+  // // Ahora se puede navegar a la nueva ruta y pasar la ruta actual como un parámetro de consulta
+  // router.push({ path: '/file/create', query: { from: currentPath.value } })
+  if (station.tipoVinculo == 'Radioeléctrico' || station.tipoVinculo == 'RADIOELÉCTRICO') {
+    router.push({ path: '/file/create', query: { rloc: 'true', from: currentPath.value } })
+  } else {
+    router.push({ path: '/file/create', query: { rloc: 'false', from: currentPath.value } })
+
+  }
 }
 
 function viewItem(item) {  
-  router.push(`/file/${item}/tech_measurement`)
+  // router.push(`/file/${item}/tech_measurement`)
+  router.push({name: 'tech_measurement', params: { id: item}})
 }
 function editItem(item) {  
   // router.push(`/file/${item}/edit`)
@@ -40,12 +47,10 @@ function editItem(item) {
 }
 function goBack() {  
   // router.push(`/list`)
-  router.push({ name: 'list', query: { includeDeleted: 'false' }})
+  // router.push({ name: 'list', query: { includeDeleted: 'false' }})
+  router.go(-1)
 
 }
-
-
-
 
 // El reactive es para que la variable items se actualice
 // automáticamente cuando cambia. Es necesario porque acá se
@@ -89,7 +94,7 @@ console.log(file)
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/tech_measurement'">Ver Mediciones Técnicas</RouterLink> -->
     <my-button @on-tap="() => viewItem(file.id)" class="secondary right" label="Mediciones Técnicas"/>
-    <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == ('PLANTA TRANSMISORA' || 'Planta Transmisora')" class="secondary right" label="Agregar Estudio"/>
+    <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora'" class="secondary right" label="Agregar Estudio"/>
     <!-- <a class="tab" @click="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA'">Agregar Estudio</a> -->
   </div>
   <div class="container">
@@ -101,9 +106,9 @@ console.log(file)
     </display-row>
     <display-row>
       <prop-value class="prop double" label="Identificación" :value="station.identificacion"/>
-      <prop-value class="prop" label="Frecuencia" :value="station.frecuencia +' '+ station.unidad"/>
-      <prop-value class="prop" label="Clase de Emisión" :value="station.claseEmision"/>
-      <prop-value class="prop" label="Servicio" :value="station.servicio"/>
+      <prop-value v-if="station.frecuencia" class="prop" label="Frecuencia" :value="station.frecuencia +' '+ station.unidad"/>
+      <prop-value v-if="station.frecuencia" class="prop" label="Clase de Emisión" :value="station.claseEmision"/>
+      <prop-value v-if="station.frecuencia" class="prop" label="Servicio" :value="station.servicio"/>
       <prop-value class="prop" label="Emplazamiento" :value="station.emplazamiento"/>
     </display-row>
     <display-row>
@@ -113,13 +118,13 @@ console.log(file)
       <prop-value class="prop" label="Latitud" :value="station.latitud"/>
       <prop-value class="prop" label="Longitud" :value="station.longitud"/>
     </display-row>
-    <display-row>
+    <display-row v-if="station.frecuencia" >
       <prop-value class="prop" label="Sistema Irradiante" :value="station.irradiante"/>
       <prop-value class="prop" label="Cantidad" :value="station.cantidad"/>
       <prop-value class="prop" label="Polarización" :value="station.polarizacion"/>
       <prop-value class="prop" label="Altura [m]" :value="station.altura"/>
     </display-row>
-    <display-row>
+    <display-row v-if="station.frecuencia" >
       <prop-value class="prop" label="Vínculo" :value="station.tipoVinculo"/>
       <prop-value class="prop" v-if="station.frecuenciaVinc" label="Frecuencia" :value="station.frecuenciaVinc +' '+ station.unidadVinc"/>
       <prop-value class="prop" v-else label="Frecuencia" value="---"/>

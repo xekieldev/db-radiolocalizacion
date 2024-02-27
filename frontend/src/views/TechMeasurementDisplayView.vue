@@ -24,7 +24,8 @@ function viewItem(item) {
 }
 
 function goBack(item) {  
-  router.push(`/file/${item}`)
+  // router.push(`/file/${item}`)
+  router.go(-1)
 }
 
 // El reactive es para que la variable items se actualice

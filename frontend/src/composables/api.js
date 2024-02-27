@@ -18,9 +18,13 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function create(data) {
+    async function create(data, rloc = true) {
         loading.value = true
-        const response = await axiosInstance.post('/file', data)
+        const response = await axiosInstance.post('/file', data, {
+            params: {
+                rloc: rloc
+            }
+        })
         loading.value = false
         return response && response.data 
     }

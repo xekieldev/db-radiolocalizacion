@@ -16,6 +16,7 @@ import Heading from './Heading.vue'
 
 
 const route = useRoute()
+const router = useRouter()
 const { currentRoute } = useRouter()
 
 const { getFile } = useApi()
@@ -34,6 +35,7 @@ const filePath = reactive({})
 const initialTechnicians = reactive([{id: "1"}, { id: "5"}])
 const fileId = ref('')
 
+console.log("path ahroa:", router.currentRoute.value.name)
 
 
 function submitHandler(fields) {
@@ -87,7 +89,8 @@ const linkType = ref('Radioeléctrico')
 </script>
 
 <template>
-  <heading>{{ title }}</heading>
+  <heading v-if="router.currentRoute.value.query.rloc =='true'">{{ title }}</heading>
+  <heading v-else> Datos de Localización</heading>
   <form-kit
     type="form"
     submit-label="Guardar"
@@ -223,7 +226,7 @@ const linkType = ref('Radioeléctrico')
     </form-row>
     <form-row>
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
         type="number"
         label="Frecuencia"
         name="frecuencia"
@@ -232,7 +235,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.frecuencia"
       />
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
         type="select"
         label="Unidad"
         name="unidad"
@@ -240,7 +243,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.unidad"
       />
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc =='true' || router.currentRoute.value.name == 'editFile'"
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
@@ -301,14 +304,14 @@ const linkType = ref('Radioeléctrico')
 
     <form-row>
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
         type="text"
         label="Sistema Irradiante"
         name="irradiante"
         v-model="station.irradiante"
       />
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
         type="select"
         label="Polarización"
         name="polarizacion"
@@ -317,14 +320,14 @@ const linkType = ref('Radioeléctrico')
         v-model="station.polarizacion"
       />
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
         type="text"
         label="Cantidad"
         name="cantidad"
         v-model="station.cantidad"
       />
       <form-kit
-        v-if="props.context === 'Radiolocalizacion'"
+        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
         type="text"
         label="Altura Media"
         name="altura"
@@ -333,7 +336,7 @@ const linkType = ref('Radioeléctrico')
       />
     </form-row>
     
-    <form-row>
+    <form-row v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'">
       <form-kit
         v-model="station.tipoVinculo" 
         type="select"
@@ -343,6 +346,7 @@ const linkType = ref('Radioeléctrico')
         placeholder="Vínculo"
       />
       <form-kit
+        v-if="station.tipoVinculo == 'Radioeléctrico'"
         type="number"
         label="Frecuencia Vínculo"
         name="frecuenciaVinc"
@@ -352,6 +356,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.frecuenciaVinc"
       />
       <form-kit
+        v-if="station.tipoVinculo == 'Radioeléctrico'"
         type="select"
         label="Unidad"
         name="unidadVinc"
@@ -361,6 +366,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.unidadVinc"
       />
       <form-kit
+        v-if="station.tipoVinculo == 'Radioeléctrico'"
         type="text"
         label="Sistema Irradiante"
         name="irradianteVinc"
@@ -369,6 +375,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.irradianteVinc"
       />
       <form-kit
+        v-if="station.tipoVinculo == 'Radioeléctrico'"
         type="select"
         label="Polarización"
         name="polarizacionVinc"
