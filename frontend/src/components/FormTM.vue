@@ -6,6 +6,7 @@ import { useUnit } from '../composables/unit';
 import { useTechnician } from '../composables/technician';
 import { onBeforeMount, reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router'
+import Heading from './Heading.vue';
 
 
 const { currentRoute } = useRouter()
@@ -36,14 +37,15 @@ const { unidad } = useUnit()
 </script>
 
 <template>
-  <h2>{{ title }}</h2>
+  <!-- <h2>{{ title }}</h2> -->
+  <heading> {{ title }} </heading>
   <form-kit
     type="form"
     submit-label="Cargar"
     @submit="submitHandler"
   >
     <form-row>
-      <form-kit
+      <!-- <form-kit
         type="text"
         label="Expediente"
         name="expediente"
@@ -52,7 +54,7 @@ const { unidad } = useUnit()
         validation-visibility="live"
         v-model="file.expediente"
         :disabled="true"
-      />
+      /> -->
     </form-row>
     <form-row>
       <form-kit
@@ -64,30 +66,38 @@ const { unidad } = useUnit()
         type="time"
         label="Hora"
         name="hora"
-      />
+      />      
       <form-kit
-        type="select"
-        label="CCTE/Área"
-        name="area"
-        :options="area"
-        placeholder="Área"
-        v-model="file.area"
-        :disabled="true"
+        type="text"
+        label="Punto de Medición"
+        name="puntoMedicion"
       />
     </form-row>
 
     <form-row>
+
       <form-kit
-        type="text"
-        label="Provincia"
-        name="provincia"
-        validation="required| text"
+        type="number"
+        label="Frecuencia Medida"
+        name="frecMedida"
+        step="0.001"
       />
       <form-kit
-        type="text"
-        label="Localidad"
-        name="localidad"
-        validation="required| text"
+        type="select"
+        label="Unidad"
+        name="unidadFrecMedida"
+        :options="unidad"
+      />
+      <form-kit
+        type="number"
+        label="Anchura de banda"
+        name="anchoBanda"
+      />
+      <form-kit
+        type="select"
+        label="Unidad"
+        name="unidadBW"
+        :options="unidad"
       />
     </form-row>
     <form-row>
@@ -95,26 +105,31 @@ const { unidad } = useUnit()
         type="text"
         label="Domicilio"
         name="domicilio"
-        validation="required| text"
       />
+      <form-kit
+        type="text"
+        label="Provincia"
+        name="provincia"
+      />
+      <form-kit
+        type="text"
+        label="Localidad"
+        name="localidad"
+      />
+    </form-row>
+    <form-row>
       <form-kit
         type="number"
         label="Latitud"
         name="latitud"
-        validation="required| number"
         step="0.000001"
-
       />
       <form-kit
         type="number"
         label="Longitud"
         name="longitud"
-        validation="required| number"
         step="0.000001"
-
       />
-    </form-row>
-    <form-row>
       <form-kit
         type="number"
         label="Distancia"
@@ -130,96 +145,96 @@ const { unidad } = useUnit()
     </form-row>
     <form-row>
       <form-kit
-        type="number"
-        label="Frecuencia Característica"
-        name="frecuenciaCaract"
-        step="0.001"
-        validation-visibility="live"
-      />
-      <form-kit
-        type="select"
-        label="Unidad"
-        name="unidadFC"
-        :options="unidad"
-      />
-      <form-kit
-        type="number"
-        label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="mic"
-        help="Valor de referencia en el punto de medición"
+        type="textarea"
+        label="Descripción/Observaciones"
+        name="observaciones"
+        validation="false"
       />
     </form-row>
+    <div style="border: 1px solid gray; padding: 10px; border-radius: 5px; margin: 10px 0 10px 0">
     <form-row>
       <form-kit
         type="text"
-        label="Clase de Emisión"
-        name="claseEmision"
+        label="Domicilio estación Testigo"
+        name="domicilioTestigo"
       />
       <form-kit
-        type="number"
-        label="Anchura de banda"
-        name="anchoBanda"
+        type="text"
+        label="Provincia"
+        name="provinciaTestigo"
       />
       <form-kit
-        type="select"
-        label="Unidad"
-        name="unidad"
-        :options="unidad"
+        type="text"
+        label="Localidad"
+        name="localidadTestigo"
       />
     </form-row>
     <form-row>
       <form-kit
         type="number"
-        label="No esencial"
-        name="noEsencial1"
-        step="0.001"
-        validation-visibility="live"
+        label="Latitud"
+        name="latitudTestigo"
+        step="0.000001"
       />
       <form-kit
         type="number"
-        label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="micNoEsencial1"
-        help="Valor de referencia en el punto de medición"
-      />
-    </form-row>   
-    <form-row>
-      <form-kit
-        type="number"
-        label="No esencial"
-        name="noEsencial2"
-        step="0.001"
-        validation-visibility="live"
+        label="Longitud"
+        name="longitudTestigo"
+        step="0.000001"
       />
       <form-kit
         type="number"
-        label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="micNoEsencial2"
-        help="Valor de referencia en el punto de medición"
-      />
-    </form-row> 
-    <form-row>
-      <form-kit
-        type="number"
-        label="No esencial"
-        name="noEsencial3"
-        step="0.001"
-        validation-visibility="live"
+        label="Distancia"
+        name="distanciaTestigo"
+        help="Distancia en metros"
       />
       <form-kit
         type="number"
-        label="Intensidad de Campo Radioeléctrico [dBuV/m]"
-        name="micNoEsencial3"
-        help="Valor de referencia en el punto de medición"
+        label="Azimut"
+        name="azimutTestigo"
+        help="Azimut geográf. respecto a la PTx en grados decimales"
       />
-    </form-row> 
+    
+
+
+
+    </form-row>
+  </div>
 
     <form-row>
       <form-kit
-        type="textarea"
-        label="Resultado de las Comprobaciones Técnicas"
-        name="ResultadoComprob"
+        type="number"
+        label="E medido [dBuV/m]"
+        name="eMedido"
+        help="Valor de referencia en el punto de medición"
+      />
+      <form-kit
+        type="number"
+        label="E testigo [dBuV/m]"
+        name="eTestigo"
+        help="Valor de referencia en el punto de medición"
+      />
+      <form-kit
+        type="number"
+        label="E corregido [dBuV/m]"
+        name="eCorregido"
+        help="Valor de referencia en el punto de medición"
+      />
+      <form-kit
+        type="number"
+        label="Incertidumbre [dB]"
+        name="incertidumbre"
       />
     </form-row>
+    <form-row>
+      <form-kit
+        type="textarea"
+        label="Descripción/Observaciones"
+        name="resultadoComprob"
+        validation="false"
+      />
+    </form-row>
+    
     <form-row>
       <form-kit
         type="select"

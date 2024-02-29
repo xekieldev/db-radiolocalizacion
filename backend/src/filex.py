@@ -251,29 +251,40 @@ def tech_measurement(id):
     try:
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
-        area = request.json.get('area')
+        puntoMedicion = request.json.get('puntoMedicion')
         file_id = id
+        frecMedida = request.json.get('frecMedida')
+        unidadFrecMedida = request.json.get('unidadFrecMedida')
+        anchoBanda =  request.json.get('anchoBanda')
+        unidadBW = request.json.get('unidadBW')
+        domicilio = request.json.get('domicilio')
+        localidad = request.json.get('localidad')
+        provincia = request.json.get('provincia')
+        # import pdb; pdb.set_trace()
+
+        latitud = request.json.get('latitud')
+        longitud = request.json.get('longitud')
         distancia = request.json.get('distancia')
         azimut = request.json.get('azimut')
-        frecuenciaCaract = request.json.get('frecuenciaCaract')
-        unidadFC = request.json.get('unidadFC')
-        mic = request.json.get('mic')
-        claseEmision = request.json.get('claseEmision')
-        anchoBanda =  request.json.get('anchoBanda')
-        unidad = request.json.get('unidad')
-        noEsencial1 = request.json.get('noEsencial1')
-        micNoEsencial1 = request.json.get('micNoEsencial1')
-        noEsencial2 = request.json.get('noEsencial2')
-        micNoEsencial2 = request.json.get('micNoEsencial2')
-        noEsencial3 = request.json.get('noEsencial2')
-        micNoEsencial3 = request.json.get('micNoEsencial3')
+        observaciones = request.json.get('observaciones')
+        domicilioTestigo = request.json.get('domicilioTestigo')
+        localidadTestigo = request.json.get('localidadTestigo')
+        provinciaTestigo = request.json.get('provinciaTestigo')
+        latitudTestigo = request.json.get('latitudTestigo')
+        longitudTestigo = request.json.get('longitudTestigo')
+        distanciaTestigo = request.json.get('distanciaTestigo')
+        azimutTestigo = request.json.get('azimutTestigo')
+        eMedido = request.json.get('eMedido')
+        eTestigo = request.json.get('eTestigo')
+        eCorregido = request.json.get('eCorregido')
+        incertidumbre = request.json.get('incertidumbre')
         resultadoComprob = request.json.get('resultadoComprob')
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
 
 
-        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, area = area, file_id = file_id, distancia = distancia, azimut = azimut, frecuenciaCaract = frecuenciaCaract, unidadFC = unidadFC,  mic = mic, claseEmision = claseEmision, anchoBanda = anchoBanda, unidad = unidad, noEsencial1 = noEsencial1, micNoEsencial1 = micNoEsencial1, noEsencial2 = noEsencial2, micNoEsencial2 = micNoEsencial2, noEsencial3 = noEsencial3, micNoEsencial3 = micNoEsencial3, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
-       
+        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, puntoMedicion = puntoMedicion, file_id = file_id, frecMedida = frecMedida, unidadFrecMedida = unidadFrecMedida, anchoBanda = anchoBanda, unidadBW = unidadBW, domicilio = domicilio, localidad = localidad, provincia = provincia, latitud = latitud, longitud = longitud, distancia = distancia, azimut = azimut, observaciones = observaciones, domicilioTestigo = domicilioTestigo, localidadTestigo = localidadTestigo, provinciaTestigo = provinciaTestigo, latitudTestigo = latitudTestigo, longitudTestigo = longitudTestigo, distanciaTestigo = distanciaTestigo, azimutTestigo = azimutTestigo, eMedido = eMedido, eTestigo = eTestigo, eCorregido = eCorregido, incertidumbre = incertidumbre, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
+        
         r = db.session.add(tech_measurement)
         db.session.commit()
         stmt1 = (
@@ -306,7 +317,11 @@ def get_tech_measurement(id):
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
         
         # Rehacer query: https://stackoverflow.com/questions/8603088/sqlalchemy-in-clause
-        technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==tech_measurements_schema.dump(tech_measurement)[0]['id']))
+        # technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==tech_measurements_schema.dump(tech_measurement)[0]['id']))
+        # technicians = db.session.query(technician_tech_measurement).join(tech_measurement).all()
+        technicians = db.session.query(Technician).join(technician_tech_measurement).join(TechMeasurement).filter(TechMeasurement.file_id == id).all()
+
+        # import pdb; pdb.set_trace()
 
         combined_return = {
                             "techMeasurement": tech_measurements_schema.dump(tech_measurement),

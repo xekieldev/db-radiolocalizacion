@@ -25,7 +25,8 @@ function viewItem(item) {
 
 function goBack(item) {  
   // router.push(`/file/${item}`)
-  router.go(-1)
+  // router.go(-1)
+  router.back()
 }
 
 // El reactive es para que la variable items se actualice
@@ -60,6 +61,19 @@ onMounted(async () => {
     
 })
 
+function getTechnician(id) {
+  console.log("id: ", id, "id_technician1: ",techMeasurement[id].id_technician1,"id_technician2: ", techMeasurement[id].id_technician2)
+  const technician1 = technicians[techMeasurement[id].id_technician1-1].nombre + ', ' + technicians[techMeasurement[id].id_technician1-1].apellido
+  const technician2 = technicians[techMeasurement[id].id_technician2-1].nombre + ', ' + technicians[techMeasurement[id].id_technician2-1].apellido
+  
+  // debugger
+  return [technician1, technician2]
+}
+// function getTechnician2(id) {
+
+//   return technicians[techMeasurement[id].id_technician2].nombre + ', ' + technicians[techMeasurement[id].id_technician2].apellido
+// }
+
 
 
 </script>
@@ -67,41 +81,81 @@ onMounted(async () => {
   
   <heading>Mediciones Técnicas Externas</heading>
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
-  <div class="buttons-container" >
+  
+  <div>
+    <display-row> 
+        <prop-value class="prop" label="id" :value="file.id"/>
+        <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
+        <prop-value class="prop" label="CCTE/Área" :value="file.area"/>
+        <!-- <prop-value class="prop" label="Fecha y hora" :value="file.fecha +' '+ file.hora"/> -->
+      </display-row>
+  </div>
+<br>
+<div class="buttons-container" >
     <my-button @on-tap="() => viewItem(idPath)" class="primary right" label="Agregar Mediciones Técnicas"/>
   </div>
- 
   <div v-for="value, index in techMeasurement">
-  <display-row > 
+    <p v-if="index==0">Emplazamiento Estación Testigo </p>
+    <display-row v-if="index==0"> 
+      <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilioTestigo"/>
+      <prop-value class="prop double" label="Localidad" :value="techMeasurement[index].localidadTestigo"/>
+      <prop-value class="prop double" label="Provincia" :value="techMeasurement[index].provinciaTestigo"/>
+    </display-row>
+    <display-row v-if="index==0">
+      <prop-value class="prop"  label="Latitud" :value="techMeasurement[index].latitudTestigo"/>
+      <prop-value class="prop"  label="Longitud" :value="techMeasurement[index].longitudTestigo"/>
+      <prop-value class="prop"  label="Distancia" :value=" techMeasurement[index].distanciaTestigo"/>
+      <prop-value class="prop double" label="Azimut geog. con respecto a PTx" :value="techMeasurement[index].azimutTestigo"/>
+    </display-row>
+<br>
+    <display-row > 
       <prop-value class="prop"  label="id" :value="techMeasurement[index].id"/>
       <prop-value class="prop"  label="Fecha y hora" :value=" techMeasurement[index].fecha + ' ' + techMeasurement[index].hora"/>
-      <prop-value class="prop"  label="Area" :value=" techMeasurement[index].area"/>
-    
-
-  </display-row>
-  <display-row > 
-      <prop-value class="prop"  label="Frecuencia Caracteristica" :value=" techMeasurement[index].frecuenciaCaract"/>
-      <prop-value class="prop"  label="Unidad" :value=" techMeasurement[index].unidadFC"/>
+      <prop-value class="prop"  label="Descripción" :value=" techMeasurement[index].puntoMedicion"/>
+    </display-row>
+    <display-row > 
+      <prop-value class="prop"  label="Frecuencia Medida" :value=" techMeasurement[index].frecMedida"/>
+      <prop-value class="prop"  label="Unidad" :value=" techMeasurement[index].unidadFrecMedida"/>
+      <prop-value class="prop"  label="Ancho de Banda" :value=" techMeasurement[index].anchoBanda"/>
+      <prop-value class="prop"  label="Unidad" :value=" techMeasurement[index].unidadBW"/>
+    </display-row>
+    <display-row > 
+      <prop-value class="prop"  label="Latitud" :value="techMeasurement[index].latitud"/>
+      <prop-value class="prop"  label="Longitud" :value="techMeasurement[index].longitud"/>
       <prop-value class="prop"  label="Distancia" :value=" techMeasurement[index].distancia"/>
       <prop-value class="prop"  label="Azimut" :value=" techMeasurement[index].azimut"/>
-      <prop-value class="prop"  label="MIC" :value=" techMeasurement[index].mic"/>
-      <prop-value class="prop"  label="Clase de Emision" :value=" techMeasurement[index].claseEmision"/>
-      <prop-value class="prop"  label="Ancho de Banda" :value=" techMeasurement[index].anchoBanda"/>
-      <prop-value class="prop"  label="Unidad" :value=" techMeasurement[index].unidad"/>
     </display-row>
-  <display-row > 
-      <prop-value class="prop"  label="No esencial 1" :value=" techMeasurement[index].noEsencial1"/>
-      <prop-value class="prop"  label="MIC no esencial 1" :value=" techMeasurement[index].micNoEsencial1"/>
-      <prop-value class="prop"  label="No esencial 2" :value=" techMeasurement[index].noEsencial2"/>
-      <prop-value class="prop"  label="MIC no esencial 2" :value=" techMeasurement[index].micNoEsencial2"/>
-      <prop-value class="prop"  label="No esencial 3" :value=" techMeasurement[index].noEsencial3"/>
-      <prop-value class="prop"  label="MIC no esencial 3" :value=" techMeasurement[index].micNoEsencial3"/>
-  </display-row>
-  <display-row > 
-      <prop-value class="prop" v-for="value, index in technicians" label="Técnico" :value=" technicians[index].nombre + ', ' + technicians[index].apellido"/>
-  </display-row>
+    <display-row > 
+      <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilio"/>
+      <prop-value class="prop double" label="Localidad" :value="techMeasurement[index].localidad"/>
+      <prop-value class="prop double" label="Provincia" :value="techMeasurement[index].provincia"/>
+    </display-row>
+    <display-row > 
+      <prop-value class="prop"  label="E medido (dBuV/m)" :value=" techMeasurement[index].eMedido"/>
+      <prop-value class="prop"  label="E testigo (dBuV/m)" :value=" techMeasurement[index].eTestigo"/>
+      <prop-value class="prop"  label="E corregido (dBuV/m)" :value=" techMeasurement[index].eCorregido"/>
+      <prop-value class="prop"  label="Incertidumbre (dB)" :value=" techMeasurement[index].incertidumbre"/>
+    </display-row>
+    <display-row >
+      <prop-value class="prop"  label="Resultado Comprobaciones Técnicas" :value=" techMeasurement[index].resultadoComprob"/>
 
+    </display-row>
+        <!-- <prop-value class="prop"  label="No esencial 1" :value=" techMeasurement[index].noEsencial1"/>
+        <prop-value class="prop"  label="MIC no esencial 1" :value=" techMeasurement[index].micNoEsencial1"/>
+        <prop-value class="prop"  label="No esencial 2" :value=" techMeasurement[index].noEsencial2"/>
+        <prop-value class="prop"  label="MIC no esencial 2" :value=" techMeasurement[index].micNoEsencial2"/>
+        <prop-value class="prop"  label="No esencial 3" :value=" techMeasurement[index].noEsencial3"/>
+        <prop-value class="prop"  label="MIC no esencial 3" :value=" techMeasurement[index].micNoEsencial3"/> -->
+    <!-- </display-row> -->
+    <display-row > 
+        <!-- <prop-value class="prop" label="Técnico" :value="technicians[techMeasurement[index].id_technician1].nombre + ', ' + technicians[techMeasurement[index].id_technician1].apellido"/> -->
+        <!-- <prop-value class="prop" label="Técnico" :value="technicians[techMeasurement[index].id_technician2].nombre + ', ' + technicians[techMeasurement[index].id_technician2].apellido"/> -->
+      <prop-value class="prop"  label="Técnico1" :value="getTechnician(index)[0]"/>
+      <prop-value class="prop"  label="Técnico2" :value="getTechnician(index)[1]"/>
+
+    </display-row>
 </div>  
+
 <div class="buttons-container">
   <!-- <RouterLink :to="'/file/'+ idPath">Volver</RouterLink> -->
   <my-button @on-tap="goBack(idPath)" class="primary right" label="Volver"/>
