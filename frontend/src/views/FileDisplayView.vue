@@ -48,7 +48,8 @@ function editItem(item) {
 function goBack() {  
   // router.push(`/list`)
   // router.push({ name: 'list', query: { includeDeleted: 'false' }})
-  router.go(-1)
+  // router.go(-1)
+  router.back()
 
 }
 
@@ -88,7 +89,7 @@ console.log(file)
     <!-- <my-button @on-tap="() => editItem(file.id)" label="Editar"/> -->
   </div>
 
-  <heading>Radiolocalización de Estaciones</heading>
+  <heading>Datos de Radiolocalización</heading>
 
   <div class="buttons-container">
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
