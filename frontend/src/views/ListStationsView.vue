@@ -25,9 +25,27 @@ const { getNameByCode } = useTerritory()
 const items = ref([])
 const searchText = ref()
 
-function editItem(item) {  
-  router.push(`/file/${item}/edit`)
+// function editItem(item) {  
+//   router.push(`/file/${item}/edit`)
+// }
+function editItem(item) {
+  console.log("argumento: ", item)
+  console.log("item: ", items.value[item-1])
+  
+  if (items.value[item-1].frecuencia != null || items.value[item-1].frecuencia != undefined) {
+    
+    router.currentRoute.value.query.rloc = 'true'
+    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
+
+  } else {
+    
+    router.currentRoute.value.query.rloc = 'false'
+    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'false'} })
+
+  }
 }
+
+
 function createItem() {  
   router.push('/file/create')
 }
@@ -49,6 +67,7 @@ onBeforeMount(async () => {
     // haciendo una llamada a un método asíncrono
   const data = await listStations(true)
   items.value.push(...data)
+  const stations = items.value
   console.log("data else: ", data)
   for (const item in items.value) {
     items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
@@ -61,23 +80,33 @@ onBeforeMount(async () => {
 })
 
 async function searchStations() {
-  const searchString = searchText.value.toLowerCase()
-  console.log("Texto a buscar: ", searchText.value)
+  const searchStringTemp = searchText.value ? searchText.value.toLowerCase() : ''
+  const searchString = searchStringTemp.split('+')
+  console.log("Texto a buscar: ", searchString, searchText.value)
   const data = await listStations(true)
   // debugger
-  const searchResult = data.filter((item) => item.id == searchString || item.identificacion.toLowerCase().includes(searchString) || item.domicilio.toLowerCase().includes(searchString) || item.frecuencia.toString().includes(searchString) || getNameByCode("city", item.localidad).toLowerCase().includes(searchString) || getNameByCode("province", item.provincia).toLowerCase().includes(searchString))
-  // items.value.push(...searchResult)
-  // Object.assign(items.value, [])
+  const searchResult = data.filter((item) => {
+
+    const id = item.id
+    const identificacion = item.identificacion ? item.identificacion.toLowerCase() : ''
+    const servicio = item.servicio ? item.servicio.toLowerCase() : ''
+    const frecuencia = item.frecuencia !== null && item.frecuencia !== undefined ? item.frecuencia.toString() : ''
+    const domicilio = item.domicilio ? item.domicilio.toString().toLowerCase() : ''
+    const localidad = getNameByCode("city", item.localidad) ? getNameByCode("city", item.localidad).toLowerCase() : '' 
+    const provincia = getNameByCode("province", item.provincia) ? getNameByCode("province", item.provincia).toLowerCase() : '' 
+    const emplazamiento = item.emplazamiento ? item.emplazamiento.toLowerCase() : ''
+    
+    return id == searchString || identificacion.includes(searchString) || servicio.includes(searchString) || frecuencia.includes(searchString) || domicilio.includes(searchString) || localidad.includes(searchString) || provincia.includes(searchString) || emplazamiento.includes(searchString)
+    
+  })
+
   items.value = searchResult
   for (const item in items.value) {
     items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
     items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-    
   }
-  
-  
-}
 
+}
 
 
 </script>
@@ -89,10 +118,11 @@ async function searchStations() {
           outer-class="field-search"
           type="text"
           name="searchInput"
-          placeholder="Buscar"
+          placeholder="Buscar estaciones"
           v-model="searchText"
         />
         <my-button @on-tap="() => searchStations()" class="secondary buscar-btn" label="Buscar"/>
+        
     </form-row>
   </div>
 
@@ -119,7 +149,8 @@ async function searchStations() {
       <!-- <td>{{ item.id }}</td> -->
       <td>{{ item.identificacion }}</td> 
       <td>{{ item.servicio }}</td> 
-      <td>{{ item.frecuencia +" "+item.unidad}}</td>
+      <td v-if="item.frecuencia">{{ item.frecuencia +" "+item.unidad}}</td>
+      <td v-else>---</td>
       <td>{{ item.emplazamiento }}</td>
       <td>{{ item.domicilio }}</td>
       <td>{{ item.localidad + " (" + item.provincia +")" }} </td>

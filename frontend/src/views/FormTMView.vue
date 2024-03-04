@@ -17,6 +17,7 @@ const file = reactive({})
 const technicians = reactive([])
 const techniciansValues = reactive([])
 
+
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono

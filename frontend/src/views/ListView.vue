@@ -21,12 +21,30 @@ const currentRoute = useRouter()
 // template sin necesidad de que su valor sea reasignado
 const items = reactive([])
 
-function editItem(item) {  
-  router.push(`/file/${item}/edit`)
+// function editItem(item) {  
+//   router.push(`/file/${item}/edit`)
+// }
+
+function editItem(item) {
+  console.log("argumento: ", item)
+  console.log("item: ", items[item-1])
+  
+  // if (items.value[item-1].frecuencia != null || items.value[item-1].frecuencia != undefined) {
+    
+  //   router.currentRoute.value.query.rloc = 'true'
+  //   router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
+
+  // } else {
+    
+  //   router.currentRoute.value.query.rloc = 'false'
+  //   router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'false'} })
+
+  // }
 }
-function createItem() {  
-  router.push('/file/create')
-}
+
+// function createItem() {  
+//   router.push('/file/create')
+// }
 function viewItem(item) {  
   router.push(`/file/${item}`)
 }

@@ -8,7 +8,7 @@ export function useArea() {
         label: 'Buenos Aires'
       },
       {
-        value: 'Cordoba',
+        value: 'Córdoba',
         label: 'Córdoba'
       },
       {
@@ -20,7 +20,7 @@ export function useArea() {
         label: 'Posadas'
       },
       {
-        value: 'Neuquen',
+        value: 'Neuquén',
         label: 'Neuquén'
       },
       {

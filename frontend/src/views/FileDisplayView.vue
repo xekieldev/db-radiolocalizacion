@@ -41,9 +41,16 @@ function viewItem(item) {
   router.push({name: 'tech_measurement', params: { id: item}})
 }
 function editItem(item) {  
-  // router.push(`/file/${item}/edit`)
-  router.push({ name: 'editFile', params: { id: item } })
 
+  if (station.frecuencia != null || station.frecuencia != undefined) {
+    router.currentRoute.value.query.rloc = 'true'
+    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
+
+  } else {
+    router.currentRoute.value.query.rloc = 'false'
+    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'false'} })
+
+  }
 }
 function goBack() {  
   // router.push(`/list`)
@@ -75,7 +82,7 @@ onMounted(async () => {
     Object.assign(station, response.station)
     Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
-console.log(file)
+    console.log(station)
 
     station.provincia = getNameByCode("province", response.station.provincia)
     station.localidad = getNameByCode("city", response.station.localidad)    
@@ -89,7 +96,8 @@ console.log(file)
     <!-- <my-button @on-tap="() => editItem(file.id)" label="Editar"/> -->
   </div>
 
-  <heading>Datos de Radiolocalización</heading>
+  <heading v-if="station.frecuencia != null">Datos de Radiolocalización</heading>
+  <heading v-else>Datos de Localización</heading>
 
   <div class="buttons-container">
     <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
