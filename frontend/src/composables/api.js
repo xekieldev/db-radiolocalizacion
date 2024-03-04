@@ -29,18 +29,26 @@ export function useApi() {
         return response && response.data 
     }
 
+    // async function edit(id, data) {
+    //     const caseOmit = ['unidadVinc', 'unidad', 'status']
+    //     const payload = { ...data }
+    //     Object.keys(data).forEach( key => { 
+    //         if (typeof data[key] === 'string' || data[key] instanceof String)
+    //             if (!caseOmit.includes(key))
+    //                 payload[key] = data[key].toUpperCase()
+    //     })
+    //     loading.value = true
+    //     const response = await axiosInstance.put(`/file/${id}/edit`, payload)
+    //     loading.value = false
+    //     return response && response.data 
+    // }
+
     async function edit(id, data) {
-        const caseOmit = ['unidadVinc', 'unidad', 'status']
-        const payload = { ...data }
-        Object.keys(data).forEach( key => { 
-            if (typeof data[key] === 'string' || data[key] instanceof String)
-                if (!caseOmit.includes(key))
-                    payload[key] = data[key].toUpperCase()
-        })
         loading.value = true
-        const response = await axiosInstance.put(`/file/${id}/edit`, payload)
+        const response = await axiosInstance.put(`/file/${id}/edit`, data)
         loading.value = false
         return response && response.data 
+
     }
     
     async function getFile(id) {

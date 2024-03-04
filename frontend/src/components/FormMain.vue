@@ -50,13 +50,13 @@ onBeforeMount( async ()=> {
     const response = await getFile(fileId.value)  
     Object.assign(filePath , response.file)
 
-    // console.log("fileP: ", filePath)
+    console.log("filePath: ", filePath)
   } catch {
   fileId.value = null
   }
 })
 
-console.log("localidad", props.station.localidad)
+console.log("Edition query: ", router.currentRoute.value.query.rloc, "Edition name: ", router.currentRoute.value.name )
 
 const province = ref(props.station.provincia)
 const city = ref(props.station.localidad)
@@ -226,7 +226,7 @@ const linkType = ref('Radioeléctrico')
     </form-row>
     <form-row>
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc == 'true'"
         type="number"
         label="Frecuencia"
         name="frecuencia"
@@ -235,7 +235,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.frecuencia"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc == 'true'"
         type="select"
         label="Unidad"
         name="unidad"
@@ -243,7 +243,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.unidad"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc =='true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc =='true'"
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
@@ -304,14 +304,14 @@ const linkType = ref('Radioeléctrico')
 
     <form-row>
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc == 'true'"
         type="text"
         label="Sistema Irradiante"
         name="irradiante"
         v-model="station.irradiante"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc == 'true'"
         type="select"
         label="Polarización"
         name="polarizacion"
@@ -320,14 +320,14 @@ const linkType = ref('Radioeléctrico')
         v-model="station.polarizacion"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc == 'true'"
         type="text"
         label="Cantidad"
         name="cantidad"
         v-model="station.cantidad"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'"
+        v-if="router.currentRoute.value.query.rloc == 'true'"
         type="text"
         label="Altura Media"
         name="altura"
@@ -336,7 +336,7 @@ const linkType = ref('Radioeléctrico')
       />
     </form-row>
     
-    <form-row v-if="router.currentRoute.value.query.rloc == 'true' || router.currentRoute.value.name == 'editFile'">
+    <form-row v-if="router.currentRoute.value.query.rloc == 'true'">
       <form-kit
         v-model="station.tipoVinculo" 
         type="select"

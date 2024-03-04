@@ -39,7 +39,7 @@ onBeforeMount(async () => {
     
 })
 
-console.log("lakhjd", typeof(station))
+console.log("Path para editar", currentRoute.value.query)
 
 async function save(fields) {
   try {

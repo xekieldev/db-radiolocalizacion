@@ -151,7 +151,8 @@ const { unidad } = useUnit()
         validation="false"
       />
     </form-row>
-    <div style="border: 1px solid gray; padding: 10px; border-radius: 5px; margin: 10px 0 10px 0">
+    <!-- <div style="border: 1px solid gray; padding: 10px; border-radius: 5px; margin: 10px 0 10px 0"> -->
+    <div>
     <form-row>
       <form-kit
         type="text"
@@ -206,24 +207,28 @@ const { unidad } = useUnit()
         type="number"
         label="E medido [dBuV/m]"
         name="eMedido"
+        step="0.000001"
         help="Valor de referencia en el punto de medición"
       />
       <form-kit
         type="number"
         label="E testigo [dBuV/m]"
         name="eTestigo"
+        step="0.000001"
         help="Valor de referencia en el punto de medición"
       />
       <form-kit
         type="number"
         label="E corregido [dBuV/m]"
         name="eCorregido"
+        step="0.000001"
         help="Valor de referencia en el punto de medición"
       />
       <form-kit
         type="number"
         label="Incertidumbre [dB]"
         name="incertidumbre"
+        step="0.000001"
       />
     </form-row>
     <form-row>
