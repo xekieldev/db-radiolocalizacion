@@ -46,7 +46,7 @@ function submitHandler(fields) {
 onBeforeMount( async ()=> {
   try{
     fileId.value = currentRoute.value.query.from.slice(6,)
-    // console.log(fileId)
+    console.log("fileId: ", fileId)
     const response = await getFile(fileId.value)  
     Object.assign(filePath , response.file)
 
@@ -338,12 +338,14 @@ const linkType = ref('Radioeléctrico')
     
     <form-row v-if="router.currentRoute.value.query.rloc == 'true'">
       <form-kit
+        outer-class="field-emplazamiento"
         v-model="station.tipoVinculo" 
         type="select"
         label="Tipo de Vínculo"
         name="tipoVinculo"
         :options="tipoVinculo"
         placeholder="Vínculo"
+        v-if="(fileId == null || fileId == undefined) && station.emplazamiento != 'Estudio'"
       />
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"
@@ -438,6 +440,9 @@ const linkType = ref('Radioeléctrico')
 .field-domicilio {
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
   flex: 0 0 70%;
+}
+.field-emplazamiento {
+  flex: 0 0 20%;
 }
 
 .field-status {
