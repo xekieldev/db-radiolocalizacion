@@ -31,7 +31,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/list?includeDeleted=false">
           Expedientes
         </RouterLink>
-        <RouterLink to="/station">
+        <RouterLink to="/station?includeDeleted=false">
           Estaciones
         </RouterLink>
         <!-- <RouterLink to="/search">

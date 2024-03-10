@@ -32,7 +32,7 @@ const props = defineProps({
 })
 
 const filePath = reactive({})
-const initialTechnicians = reactive([{id: "1"}, { id: "5"}])
+const initialTechnicians = reactive([{id: "1"}, { id: "2"}])
 const fileId = ref('')
 
 console.log("path ahroa:", router.currentRoute.value.name)
@@ -187,6 +187,15 @@ const linkType = ref('Radioeléctrico')
       />
     </form-row>
     <form-row>
+      <form-kit
+        outer-class="field-status"
+        type="text"
+        label="Status"
+        name="status2"
+        v-model="station.status2"
+        value="Available"
+        :disabled="true"
+      />
     <form-kit
         type="text"
         label="Señal distintiva/Identificación"

@@ -43,8 +43,14 @@ const { unidad } = useUnit()
     type="form"
     submit-label="Cargar"
     @submit="submitHandler"
+    :config="{ validationVisibility: 'submit',
+               validation:'required', 
+               validationMessages:{ required:'Campo obligatorio', 
+                                    
+               }
+    }"
   >
-    <form-row>
+    <!-- <form-row> -->
       <!-- <form-kit
         type="text"
         label="Expediente"
@@ -55,7 +61,7 @@ const { unidad } = useUnit()
         v-model="file.expediente"
         :disabled="true"
       /> -->
-    </form-row>
+    <!-- </form-row> -->
     <form-row>
       <form-kit
         type="date"
@@ -234,7 +240,7 @@ const { unidad } = useUnit()
     <form-row>
       <form-kit
         type="textarea"
-        label="Descripción/Observaciones"
+        label="Resultados de las Comprobaciones Técnicas"
         name="resultadoComprob"
         validation="false"
       />

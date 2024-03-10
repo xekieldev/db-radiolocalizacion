@@ -42,6 +42,7 @@ def filex():
         filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, status = status, id_technician1 = id_technician1, id_technician2 = id_technician2)#, id_technician2 = id_technician2 ) #, technicians = technicians)
         db.session.add(filex)
 
+        status2 = request.json.get('status')
         identificacion = request.json.get('identificacion')
         emplazamiento = request.json.get('emplazamiento')
         servicio = request.json.get('servicio')
@@ -64,7 +65,7 @@ def filex():
         longitud = request.json.get('longitud')
         observaciones = request.json.get('observaciones')
                 
-        station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
+        station = Station(status2 = status2, identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
         db.session.add(station)
 
         db.session.commit()
@@ -152,6 +153,7 @@ def edit_file(id):
             filex.id_technician1 = id_technician1
             filex.id_technician2 = id_technician2
 
+            status2 = request.json.get('status2')
             identificacion = request.json.get('identificacion')
             emplazamiento = request.json.get('emplazamiento')
             servicio = request.json.get('servicio')
@@ -174,6 +176,7 @@ def edit_file(id):
             longitud = request.json.get('longitud')
             observaciones = request.json.get('observaciones')
 
+            station.status2 = status2
             station.identificacion = identificacion
             station.emplazamiento = emplazamiento
             station.servicio = servicio
@@ -236,7 +239,9 @@ def edit_file(id):
 def delete_file(id):
     try:
         filex = Filex.query.get(id)
+        station = Station.query.get(id)
         filex.status = 'Deleted'
+        station.status2 = 'Deleted'
         db.session.commit()
         response = {'id_file': filex.id}
         return response

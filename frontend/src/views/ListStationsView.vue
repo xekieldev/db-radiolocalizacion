@@ -30,9 +30,11 @@ const searchText = ref()
 // }
 function editItem(item) {
   console.log("argumento: ", item)
-  console.log("item: ", items.value[item-1])
+  console.log("item: ", items)
+  console.log("station: ", items.value.find(station => station.id === item).frecuencia)
   
-  if (items.value[item-1].frecuencia != null || items.value[item-1].frecuencia != undefined) {
+  
+  if (items.value.find(station => station.id === item).frecuencia != null || items.value.find(station => station.id === item).frecuencia != undefined) {
     
     router.currentRoute.value.query.rloc = 'true'
     router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
@@ -65,18 +67,31 @@ async function deleteItem(item) {
 onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
-  const data = await listStations(true)
-  items.value.push(...data)
-  const stations = items.value
-  console.log("data else: ", data)
-  for (const item in items.value) {
-    items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
-    items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-    
-  }
-  console.log(":Items modify ", items)
-    
-    
+    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
+
+      const data = await listStations()
+      items.value.push(...data)
+      const stations = items.value
+      console.log("stations if: ", items.value)
+      for (const item in items.value) {
+        items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
+        items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
+        
+      }
+      console.log(":Items modify ", items)
+    } else {
+        const data = await listStations(true)
+        items.value.push(...data)
+        const stations = items.value
+        console.log("stations else: ", items.value)
+        
+        console.log("data else: ", data)
+        for (const item in items.value) {
+          items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
+          items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
+        }
+      }
+      
 })
 
 async function searchStations() {
@@ -138,6 +153,7 @@ async function searchStations() {
         <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
         <th>Domicilio</th>
         <th>Localidad (Provincia)</th>
+        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th>
         <th>Acciones</th>
       </tr>
       <tr
@@ -155,6 +171,7 @@ async function searchStations() {
       <td>{{ item.domicilio }}</td>
       <td>{{ item.localidad + " (" + item.provincia +")" }} </td>
       <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
+      <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status2 }}</td>
       <td> 
         <div class="action-buttons-container">
           <my-button @on-tap="() => editItem(item.id)" class="primary center" label="Editar"/>
