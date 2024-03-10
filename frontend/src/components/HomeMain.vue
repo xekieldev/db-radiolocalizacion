@@ -22,7 +22,7 @@ function listTechnicians() {
 }
 
 function stationList() {
-  router.push({ name: "station"})
+  router.push({ name: "station", query: { includeDeleted: 'false'}})
 }
 
 </script>
@@ -31,11 +31,11 @@ function stationList() {
 
 <heading>Base de datos de Radiolocalizaciones y Localizaciones</heading>
   <div class="home-buttons">
-    <my-button @on-tap="createFile" class="quaternary button new-rloc" label="Nueva Radiolocalización"></my-button>
-    <my-button @on-tap="createLocFile" class="quaternary button new-loc" label="Nueva Localización"></my-button>
-    <my-button @on-tap="list" class="quaternary button file-manage" label="Gestión de Expedientes"></my-button>
-    <my-button @on-tap="stationList" class="quaternary button station-manage" label="Gestión de Estaciones"></my-button>
-    <my-button @on-tap="listTechnicians" class="quaternary button technician-manage" label="Gestión de Técnicos"></my-button>
+    <my-button tabindex="0" @on-tap="createFile" class="quaternary button new-rloc" label="Nueva Radiolocalización"></my-button>
+    <my-button tabindex="0" @on-tap="createLocFile" class="quaternary button new-loc" label="Nueva Localización"></my-button>
+    <my-button tabindex="0" @on-tap="list" class="quaternary button file-manage" label="Gestión de Expedientes"></my-button>
+    <my-button tabindex="0" @on-tap="stationList" class="quaternary button station-manage" label="Gestión de Estaciones"></my-button>
+    <my-button tabindex="0" @on-tap="listTechnicians" class="quaternary button technician-manage" label="Gestión de Técnicos"></my-button>
 
   </div>
 

@@ -62,7 +62,7 @@ onMounted(async () => {
 })
 
 function getTechnician(id) {
-  console.log("id: ", id, "id_technician1: ",techMeasurement[id].id_technician1,"id_technician2: ", techMeasurement[id].id_technician2)
+  // console.log("id: ", id, "id_technician1: ",techMeasurement[id].id_technician1,"id_technician2: ", techMeasurement[id].id_technician2)
   const technician1 = technicians[techMeasurement[id].id_technician1-1].nombre + ', ' + technicians[techMeasurement[id].id_technician1-1].apellido
   const technician2 = technicians[techMeasurement[id].id_technician2-1].nombre + ', ' + technicians[techMeasurement[id].id_technician2-1].apellido
   
@@ -95,7 +95,7 @@ function getTechnician(id) {
     <my-button @on-tap="() => viewItem(idPath)" class="primary right" label="Agregar Mediciones Técnicas"/>
   </div>
   <div v-for="value, index in techMeasurement">
-    <p v-if="index==0">Emplazamiento Estación Testigo </p>
+    <p v-if="index==0" class="title-testigo">Emplazamiento Estación Testigo </p>
     <display-row v-if="index==0"> 
       <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilioTestigo"/>
       <prop-value class="prop double" label="Localidad" :value="techMeasurement[index].localidadTestigo"/>
@@ -104,8 +104,8 @@ function getTechnician(id) {
     <display-row v-if="index==0">
       <prop-value class="prop"  label="Latitud" :value="techMeasurement[index].latitudTestigo"/>
       <prop-value class="prop"  label="Longitud" :value="techMeasurement[index].longitudTestigo"/>
-      <prop-value class="prop"  label="Distancia" :value=" techMeasurement[index].distanciaTestigo"/>
-      <prop-value class="prop double" label="Azimut geog. con respecto a PTx" :value="techMeasurement[index].azimutTestigo"/>
+      <prop-value class="prop"  label="Distancia [m]" :value=" techMeasurement[index].distanciaTestigo"/>
+      <prop-value class="prop double" label="Azimut geog. con respecto a PTx [°]" :value="techMeasurement[index].azimutTestigo"/>
     </display-row>
 <br>
     <display-row > 
@@ -122,8 +122,8 @@ function getTechnician(id) {
     <display-row > 
       <prop-value class="prop"  label="Latitud" :value="techMeasurement[index].latitud"/>
       <prop-value class="prop"  label="Longitud" :value="techMeasurement[index].longitud"/>
-      <prop-value class="prop"  label="Distancia" :value=" techMeasurement[index].distancia"/>
-      <prop-value class="prop"  label="Azimut" :value=" techMeasurement[index].azimut"/>
+      <prop-value class="prop"  label="Distancia [m]" :value=" techMeasurement[index].distancia"/>
+      <prop-value class="prop"  label="Azimut [°]" :value=" techMeasurement[index].azimut"/>
     </display-row>
     <display-row > 
       <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilio"/>
@@ -137,19 +137,14 @@ function getTechnician(id) {
       <prop-value class="prop"  label="Incertidumbre (dB)" :value=" techMeasurement[index].incertidumbre"/>
     </display-row>
     <display-row >
-      <prop-value class="prop"  label="Resultado Comprobaciones Técnicas" :value=" techMeasurement[index].resultadoComprob"/>
+      <prop-value class="prop"  label="Resultado de las Comprobaciones Técnicas" :value=" techMeasurement[index].resultadoComprob"/>
 
     </display-row>
-        <!-- <prop-value class="prop"  label="No esencial 1" :value=" techMeasurement[index].noEsencial1"/>
-        <prop-value class="prop"  label="MIC no esencial 1" :value=" techMeasurement[index].micNoEsencial1"/>
-        <prop-value class="prop"  label="No esencial 2" :value=" techMeasurement[index].noEsencial2"/>
-        <prop-value class="prop"  label="MIC no esencial 2" :value=" techMeasurement[index].micNoEsencial2"/>
-        <prop-value class="prop"  label="No esencial 3" :value=" techMeasurement[index].noEsencial3"/>
-        <prop-value class="prop"  label="MIC no esencial 3" :value=" techMeasurement[index].micNoEsencial3"/> -->
-    <!-- </display-row> -->
-    <display-row > 
+   
+    <display-row> 
         <!-- <prop-value class="prop" label="Técnico" :value="technicians[techMeasurement[index].id_technician1].nombre + ', ' + technicians[techMeasurement[index].id_technician1].apellido"/> -->
         <!-- <prop-value class="prop" label="Técnico" :value="technicians[techMeasurement[index].id_technician2].nombre + ', ' + technicians[techMeasurement[index].id_technician2].apellido"/> -->
+  
       <prop-value class="prop"  label="Técnico1" :value="getTechnician(index)[0]"/>
       <prop-value class="prop"  label="Técnico2" :value="getTechnician(index)[1]"/>
 
@@ -176,5 +171,9 @@ function getTechnician(id) {
     gap: 10px;
     justify-content: end;
     margin: 5px;
+}
+.title-testigo {
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 </style>

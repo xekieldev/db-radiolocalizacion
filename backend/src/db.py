@@ -54,6 +54,7 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
     __tablename__= "Station"
     id = db.Column(db.Integer, primary_key = True)
+    status2 = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
     identificacion = db.Column(db.String(50), nullable = False)
     emplazamiento = db.Column(db.String(15))
     servicio = db.Column(db.String(6))

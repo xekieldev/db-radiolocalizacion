@@ -106,14 +106,25 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function listStations() {
+    // async function listStations() {
+    //     loading.value = true
+    //     const response = await axiosInstance.get('/station')
+    //     loading.value = false
+    //     return response && response.data 
+    // }
+
+    async function listStations(includeDeleted = false) {
         loading.value = true
-        const response = await axiosInstance.get('/station')
+        const response = await axiosInstance.get('/station', {
+            params: {
+                includeDeleted: includeDeleted
+            }
+        })
         loading.value = false
         return response && response.data 
     }
 
-    async function getStation() {
+    async function getStation(id) {
         loading.value = true
         const response = await axiosInstance.get(`/station/${id}`)
         loading.value = false

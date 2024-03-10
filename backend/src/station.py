@@ -16,7 +16,7 @@ bp = Blueprint("station", __name__)
 class StationSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
+        fields = ("id", "status2", "identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
                    "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc",
                      "unidadVinc", "irradianteVinc", "polarizacionVinc", "provincia", "localidad",
                        "domicilio", "latitud", "longitud", "observaciones")
@@ -36,10 +36,22 @@ def get_station(id):
     
 @bp.route("/station/", methods = ['GET'])
 def get_all_stations():
+    # try:
+    #     all_stations = Station.query.all()
+    #     # import pdb; pdb.set_trace()
     try:
-        all_stations = Station.query.all()
-        # import pdb; pdb.set_trace()
-        return stations_schema.dump(all_stations)
+        include_deleted = request.args.get('includeDeleted')
+
+        if include_deleted and include_deleted.lower() == 'true':
+            # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
+            stations_available = Station.query.all()
+        else:
+            # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
+            stations_available = Station.query.filter_by(status2='Available').all()
+
+        return stations_schema.dump(stations_available)
+        
+
     except:
         response = {"message": "server error"}
         return response, 500
