@@ -61,14 +61,15 @@ onMounted(async () => {
     
 })
 
-function getTechnician(id) {
-  // console.log("id: ", id, "id_technician1: ",techMeasurement[id].id_technician1,"id_technician2: ", techMeasurement[id].id_technician2)
-  const technician1 = technicians[techMeasurement[id].id_technician1-1].nombre + ', ' + technicians[techMeasurement[id].id_technician1-1].apellido
-  const technician2 = technicians[techMeasurement[id].id_technician2-1].nombre + ', ' + technicians[techMeasurement[id].id_technician2-1].apellido
+// function getTechnician(id) {
+//   console.log("id: ", id, "id_technician1: ",techMeasurement[id].id_technician1,"id_technician2: ", techMeasurement[id].id_technician2)
   
-  // debugger
-  return [technician1, technician2]
-}
+//   const technician1 = technicians[techMeasurement[id].id_technician1-1].nombre + ', ' + technicians[techMeasurement[id].id_technician1-1].apellido
+//   const technician2 = technicians[techMeasurement[id].id_technician2-1].nombre + ', ' + technicians[techMeasurement[id].id_technician2-1].apellido
+  
+//   debugger
+//   return [technician1, technician2]
+// }
 // function getTechnician2(id) {
 
 //   return technicians[techMeasurement[id].id_technician2].nombre + ', ' + technicians[techMeasurement[id].id_technician2].apellido
@@ -142,12 +143,10 @@ function getTechnician(id) {
     </display-row>
    
     <display-row> 
-        <!-- <prop-value class="prop" label="Técnico" :value="technicians[techMeasurement[index].id_technician1].nombre + ', ' + technicians[techMeasurement[index].id_technician1].apellido"/> -->
-        <!-- <prop-value class="prop" label="Técnico" :value="technicians[techMeasurement[index].id_technician2].nombre + ', ' + technicians[techMeasurement[index].id_technician2].apellido"/> -->
   
-      <prop-value class="prop"  label="Técnico1" :value="getTechnician(index)[0]"/>
-      <prop-value class="prop"  label="Técnico2" :value="getTechnician(index)[1]"/>
-
+      <prop-value class="prop"  label="Técnico1" :value="technicians[index*2+0].nombre +', ' + technicians[index*2+0].apellido"/>
+      <prop-value class="prop"  label="Técnico1" :value="technicians[index*2+1].nombre +', ' + technicians[index*2+1].apellido"/>
+      
     </display-row>
 </div>  
 

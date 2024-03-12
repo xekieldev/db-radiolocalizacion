@@ -16,6 +16,7 @@ const router = useRouter()
 const file = reactive({})
 const technicians = reactive([])
 const techniciansValues = reactive([])
+const techMeasurement = reactive([])
 
 
 onBeforeMount(async () => {
@@ -23,6 +24,7 @@ onBeforeMount(async () => {
     // haciendo una llamada a un método asíncrono
     const fileResponse = await getFile(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
+    const techMeasurementResponse = await getTechMeasurement(currentRoute.value.params.id)
     // console.log(currentRoute.value.params.id)
     
     // const response = getTechMeasurement(currentRoute.value.params.id)
@@ -30,6 +32,8 @@ onBeforeMount(async () => {
     // Object.assign(technicians, response.technicians)
     Object.assign(file, fileResponse.file)
     console.log("fR",fileResponse.file)
+    Object.assign(techMeasurement, techMeasurementResponse)
+    console.log("Estoy pasando: ", techMeasurement)
     
 
 })
@@ -55,6 +59,7 @@ async function save(fields) {
     :file=  "file"
     :techniciansValues="techniciansValues"
     :technicians="technicians"
+    :techMeasurement="techMeasurement"
     @on-submit="save"
   />
 </template>
