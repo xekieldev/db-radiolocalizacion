@@ -22,6 +22,7 @@ const props = defineProps({
   techniciansValues: Array,
   technicians: Object,
   file: Object,
+  techMeasurement: Object,
 })
 function submitHandler(fields) {
   emit('onSubmit', fields)
@@ -29,10 +30,10 @@ function submitHandler(fields) {
 
 // console.log("file.area", file)
 
-
 const { area } = useArea()
 const { unidad } = useUnit()
 // const { tecnico} = useTechnician()
+console.log("prop.techMeasurement: ", props.techMeasurement)
 
 </script>
 
@@ -159,7 +160,7 @@ const { unidad } = useUnit()
     </form-row>
     <!-- <div style="border: 1px solid gray; padding: 10px; border-radius: 5px; margin: 10px 0 10px 0"> -->
     <div>
-    <form-row>
+    <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
       <form-kit
         type="text"
         label="Domicilio estación Testigo"
@@ -176,7 +177,7 @@ const { unidad } = useUnit()
         name="localidadTestigo"
       />
     </form-row>
-    <form-row>
+    <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
       <form-kit
         type="number"
         label="Latitud"
