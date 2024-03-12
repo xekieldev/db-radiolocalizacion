@@ -123,7 +123,7 @@ const linkType = ref('Radioeléctrico')
         :validation-rules="{ validateFile }"
         v-else
       />
-      <form-kit
+      <!-- <form-kit
         outer-class="field-status"
         type="text"
         label="Status"
@@ -131,7 +131,7 @@ const linkType = ref('Radioeléctrico')
         v-model="file.status"
         value="Available"
         :disabled="true"
-      />
+      /> -->
     </form-row>
     <form-row>
       <form-kit
@@ -187,7 +187,7 @@ const linkType = ref('Radioeléctrico')
       />
     </form-row>
     <form-row>
-      <form-kit
+      <!-- <form-kit
         outer-class="field-status"
         type="text"
         label="Status"
@@ -195,7 +195,7 @@ const linkType = ref('Radioeléctrico')
         v-model="station.status2"
         value="Available"
         :disabled="true"
-      />
+      /> -->
     <form-kit
         type="text"
         label="Señal distintiva/Identificación"

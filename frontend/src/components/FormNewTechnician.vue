@@ -1,5 +1,6 @@
 <script setup>
 import FormRow from './FormRow.vue'
+import Heading from './Heading.vue';
 import { useArea } from '../composables/area';
 
 const emit = defineEmits(['onSubmit'])
@@ -19,7 +20,7 @@ function submitHandler(fields) {
 </script>
 
 <template>
-  <h2>{{ title }}</h2>
+  <heading>{{ title }}</heading>
   <form-kit
     type="form"
     submit-label="Guardar"

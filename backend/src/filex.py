@@ -35,14 +35,14 @@ def filex():
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
         area = request.json.get('area')
-        status = request.json.get('status')
+        # status = request.json.get('status')
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
         
-        filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, status = status, id_technician1 = id_technician1, id_technician2 = id_technician2)#, id_technician2 = id_technician2 ) #, technicians = technicians)
+        filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, id_technician1 = id_technician1, id_technician2 = id_technician2)#, id_technician2 = id_technician2 ) #, technicians = technicians)
         db.session.add(filex)
 
-        status2 = request.json.get('status')
+        # status2 = request.json.get('status')
         identificacion = request.json.get('identificacion')
         emplazamiento = request.json.get('emplazamiento')
         servicio = request.json.get('servicio')
@@ -65,7 +65,7 @@ def filex():
         longitud = request.json.get('longitud')
         observaciones = request.json.get('observaciones')
                 
-        station = Station(status2 = status2, identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
+        station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
         db.session.add(station)
 
         db.session.commit()
@@ -141,7 +141,7 @@ def edit_file(id):
             fecha = request.json.get('fecha')
             hora = request.json.get('hora')
             area = request.json.get('area')
-            status = request.json.get('status')
+            # status = request.json.get('status')
             id_technician1 = request.json.get('id_technician1')
             id_technician2 = request.json.get('id_technician2')
             
@@ -149,11 +149,11 @@ def edit_file(id):
             filex.fecha = fecha
             filex.hora = hora
             filex.area = area
-            filex.status = status
+            # filex.status = status
             filex.id_technician1 = id_technician1
             filex.id_technician2 = id_technician2
 
-            status2 = request.json.get('status2')
+            # status2 = request.json.get('status2')
             identificacion = request.json.get('identificacion')
             emplazamiento = request.json.get('emplazamiento')
             servicio = request.json.get('servicio')
@@ -176,7 +176,7 @@ def edit_file(id):
             longitud = request.json.get('longitud')
             observaciones = request.json.get('observaciones')
 
-            station.status2 = status2
+            # station.status2 = status2
             station.identificacion = identificacion
             station.emplazamiento = emplazamiento
             station.servicio = servicio
