@@ -25,7 +25,11 @@ export function useArea() {
       },
       {
         value: 'Comodoro Rivadavia',
-        label: 'Com. Rivadavia'
+        label: 'Comodoro Rivadavia'
+      },
+      {
+        value: 'Lima',
+        label: 'Lima'
       }]
 
     return { area }

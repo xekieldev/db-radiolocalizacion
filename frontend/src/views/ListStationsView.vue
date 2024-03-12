@@ -98,7 +98,7 @@ async function searchStations() {
   const searchStringTemp = searchText.value ? searchText.value.toLowerCase() : ''
   const searchString = searchStringTemp.split('+')
   console.log("Texto a buscar: ", searchString, searchText.value)
-  const data = await listStations(true)
+  const data = await listStations(false)
   // debugger
   const searchResult = data.filter((item) => {
 
