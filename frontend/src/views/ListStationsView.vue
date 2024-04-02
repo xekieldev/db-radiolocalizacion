@@ -68,7 +68,7 @@ onBeforeMount(async () => {
     // El await acá es necesario para representar que se está
     // haciendo una llamada a un método asíncrono
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-
+      // debugger
       const data = await listStations()
       items.value.push(...data)
       const stations = items.value

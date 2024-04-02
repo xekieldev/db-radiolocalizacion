@@ -8,9 +8,24 @@ from flask import url_for
 from werkzeug.exceptions import abort
 from src.db import db, Technician, ma
 from sqlalchemy import exc
-
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
+from src.users import verify_password, auth
 
 bp = Blueprint("technician", __name__)
+# auth = HTTPBasicAuth()
+
+# users = {
+#     "admin": generate_password_hash("admin")
+# }
+
+# @auth.verify_password
+# def verify_password(username, password):
+#     # import pdb; pdb.set_trace()
+#     if username in users and \
+#         check_password_hash(users.get(username), password):
+#         return username
+
 
 
 class TechnicianSchema(ma.Schema):
@@ -23,6 +38,7 @@ technicians_schema = TechnicianSchema( many = True )
 
 
 @bp.route("/technician", methods=["POST"])
+@auth.login_required
 def technician():
     try:
         nombre = request.json.get('nombre')
@@ -42,6 +58,7 @@ def technician():
 
 
 @bp.route('/technician/<id>', methods = ['GET'])
+@auth.login_required
 def get_technician(id): 
     try:
         # import pdb; pdb.set_trace()
@@ -53,6 +70,7 @@ def get_technician(id):
     
 
 @bp.route("/technician/", methods = ['GET'])
+@auth.login_required
 def get_all_technicians():
     try:
         all_technicians = Technician.query.all()
@@ -64,6 +82,7 @@ def get_all_technicians():
 
 
 @bp.route("/technician/<id>/delete_technician", methods = ['DELETE'])
+@auth.login_required
 def delete_technician(id):
     try:
         technician=Technician.query.get(id)

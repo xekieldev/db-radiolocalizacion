@@ -120,6 +120,14 @@ class Technician (db.Model):
     area = db.Column(db.String(20), nullable = False)
     
 
+class User (db.Model):
+    __tablename__ = 'User'
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    usuario = db.Column(db.String(50), unique=True, nullable = False)
+    password = db.Column(db.String(50), nullable = False)
+    area = db.Column(db.String(50), nullable = False)
+    email = db.Column(db.String(50), nullable = False)
+
 def init_app(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///radioloc.sqlite"
     db.init_app(app)

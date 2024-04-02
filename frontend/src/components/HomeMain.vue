@@ -47,6 +47,7 @@ function stationList() {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  margin: 0 auto;
   margin-top: 10px;
   width: 600px;
   align-items: center;

@@ -13,6 +13,7 @@
   /* background-color: red; */
   display: flex;
   font-size: 25px;
+  font-weight: 500;
   justify-content: center;
   width: 100%;
   flex-direction: row;

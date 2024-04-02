@@ -1,11 +1,18 @@
 import axios from 'axios'
 import { ref } from 'vue'
+import { useSession } from './session'
+
+
 
 export function useApi() {
     var loading = ref(false);
     const axiosInstance = axios.create({
         baseURL: 'http://127.0.0.1:5000',
+        headers: { Authorization: `Basic ${document.cookie.split('appAuth=')[1]}`}
     })
+    // const loginAxiosInstance = axios.create({
+    //     baseURL: 'http://127.0.0.1:5000',
+    // })
 
     async function list(includeDeleted = false) {
         loading.value = true
@@ -131,6 +138,13 @@ export function useApi() {
         return response && response.data 
     }
 
+    async function checkCredentials(data) {
+        loading.value = true
+        const response = await loginAxiosInstance.post('/login',data)
+        loading.value = false
+        return response && response.data 
+    }
+
     return {
         list,
         loading,
@@ -146,5 +160,6 @@ export function useApi() {
         getTechMeasurement,
         listStations,
         getStation,
+        checkCredentials,
     }
 }
