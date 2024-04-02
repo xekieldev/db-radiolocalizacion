@@ -5,6 +5,9 @@ from sqlalchemy import exc, insert, delete
 from src.technician import technicians_schema
 from src.station import station_schema
 from src.tech_measurement import tech_measurements_schema
+# from flask_httpauth import HTTPBasicAuth
+# from werkzeug.security import generate_password_hash, check_password_hash
+from src.users import auth, verify_password
 
 
 bp = Blueprint("filex", __name__)
@@ -16,7 +19,8 @@ class FilexSchema(ma.Schema):
 filex_schema = FilexSchema()
 filexs_schema = FilexSchema( many = True )
 
-@bp.route("/file/", methods = ['GET'])
+@bp.route("/file/", methods = ['GET'])  
+@auth.login_required
 def get_all_files():
     try:
         all_files = Filex.query.all()
@@ -28,8 +32,8 @@ def get_all_files():
 # From here I modify the code to adapt it to the new API design
 
 @bp.route("/file", methods=["POST"])
+@auth.login_required
 def filex():
-    
     try:
         expediente = request.json.get('expediente')
         fecha = request.json.get('fecha')
@@ -95,6 +99,7 @@ def filex():
 
     
 @bp.route('/file/<id>', methods = ['GET'])
+@auth.login_required
 def get_file(id):
     try:
         filex = Filex.query.get(id)
@@ -112,6 +117,7 @@ def get_file(id):
 
 
 @bp.route('/file', methods = ['GET'])
+@auth.login_required
 def get_available_files():
     try:
         include_deleted = request.args.get('includeDeleted')
@@ -130,6 +136,7 @@ def get_available_files():
         return response, 400
 
 @bp.route('/file/<id>/edit', methods = ['PUT'])
+@auth.login_required
 def edit_file(id):
     try:
         filex = Filex.query.get(id)
@@ -236,6 +243,7 @@ def edit_file(id):
         return response, 400
 
 @bp.route('/file/<id>', methods = ['DELETE'])
+@auth.login_required
 def delete_file(id):
     try:
         filex = Filex.query.get(id)
@@ -252,6 +260,7 @@ def delete_file(id):
 
 
 @bp.route("/file/<id>/create_tech_measurement", methods=["POST"])
+@auth.login_required
 def tech_measurement(id):
     try:
         fecha = request.json.get('fecha')
@@ -317,6 +326,7 @@ def tech_measurement(id):
     
 
 @bp.route('/file/<id>/tech_measurement', methods = ['GET'])
+@auth.login_required
 def get_tech_measurement(id):
     try:
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()

@@ -7,10 +7,27 @@ from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
 from src.db import db, Station, ma
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
+from src.users import auth, verify_password
+
 
 
 
 bp = Blueprint("station", __name__)
+# auth = HTTPBasicAuth()
+# users = {
+#     "admin": generate_password_hash("admin")
+# }
+
+# @auth.verify_password
+# def verify_password(username, password):
+#     # import pdb; pdb.set_trace()
+#     if username in users and \
+#         check_password_hash(users.get(username), password):
+#         return username
+
+
 
 
 class StationSchema(ma.Schema):
@@ -25,6 +42,7 @@ station_schema = StationSchema()
 stations_schema = StationSchema(many=True)
 
 @bp.route('/station/<id>', methods = ['GET'])
+@auth.login_required
 def get_station(id):
     try:
         # import pdb; pdb.set_trace()
@@ -34,7 +52,8 @@ def get_station(id):
         response = {"message": "input error"}
         return response, 400
     
-@bp.route("/station/", methods = ['GET'])
+@bp.route("/station", methods = ['GET'])
+@auth.login_required
 def get_all_stations():
     # try:
     #     all_stations = Station.query.all()

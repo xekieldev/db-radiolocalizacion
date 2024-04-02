@@ -2,6 +2,8 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
+# from flask_httpauth import HTTPBasicAuth
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
@@ -9,13 +11,7 @@ def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
     CORS(app)
-    # app.config.from_mapping(
-    #     # a default secret that should be overridden by instance config
-    #     SECRET_KEY="dev",
-    #     # store the database in the instance folder
-    #     DATABASE=os.path.join(app.instance_path, "radioloc.sqlite"),
-    # )
-
+   
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile("config.py", silent=True)
@@ -30,6 +26,7 @@ def create_app(test_config=None):
         pass
 
     @app.route("/hello")
+    # @auth.login_required
     def hello():
         return "Hello, World!"
 
@@ -46,6 +43,7 @@ def create_app(test_config=None):
     
     from src import station
     from src import tech_measurement
+    from src import users
 
 
     app.register_blueprint(technician.bp)
@@ -53,6 +51,7 @@ def create_app(test_config=None):
     app.register_blueprint(filex.bp)
     app.register_blueprint(station.bp)
     app.register_blueprint(tech_measurement.bp)
+    app.register_blueprint(users.bp)
 
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with

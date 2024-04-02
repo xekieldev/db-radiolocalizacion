@@ -1,56 +1,46 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import MyButton from './components/MyButton.vue'
+import { useRouter } from 'vue-router'
+import { useSession } from './composables/session'
+import { computed } from 'vue'
+import BarMenu from './components/Menu.vue'
+
+const router = useRouter()
+const { logout, loggedIn } = useSession()
+
+
+// const isLoggedIn = computed(() => {
+//       return loggedIn.value;
+//     });
+
+// function checkAuth() {
+    
+//   if(document.cookie.split('=')[0] == 'appAuth') {
+//     return true
+//   } else return false
+// }
+
+// const cookie = document.cookie
+// console.log("cookie: ", cookie)
+
+
+// async function logout2() {
+//   const response = await logout()
+
+//   router.push('/login')
+// }
+
 </script>
 
 <template>
   <div class="wrapper">
-    <header>
-      <img
-        alt="ENACOM logo"
-        class="logo"
-        src="../../img/Logo.png"
-        width="100"
-        height="100"
-      >
-      <nav>
-        <RouterLink to="/">
-          Home
-        </RouterLink>
-        <!-- <RouterLink to="/form">
-          Form
-        </RouterLink>
-        <RouterLink to="/map">
-          Map
-        </RouterLink>
-        <RouterLink to="/rloc">
-          Rloc
-        </RouterLink>
-        <RouterLink to="/loc">
-          Loc
-        </RouterLink> -->
-        <RouterLink to="/list?includeDeleted=false">
-          Expedientes
-        </RouterLink>
-        <RouterLink to="/station?includeDeleted=false">
-          Estaciones
-        </RouterLink>
-        <!-- <RouterLink to="/search">
-          Buscar
-        </RouterLink> -->
-        <!-- <RouterLink to="/tech">
-          Tech
-        </RouterLink> -->
-        <RouterLink to="/list_technicians">
-          Técnicos
-        </RouterLink>
-        <RouterLink to="/about">
-          About
-        </RouterLink>
-      </nav>
-    </header>
+    <bar-menu></bar-menu>
 
-    <RouterView />
+<RouterView />
+
   </div>
+    
 </template>
 
 

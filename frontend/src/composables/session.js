@@ -1,0 +1,41 @@
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
+
+
+export function useSession() {
+    const loading = ref(false);
+    const loggedIn = ref(document.cookie.indexOf('Auth') !== -1);
+
+    const loginAxiosInstance = axios.create({
+        baseURL: 'http://127.0.0.1:5000',
+    })
+
+    function updateLoggedIn() {
+        // debugger
+        loggedIn.value = document.cookie.indexOf('Auth') !== -1
+    }
+
+    async function login(data) {
+        loading.value = true
+        const response = await loginAxiosInstance.post('/login',data)
+        console.log("response: ", response)
+        loading.value = false
+        const fechaActual = new Date()
+        const expirationDate = new Date(fechaActual.getTime() + (30 * 60 * 1000))
+        const expirationDateGMT = expirationDate.toGMTString()
+        document.cookie = `appAuth=${response.data}; expires=${expirationDateGMT}`
+        return response && response.data
+    }
+
+    async function logout() {
+        document.cookie = 'appAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;' 
+      }
+
+      return {
+        login,
+        logout,
+        loggedIn,
+        updateLoggedIn,
+        
+    }
+}
