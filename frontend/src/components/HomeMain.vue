@@ -29,7 +29,7 @@ function stationList() {
 
 <template>
 
-<heading>Base de datos de Radiolocalizaciones y Localizaciones</heading>
+<heading class="home-title">Base de Datos de Radiolocalizaciones y Mediciones Técnicas Externas</heading>
   <div class="home-buttons">
     <my-button tabindex="0" @on-tap="createFile" class="quaternary button new-rloc" label="Nueva Radiolocalización"></my-button>
     <my-button tabindex="0" @on-tap="createLocFile" class="quaternary button new-loc" label="Nueva Localización"></my-button>
@@ -92,6 +92,9 @@ function stationList() {
   background-repeat: no-repeat;
   background-size: 30px;
   background-position: 25px 15px;
+}
+.home-title {
+  text-align: center;
 }
 
 </style>

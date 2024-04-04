@@ -6,11 +6,11 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
-from src.db import db, Technician, ma
+from src.db import db, Technician, ma, User
 from sqlalchemy import exc
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-from src.users import verify_password, auth
+from src.users import verify_password, auth, checkUser
 
 bp = Blueprint("technician", __name__)
 # auth = HTTPBasicAuth()
@@ -73,7 +73,14 @@ def get_technician(id):
 @auth.login_required
 def get_all_technicians():
     try:
-        all_technicians = Technician.query.all()
+        # all_technicians = Technician.query.all()
+        usuario = auth.current_user()
+        checkUser= User.query.filter_by(usuario=usuario).first()
+        if checkUser.area != 'AGCCTYL':
+            all_technicians = Technician.query.filter_by(area = checkUser.area).all()
+        else:
+            all_technicians = Technician.query.all()
+
         # import pdb; pdb.set_trace()
         return technicians_schema.dump(all_technicians)
     except:

@@ -6,7 +6,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
-from src.db import db, Station, ma
+from src.db import db, Station, ma, User, Filex
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from src.users import auth, verify_password
@@ -55,19 +55,31 @@ def get_station(id):
 @bp.route("/station", methods = ['GET'])
 @auth.login_required
 def get_all_stations():
-    # try:
-    #     all_stations = Station.query.all()
-    #     # import pdb; pdb.set_trace()
+
     try:
         include_deleted = request.args.get('includeDeleted')
-
-        if include_deleted and include_deleted.lower() == 'true':
-            # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
-            stations_available = Station.query.all()
+        usuario = auth.current_user()
+        checkUser= User.query.filter_by(usuario=usuario).first()
+        filex_available = Filex.query.filter_by(area=checkUser.area).with_entities(Filex.id).all()
+        ids_disponibles = [result[0] for result in filex_available]
+        if checkUser.area != 'AGCCTYL':
+            if include_deleted and include_deleted.lower() == 'true':
+                # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
+                # stations_available = Station.query.all()
+                stations_available = Station.query.filter(Station.id.in_(ids_disponibles)).all()
+            else:
+                # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
+                stations_available = Station.query.filter(Station.id.in_(ids_disponibles)).filter_by(status2='Available').all()
+                # stations_available = Station.query.filter_by(status2='Available').all()
         else:
-            # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
-            stations_available = Station.query.filter_by(status2='Available').all()
-
+            if include_deleted and include_deleted.lower() == 'true':
+                # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
+                stations_available = Station.query.all()
+                # stations_available = Station.query.filter(Station.id.in_(ids_disponibles)).all()
+            else:
+                # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
+                # stations_available = Station.query.filter(Station.id.in_(ids_disponibles)).filter_by(status2='Available').all()
+                stations_available = Station.query.filter_by(status2='Available').all()
         return stations_schema.dump(stations_available)
         
 

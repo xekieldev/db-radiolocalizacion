@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import request
-from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, technician_file, Technician, ma
+from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurement, technician_file, Technician, ma, User
 from sqlalchemy import exc, insert, delete
 from src.technician import technicians_schema
 from src.station import station_schema
@@ -121,13 +121,26 @@ def get_file(id):
 def get_available_files():
     try:
         include_deleted = request.args.get('includeDeleted')
-
-        if include_deleted and include_deleted.lower() == 'true':
-            # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
-            filex_available = Filex.query.all()
+        usuario = auth.current_user()
+        checkUser= User.query.filter_by(usuario=usuario).first()
+        if checkUser.area != 'AGCCTYL':
+            if include_deleted and include_deleted.lower() == 'true':
+                # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
+                # filex_available = Filex.query.all()
+                # import pdb; pdb.set_trace()
+                filex_available = Filex.query.filter_by(area = checkUser.area).all()
+            else:
+                # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
+                filex_available = Filex.query.filter_by(area = checkUser.area, status='Available').all()
         else:
-            # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
-            filex_available = Filex.query.filter_by(status='Available').all()
+            if include_deleted and include_deleted.lower() == 'true':
+                # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
+                # filex_available = Filex.query.all()
+                # import pdb; pdb.set_trace()
+                filex_available = Filex.query.all()
+            else:
+                # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
+                filex_available = Filex.query.filter_by(status='Available').all()          
 
         return filexs_schema.dump(filex_available)
 
