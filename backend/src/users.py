@@ -10,8 +10,11 @@ from flask_httpauth import HTTPBasicAuth
 bp = Blueprint("user", __name__)
 auth = HTTPBasicAuth()
 
+checkUser = None
+
 @auth.verify_password
 def verify_password(usuario, password):
+    global checkUser
     try:               
         checkUser = User.query.filter_by(usuario=usuario).first()
         if checkUser is not None:
