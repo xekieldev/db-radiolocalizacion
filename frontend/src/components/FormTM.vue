@@ -50,6 +50,7 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
                                     
                }
     }"
+    :actions="false"
   >
     <!-- <form-row> -->
       <!-- <form-kit
@@ -290,9 +291,26 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
 
       />
     </form-row>
+    <button class="submit-button" slot="submit">Guardar</button>
   </form-kit>
 </template>
 
   
-<style></style>
+<style scoped>
+.submit-button {
+      background-color: white;
+      margin: 10px 0 20px;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      border: 1px solid #007BFF;
+      font-weight: 600;  
+      color: #007BFF;  
+      align-self: flex-end;
+
+}
+.submit-button:hover {
+      background-color: #007BFF;
+      color: white;
+}</style>
   
