@@ -44,7 +44,9 @@ function submitHandler(fields) {
 <form-kit
     type="form"
     submit-label="Ingresar"
+    :actions="false"
     @submit="submitHandler"
+
 >
       <img class="login-img" src="../../img/Logo.png" alt="logo">
       <form-kit
@@ -61,7 +63,7 @@ function submitHandler(fields) {
             name="pass"
             v-model="pass"
       />
-      <!-- <my-button @on-tap="() => credentials()" class="primary right" label="Ingresar"></my-button> -->
+      <button class="login-button" slot="submit">Ingresar</button>
 
 
 </form-kit>
@@ -93,6 +95,26 @@ function submitHandler(fields) {
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
   flex: 0 0 50%;
   width: 300px;
+}
+
+.login-button {
+      /* display: flex; */
+      background-color: white;
+      margin-top: 10px;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 800;
+      /* width: fit-content; */
+      cursor: pointer;
+      /* text-decoration: none; */
+      border: 1px solid #007BFF;
+      font-weight: 500;  
+      color: #007BFF;  
+      align-self: flex-end;
+}
+.login-button:hover {
+      background-color: #007BFF;
+      color: white;
 }
 
 </style>
