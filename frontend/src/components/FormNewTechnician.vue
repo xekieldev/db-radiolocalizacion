@@ -25,6 +25,7 @@ function submitHandler(fields) {
     type="form"
     submit-label="Guardar"
     @submit="submitHandler"
+    :actions="false"
   >
     <form-row>
       <form-kit
@@ -48,11 +49,24 @@ function submitHandler(fields) {
         name="area" 
       />
     </form-row>
+    <button class="submit-technician-button" slot="submit">Guardar</button>
   </form-kit>
 </template>
 
   
 <style scoped>
+
+.submit-technician-button {
+      background-color: white;
+      margin: 10px 0 20px;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      border: 1px solid #007BFF;
+      font-weight: 600;  
+      color: #007BFF;  
+      align-self: flex-end;
+}
 
 </style>
   

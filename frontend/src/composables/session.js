@@ -23,12 +23,12 @@ export function useSession() {
         const fechaActual = new Date()
         const expirationDate = new Date(fechaActual.getTime() + (30 * 60 * 1000))
         const expirationDateGMT = expirationDate.toGMTString()
-        document.cookie = `appAuth=${response.data}; expires=${expirationDateGMT}`
+        document.cookie = `appAuth=${response.data}; expires=${expirationDateGMT};samesite=lax`
         return response && response.data
     }
 
     async function logout() {
-        document.cookie = 'appAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;' 
+        document.cookie = 'appAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;samesite=lax' 
       }
 
       return {

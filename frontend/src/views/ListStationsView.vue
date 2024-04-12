@@ -152,7 +152,8 @@ async function searchStations() {
         <th>Emplazamiento</th>
         <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
         <th>Domicilio</th>
-        <th>Localidad (Provincia)</th>
+        <th>Localidad</th>
+        <th>Provincia</th>
         <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th>
         <th>Acciones</th>
       </tr>
@@ -169,7 +170,8 @@ async function searchStations() {
       <td v-else>---</td>
       <td>{{ item.emplazamiento }}</td>
       <td>{{ item.domicilio }}</td>
-      <td>{{ item.localidad + " (" + item.provincia +")" }} </td>
+      <td>{{ item.localidad }} </td>
+      <td>{{ item.provincia }} </td>
       <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
       <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status2 }}</td>
       <td> 
@@ -195,6 +197,7 @@ async function searchStations() {
   /* max-width: 900px; */
   width: 100%;
   justify-content: center;
+  font-size: 14px;
 }
 .status{
     background-color: lightyellow;

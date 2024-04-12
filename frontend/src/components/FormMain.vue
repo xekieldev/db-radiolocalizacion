@@ -101,6 +101,7 @@ const linkType = ref('Radioeléctrico')
                }
     }"
     @submit="submitHandler"
+    :actions="false"
   >
     <form-row>
       <form-kit
@@ -134,35 +135,35 @@ const linkType = ref('Radioeléctrico')
       /> -->
     </form-row>
     <form-row>
-      <form-kit
+      <!-- <form-kit
         type="date"
         label="Fecha"
         name="fecha" 
         v-model="filePath.fecha"
         v-if="fileId != null || fileId != undefined"
         :disabled="true"
-      />
+      /> -->
       <form-kit
         type="date"
         label="Fecha"
         name="fecha" 
         v-model="file.fecha"
-        v-else
+        
       />
-      <form-kit
+      <!-- <form-kit
         type="time"
         label="Hora"
         name="hora"
         v-model="filePath.hora"
         v-if="fileId != null || fileId != undefined"
         :disabled="true"
-      />
+      /> -->
       <form-kit
         type="time"
         label="Hora"
         name="hora"
         v-model="file.hora"
-        v-else
+        
       />
       <form-kit
         type="select"
@@ -441,21 +442,38 @@ const linkType = ref('Radioeléctrico')
 
       />
     </form-row>
+    <button class="submit-button" slot="submit">Guardar</button>
   </form-kit>
 </template>
 
   
 <style scoped>
 .field-domicilio {
-  /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
-  flex: 0 0 70%;
+      /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
+      flex: 0 0 70%;
 }
 .field-emplazamiento {
-  flex: 0 0 20%;
+      flex: 0 0 20%;
 }
 
 .field-status {
-  flex: 0 0 10%;
+      flex: 0 0 10%;
+}
+.submit-button {
+      background-color: white;
+      margin: 10px 0 20px;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      border: 1px solid #007BFF;
+      font-weight: 600;  
+      color: #007BFF;  
+      align-self: flex-end;
+
+}
+.submit-button:hover {
+      background-color: #007BFF;
+      color: white;
 }
 </style>
   
