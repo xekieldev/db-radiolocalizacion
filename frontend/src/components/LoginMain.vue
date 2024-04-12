@@ -49,6 +49,7 @@ function submitHandler(fields) {
 
 >
       <img class="login-img" src="../../img/Logo.png" alt="logo">
+      <p class="login-box-title">Área Gestión de CCTE y Laboratorios</p>
       <form-kit
             outer-class="field-login"
             type="text"
@@ -79,7 +80,7 @@ function submitHandler(fields) {
       margin: auto;
       margin-top: 10%;
       border: 1px solid gray;
-      padding: 0 60px 60px;
+      padding: 0 60px 30px;
       border-radius: 10px;
       box-shadow: 5px 5px 5px 5px gray;
       /* width: 400px; */
@@ -90,6 +91,7 @@ function submitHandler(fields) {
       height: 70px;
       width: 70px;
       margin: 15px auto;
+      margin-bottom: 5px;
 }
 .field-login {
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
@@ -116,5 +118,10 @@ function submitHandler(fields) {
       background-color: #007BFF;
       color: white;
 }
-
+.login-box-title {
+      font-weight: 700;
+      align-self: center;
+      /* margin-bottom: 10px; */
+      padding: 5px 10px 15px;
+}
 </style>

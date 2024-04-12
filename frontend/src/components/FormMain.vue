@@ -32,7 +32,6 @@ const props = defineProps({
 })
 
 const filePath = reactive({})
-const initialTechnicians = reactive([{id: "1"}, { id: "2"}])
 const fileId = ref('')
 
 console.log("path ahroa:", router.currentRoute.value.name)
@@ -417,8 +416,8 @@ const linkType = ref('Radioeléctrico')
         name="id_technician1"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
-        v-else
-        v-model="initialTechnicians[0].id"
+        v-else-if="techniciansValues.length > 0"
+        v-model="techniciansValues[0].id"
 
       />
       <form-kit
@@ -437,8 +436,8 @@ const linkType = ref('Radioeléctrico')
         name="id_technician2"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
-        v-else
-        v-model="initialTechnicians[1].id"
+        v-else-if="techniciansValues.length > 0"
+        v-model="techniciansValues[1].id"
 
       />
     </form-row>

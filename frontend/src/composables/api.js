@@ -7,7 +7,7 @@ import { useSession } from './session'
 export function useApi() {
     var loading = ref(false);
     const axiosInstance = axios.create({
-        baseURL: 'http://127.0.0.1:5000',
+        baseURL: import.meta.env.VITE_APP_API_URL,
         headers: { Authorization: `Basic ${document.cookie.split('appAuth=')[1]}`}
     })
     // const loginAxiosInstance = axios.create({

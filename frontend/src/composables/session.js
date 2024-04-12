@@ -7,7 +7,7 @@ export function useSession() {
     const loggedIn = ref(document.cookie.indexOf('Auth') !== -1);
 
     const loginAxiosInstance = axios.create({
-        baseURL: 'http://127.0.0.1:5000',
+        baseURL: import.meta.env.VITE_APP_API_URL
     })
 
     function updateLoggedIn() {
