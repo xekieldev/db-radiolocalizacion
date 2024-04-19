@@ -406,7 +406,7 @@ const linkType = ref('Radioeléctrico')
         placeholder="Técnico 1"
         v-if="technicians && technicians.length > 1"    
         v-model="technicians[0].id"
-        value
+        
 
   
       />
@@ -417,7 +417,7 @@ const linkType = ref('Radioeléctrico')
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
         v-else-if="techniciansValues.length > 0"
-        v-model="techniciansValues[0].id"
+        
 
       />
       <form-kit
@@ -437,7 +437,7 @@ const linkType = ref('Radioeléctrico')
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
         v-else-if="techniciansValues.length > 0"
-        v-model="techniciansValues[1].id"
+        
 
       />
     </form-row>
