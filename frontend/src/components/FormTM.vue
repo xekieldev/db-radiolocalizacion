@@ -4,15 +4,20 @@ import { useApi} from '../composables/api'
 import { useArea } from '../composables/area'
 import { useUnit } from '../composables/unit';
 import { useTechnician } from '../composables/technician';
-import { onBeforeMount, reactive, ref } from 'vue';
+import { useTerritory } from '../composables/territory';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { RouterLink, useRouter } from 'vue-router'
 import Heading from './Heading.vue';
+
+import provincesDataRaw from "../../../data/provincias.json"
+import citiesDataRaw from "../../../data/localidades.json"
+
+const provincesData = provincesDataRaw.provincias
+const citiesData = citiesDataRaw.localidades
 
 
 const { currentRoute } = useRouter()
 // const file = reactive ({})
-
-const initialTechnicians = ref([{id: "1"}, { id: "2"}])
 
 
 const emit = defineEmits(['onSubmit'])
@@ -22,6 +27,7 @@ const props = defineProps({
   techniciansValues: Array,
   technicians: Object,
   file: Object,
+  // station: Array,
   techMeasurement: Object,
 })
 function submitHandler(fields) {
@@ -34,6 +40,28 @@ const { area } = useArea()
 const { unidad } = useUnit()
 // const { tecnico} = useTechnician()
 console.log("prop.techMeasurement: ", props.techMeasurement)
+
+const province = ref()
+const city = ref()
+const cityWitness = ref()
+const provinceWitness = ref()
+const citiesWitness = ref([])
+const { provinces, cities, getProvinceCities, getNameByCode } = useTerritory()
+
+watch([province, city, provinceWitness], (newValue, oldValue) => {
+  if (newValue[0] !== oldValue[0]) {
+    province.value = newValue[0]
+    provinceWitness.value = province.value
+    getProvinceCities(newValue[0])
+  }
+  if (newValue[1] !== oldValue[1]) {
+    cityWitness.value = newValue[1]
+  }
+  if (newValue[2] !== oldValue[2]) {
+    citiesWitness.value = citiesData.filter(c => c.provincia.id === newValue[2]).map(c => ({ label: c.nombre, value: c.id , province: c.provincia.id }))  
+  }
+})
+
 
 </script>
 
@@ -115,14 +143,19 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
         name="domicilio"
       />
       <form-kit
-        type="text"
+        type="select"
+        :options="provinces"
         label="Provincia"
         name="provincia"
+        v-model="province"
+
       />
       <form-kit
-        type="text"
+        type="select"
+        :options="cities"
         label="Localidad"
         name="localidad"
+        v-model="city"
       />
     </form-row>
     <form-row>
@@ -168,14 +201,18 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
         name="domicilioTestigo"
       />
       <form-kit
-        type="text"
+        type="select"
+        :options="provinces"
         label="Provincia"
         name="provinciaTestigo"
+        v-model="provinceWitness"
       />
       <form-kit
-        type="text"
+        type="select"
+        :options="citiesWitness"
         label="Localidad"
         name="localidadTestigo"
+        v-model="cityWitness"
       />
     </form-row>
     <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
@@ -257,6 +294,7 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
         placeholder="Técnico 1"
         v-if="technicians && technicians.length > 1"    
         v-model="technicians[0].id"
+        
 
   
       />
@@ -266,8 +304,8 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
         name="id_technician1"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
-        v-else
-        v-model="initialTechnicians[0].id"
+        v-else-if="techniciansValues.length > 0"
+        
 
       />
       <form-kit
@@ -286,11 +324,12 @@ console.log("prop.techMeasurement: ", props.techMeasurement)
         name="id_technician2"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
-        v-else
-        v-model="initialTechnicians[1].id"
+        v-else-if="techniciansValues.length > 0"
+        
 
       />
     </form-row>
+
     <button class="submit-button" slot="submit">Guardar</button>
   </form-kit>
 </template>

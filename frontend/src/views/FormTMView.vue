@@ -56,7 +56,7 @@ async function save(fields) {
 <template>
   <formtc
     title="Mediciones Técnicas Externas"
-    :file=  "file"
+    :file="file"
     :techniciansValues="techniciansValues"
     :technicians="technicians"
     :techMeasurement="techMeasurement"

@@ -6,6 +6,7 @@ import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 import DisplayRow from '../components/DisplayRow.vue';
 import PropValue from '../components/PropValue.vue';
+import { useTerritory } from '../composables/territory';
 
 
 
@@ -15,6 +16,7 @@ import PropValue from '../components/PropValue.vue';
 const { getFile, getTechMeasurement } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
+const { getNameByCode } = useTerritory()
 
 
 
@@ -58,6 +60,9 @@ onMounted(async () => {
     console.log("file-id: ", file.id)
     console.log("technicians: ", technicians)
     
+    techMeasurement[0].provinciaTestigo = getNameByCode("province", response.techMeasurement[0].provinciaTestigo)
+    techMeasurement[0].localidadTestigo = getNameByCode("city", response.techMeasurement[0].localidadTestigo)
+    console.log("Valor Testigo",techMeasurement[0])
     
 })
 
@@ -109,6 +114,8 @@ onMounted(async () => {
       <prop-value class="prop double" label="Azimut geog. con respecto a PTx [°]" :value="techMeasurement[index].azimutTestigo"/>
     </display-row>
 <br>
+<p class="title-techMeasurements">Mediciones Técnicas Externas</p>
+
     <display-row > 
       <prop-value class="prop"  label="id" :value="techMeasurement[index].id"/>
       <prop-value class="prop"  label="Fecha y hora" :value=" techMeasurement[index].fecha + ' ' + techMeasurement[index].hora"/>
@@ -128,8 +135,8 @@ onMounted(async () => {
     </display-row>
     <display-row > 
       <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilio"/>
-      <prop-value class="prop double" label="Localidad" :value="techMeasurement[index].localidad"/>
-      <prop-value class="prop double" label="Provincia" :value="techMeasurement[index].provincia"/>
+      <prop-value class="prop double" label="Localidad" :value="getNameByCode('city', techMeasurement[index].localidad)"/>
+      <prop-value class="prop double" label="Provincia" :value="getNameByCode('province', techMeasurement[index].provincia)"/>
     </display-row>
     <display-row > 
       <prop-value class="prop"  label="E medido (dBuV/m)" :value=" techMeasurement[index].eMedido"/>
@@ -142,11 +149,11 @@ onMounted(async () => {
 
     </display-row>
    
-    <display-row> 
-  
-      <prop-value class="prop"  label="Técnico1" :value="technicians[index*2+0].nombre +', ' + technicians[index*2+0].apellido"/>
-      <prop-value class="prop"  label="Técnico1" :value="technicians[index*2+1].nombre +', ' + technicians[index*2+1].apellido"/>
+    <display-row v-for="value, index_t in technicians" class="field-technicians"> 
       
+      <prop-value class="prop tecnico1" label="Técnico 1" v-if="technicians[index_t].id === techMeasurement[index].id_technician1" :value= "technicians[index_t].nombre +', ' + technicians[index_t].apellido"/>
+      <prop-value class="prop tecnico2" label="Técnico 2" v-if="technicians[index_t].id === techMeasurement[index].id_technician2" :value= "technicians[index_t].nombre +', ' + technicians[index_t].apellido"/>
+
     </display-row>
 </div>  
 
@@ -174,5 +181,19 @@ onMounted(async () => {
 .title-testigo {
   font-weight: 700;
   margin-bottom: 10px;
+}
+.title-techMeasurements {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.field-technicians {
+  display: inline-flex;
+  width: 50%; 
+}
+.tecnico1 {
+  margin-right: 2.5px;
+}
+.tecnico2 {
+  margin-left: 2.5px;
 }
 </style>
