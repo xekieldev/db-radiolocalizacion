@@ -133,6 +133,9 @@ function getTechnician(id) {
       <prop-value class="prop double" label="Localidad" :value="getNameByCode('city', techMeasurement[index].localidad)"/>
       <prop-value class="prop double" label="Provincia" :value="getNameByCode('province', techMeasurement[index].provincia)"/>
     </display-row>
+    <display-row>
+      <prop-value class="prop"  label="Observaciones" :value=" techMeasurement[index].observaciones"/>
+    </display-row>
     <display-row > 
       <prop-value class="prop"  label="E medido (dBuV/m)" :value=" techMeasurement[index].eMedido"/>
       <prop-value class="prop"  label="E testigo (dBuV/m)" :value=" techMeasurement[index].eTestigo"/>
