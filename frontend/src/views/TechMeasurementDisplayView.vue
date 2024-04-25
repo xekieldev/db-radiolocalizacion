@@ -55,9 +55,9 @@ onMounted(async () => {
     Object.assign(file, fileResponse.file)
     Object.assign(technicians, response.technicians)
     Object.assign(techMeasurement, response.techMeasurement)
-    console.log(techMeasurement)
-    console.log("TechMeasurement: ", response.techMeasurement)
-    console.log("file-id: ", file.id)
+    // console.log(techMeasurement)
+    // console.log("TechMeasurement: ", response.techMeasurement)
+    // console.log("file-id: ", file.id)
     console.log("technicians: ", technicians)
     
     techMeasurement[0].provinciaTestigo = getNameByCode("province", response.techMeasurement[0].provinciaTestigo)
@@ -66,19 +66,14 @@ onMounted(async () => {
     
 })
 
-// function getTechnician(id) {
-//   console.log("id: ", id, "id_technician1: ",techMeasurement[id].id_technician1,"id_technician2: ", techMeasurement[id].id_technician2)
-  
-//   const technician1 = technicians[techMeasurement[id].id_technician1-1].nombre + ', ' + technicians[techMeasurement[id].id_technician1-1].apellido
-//   const technician2 = technicians[techMeasurement[id].id_technician2-1].nombre + ', ' + technicians[techMeasurement[id].id_technician2-1].apellido
-  
-//   debugger
-//   return [technician1, technician2]
-// }
-// function getTechnician2(id) {
-
-//   return technicians[techMeasurement[id].id_technician2].nombre + ', ' + technicians[techMeasurement[id].id_technician2].apellido
-// }
+function getTechnician(id) {
+  for (const key in technicians) {
+    if (technicians[key].id === id) {
+      return technicians[key].nombre + ', ' + technicians[key].apellido
+    }
+  }
+  return ''
+}
 
 
 
@@ -148,11 +143,11 @@ onMounted(async () => {
       <prop-value class="prop"  label="Resultado de las Comprobaciones Técnicas" :value=" techMeasurement[index].resultadoComprob"/>
 
     </display-row>
-   
-    <display-row v-for="value, index_t in technicians" class="field-technicians"> 
+
+    <display-row> 
       
-      <prop-value class="prop tecnico1" label="Técnico 1" v-if="technicians[index_t].id === techMeasurement[index].id_technician1" :value= "technicians[index_t].nombre +', ' + technicians[index_t].apellido"/>
-      <prop-value class="prop tecnico2" label="Técnico 2" v-if="technicians[index_t].id === techMeasurement[index].id_technician2" :value= "technicians[index_t].nombre +', ' + technicians[index_t].apellido"/>
+        <prop-value class="prop" label="Técnico 1" :value="getTechnician(techMeasurement[index].id_technician1)"/>
+        <prop-value class="prop" label="Técnico 2" :value="getTechnician(techMeasurement[index].id_technician2)"/>
 
     </display-row>
 </div>  
@@ -190,10 +185,10 @@ onMounted(async () => {
   display: inline-flex;
   width: 50%; 
 }
-.tecnico1 {
+/* .tecnico1 {
   margin-right: 2.5px;
 }
 .tecnico2 {
   margin-left: 2.5px;
-}
+} */
 </style>
