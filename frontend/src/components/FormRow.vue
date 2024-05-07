@@ -9,12 +9,10 @@
 </template>
 
 <style scoped>
-.form-row-container{
-  /* background-color: red; */
+.form-row-container {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  
+  gap: 10px; 
 }
 
 </style>

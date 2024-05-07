@@ -1,33 +1,11 @@
 from flask import Blueprint
-from flask import flash
-from flask import g
-from flask import redirect
-from flask import render_template
 from flask import request
 from flask import url_for
-from werkzeug.exceptions import abort
 from src.db import db, Technician, ma, User
 from sqlalchemy import exc
-from flask_httpauth import HTTPBasicAuth
-from werkzeug.security import generate_password_hash, check_password_hash
-from src.users import verify_password, auth, checkUser
+from src.users import auth
 
 bp = Blueprint("technician", __name__)
-# auth = HTTPBasicAuth()
-
-# users = {
-#     "admin": generate_password_hash("admin")
-# }
-
-# @auth.verify_password
-# def verify_password(username, password):
-#     # import pdb; pdb.set_trace()
-#     if username in users and \
-#         check_password_hash(users.get(username), password):
-#         return username
-
-
-
 class TechnicianSchema(ma.Schema):
     class Meta:
         # Fields to expose
@@ -61,7 +39,6 @@ def technician():
 @auth.login_required
 def get_technician(id): 
     try:
-        # import pdb; pdb.set_trace()
         technician = Technician.query.get(id)
         return technician_schema.dump(technician)
     except:
@@ -73,7 +50,6 @@ def get_technician(id):
 @auth.login_required
 def get_all_technicians():
     try:
-        # all_technicians = Technician.query.all()
         usuario = auth.current_user()
         checkUser= User.query.filter_by(usuario=usuario).first()
         if checkUser.area != 'AGCCTYL':
@@ -81,7 +57,6 @@ def get_all_technicians():
         else:
             all_technicians = Technician.query.all()
 
-        # import pdb; pdb.set_trace()
         return technicians_schema.dump(all_technicians)
     except:
         response = {"message": "server error"}

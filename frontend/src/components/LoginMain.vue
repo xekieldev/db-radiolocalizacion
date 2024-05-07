@@ -1,55 +1,29 @@
 <script setup>
 import { useSession} from '../composables/session'
-import Heading from '../components/Heading.vue';
-import MyButton from '../components/MyButton.vue';
-import router from '../router';
 
 import { ref } from 'vue'
-// const { loggedIn } = useSession()
 
 const { loggedIn } = useSession()
-
-
 const user = ref()
 const pass = ref()
-
-console.log("Logeado?? ", loggedIn)
-
-// async function credentials() {
-
-//       const usuario = user.value
-//       const password = pass.value
-//       const credentials = {
-//             usuario: 'usuario',
-//             password: 'password'
-//       }
-//       const credentialsResponse = await checkCredentials(credentials)
-//       console.log("Respuesta", credentialsResponse)
-//       console.log(usuario, password)
-      
-  
-//   }
 const emit = defineEmits(['onSubmit'])
 
 function submitHandler(fields) {
   emit('onSubmit', fields)
 }
 
-
 </script>
 
 <template>
-<div class="login-box">
-
-<form-kit
-    type="form"
-    submit-label="Ingresar"
-    :actions="false"
-    @submit="submitHandler"
-
->
-      <img class="login-img" src="../../img/Logo.png" alt="logo">
-      <p class="login-box-title">Área Gestión de CCTE y Laboratorios</p>
+  <div class="login-box">
+    <form-kit
+      type="form"
+      submit-label="Ingresar"
+      :actions="false"
+      @submit="submitHandler"
+      >
+    <img class="login-img" src="../../img/Logo.png" alt="logo">
+    <p class="login-box-title">Área Gestión de CCTE y Laboratorios</p>
       <form-kit
             outer-class="field-login"
             type="text"
@@ -65,10 +39,8 @@ function submitHandler(fields) {
             v-model="pass"
       />
       <button class="login-button" slot="submit">Ingresar</button>
-
-
-</form-kit>
-</div>
+    </form-kit>
+  </div>
 
 </template>
 
@@ -98,17 +70,13 @@ function submitHandler(fields) {
   flex: 0 0 50%;
   width: 300px;
 }
-
 .login-button {
-      /* display: flex; */
       background-color: white;
       margin-top: 10px;
       padding: 10px 18px;
       border-radius: 20px;
       font-weight: 800;
-      /* width: fit-content; */
       cursor: pointer;
-      /* text-decoration: none; */
       border: 1px solid #007BFF;
       font-weight: 500;  
       color: #007BFF;  
@@ -121,7 +89,6 @@ function submitHandler(fields) {
 .login-box-title {
       font-weight: 700;
       align-self: center;
-      /* margin-bottom: 10px; */
       padding: 5px 10px 15px;
 }
 </style>

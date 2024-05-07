@@ -1,44 +1,14 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import MyButton from './components/MyButton.vue'
-import { useRouter } from 'vue-router'
-import { useSession } from './composables/session'
-import { computed } from 'vue'
+import { RouterView } from 'vue-router'
 import BarMenu from './components/Menu.vue'
 
-const router = useRouter()
-const { logout, loggedIn } = useSession()
-
-
-// const isLoggedIn = computed(() => {
-//       return loggedIn.value;
-//     });
-
-// function checkAuth() {
-    
-//   if(document.cookie.split('=')[0] == 'appAuth') {
-//     return true
-//   } else return false
-// }
-
-// const cookie = document.cookie
-// console.log("cookie: ", cookie)
-
-
-// async function logout2() {
-//   const response = await logout()
-
-//   router.push('/login')
-// }
 
 </script>
 
 <template>
   <div class="wrapper">
-    <bar-menu></bar-menu>
-
-<RouterView />
-
+    <bar-menu/>
+    <RouterView />
   </div>
     
 </template>
@@ -50,7 +20,6 @@ const { logout, loggedIn } = useSession()
   flex-direction: column;
   width: 900px;
   margin: 0 auto;
-
 }
 
 header {
@@ -58,13 +27,7 @@ header {
   flex-direction: row;
   background: linear-gradient(to right, rgba(202, 202, 202, 0), #cacaca, rgba(202, 202, 202, 0));
   width: 100%;
-
 }
-
-/* .logo {
-  display: block;
-  margin: 0 auto 2rem;
-} */
 
 nav {
   width: 100%;
@@ -94,9 +57,8 @@ nav a {
 nav a:hover {
   color: rgb(255, 136, 0);
 }
-
-
 nav a:first-of-type {
   border: 0;
 }
+
 </style>

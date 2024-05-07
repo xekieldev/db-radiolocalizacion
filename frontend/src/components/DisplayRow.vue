@@ -10,7 +10,6 @@
 
 <style scoped>
 .container1{
-  /* background-color: red; */
   display: flex;
   flex-direction: row;
   gap: 5px;

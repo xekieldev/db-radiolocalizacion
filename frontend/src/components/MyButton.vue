@@ -1,15 +1,9 @@
 <script setup>
-import { ref } from 'vue';
-
-// const primary = ref(true)
-
-
 const props = defineProps({
   label: String,
   type: String,
   align: String,
 })
-
 const emit = defineEmits([
   'onTap',
 ])
@@ -72,10 +66,8 @@ function handleClick() {
   color: #426aaf; 
   height: 60px;
   width: 350px;
-  /* line-height: 30px; */
   text-align: center;
   align-items: center;
-  /* padding-top: 18px; */
 }
 .quaternary:hover {
   background-color: #426aaf;

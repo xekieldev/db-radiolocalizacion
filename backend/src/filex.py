@@ -5,9 +5,7 @@ from sqlalchemy import exc, insert, delete
 from src.technician import technicians_schema
 from src.station import station_schema
 from src.tech_measurement import tech_measurements_schema
-# from flask_httpauth import HTTPBasicAuth
-# from werkzeug.security import generate_password_hash, check_password_hash
-from src.users import auth, verify_password
+from src.users import auth
 
 
 bp = Blueprint("filex", __name__)
@@ -39,14 +37,12 @@ def filex():
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
         area = request.json.get('area')
-        # status = request.json.get('status')
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
         
         filex = Filex(expediente = expediente, fecha = fecha, hora = hora, area = area, id_technician1 = id_technician1, id_technician2 = id_technician2)#, id_technician2 = id_technician2 ) #, technicians = technicians)
         db.session.add(filex)
 
-        # status2 = request.json.get('status')
         identificacion = request.json.get('identificacion')
         emplazamiento = request.json.get('emplazamiento')
         servicio = request.json.get('servicio')
@@ -126,8 +122,6 @@ def get_available_files():
         if checkUser.area != 'AGCCTYL':
             if include_deleted and include_deleted.lower() == 'true':
                 # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
-                # filex_available = Filex.query.all()
-                # import pdb; pdb.set_trace()
                 filex_available = Filex.query.filter_by(area = checkUser.area).all()
             else:
                 # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
@@ -135,8 +129,6 @@ def get_available_files():
         else:
             if include_deleted and include_deleted.lower() == 'true':
                 # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
-                # filex_available = Filex.query.all()
-                # import pdb; pdb.set_trace()
                 filex_available = Filex.query.all()
             else:
                 # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
@@ -161,7 +153,6 @@ def edit_file(id):
             fecha = request.json.get('fecha')
             hora = request.json.get('hora')
             area = request.json.get('area')
-            # status = request.json.get('status')
             id_technician1 = request.json.get('id_technician1')
             id_technician2 = request.json.get('id_technician2')
             
@@ -169,11 +160,9 @@ def edit_file(id):
             filex.fecha = fecha
             filex.hora = hora
             filex.area = area
-            # filex.status = status
             filex.id_technician1 = id_technician1
             filex.id_technician2 = id_technician2
 
-            # status2 = request.json.get('status2')
             identificacion = request.json.get('identificacion')
             emplazamiento = request.json.get('emplazamiento')
             servicio = request.json.get('servicio')
@@ -196,7 +185,6 @@ def edit_file(id):
             longitud = request.json.get('longitud')
             observaciones = request.json.get('observaciones')
 
-            # station.status2 = status2
             station.identificacion = identificacion
             station.emplazamiento = emplazamiento
             station.servicio = servicio
@@ -230,7 +218,6 @@ def edit_file(id):
         )
         session = db.session
         session.execute(stmt0)
-        # session.commit()
 
         stmt1 = (
         insert(technician_file).
@@ -287,8 +274,6 @@ def tech_measurement(id):
         domicilio = request.json.get('domicilio')
         localidad = request.json.get('localidad')
         provincia = request.json.get('provincia')
-        # import pdb; pdb.set_trace()
-
         latitud = request.json.get('latitud')
         longitud = request.json.get('longitud')
         distancia = request.json.get('distancia')
@@ -345,11 +330,7 @@ def get_tech_measurement(id):
         tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
         
         # Rehacer query: https://stackoverflow.com/questions/8603088/sqlalchemy-in-clause
-        # technicians = (db.session.query(Technician).join(technician_tech_measurement).filter(technician_tech_measurement.c.id_tech_measurement==tech_measurements_schema.dump(tech_measurement)[0]['id']))
-        # technicians = db.session.query(technician_tech_measurement).join(tech_measurement).all()
         technicians = db.session.query(Technician).join(technician_tech_measurement).join(TechMeasurement).filter(TechMeasurement.file_id == id).all()
-
-        # import pdb; pdb.set_trace()
 
         combined_return = {
                             "techMeasurement": tech_measurements_schema.dump(tech_measurement),

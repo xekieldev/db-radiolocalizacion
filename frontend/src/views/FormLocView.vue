@@ -4,22 +4,12 @@ import Floc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import Mapa from '../components/MapMain.vue'
 
-// El 1000 es la cantidad de milisegundos que se tardarán
-// en responder los métodos. Esto es para emular la naturaleza
-// asíncrona que vas a tener cuando uses un API HTTP.
+
 const { create, list } = useLocalStorage(1000)
 
-// El reactive es para que la variable items se actualice
-// automáticamente cuando cambia. Es necesario porque acá se
-// inicializa como una lista vacía y más abajo se hace la llamada
-// al método que tarda 1000ms. Cuando la respuesta del método llega
-// el valor de la variable se actualiza automáticamente en el
-// template sin necesidad de que su valor sea reasignado
 const items = reactive([])
 
 onBeforeMount(async () => {
-  // El await acá es necesario para representar que se está
-  // haciendo una llamada a un método asíncrono
   const data = await list()
   items.push(...data)
 })
@@ -30,7 +20,6 @@ async function save(fields) {
     items.splice(0, items.length)
     const data = await list()
     items.push(...data)
-
   } catch (error) {
     console.error(error)
   }
@@ -46,4 +35,6 @@ async function save(fields) {
   <mapa :position="[47.313220, -1.319482]" />
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

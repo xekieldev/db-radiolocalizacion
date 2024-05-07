@@ -1,8 +1,7 @@
 <script setup>
-// import { useLocalStorage } from '../composables/localstorage'
 import { useApi } from '../composables/api'
 import { onMounted, reactive, ref } from 'vue'
-import { RouterLink, useRouter , useRoute} from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useTerritory } from '../composables/territory'
 import Mapa from '../components/MapMain.vue'
 import DisplayRow from '../components/DisplayRow.vue'
@@ -11,10 +10,6 @@ import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
 
 
-
-// El 1000 es la cantidad de milisegundos que se tardarán
-// en responder los métodos. Esto es para emular la naturaleza
-// asíncrona que vas a tener cuando uses un API HTTP.
 const { getFile, loading, getAllTechnicians } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
@@ -24,10 +19,7 @@ const { getNameByCode } = useTerritory()
 const currentPath = ref('')
 
 const redirectToCreate = () => {
-  // console.log("currentPath.value: ", router.currentRoute.value.path)
   currentPath.value = router.currentRoute.value.path
-  // // Ahora se puede navegar a la nueva ruta y pasar la ruta actual como un parámetro de consulta
-  // router.push({ path: '/file/create', query: { from: currentPath.value } })
   if (station.tipoVinculo == 'Radioeléctrico' || station.tipoVinculo == 'RADIOELÉCTRICO') {
     router.push({ path: '/file/create', query: { rloc: 'true', from: currentPath.value } })
   } else {
@@ -37,7 +29,6 @@ const redirectToCreate = () => {
 }
 
 function viewItem(item) {  
-  // router.push(`/file/${item}/tech_measurement`)
   router.push({name: 'tech_measurement', params: { id: item}})
 }
 function editItem(item) {  
@@ -53,37 +44,22 @@ function editItem(item) {
   }
 }
 function goBack() {  
-  // router.push(`/list`)
-  // router.push({ name: 'list', query: { includeDeleted: 'false' }})
-  // router.go(-1)
   router.back()
 
 }
 
-// El reactive es para que la variable items se actualice
-// automáticamente cuando cambia. Es necesario porque acá se
-// inicializa como una lista vacía y más abajo se hace la llamada
-// al método que tarda 1000ms. Cuando la respuesta del método llega
-// el valor de la variable se actualiza automáticamente en el
-// template sin necesidad de que su valor sea reasignado
 const file = reactive({})
 const station = reactive({})
 const technicians = reactive({})
 const techniciansValues = reactive({})
-// const currentPath = this.$route.fullPath;
 
 onMounted(async () => {
-    // El await acá es necesario para representar que se está
-    // haciendo una llamada a un método asíncrono
     const response = await getFile(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
-
     Object.assign(file, response.file)
     Object.assign(station, response.station)
     Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
-    console.log(station)
-
     station.provincia = getNameByCode("province", response.station.provincia)
     station.localidad = getNameByCode("city", response.station.localidad)    
 })
@@ -93,18 +69,14 @@ onMounted(async () => {
 <template>
   <div class="buttons-container">
     <my-button @on-tap="goBack" class="primary right" label="Volver" />
-    <!-- <my-button @on-tap="() => editItem(file.id)" label="Editar"/> -->
   </div>
 
   <heading v-if="station.frecuencia != null">Datos de Radiolocalización</heading>
   <heading v-else>Datos de Localización</heading>
 
   <div class="buttons-container">
-    <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/create_tech_measurement'">Agregar Mediciones Técnicas</RouterLink> -->
-    <!-- <RouterLink class="tab" :to="'/file/'+ file.id +'/tech_measurement'">Ver Mediciones Técnicas</RouterLink> -->
     <my-button @on-tap="() => viewItem(file.id)" class="secondary right" label="Mediciones Técnicas"/>
     <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora'" class="secondary right" label="Agregar Estudio"/>
-    <!-- <a class="tab" @click="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA'">Agregar Estudio</a> -->
   </div>
   <div class="container">
     <display-row> 
@@ -141,28 +113,16 @@ onMounted(async () => {
       <prop-value class="prop" v-else label="Sistema Irradiante" value="---"/>
       <prop-value class="prop" v-if="station.irradianteVinc" label="Polarización" :value="station.polarizacionVinc"/>
       <prop-value class="prop" v-else label="Polarización" value="---"/>
-
-
     </display-row>
     <display-row>
       <prop-value class="prop" v-if="station.observaciones" label="Observaciones" :value="station.observaciones"/>
       <prop-value class="prop" v-else label="Observaciones" value="---"/>
-
-
     </display-row>
     <mapa class="mapa" v-if="station.latitud" :position="[ station.latitud, station.longitud ]" />
-
     <display-row>
       <prop-value class="prop technicians" v-for="value, index in technicians" label="Técnico" :value=" technicians[index].apellido + ', ' + technicians[index].nombre"/>
-
     </display-row>
-    <!-- <display-row> -->
-      <prop-value class="prop status" label="Status" :value="file.status"/>
-
-    <!-- </display-row> -->
-
-
-
+    <prop-value class="prop status" label="Status" :value="file.status"/>
   </div>
   <div class="buttons-container">
     <my-button @on-tap="() => editItem(file.id)" class="tertiary right" label="Editar"/>

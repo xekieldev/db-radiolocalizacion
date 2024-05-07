@@ -8,11 +8,8 @@ import { reactive, onBeforeMount } from "vue";
 const { currentRoute } = useRouter()
 
 
-
-
 const {create_tech_measurement, getAllTechnicians, getTechMeasurement, getFile} = useApi()
 const router = useRouter()
-
 const file = reactive({})
 const technicians = reactive([])
 const techniciansValues = reactive([])
@@ -20,32 +17,18 @@ const techMeasurement = reactive([])
 
 
 onBeforeMount(async () => {
-    // El await acá es necesario para representar que se está
-    // haciendo una llamada a un método asíncrono
     const fileResponse = await getFile(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
     const techMeasurementResponse = await getTechMeasurement(currentRoute.value.params.id)
-    // console.log(currentRoute.value.params.id)
-    
-    // const response = getTechMeasurement(currentRoute.value.params.id)
     Object.assign(techniciansValues, techResponse)
-    // Object.assign(technicians, response.technicians)
     Object.assign(file, fileResponse.file)
-    console.log("fR",fileResponse.file)
     Object.assign(techMeasurement, techMeasurementResponse)
-    console.log("Estoy pasando: ", techMeasurement)
-    
-
 })
-
-
 
 async function save(fields) {
   try {
     const id = currentRoute.value.params.id
-    console.log("id del path: ", id)
     const response = await create_tech_measurement(id, fields)
-    console.log("id respuesta: ", response.id)
     router.push(`/file/${id}/tech_measurement`)
   } catch (error) {
     console.error(error)
@@ -64,4 +47,6 @@ async function save(fields) {
   />
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

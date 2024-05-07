@@ -36,7 +36,6 @@ function stationList() {
     <my-button tabindex="0" @on-tap="list" class="quaternary button file-manage" label="Gestión de Expedientes"></my-button>
     <my-button tabindex="0" @on-tap="stationList" class="quaternary button station-manage" label="Gestión de Estaciones"></my-button>
     <my-button tabindex="0" @on-tap="listTechnicians" class="quaternary button technician-manage" label="Gestión de Técnicos"></my-button>
-
   </div>
 
 </template>

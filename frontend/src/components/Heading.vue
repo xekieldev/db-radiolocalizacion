@@ -10,7 +10,6 @@
 
 <style scoped>
 .heading-container{
-  /* background-color: red; */
   display: flex;
   font-size: 25px;
   font-weight: 500;
@@ -18,8 +17,7 @@
   width: 100%;
   flex-direction: row;
   padding: 5px;
-  margin: 10px;
-  
+  margin: 10px; 
 }
 
 </style>

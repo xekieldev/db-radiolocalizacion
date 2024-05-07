@@ -2,9 +2,6 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
-# from flask_httpauth import HTTPBasicAuth
-# from werkzeug.security import generate_password_hash, check_password_hash
-
 
 
 def create_app(test_config=None):
@@ -26,7 +23,6 @@ def create_app(test_config=None):
         pass
 
     @app.route("/hello")
-    # @auth.login_required
     def hello():
         return "Hello, World!"
 
@@ -35,19 +31,14 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    # apply the blueprints to the app
     from src import technician
-    # from src import location
     from src import filex
-    # import pdb; pdb.set_trace()
-    
     from src import station
     from src import tech_measurement
     from src import users
 
 
     app.register_blueprint(technician.bp)
-    # app.register_blueprint(location.bp)
     app.register_blueprint(filex.bp)
     app.register_blueprint(station.bp)
     app.register_blueprint(tech_measurement.bp)

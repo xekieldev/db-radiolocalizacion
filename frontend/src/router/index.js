@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 
 const router = createRouter({
@@ -15,14 +14,6 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/HomeView.vue')
     },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/LoginView.vue')
-    // },
     {
       path: '/about',
       name: 'about',
@@ -30,37 +21,6 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
-    },
-    {
-      path: '/form',
-      name: 'form',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FormView.vue')
-    },
-    {
-      path: '/map',
-      name: 'map',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/MapView.vue')
-    },
-    {
-      path: '/rloc',
-      name: 'rloc',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FormRlocView.vue')
-    },{
-      path: '/loc',
-      name: 'loc',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FormLocView.vue')
     },
     {
       path: '/list',
@@ -77,14 +37,6 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ListTechniciansView.vue')
-    },
-    {
-      path: '/tech',
-      name: 'tech',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FormTMView.vue')
     },
     {
       path: '/file/:id',
@@ -158,7 +110,6 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ListStationsView.vue')
     }
-
   ]
 })
 

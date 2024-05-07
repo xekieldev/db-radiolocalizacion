@@ -1,40 +1,25 @@
 <script setup>
 import { useApi } from '../composables/api'
 import { onBeforeMount, reactive, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 
 
-// El 1000 es la cantidad de milisegundos que se tardarán
-// en responder los métodos. Esto es para emular la naturaleza
-// asíncrona que vas a tener cuando uses un API HTTP.
 const { getAllTechnicians, delete_technician, loading } = useApi()
 const router = useRouter()
 
 function createItem() {  
   router.push('/technician/create_technician')
 }
-function deleteItem() {  
-  router.push('/technician/create_technician')
-}
-// El reactive es para que la variable items se actualice
-// automáticamente cuando cambia. Es necesario porque acá se
-// inicializa como una lista vacía y más abajo se hace la llamada
-// al método que tarda 1000ms. Cuando la respuesta del método llega
-// el valor de la variable se actualiza automáticamente en el
-// template sin necesidad de que su valor sea reasignado
+
 const items = reactive([])
 const status = ref({});
-console.log(items)
 
 
 onBeforeMount(async () => {
-    // El await acá es necesario para representar que se está
-    // haciendo una llamada a un método asíncrono
     const data = await getAllTechnicians()
     items.push(...data)
-    console.log('items',items)
     
 })
 
@@ -44,16 +29,11 @@ const confirmar = (id) => {
 
 
 async function del(id) {
-    try {
-    
-    // console.log("id del path: ", id)
-    const response = await delete_technician(id)
-    status.value[id] = 0
-    window.location.reload()
-
-
+    try { 
+      const response = await delete_technician(id)
+      status.value[id] = 0
+      window.location.reload()
     } catch (error) {
-
     console.error(error)
     
     }
@@ -65,7 +45,6 @@ async function del(id) {
 <template>
   <heading>Gestión de Técnicos</heading>
   <div class="technicians-list-container">
-     <!-- <RouterLink to="/technician/create_technician">Agregar Nuevo Técnico</RouterLink> -->
      <my-button @on-tap="createItem" class="secondary right" label="Nuevo Técnico" />
   <table>
     <tr>
@@ -128,8 +107,6 @@ tr:nth-child(odd) {
   border-radius: 10px 0 0;
 
 }
-
-
 .danger {
   color: red;
   font-weight: 700;

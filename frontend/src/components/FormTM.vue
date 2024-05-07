@@ -3,10 +3,9 @@ import FormRow from './FormRow.vue'
 import { useApi} from '../composables/api'
 import { useArea } from '../composables/area'
 import { useUnit } from '../composables/unit';
-import { useTechnician } from '../composables/technician';
 import { useTerritory } from '../composables/territory';
-import { onBeforeMount, reactive, ref, watch } from 'vue';
-import { RouterLink, useRouter } from 'vue-router'
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router'
 import Heading from './Heading.vue';
 
 import provincesDataRaw from "../../../data/provincias.json"
@@ -22,25 +21,17 @@ const { currentRoute } = useRouter()
 
 const emit = defineEmits(['onSubmit'])
 const props = defineProps({
-  // context: String,
   title: String,
   techniciansValues: Array,
   technicians: Object,
   file: Object,
-  // station: Array,
   techMeasurement: Object,
 })
 function submitHandler(fields) {
   emit('onSubmit', fields)
 }
 
-// console.log("file.area", file)
-
-const { area } = useArea()
 const { unidad } = useUnit()
-// const { tecnico} = useTechnician()
-console.log("prop.techMeasurement: ", props.techMeasurement)
-
 const province = ref()
 const city = ref()
 const cityWitness = ref()
@@ -66,7 +57,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
 </script>
 
 <template>
-  <!-- <h2>{{ title }}</h2> -->
   <heading> {{ title }} </heading>
   <form-kit
     type="form"
@@ -80,18 +70,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
     }"
     :actions="false"
   >
-    <!-- <form-row> -->
-      <!-- <form-kit
-        type="text"
-        label="Expediente"
-        name="expediente"
-        :validation="[['required'], ['matches', /^EX-\d{4}-\d{6,10}-\s{2,3}-[A-Z]{3,7}-[A-Z]{3,10}#[A-Z]{2,8}$/,
-                                     /^IF-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{5}#[A-Z]{6}$/, /^NO-\d{4}-\d{8}-[A-Z]{3,8}-[A-Z]{3,10}#?[A-Z]{6}?$/, /^[A-Z]{5,20}\s?E?\s?\s\d{1,8}\/\d{4}$/]]"
-        validation-visibility="live"
-        v-model="file.expediente"
-        :disabled="true"
-      /> -->
-    <!-- </form-row> -->
     <form-row>
       <form-kit
         type="date"
@@ -109,9 +87,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         name="puntoMedicion"
       />
     </form-row>
-
     <form-row>
-
       <form-kit
         type="number"
         label="Frecuencia Medida"
@@ -148,7 +124,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         label="Provincia"
         name="provincia"
         v-model="province"
-
       />
       <form-kit
         type="select"
@@ -192,61 +167,55 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         validation="false"
       />
     </form-row>
-    <!-- <div style="border: 1px solid gray; padding: 10px; border-radius: 5px; margin: 10px 0 10px 0"> -->
     <div>
-    <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
-      <form-kit
-        type="text"
-        label="Domicilio estación Testigo"
-        name="domicilioTestigo"
-      />
-      <form-kit
-        type="select"
-        :options="provinces"
-        label="Provincia"
-        name="provinciaTestigo"
-        v-model="provinceWitness"
-      />
-      <form-kit
-        type="select"
-        :options="citiesWitness"
-        label="Localidad"
-        name="localidadTestigo"
-        v-model="cityWitness"
-      />
-    </form-row>
-    <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
-      <form-kit
-        type="number"
-        label="Latitud"
-        name="latitudTestigo"
-        step="0.000001"
-      />
-      <form-kit
-        type="number"
-        label="Longitud"
-        name="longitudTestigo"
-        step="0.000001"
-      />
-      <form-kit
-        type="number"
-        label="Distancia"
-        name="distanciaTestigo"
-        help="Distancia en metros"
-      />
-      <form-kit
-        type="number"
-        label="Azimut"
-        name="azimutTestigo"
-        help="Azimut geográf. respecto a la PTx en grados decimales"
-      />
-    
-
-
-
-    </form-row>
-  </div>
-
+      <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
+        <form-kit
+          type="text"
+          label="Domicilio estación Testigo"
+          name="domicilioTestigo"
+        />
+        <form-kit
+          type="select"
+          :options="provinces"
+          label="Provincia"
+          name="provinciaTestigo"
+          v-model="provinceWitness"
+        />
+        <form-kit
+          type="select"
+          :options="citiesWitness"
+          label="Localidad"
+          name="localidadTestigo"
+          v-model="cityWitness"
+        />
+      </form-row>
+      <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
+        <form-kit
+          type="number"
+          label="Latitud"
+          name="latitudTestigo"
+          step="0.000001"
+        />
+        <form-kit
+          type="number"
+          label="Longitud"
+          name="longitudTestigo"
+          step="0.000001"
+        />
+        <form-kit
+          type="number"
+          label="Distancia"
+          name="distanciaTestigo"
+          help="Distancia en metros"
+        />
+        <form-kit
+          type="number"
+          label="Azimut"
+          name="azimutTestigo"
+          help="Azimut geográf. respecto a la PTx en grados decimales"
+        />
+      </form-row>
+    </div>
     <form-row>
       <form-kit
         type="number"
@@ -284,7 +253,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         validation="false"
       />
     </form-row>
-    
     <form-row>
       <form-kit
         type="select"
@@ -293,10 +261,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
         v-if="technicians && technicians.length > 1"    
-        v-model="technicians[0].id"
-        
-
-  
+        v-model="technicians[0].id"  
       />
       <form-kit
         type="select"
@@ -305,8 +270,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
         v-else-if="techniciansValues.length > 0"
-        
-
       />
       <form-kit
         type="select"
@@ -316,7 +279,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         placeholder="Técnico 2"
         v-if="technicians && technicians.length > 1"    
         v-model="technicians[1].id"
-  
       />
       <form-kit
         type="select"
@@ -325,16 +287,12 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
         v-else-if="techniciansValues.length > 0"
-        
-
       />
     </form-row>
-
     <button class="submit-button" slot="submit">Guardar</button>
   </form-kit>
 </template>
-
-  
+ 
 <style scoped>
 .submit-button {
       background-color: white;
@@ -351,5 +309,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
 .submit-button:hover {
       background-color: #007BFF;
       color: white;
-}</style>
+}
+
+</style>
   

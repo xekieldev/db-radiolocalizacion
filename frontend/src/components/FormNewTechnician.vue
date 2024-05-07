@@ -10,12 +10,9 @@ const props = defineProps({
 })
 const { area } = useArea()
 
-
-
 function submitHandler(fields) {
   emit('onSubmit', fields)
 }
-
 
 </script>
 

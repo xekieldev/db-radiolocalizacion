@@ -5,70 +5,31 @@ import { RouterLink, useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 
-// El 1000 es la cantidad de milisegundos que se tardarán
-// en responder los métodos. Esto es para emular la naturaleza
-// asíncrona que vas a tener cuando uses un API HTTP.
+
 const { list, loading, deleteFile } = useApi()
 
 const router = useRouter()
 const currentRoute = useRouter()
 
-// El reactive es para que la variable items se actualice
-// automáticamente cuando cambia. Es necesario porque acá se
-// inicializa como una lista vacía y más abajo se hace la llamada
-// al método que tarda 1000ms. Cuando la respuesta del método llega
-// el valor de la variable se actualiza automáticamente en el
-// template sin necesidad de que su valor sea reasignado
 const items = reactive([])
 
-// function editItem(item) {  
-//   router.push(`/file/${item}/edit`)
-// }
 
-function editItem(item) {
-  console.log("argumento: ", item)
-  console.log("item: ", items[item-1])
-  
-  // if (items.value[item-1].frecuencia != null || items.value[item-1].frecuencia != undefined) {
-    
-  //   router.currentRoute.value.query.rloc = 'true'
-  //   router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
-
-  // } else {
-    
-  //   router.currentRoute.value.query.rloc = 'false'
-  //   router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'false'} })
-
-  // }
-}
-
-// function createItem() {  
-//   router.push('/file/create')
-// }
 function viewItem(item) {  
   router.push(`/file/${item}`)
 }
 
 async function deleteItem(item) {  
-  console.log("id?", item)
-  
   const response = await deleteFile(item)
-  window.location.reload()
-
-  
+  window.location.reload() 
 }
 
 onBeforeMount(async () => {
-    // El await acá es necesario para representar que se está
-    // haciendo una llamada a un método asíncrono
-    console.log("Path", router.currentRoute.value.query.includeDeleted)
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
       const data = await list()
       items.push(...data)
     } else {
         const data = await list(true)
-        items.push(...data)
-        
+        items.push(...data)    
     }  
 })
 
@@ -77,7 +38,6 @@ onBeforeMount(async () => {
 <template>
   <heading>Gestión de Expedientes</heading>
   <div class="list-container">
-      <!-- <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" /> -->
     <table>
       <tr>
         <th>id</th>
@@ -91,7 +51,6 @@ onBeforeMount(async () => {
         v-for="item in items"
         :key="item"
       >
-      <!-- <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> -->
       <td><my-button @on-tap="() => viewItem(item.id)" class="primary center" :label="(item.id.toString())"/></td>
       <td>{{ item.expediente }}</td> 
       <td>{{ item.area }}</td> 
@@ -99,7 +58,6 @@ onBeforeMount(async () => {
       <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td>
       <td> 
         <div class="action-buttons-container">
-          <!-- <my-button @on-tap="() => editItem(item.id)" class="primary center" label="Editar"/> -->
           <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/>
         </div>
       </td> 
@@ -143,7 +101,6 @@ th{
 tr:nth-child(odd) {
   background-color: #ebeded;
   border-radius: 10px 0 0;
-
 }
 
 .action-buttons-container {

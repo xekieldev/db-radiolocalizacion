@@ -24,7 +24,6 @@ const props = defineProps({
   
 }
 .label{
-  /* display: flex; */
   width: 100%;
   background-color: #cbcdce;
   color: #0e0e0e;
@@ -33,6 +32,5 @@ const props = defineProps({
   text-align: center;
   border-radius: 10px 0 0;
 }
-
 
 </style>
