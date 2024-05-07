@@ -1,9 +1,6 @@
 <script setup>
-import { useSession} from '../composables/session'
-
 import { ref } from 'vue'
 
-const { loggedIn } = useSession()
 const user = ref()
 const pass = ref()
 const emit = defineEmits(['onSubmit'])
@@ -21,27 +18,36 @@ function submitHandler(fields) {
       submit-label="Ingresar"
       :actions="false"
       @submit="submitHandler"
+    >
+      <img
+        class="login-img"
+        src="../../img/Logo.png"
+        alt="logo"
       >
-    <img class="login-img" src="../../img/Logo.png" alt="logo">
-    <p class="login-box-title">Área Gestión de CCTE y Laboratorios</p>
+      <p class="login-box-title">
+        Área Gestión de CCTE y Laboratorios
+      </p>
       <form-kit
-            outer-class="field-login"
-            type="text"
-            label="Usuario"
-            name="user"
-            v-model="user"
+        v-model="user"
+        outer-class="field-login"
+        type="text"
+        label="Usuario"
+        name="user"
       />
       <form-kit
-            outer-class="field-login"
-            type="password"
-            label="Contraseña"
-            name="pass"
-            v-model="pass"
+        v-model="pass"
+        outer-class="field-login"
+        type="password"
+        label="Contraseña"
+        name="pass"
       />
-      <button class="login-button" slot="submit">Ingresar</button>
+      <button
+        class="login-button"
+      >
+        Ingresar
+      </button>
     </form-kit>
   </div>
-
 </template>
 
 <style scoped>

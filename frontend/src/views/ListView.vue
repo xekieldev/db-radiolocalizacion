@@ -1,7 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
 import { onBeforeMount, reactive } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 
@@ -9,7 +9,6 @@ import MyButton from '../components/MyButton.vue';
 const { list, loading, deleteFile } = useApi()
 
 const router = useRouter()
-const currentRoute = useRouter()
 
 const items = reactive([])
 
@@ -19,7 +18,7 @@ function viewItem(item) {
 }
 
 async function deleteItem(item) {  
-  const response = await deleteFile(item)
+  await deleteFile(item)
   window.location.reload() 
 }
 
@@ -44,24 +43,37 @@ onBeforeMount(async () => {
         <th>Expediente</th>
         <th>Área</th>
         <th>Fecha y hora</th>
-        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th>
+        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+          Status
+        </th>
         <th>Acciones</th>
       </tr>
       <tr
         v-for="item in items"
         :key="item"
       >
-      <td><my-button @on-tap="() => viewItem(item.id)" class="primary center" :label="(item.id.toString())"/></td>
-      <td>{{ item.expediente }}</td> 
-      <td>{{ item.area }}</td> 
-      <td>{{ item.fecha +" "+item.hora}}</td> 
-      <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td>
-      <td> 
-        <div class="action-buttons-container">
-          <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/>
-        </div>
-      </td> 
-
+        <td>
+          <my-button
+            class="primary center"
+            :label="(item.id.toString())"
+            @on-tap="() => viewItem(item.id)"
+          />
+        </td>
+        <td>{{ item.expediente }}</td> 
+        <td>{{ item.area }}</td> 
+        <td>{{ item.fecha +" "+item.hora }}</td> 
+        <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+          {{ item.status }}
+        </td>
+        <td> 
+          <div class="action-buttons-container">
+            <my-button
+              class="tertiary center"
+              label="Borrar"
+              @on-tap="() => deleteItem(item.id)"
+            />
+          </div>
+        </td>
       </tr>
 
       <div class="status">

@@ -7,10 +7,9 @@ import BarMenu from './components/Menu.vue'
 
 <template>
   <div class="wrapper">
-    <bar-menu/>
+    <bar-menu />
     <RouterView />
   </div>
-    
 </template>
 
 

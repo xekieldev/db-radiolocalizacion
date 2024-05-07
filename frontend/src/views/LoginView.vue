@@ -5,13 +5,13 @@ import { useRouter } from 'vue-router';
 
 
 
-const { login, loggedIn } = useSession()
+const { login } = useSession()
 const router = useRouter()
 
 
   async function check(fields) {
     try {
-      const response = await login(fields)
+      await login(fields)
       router.push(`/home`)
 
     } catch (error) {
@@ -23,11 +23,9 @@ const router = useRouter()
 </script>
 
 <template>
-  
   <login-main
-  @on-submit="check"
+    @on-submit="check"
   />
-  
 </template>
 
 <style scoped>

@@ -9,15 +9,14 @@ import { useService } from '../composables/service'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
 import { useFileValidation } from '../composables/filevalidation'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useApi} from '../composables/api'
 import Heading from './Heading.vue'
 
-const route = useRoute()
 const router = useRouter()
 const { currentRoute } = useRouter()
 const { getFile } = useApi()
-const emit = defineEmits(['onSubmit'])
+const emits = defineEmits(['onSubmit', 'update:station.provincia', 'update:station.localidad']);
 const props = defineProps({
   context: String,
   title: String,
@@ -30,7 +29,7 @@ const filePath = reactive({})
 const fileId = ref('')
 
 function submitHandler(fields) {
-  emit('onSubmit', fields)
+  emits('onSubmit', fields)
 }
 
 onBeforeMount( async ()=> {
@@ -52,13 +51,15 @@ const city = ref(props.station.localidad)
 const { provinces, cities, getProvinceCities } = useTerritory()
 
 watch(province, (newValue, oldValue) => {
-  props.station.provincia = newValue
-  
+  // props.station.provincia = newValue
+  emits('update:station.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
     
     city.value = cities.value[0].value
-    props.station.localidad = city.value.value
+    emits('update:station.localidad', newValue)
+
+    // props.station.localidad = city.value.value
 
   }  
 })
@@ -70,14 +71,17 @@ const { servicio } = useService()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
 const { validateFile } = useFileValidation()
-const linkType = ref('Radioeléctrico')
 
 
 </script>
 
 <template>
-  <heading v-if="router.currentRoute.value.query.rloc =='true'">{{ title }}</heading>
-  <heading v-else> Datos de Localización</heading>
+  <heading v-if="router.currentRoute.value.query.rloc =='true'">
+    {{ title }}
+  </heading>
+  <heading v-else>
+    Datos de Localización
+  </heading>
   <form-kit
     type="form"
     submit-label="Guardar"
@@ -87,150 +91,150 @@ const linkType = ref('Radioeléctrico')
                                     validateFile:'Formato incorrecto',
                }
     }"
-    @submit="submitHandler"
     :actions="false"
+    @submit="submitHandler"
   >
     <form-row>
       <form-kit
+        v-if="fileId != null || fileId != undefined"
+        v-model="filePath.expediente"
         type="text"
         label="Expediente"
         name="expediente"
-        v-model="filePath.expediente"
         validation="required | validateFile"
         :validation-rules="{ validateFile }"
-        v-if="fileId != null || fileId != undefined"
         :disabled="true"
       />
       <form-kit
+        v-else
+        v-model="file.expediente"
         type="text"
         label="Expediente"
         name="expediente"
-        v-model="file.expediente"
         validation="required | validateFile"
         :validation-rules="{ validateFile }"
-        v-else
       />
     </form-row>
     <form-row>
       <form-kit
+        v-model="file.fecha"
         type="date"
-        label="Fecha"
+        label="Fecha" 
         name="fecha" 
-        v-model="file.fecha" 
       />
       <form-kit
+        v-model="file.hora"
         type="time"
         label="Hora"
-        name="hora"
-        v-model="file.hora"        
+        name="hora"        
       />
       <form-kit
-        type="select"
+        v-if="fileId != null || fileId != undefined"
         id="area"
+        v-model="filePath.area"
+        type="select"
         label="CCTE/Área"
         name="area"
-        v-model="filePath.area"
         :options="area"
         placeholder="Área"
-        v-if="fileId != null || fileId != undefined"
         :disabled="true"
       />
       <form-kit
-        type="select"
+        v-else
         id="area"
+        v-model="file.area"
+        type="select"
         label="CCTE/Área"
         name="area"
-        v-model="file.area"
-        :options="area"
-        placeholder="Área" 
-        v-else
+        :options="area" 
+        placeholder="Área"
       />
     </form-row>
     <form-row>
-    <form-kit
+      <form-kit
+        v-model="station.identificacion"
         type="text"
         label="Señal distintiva/Identificación"
         name="identificacion"
-        v-model="station.identificacion"
       />
       <form-kit
+        v-model="station.servicio"
         type="select"
         label="Servicio"
         name="servicio"
         :options="servicio"
         placeholder="Servicio"
-        v-model="station.servicio"
       />
       <form-kit
+        v-if="fileId != null || fileId != undefined"
+        v-model="station.emplazamiento"
         type="select"
         label="Tipo de Emplazamiento"
         name="emplazamiento"
         :options="emplazamiento"
         placeholder="Emplazamiento"
-        v-model="station.emplazamiento"
-        v-if="fileId != null || fileId != undefined"
         value="Estudio"
         :disabled="true"
       />
       <form-kit
+        v-else
+        v-model="station.emplazamiento"
         type="select"
         label="Tipo de Emplazamiento"
         name="emplazamiento"
         :options="emplazamiento"
         placeholder="Emplazamiento"
-        v-model="station.emplazamiento"
-        v-else
       />
     </form-row>
     <form-row>
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-model="station.frecuencia"
         type="number"
         label="Frecuencia"
         name="frecuencia"
         step="0.000001"
         suffix="MHz"
-        v-model="station.frecuencia"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-model="station.unidad"
         type="select"
         label="Unidad"
         name="unidad"
         :options="unidad"
-        v-model="station.unidad"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc =='true'"
+        v-model="station.claseEmision"
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
-        v-model="station.claseEmision"
       />
     </form-row>
     <form-row>
       <form-kit
+        v-model="province"
         :options="provinces"
         type="select"
         label="Provincia"
-        name="provincia"
-        v-model="province"        
+        name="provincia"        
       />
       <form-kit
+        v-model="city"
         :options="cities"
         type="select"
         label="Localidad"
-        name="localidad"
-        v-model="city"       
+        name="localidad"       
       />
     </form-row>
     <form-row>
       <form-kit
+        v-model="station.domicilio"
         outer-class="field-domicilio"
         type="text"
         label="Domicilio"
         name="domicilio"
-        v-model="station.domicilio"
       />
       <form-kit
         v-model="station.latitud"
@@ -249,88 +253,89 @@ const linkType = ref('Radioeléctrico')
     </form-row>
     <form-row>
       <form-kit
+        v-model="station.observaciones"
         type="textarea"
         label="Observaciones"
         name="observaciones"
         validation="false"
-        v-model="station.observaciones"
       />
     </form-row>
     <form-row>
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-model="station.irradiante"
         type="text"
         label="Sistema Irradiante"
         name="irradiante"
-        v-model="station.irradiante"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-model="station.polarizacion"
         type="select"
         label="Polarización"
         name="polarizacion"
         :options="tipoPolarizacion"
         placeholder="Polarización"
-        v-model="station.polarizacion"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-model="station.cantidad"
         type="text"
         label="Cantidad"
         name="cantidad"
-        v-model="station.cantidad"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-model="station.altura"
         type="text"
         label="Altura Media"
         name="altura"
         help="Altura en metros"
-        v-model="station.altura"
       />
     </form-row>   
     <form-row v-if="router.currentRoute.value.query.rloc == 'true'">
       <form-kit
-        outer-class="field-emplazamiento"
+        v-if="(fileId == null || fileId == undefined) && station.emplazamiento != 'Estudio'"
         v-model="station.tipoVinculo" 
+        outer-class="field-emplazamiento"
         type="select"
         label="Tipo de Vínculo"
         name="tipoVinculo"
         :options="tipoVinculo"
         placeholder="Vínculo"
-        v-if="(fileId == null || fileId == undefined) && station.emplazamiento != 'Estudio'"
       />
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"
+        v-model="station.frecuenciaVinc"
         type="number"
         label="Frecuencia Vínculo"
         name="frecuenciaVinc"
         step="0.00001"
         :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
         :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
-        v-model="station.frecuenciaVinc"
       />
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"
+        v-model="station.unidadVinc"
         type="select"
         label="Unidad"
         name="unidadVinc"
         :options="unidad"
         :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
         :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
-        v-model="station.unidadVinc"
       />
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"
+        v-model="station.irradianteVinc"
         type="text"
         label="Sistema Irradiante"
         name="irradianteVinc"
         :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
         :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
-        v-model="station.irradianteVinc"
       />
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"
+        v-model="station.polarizacionVinc"
         type="select"
         label="Polarización"
         name="polarizacionVinc"
@@ -338,46 +343,49 @@ const linkType = ref('Radioeléctrico')
         placeholder="Polarización"
         :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
         :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
-        v-model="station.polarizacionVinc"
       />
     </form-row> 
     <form-row>
       <form-kit
+        v-if="technicians && technicians.length>1"
+        v-model="technicians[0].id"
         type="select"
         label="Técnico"
         name="id_technician1"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
-        v-if="technicians && technicians.length > 1"    
-        v-model="technicians[0].id"  
       />
       <form-kit
+        v-else-if="techniciansValues.length>0"
         type="select"
         label="Técnico"
         name="id_technician1"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
-        v-else-if="techniciansValues.length > 0"
       />
       <form-kit
+        v-if="technicians && technicians.length>1"
+        v-model="technicians[1].id"
         type="select"
         label="Técnico"
         name="id_technician2"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
-        v-if="technicians && technicians.length > 1"    
-        v-model="technicians[1].id"  
       />
       <form-kit
+        v-else-if="techniciansValues.length>0"
         type="select"
         label="Técnico"
         name="id_technician2"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
-        v-else-if="techniciansValues.length > 0"
       />
     </form-row>
-    <button class="submit-button" slot="submit">Guardar</button>
+    <button
+      class="submit-button"
+    >
+      Guardar
+    </button>
   </form-kit>
 </template>
 

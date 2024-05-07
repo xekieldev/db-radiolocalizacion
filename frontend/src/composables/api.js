@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { useSession } from './session'
 
 
 
@@ -10,9 +9,6 @@ export function useApi() {
         baseURL: import.meta.env.VITE_APP_API_URL,
         headers: { Authorization: `Basic ${document.cookie.split('appAuth=')[1]}`}
     })
-    // const loginAxiosInstance = axios.create({
-    //     baseURL: 'http://127.0.0.1:5000',
-    // })
 
     async function list(includeDeleted = false) {
         loading.value = true
@@ -35,20 +31,6 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
-
-    // async function edit(id, data) {
-    //     const caseOmit = ['unidadVinc', 'unidad', 'status']
-    //     const payload = { ...data }
-    //     Object.keys(data).forEach( key => { 
-    //         if (typeof data[key] === 'string' || data[key] instanceof String)
-    //             if (!caseOmit.includes(key))
-    //                 payload[key] = data[key].toUpperCase()
-    //     })
-    //     loading.value = true
-    //     const response = await axiosInstance.put(`/file/${id}/edit`, payload)
-    //     loading.value = false
-    //     return response && response.data 
-    // }
 
     async function edit(id, data) {
         loading.value = true
@@ -113,13 +95,6 @@ export function useApi() {
         return response && response.data 
     }
 
-    // async function listStations() {
-    //     loading.value = true
-    //     const response = await axiosInstance.get('/station')
-    //     loading.value = false
-    //     return response && response.data 
-    // }
-
     async function listStations(includeDeleted = false) {
         loading.value = true
         const response = await axiosInstance.get('/station', {
@@ -134,13 +109,6 @@ export function useApi() {
     async function getStation(id) {
         loading.value = true
         const response = await axiosInstance.get(`/station/${id}`)
-        loading.value = false
-        return response && response.data 
-    }
-
-    async function checkCredentials(data) {
-        loading.value = true
-        const response = await loginAxiosInstance.post('/login',data)
         loading.value = false
         return response && response.data 
     }
@@ -160,6 +128,5 @@ export function useApi() {
         getTechMeasurement,
         listStations,
         getStation,
-        checkCredentials,
     }
 }

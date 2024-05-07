@@ -4,7 +4,7 @@ import Heading from './Heading.vue';
 import { useArea } from '../composables/area';
 
 const emit = defineEmits(['onSubmit'])
-const props = defineProps({
+defineProps({
   context: String,
   title: String,
 })
@@ -21,8 +21,8 @@ function submitHandler(fields) {
   <form-kit
     type="form"
     submit-label="Guardar"
-    @submit="submitHandler"
     :actions="false"
+    @submit="submitHandler"
   >
     <form-row>
       <form-kit
@@ -46,7 +46,11 @@ function submitHandler(fields) {
         name="area" 
       />
     </form-row>
-    <button class="submit-technician-button" slot="submit">Guardar</button>
+    <button
+      class="submit-technician-button"
+    >
+      Guardar
+    </button>
   </form-kit>
 </template>
 

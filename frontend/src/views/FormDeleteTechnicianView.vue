@@ -29,8 +29,9 @@ async function save() {
 
 <template>
   <p>¿Estás seguro que quieres eliminar el técnico?</p>
-  <button @click="save">Borrar</button>
-  
+  <button @click="save">
+    Borrar
+  </button>
 </template>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   label: String,
   type: String,
   align: String,
@@ -15,7 +15,11 @@ function handleClick() {
 </script>
 
 <template>
-  <div class="my-button-container" @click="handleClick" :class="{ primary: type === 'primary', secondary: type === 'secondary', tertiary: type === 'tertiary', quaternary: type === 'quaternary'}, { center: align === 'center', right: align === 'right' }">
+  <div
+    class="my-button-container"
+    :class="{ primary: type === 'primary', secondary: type === 'secondary', tertiary: type === 'tertiary', quaternary: type === 'quaternary', center: align === 'center', right: align === 'right' }"
+    @click="handleClick"
+  >
     {{ label }}
   </div>
 </template>

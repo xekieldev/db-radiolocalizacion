@@ -19,7 +19,7 @@ function viewItem(item) {
   router.push(`/file/${item}/create_tech_measurement`)
 }
 
-function goBack(item) {  
+function goBack() {  
   router.back()
 }
 
@@ -55,73 +55,219 @@ function getTechnician(id) {
   <heading>Mediciones Técnicas Externas</heading>
   <div>
     <display-row> 
-        <prop-value class="prop" label="id" :value="file.id"/>
-        <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
-        <prop-value class="prop" label="CCTE/Área" :value="file.area"/>
-      </display-row>
+      <prop-value
+        class="prop"
+        label="id"
+        :value="file.id"
+      />
+      <prop-value
+        class="prop double"
+        label="Expediente"
+        :value="file.expediente"
+      />
+      <prop-value
+        class="prop"
+        label="CCTE/Área"
+        :value="file.area"
+      />
+    </display-row>
   </div>
-<br>
-<div class="buttons-container" >
-    <my-button @on-tap="() => viewItem(idPath)" class="primary right" label="Agregar Mediciones Técnicas"/>
+  <br>
+  <div class="buttons-container">
+    <my-button
+      class="primary right"
+      label="Agregar Mediciones Técnicas"
+      @on-tap="() => viewItem(idPath)"
+    />
   </div>
-  <div v-for="value, index in techMeasurement">
-    <p v-if="index==0" class="title-testigo">Emplazamiento Estación Testigo </p>
+  <div
+    v-for="value, index in techMeasurement"
+    :key="value"
+  >
+    <p
+      v-if="index==0"
+      class="title-testigo"
+    >
+      Emplazamiento Estación Testigo
+    </p>
     <display-row v-if="index==0"> 
-      <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilioTestigo"/>
-      <prop-value class="prop double" label="Localidad" :value="techMeasurement[index].localidadTestigo"/>
-      <prop-value class="prop double" label="Provincia" :value="techMeasurement[index].provinciaTestigo"/>
+      <prop-value
+        class="prop double"
+        label="Domicilio"
+        :value="techMeasurement[index].domicilioTestigo"
+      />
+      <prop-value
+        class="prop double"
+        label="Localidad"
+        :value="techMeasurement[index].localidadTestigo"
+      />
+      <prop-value
+        class="prop double"
+        label="Provincia"
+        :value="techMeasurement[index].provinciaTestigo"
+      />
     </display-row>
     <display-row v-if="index==0">
-      <prop-value class="prop"  label="Latitud" :value="techMeasurement[index].latitudTestigo"/>
-      <prop-value class="prop"  label="Longitud" :value="techMeasurement[index].longitudTestigo"/>
-      <prop-value class="prop"  label="Distancia [m]" :value=" techMeasurement[index].distanciaTestigo"/>
-      <prop-value class="prop double" label="Azimut geog. con respecto a PTx [°]" :value="techMeasurement[index].azimutTestigo"/>
+      <prop-value
+        class="prop"
+        label="Latitud"
+        :value="techMeasurement[index].latitudTestigo"
+      />
+      <prop-value
+        class="prop"
+        label="Longitud"
+        :value="techMeasurement[index].longitudTestigo"
+      />
+      <prop-value
+        class="prop"
+        label="Distancia [m]"
+        :value=" techMeasurement[index].distanciaTestigo"
+      />
+      <prop-value
+        class="prop double"
+        label="Azimut geog. con respecto a PTx [°]"
+        :value="techMeasurement[index].azimutTestigo"
+      />
     </display-row>
-<br>
-<p class="title-techMeasurements">Mediciones Técnicas Externas</p>
+    <br>
+    <p class="title-techMeasurements">
+      Mediciones Técnicas Externas
+    </p>
 
-    <display-row > 
-      <prop-value class="prop"  label="id" :value="techMeasurement[index].id"/>
-      <prop-value class="prop"  label="Fecha y hora" :value=" techMeasurement[index].fecha + ' ' + techMeasurement[index].hora"/>
-      <prop-value class="prop"  label="Descripción" :value=" techMeasurement[index].puntoMedicion"/>
-    </display-row>
-    <display-row > 
-      <prop-value class="prop"  label="Frecuencia Medida" :value=" techMeasurement[index].frecMedida"/>
-      <prop-value class="prop"  label="Unidad" :value=" techMeasurement[index].unidadFrecMedida"/>
-      <prop-value class="prop"  label="Ancho de Banda" :value=" techMeasurement[index].anchoBanda"/>
-      <prop-value class="prop"  label="Unidad" :value=" techMeasurement[index].unidadBW"/>
-    </display-row>
-    <display-row > 
-      <prop-value class="prop"  label="Latitud" :value="techMeasurement[index].latitud"/>
-      <prop-value class="prop"  label="Longitud" :value="techMeasurement[index].longitud"/>
-      <prop-value class="prop"  label="Distancia [m]" :value=" techMeasurement[index].distancia"/>
-      <prop-value class="prop"  label="Azimut [°]" :value=" techMeasurement[index].azimut"/>
-    </display-row>
-    <display-row > 
-      <prop-value class="prop double" label="Domicilio" :value="techMeasurement[index].domicilio"/>
-      <prop-value class="prop double" label="Localidad" :value="getNameByCode('city', techMeasurement[index].localidad)"/>
-      <prop-value class="prop double" label="Provincia" :value="getNameByCode('province', techMeasurement[index].provincia)"/>
-    </display-row>
-    <display-row>
-      <prop-value class="prop"  label="Observaciones" :value=" techMeasurement[index].observaciones"/>
-    </display-row>
-    <display-row > 
-      <prop-value class="prop"  label="E medido (dBuV/m)" :value=" techMeasurement[index].eMedido"/>
-      <prop-value class="prop"  label="E testigo (dBuV/m)" :value=" techMeasurement[index].eTestigo"/>
-      <prop-value class="prop"  label="E corregido (dBuV/m)" :value=" techMeasurement[index].eCorregido"/>
-      <prop-value class="prop"  label="Incertidumbre (dB)" :value=" techMeasurement[index].incertidumbre"/>
-    </display-row>
-    <display-row >
-      <prop-value class="prop"  label="Resultado de las Comprobaciones Técnicas" :value=" techMeasurement[index].resultadoComprob"/>
+    <display-row> 
+      <prop-value
+        class="prop"
+        label="id"
+        :value="techMeasurement[index].id"
+      />
+      <prop-value
+        class="prop"
+        label="Fecha y hora"
+        :value=" techMeasurement[index].fecha + ' ' + techMeasurement[index].hora"
+      />
+      <prop-value
+        class="prop"
+        label="Descripción"
+        :value=" techMeasurement[index].puntoMedicion"
+      />
     </display-row>
     <display-row> 
-        <prop-value class="prop" label="Técnico 1" :value="getTechnician(techMeasurement[index].id_technician1)"/>
-        <prop-value class="prop" label="Técnico 2" :value="getTechnician(techMeasurement[index].id_technician2)"/>
+      <prop-value
+        class="prop"
+        label="Frecuencia Medida"
+        :value=" techMeasurement[index].frecMedida"
+      />
+      <prop-value
+        class="prop"
+        label="Unidad"
+        :value=" techMeasurement[index].unidadFrecMedida"
+      />
+      <prop-value
+        class="prop"
+        label="Ancho de Banda"
+        :value=" techMeasurement[index].anchoBanda"
+      />
+      <prop-value
+        class="prop"
+        label="Unidad"
+        :value=" techMeasurement[index].unidadBW"
+      />
     </display-row>
-</div>  
-<div class="buttons-container">
-  <my-button @on-tap="goBack(idPath)" class="primary right" label="Volver"/>
-</div>
+    <display-row> 
+      <prop-value
+        class="prop"
+        label="Latitud"
+        :value="techMeasurement[index].latitud"
+      />
+      <prop-value
+        class="prop"
+        label="Longitud"
+        :value="techMeasurement[index].longitud"
+      />
+      <prop-value
+        class="prop"
+        label="Distancia [m]"
+        :value=" techMeasurement[index].distancia"
+      />
+      <prop-value
+        class="prop"
+        label="Azimut [°]"
+        :value=" techMeasurement[index].azimut"
+      />
+    </display-row>
+    <display-row> 
+      <prop-value
+        class="prop double"
+        label="Domicilio"
+        :value="techMeasurement[index].domicilio"
+      />
+      <prop-value
+        class="prop double"
+        label="Localidad"
+        :value="getNameByCode('city', techMeasurement[index].localidad)"
+      />
+      <prop-value
+        class="prop double"
+        label="Provincia"
+        :value="getNameByCode('province', techMeasurement[index].provincia)"
+      />
+    </display-row>
+    <display-row>
+      <prop-value
+        class="prop"
+        label="Observaciones"
+        :value=" techMeasurement[index].observaciones"
+      />
+    </display-row>
+    <display-row> 
+      <prop-value
+        class="prop"
+        label="E medido (dBuV/m)"
+        :value=" techMeasurement[index].eMedido"
+      />
+      <prop-value
+        class="prop"
+        label="E testigo (dBuV/m)"
+        :value=" techMeasurement[index].eTestigo"
+      />
+      <prop-value
+        class="prop"
+        label="E corregido (dBuV/m)"
+        :value=" techMeasurement[index].eCorregido"
+      />
+      <prop-value
+        class="prop"
+        label="Incertidumbre (dB)"
+        :value=" techMeasurement[index].incertidumbre"
+      />
+    </display-row>
+    <display-row>
+      <prop-value
+        class="prop"
+        label="Resultado de las Comprobaciones Técnicas"
+        :value=" techMeasurement[index].resultadoComprob"
+      />
+    </display-row>
+    <display-row> 
+      <prop-value
+        class="prop"
+        label="Técnico 1"
+        :value="getTechnician(techMeasurement[index].id_technician1)"
+      />
+      <prop-value
+        class="prop"
+        label="Técnico 2"
+        :value="getTechnician(techMeasurement[index].id_technician2)"
+      />
+    </display-row>
+  </div>  
+  <div class="buttons-container">
+    <my-button
+      class="primary right"
+      label="Volver"
+      @on-tap="goBack()"
+    />
+  </div>
 </template>
 
 <style scoped>

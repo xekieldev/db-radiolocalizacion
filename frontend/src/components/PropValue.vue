@@ -1,6 +1,6 @@
 <script setup>
 
-const props = defineProps({
+defineProps({
   
   label: String,
   value: [Number, String, Array],
@@ -11,8 +11,12 @@ const props = defineProps({
 
 <template>
   <div class="container">
-    <div class="label">{{ label }}</div>
-    <div class="value">{{ value }}</div>
+    <div class="label">
+      {{ label }}
+    </div>
+    <div class="value">
+      {{ value }}
+    </div>
   </div>
 </template>
 

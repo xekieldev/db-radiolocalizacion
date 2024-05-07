@@ -5,8 +5,12 @@ import Heading from '../components/Heading.vue';
 <template>
   <div class="about">
     <heading>Base de Datos de Radiolocalizaciones y Mediciones Técnicas Externas</heading>    
-    <h3 class="version-titles">Versión: 1.0</h3><br>
-    <h4 class="version-titles">En esta versión:</h4>
+    <h3 class="version-titles">
+      Versión: 1.0
+    </h3><br>
+    <h4 class="version-titles">
+      En esta versión:
+    </h4>
     <ul class="items-version">
       <li>Acceso seguro con usuario y contraseña</li>
       <li>Base de datos de Radiolocalizaciones, Localizaciones y Mediciones Técnicas Externas</li>
@@ -23,11 +27,14 @@ import Heading from '../components/Heading.vue';
       <li>Y mucho más!</li>
     </ul>
     <footer class="about-footer">
-      <a href="https://github.com/xekieldev/db-radiolocalizacion.git"><img class="logo-github" src="../../img/github-logo.png" alt="xekieldev"></a>
+      <a href="https://github.com/xekieldev/db-radiolocalizacion.git"><img
+        class="logo-github"
+        src="../../img/github-logo.png"
+        alt="xekieldev"
+      ></a>
       <h5>Diseñado y desarrollado por Exequiel Sartor</h5>
     </footer>
   </div>
-  
 </template>
 
 <style scoped>

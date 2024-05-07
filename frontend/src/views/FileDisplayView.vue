@@ -10,7 +10,7 @@ import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
 
 
-const { getFile, loading, getAllTechnicians } = useApi()
+const { getFile, getAllTechnicians } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
@@ -68,67 +68,224 @@ onMounted(async () => {
 </script>
 <template>
   <div class="buttons-container">
-    <my-button @on-tap="goBack" class="primary right" label="Volver" />
+    <my-button
+      class="primary right"
+      label="Volver"
+      @on-tap="goBack"
+    />
   </div>
 
-  <heading v-if="station.frecuencia != null">Datos de Radiolocalización</heading>
-  <heading v-else>Datos de Localización</heading>
+  <heading v-if="station.frecuencia != null">
+    Datos de Radiolocalización
+  </heading>
+  <heading v-else>
+    Datos de Localización
+  </heading>
 
   <div class="buttons-container">
-    <my-button @on-tap="() => viewItem(file.id)" class="secondary right" label="Mediciones Técnicas"/>
-    <my-button @on-tap="redirectToCreate" v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora'" class="secondary right" label="Agregar Estudio"/>
+    <my-button
+      class="secondary right"
+      label="Mediciones Técnicas"
+      @on-tap="() => viewItem(file.id)"
+    />
+    <my-button
+      v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora'"
+      class="secondary right"
+      label="Agregar Estudio"
+      @on-tap="redirectToCreate"
+    />
   </div>
   <div class="container">
     <display-row> 
-      <prop-value class="prop" label="id" :value="file.id"/>
-      <prop-value class="prop double" label="Expediente" :value="file.expediente"/>
-      <prop-value class="prop" label="CCTE/Área" :value="file.area"/>
-      <prop-value class="prop" label="Fecha y hora" :value="file.fecha +' '+ file.hora"/>
+      <prop-value
+        class="prop"
+        label="id"
+        :value="file.id"
+      />
+      <prop-value
+        class="prop double"
+        label="Expediente"
+        :value="file.expediente"
+      />
+      <prop-value
+        class="prop"
+        label="CCTE/Área"
+        :value="file.area"
+      />
+      <prop-value
+        class="prop"
+        label="Fecha y hora"
+        :value="file.fecha +' '+ file.hora"
+      />
     </display-row>
     <display-row>
-      <prop-value class="prop double" label="Identificación" :value="station.identificacion"/>
-      <prop-value v-if="station.frecuencia" class="prop" label="Frecuencia" :value="station.frecuencia +' '+ station.unidad"/>
-      <prop-value v-if="station.frecuencia" class="prop" label="Clase de Emisión" :value="station.claseEmision"/>
-      <prop-value v-if="station.frecuencia" class="prop" label="Servicio" :value="station.servicio"/>
-      <prop-value class="prop" label="Emplazamiento" :value="station.emplazamiento"/>
+      <prop-value
+        class="prop double"
+        label="Identificación"
+        :value="station.identificacion"
+      />
+      <prop-value
+        v-if="station.frecuencia"
+        class="prop"
+        label="Frecuencia"
+        :value="station.frecuencia +' '+ station.unidad"
+      />
+      <prop-value
+        v-if="station.frecuencia"
+        class="prop"
+        label="Clase de Emisión"
+        :value="station.claseEmision"
+      />
+      <prop-value
+        v-if="station.frecuencia"
+        class="prop"
+        label="Servicio"
+        :value="station.servicio"
+      />
+      <prop-value
+        class="prop"
+        label="Emplazamiento"
+        :value="station.emplazamiento"
+      />
     </display-row>
     <display-row>
-      <prop-value class="prop double" label="Domicilio" :value="station.domicilio"/>
-      <prop-value class="prop double" label="Localidad" :value="station.localidad"/>
-      <prop-value class="prop double" label="Provincia" :value="station.provincia"/>
-      <prop-value class="prop" label="Latitud" :value="station.latitud"/>
-      <prop-value class="prop" label="Longitud" :value="station.longitud"/>
+      <prop-value
+        class="prop double"
+        label="Domicilio"
+        :value="station.domicilio"
+      />
+      <prop-value
+        class="prop double"
+        label="Localidad"
+        :value="station.localidad"
+      />
+      <prop-value
+        class="prop double"
+        label="Provincia"
+        :value="station.provincia"
+      />
+      <prop-value
+        class="prop"
+        label="Latitud"
+        :value="station.latitud"
+      />
+      <prop-value
+        class="prop"
+        label="Longitud"
+        :value="station.longitud"
+      />
     </display-row>
-    <display-row v-if="station.frecuencia" >
-      <prop-value class="prop" label="Sistema Irradiante" :value="station.irradiante"/>
-      <prop-value class="prop" label="Cantidad" :value="station.cantidad"/>
-      <prop-value class="prop" label="Polarización" :value="station.polarizacion"/>
-      <prop-value class="prop" label="Altura [m]" :value="station.altura"/>
+    <display-row v-if="station.frecuencia">
+      <prop-value
+        class="prop"
+        label="Sistema Irradiante"
+        :value="station.irradiante"
+      />
+      <prop-value
+        class="prop"
+        label="Cantidad"
+        :value="station.cantidad"
+      />
+      <prop-value
+        class="prop"
+        label="Polarización"
+        :value="station.polarizacion"
+      />
+      <prop-value
+        class="prop"
+        label="Altura [m]"
+        :value="station.altura"
+      />
     </display-row>
-    <display-row v-if="station.frecuencia" >
-      <prop-value class="prop" label="Vínculo" :value="station.tipoVinculo"/>
-      <prop-value class="prop" v-if="station.frecuenciaVinc" label="Frecuencia" :value="station.frecuenciaVinc +' '+ station.unidadVinc"/>
-      <prop-value class="prop" v-else label="Frecuencia" value="---"/>
-      <prop-value class="prop" v-if="station.irradianteVinc" label="Sistema Irradiante" :value="station.irradianteVinc"/>
-      <prop-value class="prop" v-else label="Sistema Irradiante" value="---"/>
-      <prop-value class="prop" v-if="station.irradianteVinc" label="Polarización" :value="station.polarizacionVinc"/>
-      <prop-value class="prop" v-else label="Polarización" value="---"/>
+    <display-row v-if="station.frecuencia">
+      <prop-value
+        class="prop"
+        label="Vínculo"
+        :value="station.tipoVinculo"
+      />
+      <prop-value
+        v-if="station.frecuenciaVinc"
+        class="prop"
+        label="Frecuencia"
+        :value="station.frecuenciaVinc +' '+ station.unidadVinc"
+      />
+      <prop-value
+        v-else
+        class="prop"
+        label="Frecuencia"
+        value="---"
+      />
+      <prop-value
+        v-if="station.irradianteVinc"
+        class="prop"
+        label="Sistema Irradiante"
+        :value="station.irradianteVinc"
+      />
+      <prop-value
+        v-else
+        class="prop"
+        label="Sistema Irradiante"
+        value="---"
+      />
+      <prop-value
+        v-if="station.irradianteVinc"
+        class="prop"
+        label="Polarización"
+        :value="station.polarizacionVinc"
+      />
+      <prop-value
+        v-else
+        class="prop"
+        label="Polarización"
+        value="---"
+      />
     </display-row>
     <display-row>
-      <prop-value class="prop" v-if="station.observaciones" label="Observaciones" :value="station.observaciones"/>
-      <prop-value class="prop" v-else label="Observaciones" value="---"/>
+      <prop-value
+        v-if="station.observaciones"
+        class="prop"
+        label="Observaciones"
+        :value="station.observaciones"
+      />
+      <prop-value
+        v-else
+        class="prop"
+        label="Observaciones"
+        value="---"
+      />
     </display-row>
-    <mapa class="mapa" v-if="station.latitud" :position="[ station.latitud, station.longitud ]" />
+    <mapa
+      v-if="station.latitud"
+      class="mapa"
+      :position="[ station.latitud, station.longitud ]"
+    />
     <display-row>
-      <prop-value class="prop technicians" v-for="value, index in technicians" label="Técnico" :value=" technicians[index].apellido + ', ' + technicians[index].nombre"/>
+      <prop-value
+        v-for="value, index in technicians"
+        :key="value"
+        class="prop technicians"
+        label="Técnico"
+        :value=" technicians[index].apellido + ', ' + technicians[index].nombre"
+      />
     </display-row>
-    <prop-value class="prop status" label="Status" :value="file.status"/>
+    <prop-value
+      class="prop status"
+      label="Status"
+      :value="file.status"
+    />
   </div>
   <div class="buttons-container">
-    <my-button @on-tap="() => editItem(file.id)" class="tertiary right" label="Editar"/>
-    <my-button @on-tap="goBack" class="primary right" label="Volver"/>
+    <my-button
+      class="tertiary right"
+      label="Editar"
+      @on-tap="() => editItem(file.id)"
+    />
+    <my-button
+      class="primary right"
+      label="Volver"
+      @on-tap="goBack"
+    />
   </div>
-
 </template>
 
 <style scoped>

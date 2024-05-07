@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 
 export function useSession() {
@@ -11,14 +11,12 @@ export function useSession() {
     })
 
     function updateLoggedIn() {
-        // debugger
         loggedIn.value = document.cookie.indexOf('Auth') !== -1
     }
 
     async function login(data) {
         loading.value = true
         const response = await loginAxiosInstance.post('/login',data)
-        console.log("response: ", response)
         loading.value = false
         const fechaActual = new Date()
         const expirationDate = new Date(fechaActual.getTime() + (30 * 60 * 1000))

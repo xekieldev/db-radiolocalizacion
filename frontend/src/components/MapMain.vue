@@ -2,20 +2,19 @@
   <div class="map-container">
     <l-map
       ref="map"
-      :zoom=19
+      :zoom="19"
       :center="[position[0] , position[1]]"
       :use-global-leaflet="false"
       :options="{ zoomControl: true }"
-      :min-zoom=1
+      :min-zoom="1"
       draggable="false"
       dragging="false"
-      
     >
       <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
         name="OpenStreetMap"
-        :max-zoom= 19
+        :max-zoom="19"
       />
       <l-marker :lat-lng="[position[0] , position[1] ]">
         <l-icon
@@ -32,7 +31,7 @@
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LIcon, LPopup } from "@vue-leaflet/vue-leaflet";
 
-const props = defineProps({
+defineProps({
   
   position: {
     type: Array,

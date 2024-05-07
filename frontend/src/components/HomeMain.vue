@@ -28,16 +28,41 @@ function stationList() {
 </script>
 
 <template>
-
-<heading class="home-title">Base de Datos de Radiolocalizaciones y Mediciones Técnicas Externas</heading>
+  <heading class="home-title">
+    Base de Datos de Radiolocalizaciones y Mediciones Técnicas Externas
+  </heading>
   <div class="home-buttons">
-    <my-button tabindex="0" @on-tap="createFile" class="quaternary button new-rloc" label="Nueva Radiolocalización"></my-button>
-    <my-button tabindex="0" @on-tap="createLocFile" class="quaternary button new-loc" label="Nueva Localización"></my-button>
-    <my-button tabindex="0" @on-tap="list" class="quaternary button file-manage" label="Gestión de Expedientes"></my-button>
-    <my-button tabindex="0" @on-tap="stationList" class="quaternary button station-manage" label="Gestión de Estaciones"></my-button>
-    <my-button tabindex="0" @on-tap="listTechnicians" class="quaternary button technician-manage" label="Gestión de Técnicos"></my-button>
+    <my-button
+      tabindex="0"
+      class="quaternary button new-rloc"
+      label="Nueva Radiolocalización"
+      @on-tap="createFile"
+    />
+    <my-button
+      tabindex="0"
+      class="quaternary button new-loc"
+      label="Nueva Localización"
+      @on-tap="createLocFile"
+    />
+    <my-button
+      tabindex="0"
+      class="quaternary button file-manage"
+      label="Gestión de Expedientes"
+      @on-tap="list"
+    />
+    <my-button
+      tabindex="0"
+      class="quaternary button station-manage"
+      label="Gestión de Estaciones"
+      @on-tap="stationList"
+    />
+    <my-button
+      tabindex="0"
+      class="quaternary button technician-manage"
+      label="Gestión de Técnicos"
+      @on-tap="listTechnicians"
+    />
   </div>
-
 </template>
 
 <style scoped>

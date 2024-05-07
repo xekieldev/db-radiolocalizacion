@@ -17,7 +17,7 @@ onBeforeMount(async () => {
 
 async function save(fields) {
   try {
-    const response = await create_technician(fields)
+    await create_technician(fields)
     router.push(`/list_technicians`)
   } catch (error) {
     console.error(error)

@@ -28,7 +28,7 @@ onBeforeMount(async () => {
 async function save(fields) {
   try {
     const id = currentRoute.value.params.id
-    const response = await create_tech_measurement(id, fields)
+    await create_tech_measurement(id, fields)
     router.push(`/file/${id}/tech_measurement`)
   } catch (error) {
     console.error(error)
@@ -40,9 +40,9 @@ async function save(fields) {
   <formtc
     title="Mediciones Técnicas Externas"
     :file="file"
-    :techniciansValues="techniciansValues"
+    :technicians-values="techniciansValues"
     :technicians="technicians"
-    :techMeasurement="techMeasurement"
+    :tech-measurement="techMeasurement"
     @on-submit="save"
   />
 </template>

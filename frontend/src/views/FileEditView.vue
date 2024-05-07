@@ -2,7 +2,6 @@
 import { useApi} from '../composables/api'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
-import Mapa from '../components/MapMain.vue'
 import { useRouter } from 'vue-router'
 
 
@@ -38,7 +37,8 @@ async function save(fields) {
 </script>
 
 <template>
-  <frloc v-if="station.provincia"
+  <frloc
+    v-if="station.provincia"
     title="Datos de Radiolocalización"
     context="Radiolocalizacion" 
     :file="file"

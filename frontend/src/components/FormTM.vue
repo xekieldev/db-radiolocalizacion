@@ -1,26 +1,17 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { useApi} from '../composables/api'
-import { useArea } from '../composables/area'
 import { useUnit } from '../composables/unit';
 import { useTerritory } from '../composables/territory';
 import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router'
 import Heading from './Heading.vue';
 
-import provincesDataRaw from "../../../data/provincias.json"
 import citiesDataRaw from "../../../data/localidades.json"
 
-const provincesData = provincesDataRaw.provincias
 const citiesData = citiesDataRaw.localidades
 
 
-const { currentRoute } = useRouter()
-// const file = reactive ({})
-
-
 const emit = defineEmits(['onSubmit'])
-const props = defineProps({
+defineProps({
   title: String,
   techniciansValues: Array,
   technicians: Object,
@@ -37,7 +28,7 @@ const city = ref()
 const cityWitness = ref()
 const provinceWitness = ref()
 const citiesWitness = ref([])
-const { provinces, cities, getProvinceCities, getNameByCode } = useTerritory()
+const { provinces, cities, getProvinceCities } = useTerritory()
 
 watch([province, city, provinceWitness], (newValue, oldValue) => {
   if (newValue[0] !== oldValue[0]) {
@@ -61,7 +52,6 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
   <form-kit
     type="form"
     submit-label="Cargar"
-    @submit="submitHandler"
     :config="{ validationVisibility: 'submit',
                validation:'required', 
                validationMessages:{ required:'Campo obligatorio', 
@@ -69,6 +59,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
                }
     }"
     :actions="false"
+    @submit="submitHandler"
   >
     <form-row>
       <form-kit
@@ -119,18 +110,18 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         name="domicilio"
       />
       <form-kit
+        v-model="province"
         type="select"
         :options="provinces"
         label="Provincia"
         name="provincia"
-        v-model="province"
       />
       <form-kit
+        v-model="city"
         type="select"
         :options="cities"
         label="Localidad"
         name="localidad"
-        v-model="city"
       />
     </form-row>
     <form-row>
@@ -175,18 +166,18 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
           name="domicilioTestigo"
         />
         <form-kit
+          v-model="provinceWitness"
           type="select"
           :options="provinces"
           label="Provincia"
           name="provinciaTestigo"
-          v-model="provinceWitness"
         />
         <form-kit
+          v-model="cityWitness"
           type="select"
           :options="citiesWitness"
           label="Localidad"
           name="localidadTestigo"
-          v-model="cityWitness"
         />
       </form-row>
       <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
@@ -255,41 +246,45 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
     </form-row>
     <form-row>
       <form-kit
+        v-if="technicians && technicians.length>1"
+        v-model="technicians[0].id"
+        type="select"
+        label="Técnico"
+        name="id_technician1"
+        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+        placeholder="Técnico 1"  
+      />
+      <form-kit
+        v-else-if="techniciansValues.length>0"
         type="select"
         label="Técnico"
         name="id_technician1"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 1"
-        v-if="technicians && technicians.length > 1"    
-        v-model="technicians[0].id"  
       />
       <form-kit
-        type="select"
-        label="Técnico"
-        name="id_technician1"
-        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
-        placeholder="Técnico 1"
-        v-else-if="techniciansValues.length > 0"
-      />
-      <form-kit
-        type="select"
-        label="Técnico"
-        name="id_technician2"
-        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
-        placeholder="Técnico 2"
-        v-if="technicians && technicians.length > 1"    
+        v-if="technicians && technicians.length>1"
         v-model="technicians[1].id"
-      />
-      <form-kit
         type="select"
         label="Técnico"
         name="id_technician2"
         :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
         placeholder="Técnico 2"
-        v-else-if="techniciansValues.length > 0"
+      />
+      <form-kit
+        v-else-if="techniciansValues.length>0"
+        type="select"
+        label="Técnico"
+        name="id_technician2"
+        :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+        placeholder="Técnico 2"
       />
     </form-row>
-    <button class="submit-button" slot="submit">Guardar</button>
+    <button
+      class="submit-button"
+    >
+      Guardar
+    </button>
   </form-kit>
 </template>
  

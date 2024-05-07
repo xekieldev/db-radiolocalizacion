@@ -43,7 +43,6 @@ async function save(fields) {
     
     @on-submit="save"
   />
-
 </template>
 
 <style scoped>

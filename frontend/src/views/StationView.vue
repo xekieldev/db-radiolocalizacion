@@ -4,7 +4,7 @@ import { onMounted, reactive } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 
-const { getStation, loading } = useApi()
+const { getStation } = useApi()
 const { currentRoute } = useRouter()
 
 const items = reactive([])
@@ -18,7 +18,9 @@ onMounted(async () => {
 </script>
 <template>
   {{ items }}
-  <RouterLink to="/list">Volver</RouterLink>
+  <RouterLink to="/list">
+    Volver
+  </RouterLink>
 </template>
 
 <style scoped>

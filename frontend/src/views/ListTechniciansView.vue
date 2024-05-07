@@ -30,7 +30,7 @@ const confirmar = (id) => {
 
 async function del(id) {
     try { 
-      const response = await delete_technician(id)
+      await delete_technician(id)
       status.value[id] = 0
       window.location.reload()
     } catch (error) {
@@ -45,35 +45,48 @@ async function del(id) {
 <template>
   <heading>Gestión de Técnicos</heading>
   <div class="technicians-list-container">
-     <my-button @on-tap="createItem" class="secondary right" label="Nuevo Técnico" />
-  <table>
-    <tr>
-      <th>id</th>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Área/CCTE</th>
-      <th>Acciones</th>
-    </tr>
-    <tr
-      v-for="item in items"
-      :key="item"
-    >
-     <td>{{ item.id }}</td> 
-     <td>{{ item.nombre }}</td> 
-     <td>{{ item.apellido }}</td> 
-     <td>{{ item.area }}</td>
-     <td>
-          <my-button @on-tap="confirmar(item.id)" v-if="status[item.id]!=1" class="primary center" label="Borrar"/>
-          <my-button @on-tap="del(item.id)" v-if="status[item.id]===1" class="tertiary center" label="¿Confirmar?"/>
-      </td>
-    </tr>
+    <my-button
+      class="secondary right"
+      label="Nuevo Técnico"
+      @on-tap="createItem"
+    />
+    <table>
+      <tr>
+        <th>id</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Área/CCTE</th>
+        <th>Acciones</th>
+      </tr>
+      <tr
+        v-for="item in items"
+        :key="item"
+      >
+        <td>{{ item.id }}</td> 
+        <td>{{ item.nombre }}</td> 
+        <td>{{ item.apellido }}</td> 
+        <td>{{ item.area }}</td>
+        <td>
+          <my-button
+            v-if="status[item.id]!=1"
+            class="primary center"
+            label="Borrar"
+            @on-tap="confirmar(item.id)"
+          />
+          <my-button
+            v-if="status[item.id]===1"
+            class="tertiary center"
+            label="¿Confirmar?"
+            @on-tap="del(item.id)"
+          />
+        </td>
+      </tr>
     
-    <div class="status">
-      <span><strong>Loading:</strong> {{ loading }}</span>
-    </div>
-  </table>
-</div>
-
+      <div class="status">
+        <span><strong>Loading:</strong> {{ loading }}</span>
+      </div>
+    </table>
+  </div>
 </template>
 
 <style scoped>

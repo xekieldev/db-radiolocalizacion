@@ -8,11 +8,11 @@ const router = useRouter()
 const { logout, loggedIn, updateLoggedIn } = useSession()
 
 async function doLogout() {
-  const response = await logout()
+  await logout()
   router.push('/')
 }
 
-const intervalID = setInterval(updateLoggedIn, 500);
+setInterval(updateLoggedIn, 500);
 
 </script>
 
@@ -20,36 +20,58 @@ const intervalID = setInterval(updateLoggedIn, 500);
   <div>
     <header>
       <img
-      alt="ENACOM logo"
-      class="logo"
-      src="../../img/Logo.png"
-      width="100"
-      height="100"
+        alt="ENACOM logo"
+        class="logo"
+        src="../../img/Logo.png"
+        width="100"
+        height="100"
       >
       <nav>
-      <RouterLink to="/" v-if="!loggedIn">
-        Login
-      </RouterLink>
-      <RouterLink to="/home" v-if="loggedIn">
-        Home
-      </RouterLink>
-      <RouterLink to="/list?includeDeleted=false" v-if="loggedIn">
-        Expedientes
-      </RouterLink>
-      <RouterLink to="/station?includeDeleted=false" v-if="loggedIn">
-        Estaciones
-      </RouterLink>
-      <RouterLink to="/list_technicians" v-if="loggedIn">
-        Técnicos
-      </RouterLink>
-      <RouterLink to="/about" v-if="loggedIn">
-        About
-      </RouterLink>
+        <RouterLink
+          v-if="!loggedIn"
+          to="/"
+        >
+          Login
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
+          to="/home"
+        >
+          Home
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
+          to="/list?includeDeleted=false"
+        >
+          Expedientes
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
+          to="/station?includeDeleted=false"
+        >
+          Estaciones
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
+          to="/list_technicians"
+        >
+          Técnicos
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
+          to="/about"
+        >
+          About
+        </RouterLink>
       </nav>
-      <my-button @on-tap="() => doLogout()" class="tertiary logout-button" label="Salir" v-if="loggedIn"></my-button>
+      <my-button
+        v-if="loggedIn"
+        class="tertiary logout-button"
+        label="Salir"
+        @on-tap="() => doLogout()"
+      />
     </header>
   </div>
-
 </template>
 
 <style scoped>
