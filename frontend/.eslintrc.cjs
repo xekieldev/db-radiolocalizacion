@@ -15,6 +15,12 @@ module.exports = {
   rules: {
     //...
     "vue/require-default-prop": "off",
+    "vue/no-mutating-props": ["error", {
+      "shallowOnly": true
+    }],
+    "vue/multi-word-component-names": ["error", {
+      "ignores": ["Menu", "Heading"]
+    }]
   }
   
 }
