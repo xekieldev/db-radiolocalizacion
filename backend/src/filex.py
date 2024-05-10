@@ -188,7 +188,7 @@ def edit_file(id):
             station.identificacion = identificacion
             station.emplazamiento = emplazamiento
             station.servicio = servicio
-            station.frencuencia = frecuencia
+            station.frecuencia = frecuencia
             station.unidad = unidad
             station.claseEmision = claseEmision
             station.irradiante = irradiante
