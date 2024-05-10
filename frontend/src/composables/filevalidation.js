@@ -1,6 +1,6 @@
 export function useFileValidation() {
 
-    const fileRegEx1 = /^EX-\d{4}-\d{6,10}-\s{2,3}-[A-Z]{3,7}-[A-Z]{3,10}#[A-Z]{2,8}$/
+    const fileRegEx1 = /^EX-\d{4}-\d{6,10}-\s{1,3}-[A-Z]{3,7}-[A-Z]{3,10}#[A-Z]{2,8}$/
     const fileRegEx2 = /^IF-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{2,5}#[A-Z]{6}$/
     const fileRegEx3 = /^NO-\d{4}-\d{8}-[A-Z]{3,8}-[A-Z]{2,10}#?[A-Z]{6}?$/
     const fileRegEx4 = /^[A-Z]{5,20}\s?E?\s?\s\d{1,8}\/\d{4}$/
