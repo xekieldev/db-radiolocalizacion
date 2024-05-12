@@ -316,10 +316,10 @@ function preview() {
       </header>
       
     <!-- </div> -->
-  <heading v-if="station.frecuencia != null">
+  <heading v-if="station.frecuencia != null" class="preview-title">
     Datos de Radiolocalización
   </heading>
-  <heading v-else>
+  <heading v-else class="preview-title">
     Datos de Localización
   </heading>
 
@@ -508,7 +508,6 @@ function preview() {
   justify-content: space-between;
   align-items: baseline;
 }
-
 .page {
   position: absolute;
   width: 900px;
@@ -523,6 +522,9 @@ function preview() {
 }
 .general-view {
   margin-top: 100px;
+}
+.preview-title {
+  margin: 30px 10px;
 }
 .back-preview-button {
   align-self: center;
