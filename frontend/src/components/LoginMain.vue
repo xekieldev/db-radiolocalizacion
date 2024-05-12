@@ -7,11 +7,21 @@ const emit = defineEmits(['onSubmit'])
 
 function submitHandler(fields) {
   emit('onSubmit', fields)
+// console.log("Error en main", props.loginError.data)
+  
 }
+
+const props = defineProps({
+      loginError: Object,
+})
+
+console.log("Error en main", props.loginError)
 
 </script>
 
 <template>
+  <!-- {{  loginError }} -->
+
   <div class="login-box">
     <form-kit
       type="form"
@@ -41,6 +51,7 @@ function submitHandler(fields) {
         label="Contraseña"
         name="pass"
       />
+      <p v-if="loginError && loginError.response.data === 'Error de login'" class="login-error">Usuario o contraseña incorrectos</p>
       <button
         class="login-button"
       >
@@ -48,6 +59,7 @@ function submitHandler(fields) {
       </button>
     </form-kit>
   </div>
+
 </template>
 
 <style scoped>
@@ -96,5 +108,9 @@ function submitHandler(fields) {
       font-weight: 700;
       align-self: center;
       padding: 5px 10px 15px;
+}
+.login-error {
+  color: red;
+  /* font-weight: 500; */
 }
 </style>
