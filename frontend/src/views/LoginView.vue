@@ -2,13 +2,13 @@
 import LoginMain from '../components/LoginMain.vue';
 import { useSession } from '../composables/session'
 import { useRouter } from 'vue-router';
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 
 
 
 const { login } = useSession()
 const router = useRouter()
-let loginError = ref(null)
+const loginError = ref()
 
   async function check(fields) {
     try {
@@ -16,7 +16,7 @@ let loginError = ref(null)
       router.push(`/home`)
 
     } catch (error) {
-      console.log(error)
+      console.error(error)
       loginError.value = error
       
     }

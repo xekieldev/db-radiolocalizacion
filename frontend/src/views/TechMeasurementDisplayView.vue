@@ -1,6 +1,6 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
@@ -29,15 +29,13 @@ const technicians = reactive({})
 const idPath = ref(currentRoute.value.params.id)
 
 
-onMounted(async () => {
+onBeforeMount(async () => {
     const id = currentRoute.value.params.id
     const response = await getTechMeasurement(id)
     const fileResponse = await getFile(currentRoute.value.params.id)
     Object.assign(file, fileResponse.file)
     Object.assign(technicians, response.technicians)
     Object.assign(techMeasurement, response.techMeasurement)    
-    techMeasurement[0].provinciaTestigo = getNameByCode("province", response.techMeasurement[0].provinciaTestigo)
-    techMeasurement[0].localidadTestigo = getNameByCode("city", response.techMeasurement[0].localidadTestigo)
 })
 
 function getTechnician(id) {
@@ -99,12 +97,12 @@ function getTechnician(id) {
       <prop-value
         class="prop double"
         label="Localidad"
-        :value="techMeasurement[index].localidadTestigo"
+        :value="getNameByCode('city', techMeasurement[index].localidadTestigo)"
       />
       <prop-value
         class="prop double"
         label="Provincia"
-        :value="techMeasurement[index].provinciaTestigo"
+        :value="getNameByCode('province', techMeasurement[index].provinciaTestigo)"
       />
     </display-row>
     <display-row v-if="index==0">
