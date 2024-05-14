@@ -121,6 +121,11 @@ const { validateFile } = useFileValidation()
         type="date"
         label="Fecha" 
         name="fecha" 
+        validation="date_after:04-30-2024"
+        validation-visibility="live"
+        :validation-messages="{
+          date_after: 'La fecha debe ser posterior al 01/05/2024.',
+        }"
       />
       <form-kit
         v-model="file.hora"
@@ -160,10 +165,10 @@ const { validateFile } = useFileValidation()
       <form-kit
         v-model="station.servicio"
         type="select"
-        label="Servicio"
+        label="Servicio/Sistema"
         name="servicio"
         :options="servicio"
-        placeholder="Servicio"
+        placeholder="Servicio/Sistema"
       />
       <form-kit
         v-if="fileId != null || fileId != undefined"
@@ -195,6 +200,11 @@ const { validateFile } = useFileValidation()
         name="frecuencia"
         step="0.000001"
         suffix="MHz"
+        validation="min:0"
+        validation-visibility="live"
+        :validation-messages="{
+          min: 'La frecuencia debe ser mayor que 0.',
+        }"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
@@ -210,6 +220,11 @@ const { validateFile } = useFileValidation()
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
+        validation="uppercase"
+        validation-visibility="live"
+        :validation-messages="{
+          uppercase: 'La Clase de Emisión debe contener mayúsculas.',
+        }"
       />
     </form-row>
     <form-row>
@@ -242,6 +257,11 @@ const { validateFile } = useFileValidation()
         label="Latitud"
         name="latitud"
         step="0.000001"
+        validation="between:0,-90"
+        validation-visibility="live"
+        :validation-messages="{
+          between: 'Ingrese un valor de latitud entre -90 y 0.',
+        }"
       />
       <form-kit
         v-model="station.longitud"
@@ -249,6 +269,11 @@ const { validateFile } = useFileValidation()
         label="Longitud"
         name="longitud"
         step="0.000001"
+        validation="between:0,-180"
+        validation-visibility="live"
+        :validation-messages="{
+          between: 'Ingrese un valor de latitud entre -180 y 0.',
+        }"
       />
     </form-row>
     <form-row>
@@ -287,10 +312,16 @@ const { validateFile } = useFileValidation()
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
         v-model="station.altura"
-        type="text"
+        type="number"
         label="Altura Media"
+        step="0.01"
         name="altura"
+        validation="min:0"
         help="Altura en metros"
+        validation-visibility="live"
+        :validation-messages="{
+          min: 'Ingrese un valor positivo para la altura.',
+        }"
       />
     </form-row>   
     <form-row v-if="router.currentRoute.value.query.rloc == 'true'">
@@ -312,7 +343,11 @@ const { validateFile } = useFileValidation()
         name="frecuenciaVinc"
         step="0.00001"
         :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
-        :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
+        :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required' && 'min:0'" 
+        validation-visibility="live"
+        :validation-messages="{
+          min: 'La frecuencia debe ser mayor que 0.',
+        }"
       />
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"

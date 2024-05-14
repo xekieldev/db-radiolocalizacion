@@ -1,16 +1,19 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
+import FormRow from '../components/FormRow.vue';
 
 
 const { list, loading, deleteFile } = useApi()
 
 const router = useRouter()
 
-const items = reactive([])
+const items = ref([])
+const searchText = ref()
+
 
 
 function viewItem(item) {  
@@ -25,19 +28,49 @@ async function deleteItem(item) {
 onBeforeMount(async () => {
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
       const data = await list()
-      items.push(...data)
+      items.value.push(...data)
     } else {
         const data = await list(true)
-        items.push(...data)    
+        items.value.push(...data)    
     }  
 })
 
+async function searchFiles() {
+  const searchStringTemp = searchText.value ? searchText.value.toLowerCase() : ''
+  const searchString = searchStringTemp.split('+')
+  const data = await list(false)
+  // console.log("data: ", data)
+  
+  const searchResult = data.filter((item) => {
+    const id = item.id
+    const area = item.area ? item.area.toLowerCase() : ''
+    const expediente = item.expediente ? item.expediente.toLowerCase() : ''
+    
+    return id == searchString || expediente.includes(searchString) || area.includes(searchString)
+    
+  })
+  
+   items.value = searchResult
+
+}
 
 </script>
 <template>
   <heading>Gestión de Expedientes</heading>
   <div class="list-container">
-    <table>
+    <div class="bar-menu">
+    <form-row class="search-bar">
+        <form-kit
+          outer-class="field-search"
+          type="text"
+          name="searchInput"
+          placeholder="Buscar expedientes"
+          v-model="searchText"
+        />
+        <my-button @on-tap="() => searchFiles()" class="secondary buscar-btn" label="Buscar"/>
+    </form-row>
+    </div>
+    <table class="files-table">
       <tr>
         <th>id</th>
         <th>Expediente</th>
@@ -95,9 +128,9 @@ onBeforeMount(async () => {
 .status{
     background-color: lightyellow;
 }
-table{
+.files-table {
   justify-content: center; 
-  margin-top: 5px;
+  margin-top: 10px;
   
 }
 th, td{
@@ -120,6 +153,36 @@ tr:nth-child(odd) {
   flex-direction: row;
   gap: 1px;
   margin: 0;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  margin-left: auto;
+  
+}
+.buscar-btn {
+  margin: 0 5px;
+  bottom: 2px;
+  
+}
+.formkit-outer.search-bar {
+  margin: 0;
+}
+
+.field-search {
+  display: flex;
+  /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
+  flex: 0 0 75%;
+  margin: 0;
+  
+}
+
+.bar-menu {
+  display: flex;
+  justify-content: space-between;
+  top: 2px;
 }
   
 </style>
