@@ -66,6 +66,11 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         type="date"
         label="Fecha"
         name="fecha"
+        validation="date_after:04-30-2024"
+        validation-visibility="live"
+        :validation-messages="{
+          date_after: 'La fecha debe ser posterior al 01/05/2024.',
+        }"
       />
       <form-kit
         type="time"
@@ -83,7 +88,12 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         type="number"
         label="Frecuencia Medida"
         name="frecMedida"
-        step="0.001"
+        step="0.000001"
+        validation="min:0"
+        validation-visibility="live"
+        :validation-messages="{
+          min: 'La frecuencia debe ser mayor que 0.',
+        }"
       />
       <form-kit
         type="select"
@@ -93,8 +103,14 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
       />
       <form-kit
         type="number"
-        label="Anchura de banda"
+        label="Ancho de banda"
         name="anchoBanda"
+        step="0.000001"
+        validation="min:0"
+        validation-visibility="live"
+        :validation-messages="{
+          min: 'El ancho de banda debe ser mayor que 0.',
+        }"
       />
       <form-kit
         type="select"
@@ -130,24 +146,44 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         label="Latitud"
         name="latitud"
         step="0.000001"
+        validation="between:0,-90"
+        validation-visibility="live"
+        :validation-messages="{
+          between: 'Ingrese un valor de latitud entre -90 y 0.',
+        }"
       />
       <form-kit
         type="number"
         label="Longitud"
         name="longitud"
         step="0.000001"
+        validation="between:0,-180"
+        validation-visibility="live"
+        :validation-messages="{
+          between: 'Ingrese un valor de latitud entre -180 y 0.',
+        }"
       />
       <form-kit
         type="number"
         label="Distancia"
         name="distancia"
         help="Distancia en metros"
+        validation="min:0"
+        validation-visibility="live"
+        :validation-messages="{
+          min: 'Ingrese un valor positivo para la distancia.',
+        }"
       />
       <form-kit
         type="number"
         label="Azimut"
         name="azimut"
         help="Azimut en grados decimales"
+        validation="between:0,360"
+        validation-visibility="live"
+        :validation-messages="{
+          between: 'Ingrese un valor de azimut entre 0 y 360.',
+        }"
       />
     </form-row>
     <form-row>
@@ -186,24 +222,44 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
           label="Latitud"
           name="latitudTestigo"
           step="0.000001"
+          validation="between:0,-90"
+          validation-visibility="live"
+          :validation-messages="{
+            between: 'Ingrese un valor de latitud entre -90 y 0.',
+          }"
         />
         <form-kit
           type="number"
           label="Longitud"
           name="longitudTestigo"
           step="0.000001"
+          validation="between:0,-180"
+          validation-visibility="live"
+          :validation-messages="{
+            between: 'Ingrese un valor de latitud entre -180 y 0.',
+          }"
         />
         <form-kit
           type="number"
           label="Distancia"
           name="distanciaTestigo"
           help="Distancia en metros"
+          validation="min:0"
+          validation-visibility="live"
+          :validation-messages="{
+            min: 'Ingrese un valor positivo para la distancia.',
+          }"
         />
         <form-kit
           type="number"
           label="Azimut"
           name="azimutTestigo"
           help="Azimut geográf. respecto a la PTx en grados decimales"
+          validation="between:0,360"
+          validation-visibility="live"
+          :validation-messages="{
+            between: 'Ingrese un valor de azimut entre 0 y 360.',
+          }"
         />
       </form-row>
     </div>
