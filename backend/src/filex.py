@@ -290,12 +290,13 @@ def tech_measurement(id):
         eTestigo = request.json.get('eTestigo')
         eCorregido = request.json.get('eCorregido')
         incertidumbre = request.json.get('incertidumbre')
+        equipamiento = request.json.get('equipamiento')
         resultadoComprob = request.json.get('resultadoComprob')
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
 
 
-        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, puntoMedicion = puntoMedicion, file_id = file_id, frecMedida = frecMedida, unidadFrecMedida = unidadFrecMedida, anchoBanda = anchoBanda, unidadBW = unidadBW, domicilio = domicilio, localidad = localidad, provincia = provincia, latitud = latitud, longitud = longitud, distancia = distancia, azimut = azimut, observaciones = observaciones, domicilioTestigo = domicilioTestigo, localidadTestigo = localidadTestigo, provinciaTestigo = provinciaTestigo, latitudTestigo = latitudTestigo, longitudTestigo = longitudTestigo, distanciaTestigo = distanciaTestigo, azimutTestigo = azimutTestigo, eMedido = eMedido, eTestigo = eTestigo, eCorregido = eCorregido, incertidumbre = incertidumbre, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
+        tech_measurement = TechMeasurement(fecha = fecha, hora = hora, puntoMedicion = puntoMedicion, file_id = file_id, frecMedida = frecMedida, unidadFrecMedida = unidadFrecMedida, anchoBanda = anchoBanda, unidadBW = unidadBW, domicilio = domicilio, localidad = localidad, provincia = provincia, latitud = latitud, longitud = longitud, distancia = distancia, azimut = azimut, observaciones = observaciones, domicilioTestigo = domicilioTestigo, localidadTestigo = localidadTestigo, provinciaTestigo = provinciaTestigo, latitudTestigo = latitudTestigo, longitudTestigo = longitudTestigo, distanciaTestigo = distanciaTestigo, azimutTestigo = azimutTestigo, eMedido = eMedido, eTestigo = eTestigo, eCorregido = eCorregido, incertidumbre = incertidumbre, equipamiento = equipamiento, resultadoComprob = resultadoComprob, id_technician1 = id_technician1, id_technician2 = id_technician2)
         
         r = db.session.add(tech_measurement)
         db.session.commit()

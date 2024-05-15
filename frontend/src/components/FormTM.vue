@@ -79,7 +79,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
       />      
       <form-kit
         type="text"
-        label="Punto de Medición"
+        label="Descripción del Punto de Medición"
         name="puntoMedicion"
       />
     </form-row>
