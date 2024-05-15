@@ -8,6 +8,7 @@ import { usePolarization } from '../composables/polarization'
 import { useService } from '../composables/service'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
+import { useAntenna } from '../composables/antenna'
 import { useFileValidation } from '../composables/filevalidation'
 import { useRouter } from 'vue-router'
 import { useApi} from '../composables/api'
@@ -68,6 +69,7 @@ const { tipoVinculo } = useLink()
 const { area } = useArea()
 const { tipoPolarizacion } = usePolarization()
 const { servicio } = useService()
+const { antenna } = useAntenna()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
 const { validateFile } = useFileValidation()
@@ -240,7 +242,7 @@ const { validateFile } = useFileValidation()
         :options="cities"
         type="select"
         label="Localidad"
-        name="localidad"       
+        name="localidad"  
       />
     </form-row>
     <form-row>
@@ -289,9 +291,12 @@ const { validateFile } = useFileValidation()
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
         v-model="station.irradiante"
-        type="text"
+        type="select"
+        outer-class="field-irradiante"
+        :options="antenna"
         label="Sistema Irradiante"
         name="irradiante"
+        placeholder="Sistema irradiante"
       />
       <form-kit
         v-if="router.currentRoute.value.query.rloc == 'true'"
@@ -436,6 +441,9 @@ const { validateFile } = useFileValidation()
 }
 .field-status {
       flex: 0 0 10%;
+}
+.field-irradiante {
+      flex: 0 0 40%;
 }
 .submit-button {
       background-color: white;
