@@ -107,6 +107,7 @@ class TechMeasurement(db.Model):
     eTestigo = db.Column(db.Float)
     eCorregido = db.Column(db.Float)
     incertidumbre = db.Column(db.Float)
+    equipamiento = db.Column(db.String(200))
     resultadoComprob = db.Column(db.String(300))
     id_technician1 = db.Column(db.Integer)
     id_technician2 = db.Column(db.Integer)
