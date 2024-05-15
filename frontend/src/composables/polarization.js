@@ -9,6 +9,15 @@ export function usePolarization() {
       }, {
         value: 'Circular',
         label: 'Circular'
+      }, {
+        value: 'Mixta',
+        label: 'Mixta'
+      }, {
+        value: 'Oblicua',
+        label: 'Oblicua'
+      }, {
+        value: 'Lineal',
+        label: 'Lineal'
       }
       ]
 

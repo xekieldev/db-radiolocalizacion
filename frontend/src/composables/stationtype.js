@@ -14,6 +14,30 @@ export function useStationType() {
     }, {
         value: 'FB',
         label: 'FB'
+    }, {
+        value: 'ML',
+        label: 'ML'
+    }, {
+        value: 'RPT',
+        label: 'RPT'
+    }, {
+        value: 'FR',
+        label: 'FR'
+    }, {
+        value: 'BT',
+        label: 'BT'
+    }, {
+        value: 'AT',
+        label: 'AT'
+    }, {
+        value: 'MS',
+        label: 'MS'
+    }, {
+        value: 'BC',
+        label: 'BC'
+    }, {
+        value: 'FC',
+        label: 'FC'
     }]
 
     return { emplazamiento }
