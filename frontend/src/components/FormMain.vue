@@ -222,10 +222,10 @@ const { validateFile } = useFileValidation()
         type="text"
         label="Clase de Emisión"
         name="claseEmision"
-        validation="uppercase"
+        :validation="[['matches', /^[A-Z]{1}(\d{1}|[X]{1})[A-Z]{1}([A-Z]{1,2})?$/]]"
         validation-visibility="live"
         :validation-messages="{
-          uppercase: 'La Clase de Emisión debe contener mayúsculas.',
+          matches: 'Ingrese una clase de emision válida.',
         }"
       />
     </form-row>
