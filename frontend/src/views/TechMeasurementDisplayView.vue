@@ -104,9 +104,8 @@ function getTechnician(id) {
     v-for="value, index in techMeasurement"
     :key="value"
   >
-    <div class="testigo-group">
+    <div class="testigo-group" v-if="index==0 && techMeasurement && techMeasurement[0].domicilioTestigo != null">
       <p
-        v-if="index==0"
         class="title-testigo"
       >
         Emplazamiento Estación Testigo
@@ -154,7 +153,7 @@ function getTechnician(id) {
     <br>
     <div class="measurement-point-group">
       <p class="title-techMeasurements">
-        Punto de medición técnica N° {{ techMeasurement[index].id }}
+        Punto de medición técnica
       </p>
       <display-row> 
         <prop-value
@@ -238,11 +237,13 @@ function getTechnician(id) {
           :value=" techMeasurement[index].eMedido"
         />
         <prop-value
+          v-if="techMeasurement && techMeasurement[0].domicilioTestigo != null"
           class="prop"
           label="E testigo (dBuV/m)"
           :value=" techMeasurement[index].eTestigo"
         />
         <prop-value
+          v-if="techMeasurement && techMeasurement[0].domicilioTestigo != null"
           class="prop"
           label="E corregido (dBuV/m)"
           :value=" techMeasurement[index].eCorregido"
@@ -323,10 +324,15 @@ function getTechnician(id) {
 .reference-group {
   padding-bottom: 10px;;
   border-bottom: solid 1px lightblue;
+  text-transform: uppercase;
 }
 .testigo-group {
   padding-bottom: 10px;;
   border-bottom: solid 1px lightblue;
+  text-transform: uppercase;
+}
+.measurement-point-group {
+  text-transform: uppercase;
 }
 
 </style>

@@ -208,7 +208,7 @@ function preview() {
         :value="station.altura"
       />
     </display-row>
-    <display-row v-if="station.frecuencia">
+    <display-row v-if="station.frecuencia && station.frecuenciaVinc">
       <prop-value
         class="prop"
         label="Vínculo"
@@ -533,6 +533,7 @@ function preview() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-transform: uppercase;
 }
 
 .status{

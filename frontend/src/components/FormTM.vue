@@ -29,17 +29,23 @@ const cityWitness = ref()
 const provinceWitness = ref()
 const citiesWitness = ref([])
 const { provinces, cities, getProvinceCities } = useTerritory()
+const witnessStation = ref(false)
 
 watch([province, city, provinceWitness], (newValue, oldValue) => {
   if (newValue[0] !== oldValue[0]) {
     province.value = newValue[0]
     provinceWitness.value = province.value
     getProvinceCities(newValue[0])
+    city.value = cities.value[0].value
+    citiesWitness.value = citiesData.filter(c => c.provincia.id === newValue[0]).map(c => ({ label: c.nombre, value: c.id , province: c.provincia.id })) 
+    cityWitness.value = citiesWitness.value[0].value
   }
   if (newValue[1] !== oldValue[1]) {
     cityWitness.value = newValue[1]
+    city.value = newValue[1]
   }
   if (newValue[2] !== oldValue[2]) {
+    provinceWitness.value = newValue[2]
     citiesWitness.value = citiesData.filter(c => c.provincia.id === newValue[2]).map(c => ({ label: c.nombre, value: c.id , province: c.provincia.id }))  
   }
 })
@@ -194,7 +200,14 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         validation="false"
       />
     </form-row>
-    <div>
+    <form-kit
+          v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0"
+          type="checkbox"
+          label="Agregar Estación Testigo"
+          name="witnessStationCheckbox"
+          v-model="witnessStation"
+        />
+    <div v-if="witnessStation === true">
       <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
         <form-kit
           type="text"
@@ -272,6 +285,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         help="Valor de referencia en el punto de medición"
       />
       <form-kit
+        v-if="witnessStation === true"
         type="number"
         label="E testigo [dBuV/m]"
         name="eTestigo"
@@ -279,6 +293,7 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         help="Valor de referencia en el punto de medición"
       />
       <form-kit
+        v-if="witnessStation === true"
         type="number"
         label="E corregido [dBuV/m]"
         name="eCorregido"
@@ -290,6 +305,14 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
         label="Incertidumbre [dB]"
         name="incertidumbre"
         step="0.000001"
+      />
+    </form-row>
+    <form-row>
+      <form-kit
+        type="textarea"
+        label="Equipamiento utilizado"
+        name="equipamiento"
+        validation="false"
       />
     </form-row>
     <form-row>
