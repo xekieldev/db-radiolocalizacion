@@ -324,15 +324,15 @@ function getTechnician(id) {
 .reference-group {
   padding-bottom: 10px;;
   border-bottom: solid 1px lightblue;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 .testigo-group {
   padding-bottom: 10px;;
   border-bottom: solid 1px lightblue;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
-.measurement-point-group {
+/* .measurement-point-group {
   text-transform: uppercase;
-}
+} */
 
 </style>

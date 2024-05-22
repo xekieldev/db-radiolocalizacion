@@ -533,7 +533,7 @@ function preview() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 
 .status{
