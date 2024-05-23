@@ -31,7 +31,7 @@
       />
       <l-marker :lat-lng="[ item.latitud , item.longitud ]" v-for="item in items">
         <l-icon
-          :icon-size="[20, 20]"
+          :icon-size="[50, 30]"
           :icon-url= pickIcon(item)
         />
         <l-popup :options="{}"> <p class="popup-title">Datos de la estación - id: {{ item.id}}</p>
@@ -111,15 +111,19 @@ function viewItem(item) {
 
 function pickIcon(station) {
   if( station.servicio === "FM") {
-    return "../../img/FM.png"
+    return "../../img/FM_new.png"
   } else if (station.servicio === "AM") {
-      return "../../img/AM.png"
+      return "../../img/AM_new.png"
   } else if (station.servicio === "TPRS") {
-      return "../../img/TPRS.png"
+      return "../../img/TPRS_new.png"
   } else if (station.servicio === "SEE") {
-      return "../../img/SEE.png"
+      return "../../img/SEE_new.png"
+  } else if (station.servicio === "TPTV") {
+      return "../../img/TPTV_new.png"
+  } else if (station.servicio === "MCREM") {
+      return "../../img/MCREM_new.png"
   } else {
-    return "../../img/generic.png"
+    return "../../img/generic_new.png"
   }
 }
 
