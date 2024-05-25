@@ -110,19 +110,9 @@ function viewItem(item) {
 }
 
 function pickIcon(station) {
-  if( station.servicio === "FM") {
-    return "../../img/FM_new.png"
-  } else if (station.servicio === "AM") {
-      return "../../img/AM_new.png"
-  } else if (station.servicio === "TPRS") {
-      return "../../img/TPRS_new.png"
-  } else if (station.servicio === "SEE") {
-      return "../../img/SEE_new.png"
-  } else if (station.servicio === "TPTV") {
-      return "../../img/TPTV_new.png"
-  } else if (station.servicio === "MCREM") {
-      return "../../img/MCREM_new.png"
-  } else {
+  if( station.servicio != '---') {
+    return `../../img/${station.servicio}_new.png`
+  } else if ( station.servicio === '---' || station.servicio == null) {
     return "../../img/generic_new.png"
   }
 }
