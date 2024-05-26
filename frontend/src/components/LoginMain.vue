@@ -10,7 +10,7 @@ function submitHandler(fields) {
   
 }
 
-const props = defineProps({
+defineProps({
       loginError: Object,
 })
 
@@ -46,7 +46,12 @@ const props = defineProps({
         label="Contraseña"
         name="pass"
       />
-      <p v-if="loginError && loginError.response.data === 'Error de login'" class="login-error">Usuario o contraseña incorrectos</p>
+      <p
+        v-if="loginError && loginError.response.data === 'Error de login'"
+        class="login-error"
+      >
+        Usuario o contraseña incorrectos
+      </p>
       <button
         class="login-button"
         type="submit"
@@ -55,7 +60,6 @@ const props = defineProps({
       </button>
     </form-kit>
   </div>
-
 </template>
 
 <style scoped>

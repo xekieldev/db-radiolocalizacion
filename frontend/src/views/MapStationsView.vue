@@ -17,7 +17,7 @@ onBeforeMount( () => {
       position => {
         latitude.value = position.coords.latitude
         longitude.value = position.coords.longitude
-        zoom = 10
+        zoom.value = 10
         console.log("Coordenadas de mi ubicación: ",latitude.value, longitude.value)
 
       },
@@ -25,7 +25,7 @@ onBeforeMount( () => {
          console.log(error.message);
          latitude.value = -39.6989
          longitude.value = -64.7597
-         zoom = 4
+         zoom.value = 4
       },
    )
 }) 
@@ -37,7 +37,6 @@ function goBack() {
 
 
 <template>
-
   <heading>Mapa de Estaciones</heading>
   <div class="buttons-container">
     <my-button
@@ -46,8 +45,11 @@ function goBack() {
       @on-tap="goBack"
     />
   </div>
-  <gmap :zoom="zoom" :position="[ latitude.toString(), longitude.toString()]" v-if="latitude"/>
-
+  <gmap
+    v-if="latitude"
+    :zoom="zoom"
+    :position="[ latitude.toString(), longitude.toString()]"
+  />
 </template>
 
 

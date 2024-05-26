@@ -2,24 +2,28 @@
   <div class="map-container">
     <div class="menu-container">
       <form-row class="search-items">
-          <form-kit
-            outer-class="field-search"
-            type="text"
-            name="searchInput"
-            placeholder="Buscar estaciones"
-            v-model="searchText"
-          />
-          <my-button @on-tap="() => searchStations()" class="secondary search-btn" label="Buscar"/>
+        <form-kit
+          v-model="searchText"
+          outer-class="field-search"
+          type="text"
+          name="searchInput"
+          placeholder="Buscar estaciones"
+        />
+        <my-button
+          class="secondary search-btn"
+          label="Buscar"
+          @on-tap="() => searchStations()"
+        />
       </form-row>
     </div>
   
     <l-map
       ref="map"
-      :zoom= zoom
-      :center= "[position[0] , position[1]]"
+      :zoom="zoom"
+      :center="[position[0] , position[1]]"
       :use-global-leaflet="false"
       :options="{ zoomControl: false }"
-      :min-zoom=1
+      :min-zoom="1"
       draggable="false"
       dragging="false"
     >
@@ -27,23 +31,60 @@
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
         name="OpenStreetMap"
-        :max-zoom= 19
+        :max-zoom="19"
       />
-      <l-marker :lat-lng="[ item.latitud , item.longitud ]" v-for="item in items">
+      <l-marker
+        v-for="item in items"
+        :key="item.id"
+        :lat-lng="[ item.latitud , item.longitud ]"
+      >
         <l-icon
           :icon-size="[50, 30]"
-          :icon-url= pickIcon(item)
+          :icon-url="pickIcon(item)"
         />
-        <l-popup :options="{}"> <p class="popup-title">Datos de la estación - id: {{ item.id}}</p>
-                  <prop-value class="prop" label="Identificación" :value="item.identificacion"/>
-                  <prop-value class="prop" label="Frecuencia" value="---" v-if="item.frecuencia == null"/>
-                  <prop-value class="prop" label="Frecuencia" :value="item.frecuencia + ' ' + item.unidad" v-else/>
-                  <prop-value class="prop" label="Emplazamiento" :value="item.emplazamiento"/>
-                  <prop-value class="prop" label="Localidad" :value="item.localidad"/>
-                  <prop-value class="prop" label="Provincia" :value="item.provincia"/><br>
-                  <div class="popup-buttons">
-                    <my-button @on-tap="() => viewItem(item.id)" class="primary" label="Ver"/>
-                  </div>
+        <l-popup :options="{}">
+          <p class="popup-title">
+            Datos de la estación - id: {{ item.id }}
+          </p>
+          <prop-value
+            class="prop"
+            label="Identificación"
+            :value="item.identificacion"
+          />
+          <prop-value
+            v-if="item.frecuencia == null"
+            class="prop"
+            label="Frecuencia"
+            value="---"
+          />
+          <prop-value
+            v-else
+            class="prop"
+            label="Frecuencia"
+            :value="item.frecuencia + ' ' + item.unidad"
+          />
+          <prop-value
+            class="prop"
+            label="Emplazamiento"
+            :value="item.emplazamiento"
+          />
+          <prop-value
+            class="prop"
+            label="Localidad"
+            :value="item.localidad"
+          />
+          <prop-value
+            class="prop"
+            label="Provincia"
+            :value="item.provincia"
+          /><br>
+          <div class="popup-buttons">
+            <my-button
+              class="primary"
+              label="Ver"
+              @on-tap="() => viewItem(item.id)"
+            />
+          </div>
         </l-popup>
       </l-marker>
     </l-map>
@@ -117,7 +158,7 @@ function pickIcon(station) {
   }
 }
 
-const props = defineProps({
+defineProps({
   
   position: {
     type: Array,

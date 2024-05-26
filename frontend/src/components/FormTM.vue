@@ -201,12 +201,12 @@ watch([province, city, provinceWitness], (newValue, oldValue) => {
       />
     </form-row>
     <form-kit
-          v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0"
-          type="checkbox"
-          label="Agregar Estación Testigo"
-          name="witnessStationCheckbox"
-          v-model="witnessStation"
-        />
+      v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0"
+      v-model="witnessStation"
+      type="checkbox"
+      label="Agregar Estación Testigo"
+      name="witnessStationCheckbox"
+    />
     <div v-if="witnessStation === true">
       <form-row v-if="techMeasurement && techMeasurement.techMeasurement && techMeasurement.techMeasurement.length == 0">
         <form-kit

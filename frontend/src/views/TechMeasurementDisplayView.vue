@@ -104,7 +104,10 @@ function getTechnician(id) {
     v-for="value, index in techMeasurement"
     :key="value"
   >
-    <div class="testigo-group" v-if="index==0 && techMeasurement && techMeasurement[0].domicilioTestigo != null">
+    <div
+      v-if="index==0 && techMeasurement && techMeasurement[0].domicilioTestigo != null"
+      class="testigo-group"
+    >
       <p
         class="title-testigo"
       >

@@ -42,7 +42,6 @@ onBeforeMount(async () => {
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
       const data = await listStations()
       items.value.push(...data)
-      const stations = items.value
       for (const item in items.value) {
         items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
         items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
@@ -51,7 +50,6 @@ onBeforeMount(async () => {
     } else {
         const data = await listStations(true)
         items.value.push(...data)
-        const stations = items.value
         for (const item in items.value) {
           items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
           items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
@@ -95,22 +93,30 @@ function viewMap() {
   <heading>Listado de Estaciones</heading>
   <div class="bar-menu">
     <div class="view-map-container">
-      <my-button @on-tap="viewMap" class="secondary left view-map-button" label="Ver Mapa"/>
+      <my-button
+        class="secondary left view-map-button"
+        label="Ver Mapa"
+        @on-tap="viewMap"
+      />
     </div>
     <form-row class="search-bar">
-        <form-kit
-          outer-class="field-search"
-          type="text"
-          name="searchInput"
-          placeholder="Buscar estaciones"
-          v-model="searchText"
-        />
-        <my-button @on-tap="() => searchStations()" class="secondary buscar-btn" label="Buscar"/>
+      <form-kit
+        v-model="searchText"
+        outer-class="field-search"
+        type="text"
+        name="searchInput"
+        placeholder="Buscar estaciones"
+      />
+      <my-button
+        class="secondary buscar-btn"
+        label="Buscar"
+        @on-tap="() => searchStations()"
+      />
     </form-row>
   </div>
 
   <div class="list-container">
-      <!-- <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" /> -->
+    <!-- <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" /> -->
     <table class="stations-table">
       <tr>
         <th>id</th>
@@ -122,33 +128,50 @@ function viewMap() {
         <th>Domicilio</th>
         <th>Localidad</th>
         <th>Provincia</th>
-        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th>
+        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+          Status
+        </th>
         <th>Acciones</th>
       </tr>
       <tr
         v-for="item in items"
         :key="item"
       >
-      <!-- <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> -->
-      <td><my-button @on-tap="() => viewItem(item.id)" class="primary center" :label="(item.id.toString())"/></td>
-      <!-- <td>{{ item.id }}</td> -->
-      <td>{{ item.identificacion }}</td> 
-      <td>{{ item.servicio }}</td> 
-      <td v-if="item.frecuencia">{{ item.frecuencia +" "+item.unidad}}</td>
-      <td v-else>---</td>
-      <td>{{ item.emplazamiento }}</td>
-      <td>{{ item.domicilio }}</td>
-      <td>{{ item.localidad }} </td>
-      <td>{{ item.provincia }} </td>
-      <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
-      <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status2 }}</td>
-      <td> 
-        <div class="action-buttons-container">
-          <my-button @on-tap="() => editItem(item.id)" class="primary center" label="Editar"/>
+        <!-- <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> -->
+        <td>
+          <my-button
+            class="primary center"
+            :label="(item.id.toString())"
+            @on-tap="() => viewItem(item.id)"
+          />
+        </td>
+        <!-- <td>{{ item.id }}</td> -->
+        <td>{{ item.identificacion }}</td> 
+        <td>{{ item.servicio }}</td> 
+        <td v-if="item.frecuencia">
+          {{ item.frecuencia +" "+item.unidad }}
+        </td>
+        <td v-else>
+          ---
+        </td>
+        <td>{{ item.emplazamiento }}</td>
+        <td>{{ item.domicilio }}</td>
+        <td>{{ item.localidad }} </td>
+        <td>{{ item.provincia }} </td>
+        <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
+        <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+          {{ item.status2 }}
+        </td>
+        <td> 
+          <div class="action-buttons-container">
+            <my-button
+              class="primary center"
+              label="Editar"
+              @on-tap="() => editItem(item.id)"
+            />
           <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
-        </div>
-      </td> 
-
+          </div>
+        </td>
       </tr>
 
       <div class="status">

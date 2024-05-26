@@ -1,6 +1,6 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
@@ -59,16 +59,20 @@ async function searchFiles() {
   <heading>Gestión de Expedientes</heading>
   <div class="list-container">
     <div class="bar-menu">
-    <form-row class="search-bar">
+      <form-row class="search-bar">
         <form-kit
+          v-model="searchText"
           outer-class="field-search"
           type="text"
           name="searchInput"
           placeholder="Buscar expedientes"
-          v-model="searchText"
         />
-        <my-button @on-tap="() => searchFiles()" class="secondary buscar-btn" label="Buscar"/>
-    </form-row>
+        <my-button
+          class="secondary buscar-btn"
+          label="Buscar"
+          @on-tap="() => searchFiles()"
+        />
+      </form-row>
     </div>
     <table class="files-table">
       <tr>
