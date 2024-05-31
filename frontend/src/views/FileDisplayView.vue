@@ -1,7 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useTerritory } from '../composables/territory'
 import Mapa from '../components/MapMain.vue'
 import DisplayRow from '../components/DisplayRow.vue'
@@ -13,6 +13,7 @@ import MyButton from '../components/MyButton.vue'
 const { getFile, getAllTechnicians } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
+const route = useRoute()
 const { getNameByCode } = useTerritory()
 
 
@@ -54,7 +55,7 @@ const technicians = reactive({})
 const techniciansValues = reactive({})
 let previewStatus = ref(false)
 
-onMounted(async () => {
+onBeforeMount(async () => {
     const response = await getFile(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
     Object.assign(file, response.file)
@@ -68,6 +69,24 @@ onMounted(async () => {
 function preview() {  
   previewStatus.value = !previewStatus.value
 }
+
+function viewRelatedStation(item) {
+  router.push(`/file/${item}`)
+}
+
+watch(
+  () => route.params.id,
+  async newId => {
+    const response = await getFile(newId)
+    Object.assign(file, response.file)
+    Object.assign(station, response.station)
+    Object.assign(technicians, response.technicians)
+    station.provincia = getNameByCode("province", response.station.provincia)
+    station.localidad = getNameByCode("city", response.station.localidad)
+
+    
+  }
+)
 
 </script>
 <template>
@@ -91,6 +110,19 @@ function preview() {
     </heading>
 
     <div class="buttons-container">
+      <div class="related-station-container" v-if="station.related_station_id">
+        <my-button
+          class="primary"
+          :label="(station.id).toString()"
+        />
+        <img src="../../img/flecha-doble.png" class="related-arrow" title="Estaciones relacionadas">
+        <my-button
+          class="secondary"
+          :label="(station.related_station_id).toString()"
+          @on-tap="viewRelatedStation(station.related_station_id)"
+        />
+      </div>
+      <div class="more-buttons">
       <my-button
         class="primary right"
         label="Preview"
@@ -106,8 +138,9 @@ function preview() {
         class="secondary right"
         label="Agregar Estudio"
         @on-tap="redirectToCreate"
-      />
+      />      
     </div>
+  </div>
     <div class="container">
       <display-row> 
         <prop-value
@@ -575,4 +608,27 @@ function preview() {
 .status {
   align-self: flex-start;
 }
+.related-station-container {
+  display: flex;
+  gap: 5px;
+  margin-right: auto;
+}
+.related-station-container p {
+  padding: 5px 5px;
+  flex-direction: row;
+}
+.more-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.related-arrow {
+  width: 20px;
+}
+.text-related-stations {
+  font-size: 13px;
+  font-weight: 500;
+}
+
 </style>

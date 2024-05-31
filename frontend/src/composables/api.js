@@ -112,6 +112,15 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+    async function updateRelatedStation(id, relatedStationId) {
+        loading.value = true
+        const response = await axiosInstance.put(`/file/${id}`, 
+            {
+                related_station_id: relatedStationId
+            })
+        loading.value = false
+        return response && response.data
+    }
 
     return {
         list,
@@ -128,5 +137,6 @@ export function useApi() {
         getTechMeasurement,
         listStations,
         getStation,
+        updateRelatedStation,
     }
 }

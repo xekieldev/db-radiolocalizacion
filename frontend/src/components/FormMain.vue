@@ -421,6 +421,18 @@ const { validateFile } = useFileValidation()
         placeholder="Técnico 2"
       />
     </form-row>
+    <form-row>
+      <form-kit
+          v-if="fileId != null || fileId != undefined"
+          v-model="station.related_station_id"
+          outer-class="field-related_station"
+          type="hidden"
+          label="Estación relacionada"
+          name="related_station_id"   
+          :disabled="true"
+          :value="fileId"
+        />
+    </form-row>      
     <button
       class="submit-button"
     >
@@ -444,6 +456,9 @@ const { validateFile } = useFileValidation()
 }
 .field-irradiante {
       flex: 0 0 40%;
+}
+.field-related_station {
+      flex: 0 0 15%;
 }
 .submit-button {
       background-color: white;

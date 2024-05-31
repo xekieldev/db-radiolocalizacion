@@ -76,6 +76,7 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     latitud = db.Column(db.Float)
     longitud = db.Column(db.Float)
     observaciones = db.Column(db.String(300))
+    related_station_id = db.Column(db.Integer)
 
 class TechMeasurement(db.Model):
     __tablename__= 'TechMeasurement'
