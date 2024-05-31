@@ -367,9 +367,11 @@ const { validateFile } = useFileValidation()
       <form-kit
         v-if="station.tipoVinculo == 'Radioeléctrico'"
         v-model="station.irradianteVinc"
-        type="text"
+        type="select"
         label="Sistema Irradiante"
+        :options="antenna"
         name="irradianteVinc"
+        placeholder="Sistema irradiante"
         :disabled="(station.tipoVinculo || '').toLowerCase() !== 'radioeléctrico'"
         :validation="((station.tipoVinculo || '').toLowerCase() === 'radioeléctrico' || '') && 'required'"
       />
