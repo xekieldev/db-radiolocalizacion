@@ -64,8 +64,9 @@ def filex():
         latitud = request.json.get('latitud')
         longitud = request.json.get('longitud')
         observaciones = request.json.get('observaciones')
+        related_station_id = request.json.get('related_station_id')
                 
-        station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones)
+        station = Station(identificacion = identificacion, emplazamiento = emplazamiento, servicio = servicio, frecuencia = frecuencia, unidad = unidad, claseEmision = claseEmision, irradiante = irradiante, polarizacion = polarizacion, cantidad = cantidad, altura = altura, tipoVinculo = tipoVinculo, frecuenciaVinc = frecuenciaVinc, unidadVinc = unidadVinc, irradianteVinc = irradianteVinc, polarizacionVinc = polarizacionVinc, provincia = provincia, localidad = localidad, domicilio = domicilio, latitud = latitud, longitud = longitud, observaciones = observaciones, related_station_id = related_station_id)
         db.session.add(station)
 
         db.session.commit()
@@ -184,6 +185,7 @@ def edit_file(id):
             latitud = request.json.get('latitud')
             longitud = request.json.get('longitud')
             observaciones = request.json.get('observaciones')
+            # related_station_id = request.json.get('related_station_id')
 
             station.identificacion = identificacion
             station.emplazamiento = emplazamiento
@@ -206,6 +208,7 @@ def edit_file(id):
             station.latitud = latitud
             station.longitud = longitud
             station.observaciones = observaciones
+            # station.related_station_id = related_station_id
 
             db.session.commit()
         else:
@@ -342,5 +345,21 @@ def get_tech_measurement(id):
     except Exception as e:
         print(e)
 
+        response = {"message": "input error"}
+        return response, 400
+
+@bp.route('/file/<id>', methods = ['PUT'])
+@auth.login_required
+def update_related_station(id):
+    try:
+        # data = request.get_json()
+        related_station_id = request.json.get('related_station_id')
+        station = Station.query.get(id)
+        station.related_station_id = related_station_id
+        db.session.commit()
+        response = {'id_station': station.id}
+        return response
+
+    except:
         response = {"message": "input error"}
         return response, 400

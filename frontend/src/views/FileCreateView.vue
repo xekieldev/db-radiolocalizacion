@@ -5,7 +5,7 @@ import { onBeforeMount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
 
-const { create , getAllTechnicians} = useApi()
+const { create , getAllTechnicians, updateRelatedStation, getStation } = useApi()
 const router = useRouter()
 const file = reactive({})
 const station = reactive([])
@@ -21,7 +21,12 @@ onBeforeMount(async () => {
 async function save(fields) {
   try {
     const response = await create(fields)
+    const station = await getStation(response.id_file)
+    if( station.related_station_id != null || station.related_station_id != undefined) {
+      await updateRelatedStation(station.related_station_id, station.id)  
+    }
     router.push(`/file/${response.id_file}`)
+    
   } catch (error) {
     console.error(error)
   }

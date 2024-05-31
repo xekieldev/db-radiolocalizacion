@@ -13,7 +13,7 @@ class StationSchema(ma.Schema):
         fields = ("id", "status2", "identificacion", "emplazamiento", "servicio", "frecuencia", "unidad", "claseEmision",
                    "irradiante", "polarizacion", "cantidad", "altura", "tipoVinculo", "frecuenciaVinc",
                      "unidadVinc", "irradianteVinc", "polarizacionVinc", "provincia", "localidad",
-                       "domicilio", "latitud", "longitud", "observaciones")
+                       "domicilio", "latitud", "longitud", "observaciones", "related_station_id")
 
 station_schema = StationSchema()
 stations_schema = StationSchema(many=True)
