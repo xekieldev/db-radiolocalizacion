@@ -14,7 +14,7 @@ import Heading from '../components/Heading.vue';
       </h4>
       <ul class="items-version">
         <li>Visualización de las estaciones en un mapa con buscador</li>
-        <li>Busqueda por expedientes</li>
+        <li>Búsqueda por expedientes</li>
         <li>Preview para imprimir</li>
         <li>Nuevas validaciones en los formularios</li>
         <li>Mejora de la Planilla de Mediciones Técnicas</li>

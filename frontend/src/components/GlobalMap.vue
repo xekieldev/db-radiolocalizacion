@@ -174,7 +174,7 @@ defineProps({
 <style scoped>
 
 .map-container {
-  height: 510px;
+  height: 500px;
   width: 100%;
   margin-top: 10px;
   position: relative;
