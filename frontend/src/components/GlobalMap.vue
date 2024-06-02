@@ -39,7 +39,7 @@
         :lat-lng="[ item.latitud , item.longitud ]"
       >
         <l-icon
-          :icon-size="[60, 35]"
+          :icon-size="[55, 35]"
           :icon-url="pickIcon(item)"
         />
         <l-popup :options="{}" class="popup-content">
