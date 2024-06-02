@@ -39,10 +39,10 @@
         :lat-lng="[ item.latitud , item.longitud ]"
       >
         <l-icon
-          :icon-size="[50, 30]"
+          :icon-size="[60, 35]"
           :icon-url="pickIcon(item)"
         />
-        <l-popup :options="{}">
+        <l-popup :options="{}" class="popup-content">
           <p class="popup-title">
             Datos de la estación - id: {{ item.id }}
           </p>
@@ -152,9 +152,9 @@ function viewItem(item) {
 
 function pickIcon(station) {
   if( station.servicio != '---') {
-    return `../../img/${station.servicio}_new.png`
+    return `../../img/map_icons/${station.servicio}.png`
   } else if ( station.servicio === '---' || station.servicio == null) {
-    return "../../img/generic_new.png"
+    return "../../img/map_icons/generic.png"
   }
 }
 
@@ -218,5 +218,7 @@ defineProps({
   justify-content: flex-end;
   margin-right: 10px;
 }
-
+.popup-content {
+  font-size: 10px;
+}
 </style>
