@@ -23,7 +23,7 @@ onBeforeMount( () => {
       },
       error => {
          console.log(error.message);
-         latitude.value = -39.6989
+         latitude.value = -40.4989
          longitude.value = -64.7597
          zoom = 4
       },
