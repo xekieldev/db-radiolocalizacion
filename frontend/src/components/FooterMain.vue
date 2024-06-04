@@ -5,7 +5,11 @@
 <template>
   <div>
     <footer class="footer-container">
-      <img src="../../img/Logo.png" alt="logo-enacom" class="logo-enacom">
+      <img
+        src="../../img/Logo.png"
+        alt="logo-enacom"
+        class="logo-enacom"
+      >
     </footer>
   </div>
 </template>

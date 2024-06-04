@@ -45,9 +45,11 @@ import FooterMain from '../components/FooterMain.vue';
         <li>Y mucho más!</li>
       </ul>
     </div>
-    <footer-main/>
-      <h5 class="developer-name">Developed by Exequiel Sartor</h5>
-    </div>
+    <footer-main />
+    <h5 class="developer-name">
+      Developed by Exequiel Sartor
+    </h5>
+  </div>
 </template>
 
 <style scoped>

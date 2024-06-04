@@ -64,7 +64,7 @@ function stationList() {
       @on-tap="listTechnicians"
     />
   </div>
-  <footer-main/>
+  <footer-main />
 </template>
 
 <style scoped>
