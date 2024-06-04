@@ -42,7 +42,10 @@
           :icon-size="[55, 35]"
           :icon-url="pickIcon(item)"
         />
-        <l-popup :options="{}" class="popup-content">
+        <l-popup
+          :options="{}"
+          class="popup-content"
+        >
           <p class="popup-title">
             Datos de la estación - id: {{ item.id }}
           </p>

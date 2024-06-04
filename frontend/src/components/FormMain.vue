@@ -425,15 +425,15 @@ const { validateFile } = useFileValidation()
     </form-row>
     <form-row>
       <form-kit
-          v-if="fileId != null || fileId != undefined"
-          v-model="station.related_station_id"
-          outer-class="field-related_station"
-          type="hidden"
-          label="Estación relacionada"
-          name="related_station_id"   
-          :disabled="true"
-          :value="fileId"
-        />
+        v-if="fileId != null || fileId != undefined"
+        v-model="station.related_station_id"
+        outer-class="field-related_station"
+        type="hidden"
+        label="Estación relacionada"
+        name="related_station_id"   
+        :disabled="true"
+        :value="fileId"
+      />
     </form-row>      
     <button
       class="submit-button"

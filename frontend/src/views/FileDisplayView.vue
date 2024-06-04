@@ -96,43 +96,49 @@ watch(
 
 </script>
 <template>
-    <div class="buttons-container">
+  <div class="buttons-container">
+    <my-button
+      v-if="!previewStatus"
+      class="quinary right"
+      label="Imprimir"
+      @on-tap="print"
+    />
+    <my-button
+      v-if="!previewStatus"
+      class="primary right"
+      label="Volver"
+      @on-tap="goBack"
+    />
+  </div>
+
+  <heading v-if="station.frecuencia != null">
+    Datos de Radiolocalización
+  </heading>
+  <heading v-else>
+    Datos de Localización
+  </heading>
+
+  <div class="buttons-container">
+    <div
+      v-if="station.related_station_id && !previewStatus"
+      class="related-station-container"
+    >
       <my-button
-        v-if="!previewStatus"
-        class="quinary right"
-        label="Imprimir"
-        @on-tap="print"
+        class="primary"
+        :label="(station.id).toString()"
       />
+      <img
+        src="../../img/flecha-doble.png"
+        class="related-arrow"
+        title="Estaciones relacionadas"
+      >
       <my-button
-        v-if="!previewStatus"
-        class="primary right"
-        label="Volver"
-        @on-tap="goBack"
+        class="secondary"
+        :label="(station.related_station_id).toString()"
+        @on-tap="viewRelatedStation(station.related_station_id)"
       />
     </div>
-
-    <heading v-if="station.frecuencia != null">
-      Datos de Radiolocalización
-    </heading>
-    <heading v-else>
-      Datos de Localización
-    </heading>
-
-    <div class="buttons-container">
-      <div class="related-station-container" v-if="station.related_station_id && !previewStatus">
-        <my-button
-          class="primary"
-          :label="(station.id).toString()"
-        />
-        <img src="../../img/flecha-doble.png" class="related-arrow" title="Estaciones relacionadas">
-        <my-button
-          class="secondary"
-          :label="(station.related_station_id).toString()"
-          @on-tap="viewRelatedStation(station.related_station_id)"
-        />
-      </div>
-      <div class="more-buttons">
-
+    <div class="more-buttons">
       <my-button
         v-if="!previewStatus"
         class="secondary right"
@@ -327,7 +333,10 @@ watch(
       :value="file.status"
     />
   </div>
-  <div class="buttons-container" v-if="!previewStatus">
+  <div
+    v-if="!previewStatus"
+    class="buttons-container"
+  >
     <my-button
       class="tertiary right"
       label="Editar"
@@ -339,7 +348,10 @@ watch(
       @on-tap="goBack"
     />
   </div>
-  <div class="preview-header" v-if="previewStatus">
+  <div
+    v-if="previewStatus"
+    class="preview-header"
+  >
     <img
       alt="ENACOM logo"
       class="logo"

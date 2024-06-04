@@ -321,10 +321,10 @@ async function del_tech_measurement(id, id_tech_measurement) {
       </display-row>
       <display-row class="status-container">
         <prop-value
-            v-if="!previewStatus"
-            class="prop status"
-            label="Status"
-            :value=" techMeasurement[index].status"
+          v-if="!previewStatus"
+          class="prop status"
+          label="Status"
+          :value=" techMeasurement[index].status"
         />
       </display-row>
       <div class="buttons-container delete-btn">
@@ -345,15 +345,18 @@ async function del_tech_measurement(id, id_tech_measurement) {
       @on-tap="goBack()"
     />
   </div>
-  <div class="preview-header" v-if="previewStatus">
-      <img
-        alt="ENACOM logo"
-        class="logo"
-        src="../../img/Logo.png"
-        width="100"
-        height="100"
-      > 
-    </div>
+  <div
+    v-if="previewStatus"
+    class="preview-header"
+  >
+    <img
+      alt="ENACOM logo"
+      class="logo"
+      src="../../img/Logo.png"
+      width="100"
+      height="100"
+    > 
+  </div>
 </template>
 
 <style scoped>
