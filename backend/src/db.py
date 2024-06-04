@@ -112,6 +112,8 @@ class TechMeasurement(db.Model):
     resultadoComprob = db.Column(db.String(300))
     id_technician1 = db.Column(db.Integer)
     id_technician2 = db.Column(db.Integer)
+    status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
+
     
 
 class Technician (db.Model):

@@ -9,7 +9,7 @@ import PropValue from '../components/PropValue.vue';
 import { useTerritory } from '../composables/territory';
 
 
-const { getFile, getTechMeasurement, getStation } = useApi()
+const { getFile, getTechMeasurement, getStation, delete_tech_measurement } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
@@ -32,13 +32,21 @@ const idPath = ref(currentRoute.value.params.id)
 
 onBeforeMount(async () => {
     const id = currentRoute.value.params.id
-    const response = await getTechMeasurement(id)
     const fileResponse = await getFile(currentRoute.value.params.id)
     const stationResponse = await getStation(currentRoute.value.params.id)
     Object.assign(file, fileResponse.file)
-    Object.assign(station, stationResponse)
-    Object.assign(technicians, response.technicians)
-    Object.assign(techMeasurement, response.techMeasurement)
+    Object.assign(station, stationResponse)    
+    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
+      const response = await getTechMeasurement(id)
+      Object.assign(techMeasurement, response.techMeasurement)
+      Object.assign(technicians, response.technicians)
+
+    } else {
+        const response = await getTechMeasurement(id, true)
+        Object.assign(techMeasurement, response.techMeasurement)
+        Object.assign(technicians, response.technicians)
+    }
+    
 })
 
 function getTechnician(id) {
@@ -49,6 +57,16 @@ function getTechnician(id) {
   }
   return ''
 }
+
+async function del_tech_measurement(id, id_tech_measurement) {
+    try { 
+      await delete_tech_measurement(id, id_tech_measurement)
+      window.location.reload() 
+
+    } catch (error) {
+    console.error(error)
+    } 
+  }
 
 </script>
 
@@ -283,6 +301,20 @@ function getTechnician(id) {
           :value="getTechnician(techMeasurement[index].id_technician2)"
         />
       </display-row>
+      <display-row class="status-container">
+        <prop-value
+            class="prop status"
+            label="Status"
+            :value=" techMeasurement[index].status"
+        />
+      </display-row>
+      <div class="buttons-container delete-btn">
+        <my-button
+          class="tertiary right"
+          label="Borrar"
+          @on-tap="() => del_tech_measurement(idPath, techMeasurement[index].id)"
+        />
+      </div>
     </div>
   </div>  
   <div class="buttons-container">
@@ -311,6 +343,7 @@ function getTechnician(id) {
     gap: 10px;
     justify-content: end;
     margin: 5px;
+    padding-bottom: 5px;
 }
 .title-testigo {
   font-weight: 700;
@@ -334,8 +367,14 @@ function getTechnician(id) {
   border-bottom: solid 1px lightblue;
   /* text-transform: uppercase; */
 }
-/* .measurement-point-group {
-  text-transform: uppercase;
-} */
+.status {
+  flex: 0 0 15%;
+}
+.status-container {
+  justify-content: left;
+}
+.delete-btn {
+  border-bottom: 1px solid lightblue;
+}
 
 </style>

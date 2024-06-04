@@ -10,7 +10,7 @@ class TechMeasurementSchema(ma.Schema):
                    "unidadBW", "domicilio", "localidad", "provincia", "latitud", "longitud", "distancia",
                      "azimut", "observaciones", "domicilioTestigo", "localidadTestigo", "provinciaTestigo", 
                        "latitudTestigo", "longitudTestigo", "distanciaTestigo", "azimutTestigo", "eMedido", 
-                       "eTestigo", "eCorregido","incertidumbre","equipamiento", "resultadoComprob", "id_technician1", "id_technician2")
+                       "eTestigo", "eCorregido","incertidumbre","equipamiento", "resultadoComprob", "id_technician1", "id_technician2", "status")
 
 tech_measurement_schema = TechMeasurementSchema()
 tech_measurements_schema = TechMeasurementSchema( many = True )

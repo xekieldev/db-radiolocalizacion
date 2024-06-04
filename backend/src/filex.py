@@ -4,7 +4,7 @@ from src.db import db, Filex, Station, TechMeasurement, technician_tech_measurem
 from sqlalchemy import exc, insert, delete
 from src.technician import technicians_schema
 from src.station import station_schema
-from src.tech_measurement import tech_measurements_schema
+from src.tech_measurement import tech_measurements_schema, tech_measurement_schema
 from src.users import auth
 
 
@@ -331,7 +331,19 @@ def tech_measurement(id):
 @auth.login_required
 def get_tech_measurement(id):
     try:
-        tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
+        include_deleted = request.args.get('includeDeleted')
+        if include_deleted and include_deleted.lower() == 'true':
+            # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
+            # filex_available = Filex.query.all()
+            tech_measurement = TechMeasurement.query.filter_by(file_id=id).all()
+
+        else:
+            # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
+            filex_available = Filex.query.filter_by(status='Available').all() 
+            tech_measurement = TechMeasurement.query.filter_by(file_id=id, status='Available').all()
+
+
+
         
         # Rehacer query: https://stackoverflow.com/questions/8603088/sqlalchemy-in-clause
         technicians = db.session.query(Technician).join(technician_tech_measurement).join(TechMeasurement).filter(TechMeasurement.file_id == id).all()
@@ -347,6 +359,19 @@ def get_tech_measurement(id):
 
         response = {"message": "input error"}
         return response, 400
+    
+@bp.route("/file/<id_file>/delete_tech_measurement/<id_tech_measurement>", methods = ['DELETE'])
+@auth.login_required
+def delete_tech_measurement(id_file, id_tech_measurement):
+    try:
+        tech_measurement = TechMeasurement.query.filter_by(file_id=id_file, id=id_tech_measurement).first()
+        tech_measurement.status='Deleted'
+        db.session.commit()
+        return tech_measurement_schema.dump(tech_measurement)
+    except:
+        response = {"message": "server error"}
+        return response, 500
+
 
 @bp.route('/file/<id>', methods = ['PUT'])
 @auth.login_required
