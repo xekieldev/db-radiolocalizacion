@@ -88,9 +88,13 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function getTechMeasurement(id) {
+    async function getTechMeasurement(id, includeDeleted = false) {
         loading.value = true
-        const response = await axiosInstance.get(`/file/${id}/tech_measurement`)
+        const response = await axiosInstance.get(`/file/${id}/tech_measurement`, {
+            params: {
+                includeDeleted: includeDeleted
+            }
+        })
         loading.value = false
         return response && response.data 
     }
@@ -112,6 +116,7 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+
     async function updateRelatedStation(id, relatedStationId) {
         loading.value = true
         const response = await axiosInstance.put(`/file/${id}`, 
@@ -120,6 +125,13 @@ export function useApi() {
             })
         loading.value = false
         return response && response.data
+    }
+
+    async function delete_tech_measurement(id, id_tech_measurement) {
+        loading.value = true
+        const response = await axiosInstance.delete(`/file/${id}/delete_tech_measurement/${id_tech_measurement}`)
+        loading.value = false
+        return response && response.data 
     }
 
     return {
@@ -138,5 +150,6 @@ export function useApi() {
         listStations,
         getStation,
         updateRelatedStation,
+        delete_tech_measurement,
     }
 }
