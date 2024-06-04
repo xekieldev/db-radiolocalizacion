@@ -17,7 +17,7 @@ function handleClick() {
 <template>
   <div
     class="my-button-container"
-    :class="{ primary: type === 'primary', secondary: type === 'secondary', tertiary: type === 'tertiary', quaternary: type === 'quaternary', center: align === 'center', right: align === 'right' }"
+    :class="{ primary: type === 'primary', secondary: type === 'secondary', tertiary: type === 'tertiary', quaternary: type === 'quaternary', quinary: type === 'quinary', center: align === 'center', right: align === 'right' }"
     @click="handleClick"
   >
     {{ label }}
@@ -75,6 +75,15 @@ function handleClick() {
 }
 .quaternary:hover {
   background-color: #426aaf;
+  color: white;
+}
+.quinary {
+  border: 1px solid #b522ba;
+  font-weight: 500;  
+  color: #b522ba;
+}
+.quinary:hover {
+  background-color: #b522ba;
   color: white;
 }
 

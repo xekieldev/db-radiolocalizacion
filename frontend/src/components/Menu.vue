@@ -78,7 +78,7 @@ setInterval(updateLoggedIn, 500);
 header {
     display: flex;
     flex-direction: row;
-    background: linear-gradient(to right, rgba(202, 202, 202, 0), #cacaca, rgba(202, 202, 202, 0));
+    background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
     width: 100%;
   
   }

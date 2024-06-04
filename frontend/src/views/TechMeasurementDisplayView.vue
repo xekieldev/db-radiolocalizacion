@@ -1,6 +1,6 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive, ref } from 'vue'
+import { onBeforeMount, reactive, ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
@@ -28,6 +28,7 @@ const station = reactive({})
 const techMeasurement = reactive({})
 const technicians = reactive({})
 const idPath = ref(currentRoute.value.params.id)
+let previewStatus = ref(false)
 
 
 onBeforeMount(async () => {
@@ -68,11 +69,28 @@ async function del_tech_measurement(id, id_tech_measurement) {
     } 
   }
 
+  function print() {  
+  previewStatus.value = true
+  if(previewStatus.value){
+    nextTick(() => {
+      window.print()
+      previewStatus.value = false
+    })
+  }
+}
+
 </script>
 
 <template>
   <div class="buttons-container">
     <my-button
+      v-if="!previewStatus"
+      class="quinary right"
+      label="Imprimir"
+      @on-tap="print"
+    />
+    <my-button
+      v-if="!previewStatus"
       class="primary right"
       label="Agregar punto de medición"
       @on-tap="() => viewItem(idPath)"
@@ -303,6 +321,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       </display-row>
       <display-row class="status-container">
         <prop-value
+            v-if="!previewStatus"
             class="prop status"
             label="Status"
             :value=" techMeasurement[index].status"
@@ -310,6 +329,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       </display-row>
       <div class="buttons-container delete-btn">
         <my-button
+          v-if="!previewStatus"
           class="tertiary right"
           label="Borrar"
           @on-tap="() => del_tech_measurement(idPath, techMeasurement[index].id)"
@@ -319,11 +339,21 @@ async function del_tech_measurement(id, id_tech_measurement) {
   </div>  
   <div class="buttons-container">
     <my-button
+      v-if="!previewStatus"
       class="primary right"
       label="Volver"
       @on-tap="goBack()"
     />
   </div>
+  <div class="preview-header" v-if="previewStatus">
+      <img
+        alt="ENACOM logo"
+        class="logo"
+        src="../../img/Logo.png"
+        width="100"
+        height="100"
+      > 
+    </div>
 </template>
 
 <style scoped>
@@ -375,6 +405,17 @@ async function del_tech_measurement(id, id_tech_measurement) {
 }
 .delete-btn {
   border-bottom: 1px solid lightblue;
+}
+.preview-header {
+  display: flex;
+  position: absolute;
+  background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
+  width: 100%;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.back-preview-button {
+  align-self: center;
 }
 
 </style>
