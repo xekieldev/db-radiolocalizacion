@@ -2,6 +2,7 @@
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 import router from '../router';
+import FooterMain from '../components/FooterMain.vue';
 
 
 
@@ -63,6 +64,7 @@ function stationList() {
       @on-tap="listTechnicians"
     />
   </div>
+  <footer-main/>
 </template>
 
 <style scoped>

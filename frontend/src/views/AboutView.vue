@@ -1,5 +1,6 @@
 <script setup>
 import Heading from '../components/Heading.vue';
+import FooterMain from '../components/FooterMain.vue';
 </script>
 
 <template>
@@ -13,9 +14,9 @@ import Heading from '../components/Heading.vue';
         En esta versión:
       </h4>
       <ul class="items-version">
-        <li>Visualización de las estaciones en un mapa con buscador</li>
+        <li>Visualización de estaciones en un mapa con buscador</li>
         <li>Búsqueda por expedientes</li>
-        <li>Preview para imprimir</li>
+        <li>Función para imprimir</li>
         <li>Nuevas validaciones en los formularios</li>
         <li>Mejora de la Planilla de Mediciones Técnicas</li>
         <li>Agregado de mensaje de login failed</li>
@@ -44,15 +45,9 @@ import Heading from '../components/Heading.vue';
         <li>Y mucho más!</li>
       </ul>
     </div>
-    <footer class="about-footer">
-      <a href="https://github.com/xekieldev/db-radiolocalizacion.git"><img
-        class="logo-github"
-        src="../../img/github-logo.png"
-        alt="xekieldev"
-      ></a>
-      <h5>Diseñado y desarrollado por Exequiel Sartor</h5>
-    </footer>
-  </div>
+    <footer-main/>
+      <h5 class="developer-name">Developed by Exequiel Sartor</h5>
+    </div>
 </template>
 
 <style scoped>
@@ -69,9 +64,8 @@ import Heading from '../components/Heading.vue';
   align-items: center;
 }
 
-.logo-github {
+.logo-enacom {
   height: 50px;
-
 }
 
 .about-footer {
@@ -88,5 +82,13 @@ import Heading from '../components/Heading.vue';
 
 .about-text {
   margin-bottom: 100px;
+}
+.developer-name {
+  position: fixed;
+  color: #2C3E50;
+  bottom: 5px;
+  left: 0; /* Extiende el footer a lo largo de toda la anchura */
+  right: 0;
+  width: 100%; 
 }
 </style>

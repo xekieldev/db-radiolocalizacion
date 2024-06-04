@@ -50,7 +50,7 @@ async function del(id) {
       label="Nuevo Técnico"
       @on-tap="createItem"
     />
-    <table>
+    <table class="technicians-table">
       <tr>
         <th>id</th>
         <th>Nombre</th>
@@ -87,6 +87,7 @@ async function del(id) {
       </div>
     </table>
   </div>
+  <footer-main/>
 </template>
 
 <style scoped>
@@ -100,7 +101,7 @@ async function del(id) {
 .status{
     background-color: lightyellow;
 }
-table{
+.technicians-table{
   justify-content: center; 
   margin-top: 5px;
   
