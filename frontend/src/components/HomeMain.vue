@@ -1,9 +1,10 @@
 <script setup>
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
-import router from '../router';
+import { useRouter } from 'vue-router'
 import FooterMain from '../components/FooterMain.vue';
 
+const router = useRouter()
 
 
 function createFile() { 
