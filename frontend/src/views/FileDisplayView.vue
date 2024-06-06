@@ -53,7 +53,7 @@ const file = reactive({})
 const station = reactive({})
 const technicians = reactive({})
 const techniciansValues = reactive({})
-let previewStatus = ref(false)
+const printFlag = reactive({isActive: false})
 
 onBeforeMount(async () => {
     const response = await getFile(currentRoute.value.params.id)
@@ -66,14 +66,18 @@ onBeforeMount(async () => {
     station.localidad = getNameByCode("city", response.station.localidad)    
 })
 
-function print() {  
-  previewStatus.value = true
-  if(previewStatus.value){
-    nextTick(() => {
-      window.print()
-      previewStatus.value = false
-    })
-  }
+function print() {
+  printFlag.isActive = true
+  nextTick(() => {
+    // Usa un bucle para verificar el estado del DOM hasta que esté listo
+    const checkDomReady = setInterval(() => {
+      if (document.querySelector('.print-header')) {
+        clearInterval(checkDomReady)
+        window.print()        
+        printFlag.isActive = false
+      }
+    }, 200) // Verificar cada 100 ms
+  })
 }
 
 function viewRelatedStation(item) {
@@ -98,13 +102,13 @@ watch(
 <template>
   <div class="buttons-container">
     <my-button
-      v-if="!previewStatus"
+      v-if="!printFlag.isActive"
       class="quinary right"
       label="Imprimir"
       @on-tap="print"
     />
     <my-button
-      v-if="!previewStatus"
+      v-if="!printFlag.isActive"
       class="primary right"
       label="Volver"
       @on-tap="goBack"
@@ -120,7 +124,7 @@ watch(
 
   <div class="buttons-container">
     <div
-      v-if="station.related_station_id && !previewStatus"
+      v-if="typeof station.related_station_id !== 'undefined' && station.related_station_id !== null && station.related_station_id !== '' && !printFlag.isActive"
       class="related-station-container"
     >
       <my-button
@@ -140,13 +144,13 @@ watch(
     </div>
     <div class="more-buttons">
       <my-button
-        v-if="!previewStatus"
+        v-if="!printFlag.isActive"
         class="secondary right"
         label="Mediciones Técnicas"
         @on-tap="() => viewItem(file.id)"
       />
       <my-button
-        v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora' && !previewStatus"
+        v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora' && !printFlag.isActive"
         class="secondary right"
         label="Agregar Estudio"
         @on-tap="redirectToCreate"
@@ -327,14 +331,14 @@ watch(
       />
     </display-row>
     <prop-value
-      v-if="!previewStatus"
+      v-if="!printFlag.isActive"
       class="prop status"
       label="Status"
       :value="file.status"
     />
   </div>
   <div
-    v-if="!previewStatus"
+    v-if="!printFlag.isActive"
     class="buttons-container"
   >
     <my-button
@@ -349,8 +353,8 @@ watch(
     />
   </div>
   <div
-    v-if="previewStatus"
-    class="preview-header"
+    v-if="printFlag.isActive"
+    class="print-header"
   >
     <img
       alt="ENACOM logo"
@@ -363,7 +367,7 @@ watch(
 </template>
 
 <style scoped>
-.preview-header {
+.print-header {
   display: flex;
   background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
   width: 100%;
