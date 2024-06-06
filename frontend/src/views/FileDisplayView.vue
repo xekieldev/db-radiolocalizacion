@@ -124,19 +124,22 @@ watch(
 
   <div class="buttons-container">
     <div
-      v-if="typeof station.related_station_id !== 'undefined' && station.related_station_id !== null && station.related_station_id !== '' && !printFlag.isActive"
+      v-if="!printFlag.isActive"
       class="related-station-container"
     >
       <my-button
+        v-if="station.related_station_id != null || station.related_station_id != undefined"
         class="primary"
         :label="(station.id).toString()"
       />
       <img
+        v-if="station.related_station_id != null || station.related_station_id != undefined"
         src="../../img/flecha-doble.png"
         class="related-arrow"
         title="Estaciones relacionadas"
       >
       <my-button
+        v-if="station.related_station_id != null || station.related_station_id != undefined"
         class="secondary"
         :label="(station.related_station_id).toString()"
         @on-tap="viewRelatedStation(station.related_station_id)"
