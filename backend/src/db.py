@@ -130,6 +130,7 @@ class User (db.Model):
     usuario = db.Column(db.String(50), unique=True, nullable = False)
     password = db.Column(db.String(50), nullable = False)
     area = db.Column(db.String(50), nullable = False)
+    perfil = db.Column(db.String(50), nullable = True)
     email = db.Column(db.String(50), nullable = False)
 
 def init_app(app):

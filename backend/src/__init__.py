@@ -2,6 +2,8 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
+from flask_migrate import Migrate
+
 
 
 def create_app(test_config=None):
@@ -30,6 +32,7 @@ def create_app(test_config=None):
     from src import db
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     from src import technician
     from src import filex
