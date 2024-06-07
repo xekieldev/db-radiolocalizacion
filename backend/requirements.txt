@@ -12,3 +12,4 @@ SQLAlchemy==2.0.19
 typing_extensions==4.7.1
 Werkzeug==2.3.6
 Flask-HTTPAuth==4.8.0
+Flask-Migrate==4.0.7
