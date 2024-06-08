@@ -1,5 +1,5 @@
 <template>
-  <div class="map-container">
+  <div class="global-map-container">
     <div class="menu-container">
       <form-row class="search-items">
         <form-kit
@@ -176,8 +176,8 @@ defineProps({
 
 <style scoped>
 
-.map-container {
-  height: 500px;
+.global-map-container {
+  height: 700px;
   width: 100%;
   margin-top: 10px;
   position: relative;

@@ -19,7 +19,7 @@
       <l-marker :lat-lng="[position[0] , position[1] ]">
         <l-icon
           :icon-size="[50, 50]"
-          icon-url="../../img/antena.png"
+          :icon-url="antenaImage"
         />
         <l-popup>Coordenadas: {{ position[0] }}, {{ position[1] }}</l-popup>
       </l-marker>
@@ -30,6 +30,7 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LIcon, LPopup } from "@vue-leaflet/vue-leaflet";
+import antenaImage from "../../img/antena.png";
 
 defineProps({
   
@@ -44,7 +45,7 @@ defineProps({
 
 <style scoped>
 .map-container {
-  height: 500px;
+  height: 600px;
   width: 100%;
 }
 
