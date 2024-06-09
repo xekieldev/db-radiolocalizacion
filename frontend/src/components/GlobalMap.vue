@@ -159,7 +159,6 @@ function viewItem(item) {
 function pickIcon(station) {
   if( station.servicio != '---') {
     return getIconUrl(station.servicio)
-    // return IconsMap
   } else if ( station.servicio === '---' || station.servicio == null) {
     return genericIcon
   }
