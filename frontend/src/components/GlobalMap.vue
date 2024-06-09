@@ -104,10 +104,13 @@ import MyButton from "./MyButton.vue";
 import { useRouter } from 'vue-router'
 import PropValue from "./PropValue.vue";
 import FormRow from "./FormRow.vue";
+import { useIconsMap } from "../composables/iconsmap"
+import genericIcon from "../../img/map_icons/generic.png"
 
 
 const { listStations } = useApi()
 const { getNameByCode } = useTerritory()
+const { getIconUrl } = useIconsMap()
 const router = useRouter()
 
 
@@ -155,9 +158,10 @@ function viewItem(item) {
 
 function pickIcon(station) {
   if( station.servicio != '---') {
-    return `../../img/map_icons/${station.servicio}.png`
+    return getIconUrl(station.servicio)
+    // return IconsMap
   } else if ( station.servicio === '---' || station.servicio == null) {
-    return "../../img/map_icons/generic.png"
+    return genericIcon
   }
 }
 
