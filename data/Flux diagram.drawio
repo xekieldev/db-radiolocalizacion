@@ -1,39 +1,39 @@
-<mxfile host="app.diagrams.net" modified="2024-06-11T17:48:09.357Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0" etag="SanyJbWJzN4qzjMhEqA3" version="22.1.18" type="github">
+<mxfile host="app.diagrams.net" modified="2024-06-11T17:50:35.712Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0" etag="w3Ncnqaj_ya2Jk6pGc2_" version="22.1.18" type="github">
   <diagram name="Página-1" id="ZKQeqJewwD02eu_zfRfw">
-    <mxGraphModel dx="1434" dy="782" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="844" dy="460" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.078;exitY=0.629;exitDx=0;exitDy=0;exitPerimeter=0;startArrow=classic;startFill=1;strokeWidth=2;jumpSize=6;endSize=6;strokeColor=#000000;" edge="1" parent="1" source="BcHR5Af1jzsBUXVU-GAc-24" target="BcHR5Af1jzsBUXVU-GAc-18">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.078;exitY=0.629;exitDx=0;exitDy=0;exitPerimeter=0;startArrow=classic;startFill=1;strokeWidth=2;jumpSize=6;endSize=6;strokeColor=#000000;" parent="1" source="BcHR5Af1jzsBUXVU-GAc-24" target="BcHR5Af1jzsBUXVU-GAc-18" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="229" y="295" as="sourcePoint" />
             <mxPoint x="260" y="295" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-1" value="Relational Database&lt;br&gt;(Stores/retrieves data)" style="shape=datastore;whiteSpace=wrap;html=1;strokeWidth=2;strokeColor=#000000;" vertex="1" parent="1">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-1" value="Relational Database&lt;br&gt;(Stores/retrieves data)" style="shape=datastore;whiteSpace=wrap;html=1;strokeWidth=2;strokeColor=#000000;" parent="1" vertex="1">
           <mxGeometry x="615" y="220" width="100" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;strokeWidth=2;strokeColor=#000000;" edge="1" parent="1" source="BcHR5Af1jzsBUXVU-GAc-18" target="BcHR5Af1jzsBUXVU-GAc-12">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;strokeWidth=2;strokeColor=#000000;" parent="1" source="BcHR5Af1jzsBUXVU-GAc-18" target="BcHR5Af1jzsBUXVU-GAc-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="360" y="295" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-12" value="REST API (Python)&lt;br&gt;Handles client-side logic" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=#000000;fillColor=#000000;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam2.restful_api;" vertex="1" parent="1">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-12" value="REST API (Python)&lt;br&gt;Handles client-side logic" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=#000000;fillColor=#000000;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam2.restful_api;" parent="1" vertex="1">
           <mxGeometry x="430" y="239" width="114" height="112" as="geometry" />
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.05;entryY=0.577;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;strokeWidth=2;strokeColor=#000000;" edge="1" parent="1" source="BcHR5Af1jzsBUXVU-GAc-12" target="BcHR5Af1jzsBUXVU-GAc-1">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.05;entryY=0.577;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;strokeWidth=2;strokeColor=#000000;" parent="1" source="BcHR5Af1jzsBUXVU-GAc-12" target="BcHR5Af1jzsBUXVU-GAc-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-18" value="&lt;font color=&quot;#000000&quot;&gt;&lt;b&gt;Nginx Server&lt;/b&gt;&lt;br&gt;Serves static files&lt;br&gt;Forwards API requests&lt;/font&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#000000;strokeColor=#000000;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.traditional_server;" vertex="1" parent="1">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-18" value="&lt;font color=&quot;#000000&quot;&gt;&lt;b&gt;Nginx Server&lt;/b&gt;&lt;br&gt;Serves static files&lt;br&gt;Forwards API requests&lt;/font&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#000000;strokeColor=#000000;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.traditional_server;" parent="1" vertex="1">
           <mxGeometry x="315" y="256" width="45" height="78" as="geometry" />
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=0;endFill=1;startFill=1;startArrow=classic;strokeWidth=2;endSize=6;strokeColor=#000000;" edge="1" parent="1" source="BcHR5Af1jzsBUXVU-GAc-20" target="BcHR5Af1jzsBUXVU-GAc-18">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=0;endFill=1;startFill=1;startArrow=classic;strokeWidth=2;endSize=6;strokeColor=#000000;" parent="1" source="BcHR5Af1jzsBUXVU-GAc-20" target="BcHR5Af1jzsBUXVU-GAc-18" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-20" value="Vue.js Application" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=#000000;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.concepts.website;" vertex="1" parent="1">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-20" value="Vue.js Application" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=#000000;fillColor=#000000;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.concepts.website;" parent="1" vertex="1">
           <mxGeometry x="240" y="150" width="59" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="BcHR5Af1jzsBUXVU-GAc-24" value="&lt;font color=&quot;#000000&quot;&gt;User&lt;/font&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#000000;strokeColor=#000000;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.user;" vertex="1" parent="1">
+        <mxCell id="BcHR5Af1jzsBUXVU-GAc-24" value="&lt;font color=&quot;#000000&quot;&gt;User&lt;/font&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#000000;strokeColor=#000000;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.user;" parent="1" vertex="1">
           <mxGeometry x="148" y="246" width="78" height="78" as="geometry" />
         </mxCell>
       </root>
