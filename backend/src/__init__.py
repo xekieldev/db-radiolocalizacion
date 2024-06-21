@@ -38,6 +38,7 @@ def create_app(test_config=None):
     from src import filex
     from src import station
     from src import tech_measurement
+    from src import non_ionizing_radiation
     from src import users
 
 
@@ -45,6 +46,7 @@ def create_app(test_config=None):
     app.register_blueprint(filex.bp)
     app.register_blueprint(station.bp)
     app.register_blueprint(tech_measurement.bp)
+    app.register_blueprint(non_ionizing_radiation.bp)
     app.register_blueprint(users.bp)
 
     # make url_for('index') == url_for('blog.index')

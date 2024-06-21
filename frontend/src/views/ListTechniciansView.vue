@@ -87,7 +87,6 @@ async function del(id) {
       </div>
     </table>
   </div>
-  <footer-main />
 </template>
 
 <style scoped>

@@ -133,6 +133,32 @@ export function useApi() {
         loading.value = false
         return response && response.data 
     }
+    async function getAllNonIonizingRadiation() {
+        loading.value = true
+        const response = await axiosInstance.get(`/non_ionizing_radiation/`)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function getNonIonizingRadiation(id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/non_ionizing_radiation/${id}`)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function create_non_ionizing_radiation(data) {
+        loading.value = true
+        const response = await axiosInstance.post('/non_ionizing_radiation/create', data)
+        loading.value = false
+        return response && response.data 
+    }
+    async function delete_non_ionizing_radiation(id) {
+        loading.value = true
+        const response = await axiosInstance.delete(`/non_ionizing_radiation/${id}/delete_non_ionizing_radiation`)
+        loading.value = false
+        return response && response.data 
+    }
 
     return {
         list,
@@ -151,5 +177,9 @@ export function useApi() {
         getStation,
         updateRelatedStation,
         delete_tech_measurement,
+        getAllNonIonizingRadiation,
+        getNonIonizingRadiation,
+        create_non_ionizing_radiation,
+        delete_non_ionizing_radiation,
     }
 }

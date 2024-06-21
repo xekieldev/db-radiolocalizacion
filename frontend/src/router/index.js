@@ -118,6 +118,38 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/MapStationsView.vue')
     },
+    {
+      path: '/list_non_ionizing_radiation',
+      name: 'listNIR',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ListNIRMeasurementsView.vue')
+    },
+    {
+      path: '/non_ionizing_radiation/create',
+      name: 'createNIR',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FormNewNIRMeasurementView.vue')
+    },
+    {
+      path: '/non_ionizing_radiation/:id',
+      name: 'deleteNIR',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/NirMeasDisplayView.vue')
+    },
+    {
+      path: '/nir_map',
+      name: 'nirMap',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/MapNirView.vue')
+    },  
   ]
 })
 

@@ -133,6 +133,23 @@ class User (db.Model):
     perfil = db.Column(db.String(50), nullable = True)
     email = db.Column(db.String(50), nullable = False)
 
+class NonIonizingRadiation (db.Model):
+    __tablename__ = 'NonIonizingRadiation'
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    expediente = db.Column(db.String(50), nullable = False)
+    fecha = db.Column(db.String(10))
+    hora = db.Column(db.String(5))
+    area = db.Column(db.String(25))
+    cantidad = db.Column(db.Integer)
+    valor_maximo = db.Column(db.Float)
+    provincia = db.Column(db.String(30))
+    localidad = db.Column(db.String(30))
+    tipo = db.Column(db.String(20))
+    observaciones = db.Column(db.String(200))
+    id_technician1 = db.Column(db.Integer)
+    id_technician2 = db.Column(db.Integer)
+
+
 def init_app(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///radioloc.sqlite"
     db.init_app(app)
