@@ -120,7 +120,11 @@ const searchText = ref()
 onBeforeMount(async () => {
 
       const data = await listStations()
+      console.log("data", data)
+      
       items.value.push(...data)
+      console.log("items",items)
+      
       for (const item in items.value) {
         items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
         items.value[item].provincia = getNameByCode("province", items.value[item].provincia)

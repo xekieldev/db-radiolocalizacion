@@ -59,6 +59,12 @@ setInterval(updateLoggedIn, 500);
         </RouterLink>
         <RouterLink
           v-if="loggedIn"
+          to="/list_non_ionizing_radiation"
+        >
+          RNI
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
           to="/about"
         >
           About

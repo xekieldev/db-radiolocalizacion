@@ -111,12 +111,11 @@ async function searchFiles() {
             />
           </div>
         </td>
-      </tr>
-
-      <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
-      </div>
+      </tr>      
     </table>
+    <div class="status">
+        <span><strong>Loading:</strong> {{ loading }}</span>
+    </div>
   </div>
 </template>
 
@@ -161,9 +160,9 @@ tr:nth-child(odd) {
 
 .search-bar {
   display: flex;
-  justify-content: end;
-  align-items: end;
-  margin-left: auto;
+  justify-content: start;
+  align-items: start;
+  margin-right: auto;
   
 }
 .buscar-btn {

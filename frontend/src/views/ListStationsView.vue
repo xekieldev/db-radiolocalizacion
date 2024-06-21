@@ -173,11 +173,10 @@ function viewMap() {
           </div>
         </td>
       </tr>
-
-      <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
-      </div>
     </table>
+    <div class="status">
+        <span><strong>Loading:</strong> {{ loading }}</span>
+    </div>
   </div>
 </template>
 

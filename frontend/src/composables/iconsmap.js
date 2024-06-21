@@ -64,6 +64,7 @@ import CPLDIcon from "../../img/map_icons/CPLD.png";
 import FXIcon from "../../img/map_icons/FX.png";
 import SIDUPIcon from "../../img/map_icons/SIDUP.png";
 import SMARIcon from "../../img/map_icons/SMAR.png";    
+import NIRIcon from "../../img/map_icons/NIR.png";    
 
 const iconsMap = { 
     FM: FMIcon,
@@ -131,7 +132,8 @@ const iconsMap = {
     CPLD: CPLDIcon,
     FX: FXIcon,
     SIDUP: SIDUPIcon,
-    SMAR: SMARIcon,    
+    SMAR: SMARIcon,  
+    NIR: NIRIcon,  
 }
 
 
