@@ -5,17 +5,19 @@ import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 import { useTerritory } from '../composables/territory'
-import FormRow from '../components/FormRow.vue'
+import { useSearch } from '../composables/search'
+import FormSearch from '../components/FormSearch.vue'
 
 
 const { listStations, loading } = useApi()
 
 const router = useRouter()
 const { getNameByCode } = useTerritory()
+const { search } = useSearch()
 
 
 const items = ref([])
-const searchText = ref()
+const searchText = ref('')
 
 
 function editItem(item) {
@@ -39,51 +41,29 @@ function viewItem(item) {
 
 
 onBeforeMount(async () => {
-    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-      const data = await listStations()
+  if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
+    const data = await listStations()
+    items.value.push(...data)
+    for (const item in items.value) {
+      items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
+      items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
+    }
+  } else {
+      const data = await listStations(true)
       items.value.push(...data)
       for (const item in items.value) {
         items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
         items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-        
       }
-    } else {
-        const data = await listStations(true)
-        items.value.push(...data)
-        for (const item in items.value) {
-          items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
-          items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-        }
-      }      
+    }      
 })
 
-async function searchStations() {
-  const searchStringTemp = searchText.value ? searchText.value.toLowerCase() : ''
-  const searchString = searchStringTemp.split('+')
+async function searchStations(searchText) {
   const data = await listStations(false)
-  const searchResult = data.filter((item) => {
-    const id = item.id
-    const identificacion = item.identificacion ? item.identificacion.toLowerCase() : ''
-    const servicio = item.servicio ? item.servicio.toLowerCase() : ''
-    const frecuencia = item.frecuencia !== null && item.frecuencia !== undefined ? item.frecuencia.toString() : ''
-    const domicilio = item.domicilio ? item.domicilio.toString().toLowerCase() : ''
-    const localidad = getNameByCode("city", item.localidad) ? getNameByCode("city", item.localidad).toLowerCase() : '' 
-    const provincia = getNameByCode("province", item.provincia) ? getNameByCode("province", item.provincia).toLowerCase() : '' 
-    const emplazamiento = item.emplazamiento ? item.emplazamiento.toLowerCase() : ''
-    
-    return id == searchString || identificacion.includes(searchString) || servicio.includes(searchString) || frecuencia.includes(searchString) || domicilio.includes(searchString) || localidad.includes(searchString) || provincia.includes(searchString) || emplazamiento.includes(searchString)
-    
-  })
-
-  items.value = searchResult
-  for (const item in items.value) {
-    items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
-    items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-  }
+  items.value = search(data, searchText, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
 }
 
 function viewMap() {  
-
   router.push(`/station_map`)
 }
 
@@ -91,28 +71,17 @@ function viewMap() {
 </script>
 <template>
   <heading>Listado de Estaciones</heading>
-  <div class="bar-menu">
-    <div class="view-map-container">
+  <div class="stations-menu">
+    <form-search 
+      :searchText = "searchText"
+      placeholder = "Buscar Estaciones"
+      @on-submit="searchStations"
+    />
       <my-button
-        class="secondary left view-map-button"
+        class="secondary right view-map-button"
         label="Ver Mapa"
         @on-tap="viewMap"
       />
-    </div>
-    <form-row class="search-bar">
-      <form-kit
-        v-model="searchText"
-        outer-class="field-search"
-        type="text"
-        name="searchInput"
-        placeholder="Buscar estaciones"
-      />
-      <my-button
-        class="secondary buscar-btn"
-        label="Buscar"
-        @on-tap="() => searchStations()"
-      />
-    </form-row>
   </div>
 
   <div class="list-container">
@@ -219,11 +188,16 @@ tr:nth-child(odd) {
   gap: 1px;
   margin: 0;
 }
-  
-.field-search {
+.stations-menu {
   display: flex;
-  /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
-  /* flex: 0 0 50%; */
+  flex-direction: row;
+  justify-content: space-between;
+}
+  
+/* .field-search {
+  display: flex;
+  // https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping 
+  // flex: 0 0 50%; 
   margin: 0;
   
 }
@@ -246,7 +220,6 @@ tr:nth-child(odd) {
 }
 
 .view-map-container {
-  /* margin: auto; */
   left: 0;
   margin-right: auto;
   
@@ -254,6 +227,6 @@ tr:nth-child(odd) {
 
 .view-map-button {
   top: 2px;
-}
+} */
 
 </style>

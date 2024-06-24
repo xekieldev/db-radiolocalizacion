@@ -1,55 +1,65 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive, ref } from 'vue'
+import { useSearch } from '../composables/search'
+import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
+import FormSearch from '../components/FormSearch.vue'
 
 
 const { getAllTechnicians, delete_technician, loading } = useApi()
+const { search } = useSearch()
 const router = useRouter()
 
 function createItem() {  
   router.push('/technician/create_technician')
 }
 
-const items = reactive([])
+const items = ref([])
 const status = ref({});
-
+const searchText = ref('')
 
 onBeforeMount(async () => {
-    const data = await getAllTechnicians()
-    items.push(...data)
-    
+  const data = await getAllTechnicians()
+  items.value.push(...data)
 })
 
 const confirmar = (id) => {
-      status.value[id] = status.value[id] === 1 ? 0 : 1
+  status.value[id] = status.value[id] === 1 ? 0 : 1
 }
 
-
 async function del(id) {
-    try { 
-      await delete_technician(id)
-      status.value[id] = 0
-      window.location.reload()
-    } catch (error) {
-    console.error(error)
-    
-    }
-    
-  }
+  try { 
+    await delete_technician(id)
+    status.value[id] = 0
+    window.location.reload()
+  } catch (error) {
+  console.error(error) 
+  }  
+}
 
+async function searchTechnician(searchText) {
+  const data = await getAllTechnicians()    
+  items.value = search(data, searchText, ['apellido','nombre', 'area'])    
+}
 
 </script>
 <template>
   <heading>Gestión de Técnicos</heading>
-  <div class="technicians-list-container">
+  <div class="technicians-menu">
+    <form-search 
+      :searchText = "searchText"
+      placeholder = "Buscar Técnicos"
+      @on-submit="searchTechnician"
+    />
     <my-button
       class="secondary right"
       label="Nuevo Técnico"
       @on-tap="createItem"
     />
+  </div>
+  <div class="technicians-list-container"> 
     <table class="technicians-table">
       <tr>
         <th>id</th>
@@ -81,11 +91,10 @@ async function del(id) {
           />
         </td>
       </tr>
-    
-      <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
-      </div>
     </table>
+    <div class="status">
+        <span><strong>Loading:</strong> {{ loading }}</span>
+    </div>
   </div>
 </template>
 
@@ -93,7 +102,6 @@ async function del(id) {
 .technicians-list-container {
   display: flex;
   flex-direction: column;
-  /* max-width: 900px; */
   width: 100%;
   justify-content: center;
 }
@@ -102,7 +110,7 @@ async function del(id) {
 }
 .technicians-table{
   justify-content: center; 
-  margin-top: 5px;
+  margin-top: 10px;
   
 }
 th, td{
@@ -127,6 +135,11 @@ tr:nth-child(odd) {
 }
 .danger:hover {
   background-color: red;
+}
+.technicians-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 </style>

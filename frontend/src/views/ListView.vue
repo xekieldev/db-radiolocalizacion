@@ -4,15 +4,17 @@ import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
-import FormRow from '../components/FormRow.vue';
+import FormSearch from '../components/FormSearch.vue';
+import { useSearch } from '../composables/search'
 
 
 const { list, loading, deleteFile } = useApi()
+const { search } = useSearch()
 
 const router = useRouter()
 
 const items = ref([])
-const searchText = ref()
+const searchText = ref('')
 
 
 
@@ -26,54 +28,31 @@ async function deleteItem(item) {
 }
 
 onBeforeMount(async () => {
-    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-      const data = await list()
-      items.value.push(...data)
-    } else {
-        const data = await list(true)
-        items.value.push(...data)    
-    }  
+  if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
+    const data = await list()
+    items.value.push(...data)
+  } else {
+      const data = await list(true)
+      items.value.push(...data)    
+  }  
 })
 
-async function searchFiles() {
-  const searchStringTemp = searchText.value ? searchText.value.toLowerCase() : ''
-  const searchString = searchStringTemp.split('+')
+async function searchFiles(searchText) {
   const data = await list(false)
-  // console.log("data: ", data)
-  
-  const searchResult = data.filter((item) => {
-    const id = item.id
-    const area = item.area ? item.area.toLowerCase() : ''
-    const expediente = item.expediente ? item.expediente.toLowerCase() : ''
-    
-    return id == searchString || expediente.includes(searchString) || area.includes(searchString)
-    
-  })
-  
-   items.value = searchResult
-
+  items.value = search(data, searchText, ['area','expediente'])  
 }
 
 </script>
 <template>
   <heading>Gestión de Expedientes</heading>
+  <div class="files-menu">
+    <form-search 
+      :searchText = "searchText"
+      placeholder = "Buscar Expedientes"
+      @on-submit="searchFiles"
+    />
+  </div>
   <div class="list-container">
-    <div class="bar-menu">
-      <form-row class="search-bar">
-        <form-kit
-          v-model="searchText"
-          outer-class="field-search"
-          type="text"
-          name="searchInput"
-          placeholder="Buscar expedientes"
-        />
-        <my-button
-          class="secondary buscar-btn"
-          label="Buscar"
-          @on-tap="() => searchFiles()"
-        />
-      </form-row>
-    </div>
     <table class="files-table">
       <tr>
         <th>id</th>
@@ -156,36 +135,6 @@ tr:nth-child(odd) {
   flex-direction: row;
   gap: 1px;
   margin: 0;
-}
-
-.search-bar {
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  margin-right: auto;
-  
-}
-.buscar-btn {
-  margin: 0 5px;
-  bottom: 2px;
-  
-}
-.formkit-outer.search-bar {
-  margin: 0;
-}
-
-.field-search {
-  display: flex;
-  /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
-  flex: 0 0 75%;
-  margin: 0;
-  
-}
-
-.bar-menu {
-  display: flex;
-  justify-content: space-between;
-  top: 2px;
 }
   
 </style>

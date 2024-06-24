@@ -1,20 +1,11 @@
 <template>
   <div class="global-map-container">
     <div class="menu-container">
-      <form-row class="search-items">
-        <form-kit
-          v-model="searchText"
-          outer-class="field-search"
-          type="text"
-          name="searchInput"
-          placeholder="Buscar estaciones"
-        />
-        <my-button
-          class="secondary search-btn"
-          label="Buscar"
-          @on-tap="() => searchStations()"
-        />
-      </form-row>
+      <form-search 
+        :searchText = "searchText"
+        placeholder = "Buscar Estaciones"
+        @on-submit="searchStations"
+      />
     </div>
   
     <l-map
@@ -103,57 +94,35 @@ import { useTerritory } from "../composables/territory";
 import MyButton from "./MyButton.vue";
 import { useRouter } from 'vue-router'
 import PropValue from "./PropValue.vue";
-import FormRow from "./FormRow.vue";
+import FormSearch from "./FormSearch.vue";
 import { useIconsMap } from "../composables/iconsmap"
+import { useSearch } from "../composables/search"
 import genericIcon from "../../img/map_icons/generic.png"
 
 
 const { listStations } = useApi()
 const { getNameByCode } = useTerritory()
 const { getIconUrl } = useIconsMap()
+const { search } = useSearch()
 const router = useRouter()
 
 
 const items = ref([])
-const searchText = ref()
+const searchText = ref('')
 
 onBeforeMount(async () => {
 
-      const data = await listStations()
-      console.log("data", data)
-      
-      items.value.push(...data)
-      console.log("items",items)
-      
+      const data = await listStations()      
+      items.value.push(...data)      
       for (const item in items.value) {
         items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
         items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
       }
 })
 
-async function searchStations() {
-  const searchStringTemp = searchText.value ? searchText.value.toLowerCase() : ''
-  const searchString = searchStringTemp.split('+')
-  const data = await listStations(false)
-  const searchResult = data.filter((item) => {
-
-    const id = item.id
-    const identificacion = item.identificacion ? item.identificacion.toLowerCase() : ''
-    const servicio = item.servicio ? item.servicio.toLowerCase() : ''
-    const frecuencia = item.frecuencia !== null && item.frecuencia !== undefined ? item.frecuencia.toString() : ''
-    const domicilio = item.domicilio ? item.domicilio.toString().toLowerCase() : ''
-    const localidad = getNameByCode("city", item.localidad) ? getNameByCode("city", item.localidad).toLowerCase() : '' 
-    const provincia = getNameByCode("province", item.provincia) ? getNameByCode("province", item.provincia).toLowerCase() : '' 
-    const emplazamiento = item.emplazamiento ? item.emplazamiento.toLowerCase() : ''
-    
-    return id == searchString || identificacion.includes(searchString) || servicio.includes(searchString) || frecuencia.includes(searchString) || domicilio.includes(searchString) || localidad.includes(searchString) || provincia.includes(searchString) || emplazamiento.includes(searchString)
-    
-  })
-  items.value = searchResult
-  for (const item in items.value) {
-    items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
-    items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-  }
+async function searchStations(searchText) {
+    const data = await listStations(false)
+    items.value = search(data, searchText, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
 }
 
 function viewItem(item) {  
@@ -177,8 +146,6 @@ defineProps({
   zoom: Number
   
 })
-
-
 </script>
 
 <style scoped>
