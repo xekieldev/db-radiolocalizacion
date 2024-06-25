@@ -70,26 +70,14 @@ import FooterMain from '../components/FooterMain.vue';
   height: 50px;
 }
 
-.about-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0; /* Extiende el footer a lo largo de toda la anchura */
-  right: 0;
-  width: 100%; /* Ancho completo */
-  background-color: transparent; /* Hace que el fondo del footer sea transparente */
-  text-align: center; /* Centra el texto del footer horizontalmente */
-  padding: 20px; /* Agrega un poco de espacio alrededor del contenido del footer */
-  box-sizing: border-box; /* Asegura que el padding se incluya en el ancho total del footer */
-}
-
 .about-text {
   margin-bottom: 100px;
 }
 .developer-name {
-  position: fixed;
+  /* position: sticky; */
   color: #2C3E50;
   bottom: 5px;
-  left: 0; /* Extiende el footer a lo largo de toda la anchura */
+  left: 0; 
   right: 0;
   width: 100%; 
 }

@@ -3,6 +3,8 @@ import { useApi} from '../composables/api'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import FooterMain from '../components/FooterMain.vue'
+
 
 
 const { create , getAllTechnicians, updateRelatedStation, getStation } = useApi()
@@ -46,6 +48,7 @@ async function save(fields) {
     
     @on-submit="save"
   />
+  <footer-main/>
 </template>
 
 <style scoped>

@@ -19,6 +19,7 @@ import BarMenu from './components/Menu.vue'
   flex-direction: column;
   width: 900px;
   margin: 0 auto;
+  min-height: 100vh;
 }
 
 header {

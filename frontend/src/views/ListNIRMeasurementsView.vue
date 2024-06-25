@@ -7,6 +7,7 @@ import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
 import FormSearch from '../components/FormSearch.vue'
 import { useSearch } from '../composables/search'
+import FooterMain from '../components/FooterMain.vue'
 
 
 const { getAllNonIonizingRadiation, delete_non_ionizing_radiation, loading } = useApi()
@@ -83,61 +84,64 @@ function viewNirMap() {
         />
       </div> 
     </div>
-    <table class="nir-table">
-      <tr>
-        <th>id</th>
-        <th>Expediente</th>
-        <th>Localidad</th>
-        <th>Provincia</th>
-        <th>Área/CCTE</th>
-        <th>Cantidad de Mediciones</th>
-        <th>Valor Máximo [%]</th>
-        <th>Acciones</th>
-      </tr>
-      <tr
-        v-for="item in items"
-        :key="item"
-      >
-        <td>
-          <my-button
-            class="primary center"
-            :label="(item.id.toString())"
-            @on-tap="() => viewItem(item.id)"
-          />
-        </td> 
-        <td>{{ item.expediente }}</td> 
-        <td>{{ item.localidad }}</td> 
-        <td>{{ item.provincia }}</td>
-        <td>{{ item.area }}</td>
-        <td>{{ item.cantidad }}</td>
-        <td>{{ item.valor_maximo }}</td>
-        <td>
-          <my-button
-            v-if="status[item.id]!=1"
-            class="primary center"
-            label="Borrar"
-            @on-tap="confirmar(item.id)"
-          />
-          <my-button
-            v-if="status[item.id]===1"
-            class="tertiary center"
-            label="¿Confirmar?"
-            @on-tap="del(item.id)"
-          />
-        </td>
-      </tr>  
-    </table>
+    <div class="nir-measurements-container">
+      <table>
+        <tr>
+          <th>id</th>
+          <th>Expediente</th>
+          <th>Localidad</th>
+          <th>Provincia</th>
+          <th>Área/CCTE</th>
+          <th>Cantidad de Mediciones</th>
+          <th>Valor Máximo [%]</th>
+          <th>Acciones</th>
+        </tr>
+        <tr
+          v-for="item in items"
+          :key="item"
+        >
+          <td>
+            <my-button
+              class="primary center"
+              :label="(item.id.toString())"
+              @on-tap="() => viewItem(item.id)"
+            />
+          </td> 
+          <td>{{ item.expediente }}</td> 
+          <td>{{ item.localidad }}</td> 
+          <td>{{ item.provincia }}</td>
+          <td>{{ item.area }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.valor_maximo }}</td>
+          <td>
+            <my-button
+              v-if="status[item.id]!=1"
+              class="primary center"
+              label="Borrar"
+              @on-tap="confirmar(item.id)"
+            />
+            <my-button
+              v-if="status[item.id]===1"
+              class="tertiary center"
+              label="¿Confirmar?"
+              @on-tap="del(item.id)"
+            />
+          </td>
+        </tr>  
+      </table>
+    </div>
     <div class="status">
         <span><strong>Loading:</strong> {{ loading }}</span>
-      </div>
+    </div>
+  <footer-main class="footer-main"/>
 </template>
 
 <style scoped>
 
 .status{
-    background-color: lightyellow;
+  background-color: lightyellow;
 }
-.nir-table{
+.nir-measurements-container{
   justify-content: center; 
   margin-top: 10px;
   

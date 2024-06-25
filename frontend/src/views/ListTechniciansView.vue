@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 import FormSearch from '../components/FormSearch.vue'
+import FooterMain from '../components/FooterMain.vue'
 
 
 const { getAllTechnicians, delete_technician, loading } = useApi()
@@ -96,6 +97,7 @@ async function searchTechnician(searchText) {
         <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
   </div>
+  <footer-main class="footer-main"/>
 </template>
 
 <style scoped>
@@ -104,14 +106,10 @@ async function searchTechnician(searchText) {
   flex-direction: column;
   width: 100%;
   justify-content: center;
+  margin-top: 10px;
 }
 .status{
     background-color: lightyellow;
-}
-.technicians-table{
-  justify-content: center; 
-  margin-top: 10px;
-  
 }
 th, td{
   text-align: center;

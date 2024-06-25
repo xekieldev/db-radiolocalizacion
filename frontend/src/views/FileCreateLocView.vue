@@ -3,6 +3,7 @@ import { useApi} from '../composables/api'
 import Frloc from '../components/FormMain.vue'
 import { onBeforeMount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import FooterMain from '../components/FooterMain.vue'
 
 
 const { create , getAllTechnicians} = useApi()
@@ -11,8 +12,6 @@ const file = reactive({})
 const station = reactive([])
 const technicians = reactive([])
 const techniciansValues = reactive([])
-
-
 
 
 onBeforeMount(async () => {
@@ -40,9 +39,9 @@ async function save(fields) {
     :station="station"
     :technicians="technicians"
     :technicians-values="techniciansValues"
-    
     @on-submit="save"
   />
+  <footer-main/>
 </template>
 
 <style scoped>

@@ -7,6 +7,7 @@ import MyButton from '../components/MyButton.vue';
 import { useTerritory } from '../composables/territory'
 import { useSearch } from '../composables/search'
 import FormSearch from '../components/FormSearch.vue'
+import FooterMain from '../components/FooterMain.vue'
 
 
 const { listStations, loading } = useApi()
@@ -147,6 +148,7 @@ function viewMap() {
         <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
   </div>
+  <footer-main class="footer-main"/>
 </template>
 
 <style scoped>
