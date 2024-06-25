@@ -17,7 +17,7 @@ function handleClick() {
 <template>
   <div
     class="my-button-container"
-    :class="{ primary: type === 'primary', secondary: type === 'secondary', tertiary: type === 'tertiary', quaternary: type === 'quaternary', quinary: type === 'quinary', senary: type === 'senary', center: align === 'center', right: align === 'right' }"
+    :class="{ primary: type === 'primary', secondary: type === 'secondary', tertiary: type === 'tertiary', quaternary: type === 'quaternary', quinary: type === 'quinary', senary: type === 'senary', septenary: type === 'septenary',center: align === 'center', right: align === 'right' }"
     @click="handleClick"
   >
     {{ label }}
@@ -67,9 +67,10 @@ function handleClick() {
 .quaternary {
   border: 1px solid #426aaf;
   font-weight: 500;  
+  padding: 5px 10px 5px 50px;
   color: #426aaf; 
-  height: 60px;
-  width: 350px;
+  height: 45px;
+  width: 250px;
   text-align: center;
   align-items: center;
 }
@@ -93,6 +94,23 @@ function handleClick() {
 }
 .senary:hover {
   background-color: #fa8900;
+  color: white;
+}
+.septenary {
+  border: 2px solid #426aaf;
+  box-shadow: 2px 5px 2px 2px gray;
+  background-color: #ececec;
+  font-size: 16px;
+  font-weight: 700;  
+  color: #426aaf; 
+  height: 150px;
+  width: 250px;
+  text-align: center;
+  align-items: center;
+  padding-top: 50px;
+}
+.septenary:hover {
+  background-color: #426aaf;
   color: white;
 }
 .center {

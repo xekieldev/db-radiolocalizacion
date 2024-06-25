@@ -2,10 +2,11 @@
 import { useApi } from '../composables/api'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Heading from '../components/Heading.vue';
-import MyButton from '../components/MyButton.vue';
-import FormSearch from '../components/FormSearch.vue';
+import Heading from '../components/Heading.vue'
+import MyButton from '../components/MyButton.vue'
+import FormSearch from '../components/FormSearch.vue'
 import { useSearch } from '../composables/search'
+import FooterMain from '../components/FooterMain.vue'
 
 
 const { list, loading, deleteFile } = useApi()
@@ -96,6 +97,7 @@ async function searchFiles(searchText) {
         <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
   </div>
+  <footer-main class="footer-main"/>
 </template>
 
 <style scoped>
@@ -106,13 +108,13 @@ async function searchFiles(searchText) {
   width: 100%;
   justify-content: center;
   font-size: 14px;
+  margin-top: 10px;
 }
 .status{
     background-color: lightyellow;
 }
 .files-table {
   justify-content: center; 
-  margin-top: 10px;
   
 }
 th, td{

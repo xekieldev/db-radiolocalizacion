@@ -59,6 +59,6 @@ function goBack() {
   flex-direction: row;
   gap: 10px;
   justify-content: end;
-  margin: 0 5px;
+  /* margin: 0 5px; */
 }
 </style>

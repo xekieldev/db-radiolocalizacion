@@ -46,7 +46,7 @@ const props = defineProps({
   display: flex;
   flex-direction: row;
   gap: 10px; 
-  margin: 0 10px;
+  /* margin: 0 10px; */
 }
 .field-text-search {
   display: flex;
@@ -56,7 +56,6 @@ const props = defineProps({
   background-color: white;
 }
 .search-btn {
-  margin-bottom: 1px;
   background-color: white;
 }
 

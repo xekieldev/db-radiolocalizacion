@@ -428,7 +428,7 @@ watch(
   flex-direction: row;
   gap: 10px;
   justify-content: end;
-  margin: 5px;
+  margin: 5px 0;
 }
 
 .status {
