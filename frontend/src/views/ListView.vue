@@ -107,7 +107,6 @@ async function searchFiles(searchText) {
   /* max-width: 900px; */
   width: 100%;
   justify-content: center;
-  font-size: 14px;
   margin-top: 10px;
 }
 .status{
@@ -115,7 +114,7 @@ async function searchFiles(searchText) {
 }
 .files-table {
   justify-content: center; 
-  
+  font-size: 12px; 
 }
 th, td{
   text-align: center;

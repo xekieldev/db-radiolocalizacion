@@ -32,7 +32,7 @@ function listTechnicians() {
 }
 
 function stationsOptions() {
-  stationsMenu.value = true
+  stationsMenu.value = !stationsMenu.value
 
 }
 

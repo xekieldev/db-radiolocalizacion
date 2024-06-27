@@ -87,12 +87,6 @@ onBeforeMount(async () => {
       />
      
     </display-row>
-    
-    <!-- <mapa
-      v-if="station.latitud"
-      class="mapa"
-      :position="[ -35, -57 ]"
-    /> -->
     <display-row>
       <prop-value
         v-for="value, index in technicians"
@@ -107,44 +101,12 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped>
-.print-header {
-  display: flex;
-  background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
-  width: 100%;
-  justify-content: space-between;
-  align-items: baseline;
-  position: absolute;
-}
-.page {
-  position: absolute;
-  width: 900px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-}
-.print-preview {
-  background: white;
-  width: 900px;
-  height: 1350px;
-}
-.general-view {
-  margin-top: 100px;
-}
-.preview-title {
-  margin: 30px 10px;
-}
-.back-preview-button {
-  align-self: center;
-}
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   /* text-transform: uppercase; */
-}
-
-.status{
-    background-color: lightyellow;
 }
 .prop:hover {
   background-color: #bdc0c2;
@@ -160,38 +122,5 @@ onBeforeMount(async () => {
   border-bottom: 1px solid #cbcdce;
 }
 
-.buttons-container {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: end;
-  margin: 5px;
-}
-
-.status {
-  align-self: flex-start;
-}
-.related-station-container {
-  display: flex;
-  gap: 5px;
-  margin-right: auto;
-}
-.related-station-container p {
-  padding: 5px 5px;
-  flex-direction: row;
-}
-.more-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
-
-.related-arrow {
-  width: 20px;
-}
-.text-related-stations {
-  font-size: 13px;
-  font-weight: 500;
-}
 
 </style>

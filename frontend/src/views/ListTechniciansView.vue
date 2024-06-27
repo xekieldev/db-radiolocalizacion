@@ -108,6 +108,9 @@ async function searchTechnician(searchText) {
   justify-content: center;
   margin-top: 10px;
 }
+.technicians-table {
+  font-size: 12px;
+}
 .status{
     background-color: lightyellow;
 }

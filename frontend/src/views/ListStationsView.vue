@@ -158,7 +158,7 @@ function viewMap() {
   /* max-width: 900px; */
   width: 100%;
   justify-content: center;
-  font-size: 14px;
+  /* font-size: 14px; */
 }
 .status{
     background-color: lightyellow;
@@ -166,8 +166,9 @@ function viewMap() {
 .stations-table{
   justify-content: center; 
   margin-top: 10px;
-  
+  font-size: 12px;
 }
+
 th, td{
   text-align: center;
   padding: 5px;

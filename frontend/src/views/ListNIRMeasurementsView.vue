@@ -107,7 +107,7 @@ function viewNirMap() {
               @on-tap="() => viewItem(item.id)"
             />
           </td> 
-          <td>{{ item.expediente }}</td> 
+          <td class="file-field">{{ item.expediente }}</td> 
           <td>{{ item.localidad }}</td> 
           <td>{{ item.provincia }}</td>
           <td>{{ item.area }}</td>
@@ -144,7 +144,12 @@ function viewNirMap() {
 .nir-measurements-container{
   justify-content: center; 
   margin-top: 10px;
-  
+  font-size: 12px;
+}
+.file-field {
+  /* display: flex;
+  flex: 0 0 80%; */
+  width: 300px;
 }
 th, td{
   text-align: center;
