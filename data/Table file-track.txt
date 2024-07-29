@@ -1,0 +1,12 @@
+1   Salta   15/5    Esartor
+1   BsAs    16/5    Jperez
+1   Afuera  17/5    Esartor
+2
+2
+2
+3
+3
+3
+1
+1
+1   BsAs   5/6      Jperez

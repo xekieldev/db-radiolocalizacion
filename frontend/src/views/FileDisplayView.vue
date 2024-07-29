@@ -1,413 +1,408 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive, ref, watch, nextTick } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { onBeforeMount, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTerritory } from '../composables/territory'
-import Mapa from '../components/MapMain.vue'
 import DisplayRow from '../components/DisplayRow.vue'
 import PropValue from '../components/PropValue.vue'
 import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
+import FormNewActivity from '../components/FormNewActivity.vue'
+import FormMoveFile from '../components/FormMoveFile.vue'
+import FooterMain from '../components/FooterMain.vue'
 
-
-const { getFile, getAllTechnicians } = useApi()
+const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, patchFile } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
-const route = useRoute()
 const { getNameByCode } = useTerritory()
 
 
-const currentPath = ref('')
+const tipoTramite = ref()
+const currentLocation = ref()
 
-const redirectToCreate = () => {
-  currentPath.value = router.currentRoute.value.path
-  if (station.tipoVinculo == 'Radioeléctrico' || station.tipoVinculo == 'RADIOELÉCTRICO') {
-    router.push({ path: '/file/create', query: { rloc: 'true', from: currentPath.value } })
-  } else {
-    router.push({ path: '/file/create', query: { rloc: 'false', from: currentPath.value } })
 
-  }
-}
-
-function viewItem(item) {  
-  router.push({name: 'tech_measurement', params: { id: item}})
-}
-function editItem(item) {  
-
-  if (station.frecuencia != null || station.frecuencia != undefined) {
+function editItem(file_id, id) {
+  if (items.value.find(station => station.id === id).frecuencia != null || items.value.find(station => station.id === id).frecuencia != undefined) {
+    
     router.currentRoute.value.query.rloc = 'true'
-    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
+    router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'true'} })
 
   } else {
+    
     router.currentRoute.value.query.rloc = 'false'
-    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'false'} })
+    router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'false'} })
 
   }
 }
-function goBack() {  
-  router.back()
 
+async function deleteItem(file_id, id) {  
+  await deleteStation(file_id, id)
+  window.location.reload() 
 }
 
 const file = reactive({})
-const station = reactive({})
-const technicians = reactive({})
-const techniciansValues = reactive({})
-const printFlag = reactive({isActive: false})
+const items = ref([])
+const activities = ref([])
+const menu = ref(false)
 
 onBeforeMount(async () => {
-    const response = await getFile(currentRoute.value.params.id)
-    const techResponse = await getAllTechnicians()
+  
+    
+    const response = await getFile(router.currentRoute.value.path.slice(6))
     Object.assign(file, response.file)
-    Object.assign(station, response.station)
-    Object.assign(technicians, response.technicians)
-    Object.assign(techniciansValues, techResponse)
-    station.provincia = getNameByCode("province", response.station.provincia)
-    station.localidad = getNameByCode("city", response.station.localidad)    
-})
-
-function print() {
-  printFlag.isActive = true
-  nextTick(() => {
-    // Usa un bucle para verificar el estado del DOM hasta que esté listo
-    const checkDomReady = setInterval(() => {
-      if (document.querySelector('.print-header')) {
-        clearInterval(checkDomReady)
-        window.print()        
-        printFlag.isActive = false
-      }
-    }, 200) // Verificar cada 100 ms
-  })
-}
-
-function viewRelatedStation(item) {
-  router.push(`/file/${item}`)
-}
-
-watch(
-  () => route.params.id,
-  async newId => {
-    const response = await getFile(newId)
-    Object.assign(file, response.file)
-    Object.assign(station, response.station)
-    Object.assign(technicians, response.technicians)
-    station.provincia = getNameByCode("province", response.station.provincia)
-    station.localidad = getNameByCode("city", response.station.localidad)
+    currentLocation.value = response.currentArea
+    tipoTramite.value = file.tipo
+    console.log(tipoTramite)
+    
 
     
+    
+    file.localidad = getNameByCode('city', file.localidad)
+    file.provincia = getNameByCode('province', file.provincia)
+    const data = await stationsPerFile(file.id)
+    
+    items.value.push(...data)
+    for (const item in items.value) {
+      items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
+      items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
+    }
+    const file_id = currentRoute.value.params.id
+    
+    const activities_response = await getActivities(file_id)
+    activities.value.push(...activities_response)
+    
+})
+
+
+
+function createStation() { 
+  router.push({name: "createStation", query: { rloc: 'true' }})
+}
+
+function createLocStation() { 
+  router.push({name: "createStation", query: { rloc: 'false' }})
+}
+
+function goBack() {  
+  router.back()
+}
+
+function viewItem(file_id, id) {  
+  console.log("ruta para push", `/file/${file_id}/station/${id}`)
+  
+  router.push(`/file/${file_id}/station/${id}`)
+}
+
+
+async function save(fields) {
+  try {
+    const file_id = currentRoute.value.params.id
+    
+    await newActivity (file_id, fields)
+    window.location.reload() 
+
+  } catch (error) {
+    console.error(error)
   }
-)
+}
+
+
+const currentDate = new Date(); 
+
+const fullHours = currentDate.getHours() < 10 ? "0" + currentDate.getHours() : currentDate.getHours()
+const fullMinutes = currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : currentDate.getMinutes()
+const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
+const myTime = fullHours + ":" + fullMinutes + ":" + fullSeconds
+
+
+const fullMonth = (currentDate.getMonth()+1)<10 ? "0"+(currentDate.getMonth()+1) : (currentDate.getMonth()+1)
+const fullDay = currentDate.getDate()<10 ? "0"+currentDate.getDate() : currentDate.getDate()
+const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
+
+async function patch_file(fields) {
+  try {
+    const file_id = currentRoute.value.params.id
+    fields.fecha = myDate
+    fields.hora = myTime
+
+    await patchFile (file_id, fields)
+    window.location.reload() 
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+
+function openMenu() {
+  menu.value = !menu.value
+
+}
+function closeDiv() {
+  menu.value = false
+}
+
+
 
 </script>
 <template>
-  <div class="buttons-container">
-    <my-button
-      v-if="!printFlag.isActive"
-      class="quinary right"
-      label="Imprimir"
-      @on-tap="print"
-    />
-    <my-button
-      v-if="!printFlag.isActive"
-      class="primary right"
-      label="Volver"
-      @on-tap="goBack"
-    />
-  </div>
-
-  <heading v-if="station.frecuencia != null">
-    Datos de Radiolocalización
-  </heading>
-  <heading v-else>
-    Datos de Localización
-  </heading>
-
-  <div class="buttons-container">
-    <div
-      v-if="!printFlag.isActive"
-      class="related-station-container"
-    >
+    <div class="go-back-button">
       <my-button
-        v-if="station.related_station_id != null || station.related_station_id != undefined"
+        tabindex="0"
         class="primary"
-        :label="(station.id).toString()"
+        label="Volver"
+        @on-tap="goBack"
       />
-      <img
-        v-if="station.related_station_id != null || station.related_station_id != undefined"
-        src="../../img/flecha-doble.png"
-        class="related-arrow"
-        title="Estaciones relacionadas"
-      >
+    </div>
+   <heading>
+      {{ file.expediente }}
+    </heading>
+  <div class="menu-container">
+    <div class="left-options">
       <my-button
-        v-if="station.related_station_id != null || station.related_station_id != undefined"
+        tabindex="0"
         class="secondary"
-        :label="(station.related_station_id).toString()"
-        @on-tap="viewRelatedStation(station.related_station_id)"
-      />
-    </div>
-    <div class="more-buttons">
-      <my-button
-        v-if="!printFlag.isActive"
-        class="secondary right"
-        label="Mediciones Técnicas"
-        @on-tap="() => viewItem(file.id)"
+        label="Nueva Radiolocalización"
+        @on-tap="createStation"
       />
       <my-button
-        v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora' && !printFlag.isActive"
-        class="secondary right"
-        label="Agregar Estudio"
-        @on-tap="redirectToCreate"
-      />      
+        tabindex="0"
+        class="secondary"
+        label="Nueva Localización"
+        @on-tap="createLocStation"
+      />
     </div>
+    <my-button
+      tabindex="0"
+      class="primary options-menu"
+      label="Opciones"
+      @on-tap="openMenu"
+    />
   </div>
-  <div class="container">
-    <display-row> 
+  <div class="file-options" v-if="menu == true">
+        <button class="close-button" @click="closeDiv">x</button>
+        <!-- <br> -->
+        <div class="actions-menu">
+          <form-move-file
+            :context="tipoTramite"
+            :fileNumber="file.expediente"
+            @on-submit="patch_file"
+          />
+        </div>
+      </div>
+
+  <div class="file-container">
+   
+    <display-row>
       <prop-value
         class="prop"
         label="id"
         :value="file.id"
       />
       <prop-value
-        class="prop double"
-        label="Expediente"
-        :value="file.expediente"
+        class="prop"
+        label="Fecha y hora"
+        :value="file.fecha + ' ' + file.hora"
+      />
+      <prop-value
+        class="prop"
+        label="Tipo de trámite"
+        :value="file.tipo"
       />
       <prop-value
         class="prop"
         label="CCTE/Área"
-        :value="file.area"
+        :value="file.area_asignada"
       />
       <prop-value
-        class="prop"
-        label="Fecha y hora"
-        :value="file.fecha +' '+ file.hora"
+        class="prop double"
+        label="Prioridad"
+        :value="file.prioridad"
       />
     </display-row>
     <display-row>
       <prop-value
-        class="prop double"
-        label="Identificación"
-        :value="station.identificacion"
+        v-if="tipoTramite == 'Interferencias en Aeropuertos'"
+        class="prop double"   
+        label="Nota de Inicio"
+        :value="file.nota_inicio"
       />
       <prop-value
-        v-if="station.frecuencia"
-        class="prop"
+        class="prop double"
+        label="Usuario"
+        :value="file.usuario"
+      />
+      <prop-value
+        class="prop double"
         label="Frecuencia"
-        :value="station.frecuencia +' '+ station.unidad"
-      />
-      <prop-value
-        v-if="station.frecuencia"
-        class="prop"
-        label="Clase de Emisión"
-        :value="station.claseEmision"
-      />
-      <prop-value
-        v-if="station.frecuencia"
-        class="prop"
-        label="Servicio"
-        :value="station.servicio"
-      />
-      <prop-value
-        class="prop"
-        label="Emplazamiento"
-        :value="station.emplazamiento"
+        :value="file.frecuencia + ' ' + file.unidad" 
       />
     </display-row>
     <display-row>
-      <prop-value
-        class="prop double"
-        label="Domicilio"
-        :value="station.domicilio"
-      />
+      
+    </display-row>
+    <display-row>
       <prop-value
         class="prop double"
         label="Localidad"
-        :value="station.localidad"
+        :value="file.localidad"
       />
       <prop-value
         class="prop double"
         label="Provincia"
-        :value="station.provincia"
+        :value="file.provincia"
+      />
+    </display-row>
+    <display-row>
+      <prop-value
+        class="prop double"
+        label="Localidad"
+        :value="file.domicilio"
       />
       <prop-value
-        class="prop"
+        class="prop double"
         label="Latitud"
-        :value="station.latitud"
+        :value="file.latitud"
       />
       <prop-value
-        class="prop"
+        class="prop double"
         label="Longitud"
-        :value="station.longitud"
-      />
-    </display-row>
-    <display-row v-if="station.frecuencia">
-      <prop-value
-        class="prop"
-        label="Sistema Irradiante"
-        :value="station.irradiante"
-      />
-      <prop-value
-        class="prop"
-        label="Cantidad"
-        :value="station.cantidad"
-      />
-      <prop-value
-        class="prop"
-        label="Polarización"
-        :value="station.polarizacion"
-      />
-      <prop-value
-        class="prop"
-        label="Altura [m]"
-        :value="station.altura"
-      />
-    </display-row>
-    <display-row v-if="station.frecuencia && station.frecuenciaVinc">
-      <prop-value
-        class="prop"
-        label="Vínculo"
-        :value="station.tipoVinculo"
-      />
-      <prop-value
-        v-if="station.frecuenciaVinc"
-        class="prop"
-        label="Frecuencia"
-        :value="station.frecuenciaVinc +' '+ station.unidadVinc"
-      />
-      <prop-value
-        v-else
-        class="prop"
-        label="Frecuencia"
-        value="---"
-      />
-      <prop-value
-        v-if="station.irradianteVinc"
-        class="prop"
-        label="Sistema Irradiante"
-        :value="station.irradianteVinc"
-      />
-      <prop-value
-        v-else
-        class="prop"
-        label="Sistema Irradiante"
-        value="---"
-      />
-      <prop-value
-        v-if="station.irradianteVinc"
-        class="prop"
-        label="Polarización"
-        :value="station.polarizacionVinc"
-      />
-      <prop-value
-        v-else
-        class="prop"
-        label="Polarización"
-        value="---"
+        :value="file.longitud"
       />
     </display-row>
     <display-row>
       <prop-value
-        v-if="station.observaciones"
-        class="prop"
-        label="Observaciones"
-        :value="station.observaciones"
-      />
-      <prop-value
-        v-else
-        class="prop"
-        label="Observaciones"
-        value="---"
+        class="prop double"
+        label="Motivo"
+        :value="file.motivo"
       />
     </display-row>
-    <mapa
-      v-if="station.latitud"
-      class="mapa"
-      :position="[ station.latitud, station.longitud ]"
-    />
     <display-row>
       <prop-value
-        v-for="value, index in technicians"
-        :key="value"
-        class="prop technicians"
-        label="Técnico"
-        :value=" technicians[index].apellido + ', ' + technicians[index].nombre"
+        class="prop"
+        label="Ubicación actual"
+        :value="currentLocation"
+      />
+      <prop-value
+        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.tramitacion == 'Informado'"
+        |class="prop"
+        label="Nota de Fin"
+        :value="file.nota_fin"
       />
     </display-row>
-    <prop-value
-      v-if="!printFlag.isActive"
-      class="prop status"
-      label="Status"
-      :value="file.status"
+    
+ </div>
+
+ <prop-value
+        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.tramitacion == 'Informado'"
+        class="prop double"
+        label="Nota de Fin"
+        :value="file.nota_fin"
+      />
+ <br>
+ <br>
+ 
+
+
+
+
+    <div class="stations-table-container" v-if="items.length > 0">
+      <h2 class="file-titles">Estaciones relacionadas</h2>
+      <table class="stations-table">
+        <tr>
+          <th>id</th>
+          <th>Identificación</th>
+          <th>Servicio</th>
+          <th>Frecuencia</th>
+          <th>Emplazamiento</th>
+          <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
+          <th>Domicilio</th>
+          <th>Localidad</th>
+          <th>Provincia</th>
+          <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+            Status
+          </th>
+          <th>Acciones</th>
+        </tr>
+        <tr
+          v-for="item in items"
+          :key="item"
+        >
+          <td>
+            <my-button
+              class="primary center"
+              :label="(item.id.toString())"
+              @on-tap="() => viewItem(item.file_id, item.id)"
+            />
+          </td>
+          <!-- <td>{{ item.id }}</td> -->
+          <td>{{ item.identificacion }}</td> 
+          <td>{{ item.servicio }}</td> 
+          <td v-if="item.frecuencia">
+            {{ item.frecuencia +" "+item.unidad }}
+          </td>
+          <td v-else>
+            ---
+          </td>
+          <td>{{ item.emplazamiento }}</td>
+          <td>{{ item.domicilio }}</td>
+          <td>{{ item.localidad }} </td>
+          <td>{{ item.provincia }} </td>
+          <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
+          <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+            {{ item.status }}
+          </td>
+          <td> 
+            <div class="action-buttons-container">
+              <my-button
+                class="primary center"
+                label="Editar"
+                @on-tap="() => editItem(item.file_id, item.id)"
+              />
+              <my-button
+                class="tertiary center"
+                label="Borrar"
+                @on-tap="() => deleteItem(item.file_id, item.id)"
+              />
+            <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <form-new-activity
+     @on-submit="save"
     />
-  </div>
-  <div
-    v-if="!printFlag.isActive"
-    class="buttons-container"
-  >
-    <my-button
-      class="tertiary right"
-      label="Editar"
-      @on-tap="() => editItem(file.id)"
-    />
-    <my-button
-      class="primary right"
-      label="Volver"
-      @on-tap="goBack"
-    />
-  </div>
-  <div
-    v-if="printFlag.isActive"
-    class="print-header"
-  >
-    <img
-      alt="ENACOM logo"
-      class="logo"
-      src="../../img/Logo.png"
-      width="100"
-      height="100"
-    > 
-  </div>
+
+  
+    <table v-if="activities && activities.length > 0">
+      <tr>
+        <th class="date-field">Fecha</th>
+        <th>Detalle</th>
+      </tr>
+      <tr v-for="activity in activities" :key="activity">
+        <td class="date-field">{{ activity.fecha }}</td>
+        <td>{{ activity.detalle }}</td>
+      </tr>
+    </table>
+    
+    <footer-main class="footer-main"/>
+
+      
+    
 </template>
 
 <style scoped>
-.print-header {
-  display: flex;
-  background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
-  width: 100%;
-  justify-content: space-between;
-  align-items: baseline;
-  position: absolute;
-}
-.page {
-  position: absolute;
-  width: 900px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-}
-.print-preview {
-  background: white;
-  width: 900px;
-  height: 1350px;
-}
-.general-view {
-  margin-top: 100px;
-}
-.preview-title {
-  margin: 30px 10px;
-}
-.back-preview-button {
-  align-self: center;
-}
-.container {
+
+.file-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* text-transform: uppercase; */
 }
 
 .status{
-    background-color: lightyellow;
+  background-color: lightyellow;
 }
 .prop:hover {
   background-color: #bdc0c2;
@@ -419,11 +414,87 @@ watch(
 .prop.double{
   flex-grow: 4;
 }
-.technicians{
-  border-bottom: 1px solid #cbcdce;
+.menu-container {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding: 10px;
+  justify-content: space-between;
 }
 
-.buttons-container {
+.left-options {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.stations-table-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  border-top: solid 1px gray;
+
+}
+
+.stations-table{
+  justify-content: center; 
+  margin-top: 10px;
+  /* font-size: 12px; */
+}
+
+th, td{
+  text-align: center;
+  padding: 5px;
+}
+th{
+  font-weight: 700;
+  background-color: #cbcdce;
+  border-radius: 10px 0 0;
+
+}
+tr:nth-child(odd) {
+  background-color: #ebeded;
+  border-radius: 10px 0 0;
+
+}
+
+.date-field {
+  width: 200px;
+}
+.action-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  margin: 0;
+}
+
+.file-titles {
+  padding-top: 10px;
+  align-self: center;
+  font-weight: 500;
+}
+
+.activities-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  border-top: solid 1px gray;
+
+}
+
+.field-date {
+      flex: 0 0 25%;
+}
+
+.add-activity {
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.go-back-button {
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -431,30 +502,22 @@ watch(
   margin: 5px 0;
 }
 
-.status {
-  align-self: flex-start;
-}
-.related-station-container {
-  display: flex;
-  gap: 5px;
-  margin-right: auto;
-}
-.related-station-container p {
-  padding: 5px 5px;
-  flex-direction: row;
-}
-.more-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+.close-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 300;
+  cursor: pointer;
+  z-index: 100;
+  padding: 0;
 }
 
-.related-arrow {
-  width: 20px;
-}
-.text-related-stations {
-  font-size: 13px;
-  font-weight: 500;
+.options-menu {
+  display: flex;
+  align-items: flex-end;
 }
 
 </style>

@@ -91,11 +91,6 @@ onBeforeMount(async () => {
       }     
 })
 
-
-// function viewItem(item) {  
-//   router.push(`/file/${item}`)
-// }
-
 function pickIcon() {
     return getIconUrl("NIR")
 }

@@ -23,8 +23,8 @@ function viewItem(item) {
   router.push(`/file/${item}`)
 }
 
-async function deleteItem(item) {  
-  await deleteFile(item)
+async function deleteItem(file_id, id) {  
+  await deleteFile(file_id, id)
   window.location.reload() 
 }
 
@@ -40,7 +40,7 @@ onBeforeMount(async () => {
 
 async function searchFiles(searchText) {
   const data = await list(false)
-  items.value = search(data, searchText, ['area','expediente'])  
+  items.value = search(data, searchText, ['area','expediente', 'area_actual'])  
 }
 
 </script>
@@ -59,10 +59,13 @@ async function searchFiles(searchText) {
         <th>id</th>
         <th>Expediente</th>
         <th>Área</th>
+        <th>Tipo de trámite</th>
         <th>Fecha y hora</th>
         <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           Status
         </th>
+        <th>Ubicación</th>
+        <th>Estado</th>
         <th>Acciones</th>
       </tr>
       <tr
@@ -77,17 +80,20 @@ async function searchFiles(searchText) {
           />
         </td>
         <td>{{ item.expediente }}</td> 
-        <td>{{ item.area }}</td> 
+        <td>{{ item.area_asignada }}</td> 
+        <td>{{ item.tipo }}</td> 
         <td>{{ item.fecha +" "+item.hora }}</td> 
         <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           {{ item.status }}
         </td>
+        <td>{{ item.area_actual }}</td> 
+        <td>{{ item.tramitacion }}</td> 
         <td> 
           <div class="action-buttons-container">
             <my-button
               class="tertiary center"
               label="Borrar"
-              @on-tap="() => deleteItem(item.id)"
+              @on-tap="() => deleteItem(item.file_id, item.id)"
             />
           </div>
         </td>

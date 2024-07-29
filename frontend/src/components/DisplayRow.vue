@@ -3,13 +3,13 @@
 </script>
 
 <template>
-  <div class="container1">
+  <div class="container-display-row">
     <slot />
   </div>
 </template>
 
 <style scoped>
-.container1{
+.container-display-row{
   display: flex;
   flex-direction: row;
   gap: 5px;

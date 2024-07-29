@@ -6,38 +6,51 @@ import FooterMain from '../components/FooterMain.vue'
 import { ref } from 'vue';
 
 const router = useRouter()
+const filesMenu = ref(false)
 const stationsMenu = ref(false)
 
 const emits = defineEmits(['update: stationsMenu']);
 
 function closeDiv() {
+  filesMenu.value = false
   stationsMenu.value = false
 }
 
 
-function createFile() { 
-  router.push({name: "createFile", query: { rloc: 'true' }})
+function createStation() { 
+  router.push({name: "createStation", query: { rloc: 'true' }})
 }
 
-function createLocFile() { 
-  router.push({name: "createFile", query: { rloc: 'false' }})
+function createLocStation() { 
+  router.push({name: "createStation", query: { rloc: 'false' }})
 }
 
 function list() {
   router.push({name: "list", query: { includeDeleted: 'false'}})
 }
 
+function newFile() { 
+  router.push({name: "newFile"})
+}
+
 function listTechnicians() {
   router.push({name: "listTechnicians"})
 }
 
+function fileOptions() {
+  filesMenu.value = !filesMenu.value
+  stationsMenu.value = false
+
+}
 function stationsOptions() {
   stationsMenu.value = !stationsMenu.value
+  filesMenu.value = false
+
 
 }
 
 function stationList() {
-  router.push({ name: "station", query: { includeDeleted: 'false'}})
+  router.push({ name: "stations", query: { includeDeleted: 'false'}})
 }
 
 function nirMeasurements() {
@@ -57,8 +70,23 @@ function nirMeasurements() {
         tabindex="0"
         class="septenary button file-manage"
         label="Gestión de Expedientes"
-        @on-tap="list"
+        @on-tap="fileOptions"
       />
+      <div class="file-options" v-if="filesMenu == true">
+        <button class="close-button" @click="closeDiv">x</button>
+        <my-button
+          tabindex="0"
+          class="quaternary sub-menu-button stations-list"
+          label="Listado de Expedientes"
+          @on-tap="list"
+        />
+        <my-button
+          tabindex="0"
+          class="quaternary sub-menu-button new-file"
+          label="Alta Expediente"
+          @on-tap="newFile"
+        />
+      </div>
       <my-button
         tabindex="0"
         class="septenary button station-manage"
@@ -73,18 +101,18 @@ function nirMeasurements() {
           label="Listado de Estaciones"
           @on-tap="stationList"
         />
-        <my-button
+        <!-- <my-button
           tabindex="0"
           class="quaternary sub-menu-button new-rloc"
           label="Nueva Radiolocalización"
-          @on-tap="createFile"
+          @on-tap="createStation"
         />
         <my-button
           tabindex="0"
           class="quaternary sub-menu-button new-loc"
           label="Nueva Localización"
-          @on-tap="createLocFile"
-        />
+          @on-tap="createLocStation"
+        /> -->
       </div>
     </div>
     <div class="second-row">
@@ -140,6 +168,12 @@ function nirMeasurements() {
 }
 .stations-list {
   background-image: url(../../img/listado.png);
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center left 15px;
+}
+.new-file {
+  background-image: url(../../img/new-file.png);
   background-repeat: no-repeat;
   background-size: 30px;
   background-position: center left 15px;

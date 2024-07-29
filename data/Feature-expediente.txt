@@ -1,0 +1,14 @@
+Guardar area asignada al crear expediente
+1- Agregar el campo area asignada en el front (formulario de creacion de expediente)
+2- modificar el endpoint POST /file para que maneje el campo area asignada
+    a- Tomar el campo de request
+    b- agregar un nuevo registro a la tabla assigne location (los campos de fecha deben ser tomados del sistema)
+
+Visualizar area asignada en la vista del expediente
+1- modificar el endpoint GET /file/<id> para que recupere la ultima area asingada de la tabla assigne location y que lo devuelva como parte de la respuesta HTTP
+2- modeificar el frontend para que muestre el campo area asignada que ahora vendrá como parte de la respuesta de la API
+
+Mover expediente de un area a otra
+1- Crear endpoint POST /file/<id>/area_asignada
+2- Diseñar la UX de como un expediente sera movido de un area a otra.
+3- Implementar la UX en el codigo delk frontend

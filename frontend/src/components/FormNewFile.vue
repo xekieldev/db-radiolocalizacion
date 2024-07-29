@@ -1,0 +1,335 @@
+<script setup>
+import FormRow from './FormRow.vue'
+import Heading from './Heading.vue';
+import { useArea } from '../composables/area';
+import { useType } from '../composables/filetype';
+import { useFileValidation } from '../composables/filevalidation'
+import { ref, watch } from 'vue';
+import { useTerritory } from '../composables/territory'
+import { useUnit } from '../composables/unit'
+
+
+
+const emits = defineEmits(['onSubmit'])
+
+
+defineProps({
+  context: String,
+  title: String,
+  technicians: Object,
+  techniciansValues: Array,
+})
+const { area } = useArea()
+const { type } = useType()
+const { validateFile } = useFileValidation()
+
+function submitHandler(fields) {
+  fields.fecha = myDate
+  fields.hora = myTime
+  emits('onSubmit', fields)
+}
+
+const currentDate = new Date(); 
+
+const fullHours = currentDate.getHours() < 10 ? "0" + currentDate.getHours() : currentDate.getHours()
+const fullMinutes = currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : currentDate.getMinutes()
+const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
+const myTime = fullHours + ":" + fullMinutes + ":" + fullSeconds
+
+
+const fullMonth = (currentDate.getMonth()+1)<10 ? "0"+(currentDate.getMonth()+1) : (currentDate.getMonth()+1)
+const fullDay = currentDate.getDate()<10 ? "0"+currentDate.getDate() : currentDate.getDate()
+const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
+
+console.log("Fecha y hora", myDate, " @ ", myTime)
+
+const prioridadValue = ref(false)
+const tipoTramite = ref()
+const { unidad } = useUnit()
+
+
+const province = ref()
+const city = ref()
+const { provinces, cities, getProvinceCities } = useTerritory()
+
+
+watch(province, (newValue, oldValue) => {
+
+  getProvinceCities(newValue)
+  if (newValue !== oldValue) {
+    
+    city.value = cities.value[0].value
+
+  }  
+})
+
+
+</script>
+
+<template>
+  <heading>{{ title }}</heading>
+  <form-kit
+    type="form"
+    submit-label="Guardar"
+    :actions="false"
+    @submit="submitHandler"
+  >
+    <form-row>
+      <form-kit
+        type="text"
+        label="Expediente"
+        name="expediente"
+        validation="required | validateFile"
+        :validation-rules="{ validateFile }"
+      />
+      <form-kit
+        v-model="tipoTramite"
+        type="select"
+        label="Tipo de Trámite"
+        name="tipo"
+        :options="type"
+        placeholder="Seleccione"
+      />
+      <form-kit
+          value="Normal"
+          type="select"
+          label="Prioridad"
+          name="prioridad" 
+          :options="[
+            'Urgente',
+            'Normal',
+          ]"
+          outer-class="short-field"
+        />
+    </form-row>
+    
+    <div v-if="tipoTramite != 'Medición de Radiaciones No Ionizantes (móviles)'">
+      <form-row>
+        <form-kit
+          v-model="province"
+          :options="provinces"
+          type="select"
+          label="Provincia"
+          name="provincia"        
+        />
+        <form-kit
+          v-model="city"
+          :options="cities"
+          type="select"
+          label="Localidad"
+          name="localidad"  
+        />
+        <form-kit
+          type="select"
+          label="CCTE/Área asignada"
+          name="area_asignada"
+          :options="area"
+          placeholder="Área"
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="text"
+          label="Domicilio"
+          name="domicilio"        
+        />
+        <form-kit
+          type="number"
+          label="Latitud"
+          name="latitud"
+          step="0.000001"
+
+        />
+        <form-kit
+          type="number"
+          label="longitud"
+          name="longitud"
+          step="0.000001"
+
+        />
+      </form-row>
+      <form-row v-if="tipoTramite == 'Interferencias en Aeropuertos'">
+        <form-kit
+          type="text"
+          label="Nota/Expediente de Inicio"
+          name="nota_inicio"
+        />
+        <form-kit
+          type="text"
+          label="Aeropuerto/Aeródromo"
+          name="aeropuerto"
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="text"
+          label="Usuario"
+          name="usuario"
+        />
+        <form-kit
+          type="number"
+          label="Frecuencia"
+          name="frecuencia"
+          step="0.000001"
+          suffix="MHz"
+          validation="min:0"
+          validation-visibility="live"
+          :validation-messages="{
+            min: 'La frecuencia debe ser mayor que 0.',
+          }"
+        />
+        <form-kit
+          type="select"
+          label="Unidad"
+          name="unidad"
+          value="MHz"
+          :options="unidad"
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="textarea"
+          label="Motivo"
+          name="motivo"
+          validation="false"
+        />
+      </form-row>
+    </div>
+    
+    <div class="NIR-file" v-if="tipoTramite === 'Medición de Radiaciones No Ionizantes (móviles)'">
+      <form-row>
+        <form-kit
+          type="date"
+          label="Fecha"
+          name="fecha" 
+          validation="date_after:04-30-2024"
+          validation-visibility="live"
+          :validation-messages="{
+            date_after: 'La fecha debe ser posterior al 01/05/2024.',
+          }"
+        />
+        <form-kit
+          type="time"
+          label="Hora"
+          name="hora" 
+        />
+        <form-kit
+          type="select"
+          :options="area"
+          label="CCTE/Área"
+          name="area" 
+        />
+
+      </form-row>
+      <form-row>
+        <form-kit
+          v-model="province"
+          :options="provinces"
+          type="select"
+          label="Provincia"
+          name="provincia"        
+        />
+        <form-kit
+          v-model="city"
+          :options="cities"
+          type="select"
+          label="Localidad"
+          name="localidad"  
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="number"
+          label="Cantidad de mediciones"
+          name="cantidad" 
+        />
+        <form-kit
+          type="number"
+          label="Valor Medido Máximo [%]"
+          name="valor_maximo" 
+          step="0.000001"
+          suffix="%"
+          validation="min:0"
+          validation-visibility="live"
+          :validation-messages="{
+            min: 'El valor medido debe ser mayor que 0.',
+          }"
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="textarea"
+          label="Observaciones"
+          name="observaciones"
+          validation="false"
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          v-if="technicians && technicians.length>1"
+          v-model="technicians[0].id"
+          type="select"
+          label="Técnico"
+          name="id_technician1"
+          :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+          placeholder="Técnico 1"
+        />
+        <form-kit
+          v-else-if="techniciansValues.length>0"
+          type="select"
+          label="Técnico"
+          name="id_technician1"
+          :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+          placeholder="Técnico 1"
+        />
+        <form-kit
+          v-if="technicians && technicians.length>1"
+          v-model="technicians[1].id"
+          type="select"
+          label="Técnico"
+          name="id_technician2"
+          :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+          placeholder="Técnico 2"
+        />
+        <form-kit
+          v-else-if="techniciansValues.length>0"
+          type="select"
+          label="Técnico"
+          name="id_technician2"
+          :options="techniciansValues.map((item)=>({label:`${item.apellido}, ${item.nombre}`, value:item.id}))"
+          placeholder="Técnico 2"
+        />
+      </form-row>
+    </div>
+    
+    <button
+      class="submit-button"
+    >
+      Guardar
+    </button>
+  </form-kit>
+</template>
+
+  
+<style scoped>
+
+.submit-button {
+      background-color: white;
+      margin: 10px 0 20px;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      border: 1px solid #007BFF;
+      font-weight: 600;  
+      color: #007BFF;  
+      align-self: flex-end;
+}
+
+.short-field {
+      /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
+      flex: 0 0 10%;
+}
+
+
+</style>
+  

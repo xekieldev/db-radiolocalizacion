@@ -16,7 +16,8 @@ export function useSearch() {
             if (prop == 'provincia') {
               item[prop] = getNameByCode('province', item[prop])              
             }
-            result = result || (item[prop] !== null && item[prop] !== undefined ? item[prop].toString() : '').toLowerCase().includes(searchString)        
+            result = result || item[prop]?.toString?.().toLowerCase().includes(searchString)        
+            // result = result || (item[prop] !== null && item[prop] !== undefined ? item[prop].toString() : '').toLowerCase().includes(searchString)        
           }
           return result
       })

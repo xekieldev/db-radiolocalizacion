@@ -21,9 +21,37 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function create(data, rloc = true) {
+    async function newFile(data) {
         loading.value = true
-        const response = await axiosInstance.post('/file', data, {
+        const response = await axiosInstance.post('/file', data)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function getFile(id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/file/${id}`)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function patchFile(file_id, data) {
+        loading.value = true
+        const response = await axiosInstance.patch(`/file/${file_id}`, data)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function deleteFile(id) {
+        loading.value = true
+        const response = await axiosInstance.delete(`/file/${id}`)
+        loading.value = false
+        return response && response.data
+    }
+    
+    async function create(id, data, rloc = true) {
+        loading.value = true
+        const response = await axiosInstance.post(`/file/${id}/station`, data, {
             params: {
                 rloc: rloc
             }
@@ -32,24 +60,24 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function edit(id, data) {
+    async function edit(file_id, id, data) {
         loading.value = true
-        const response = await axiosInstance.put(`/file/${id}/edit`, data)
+        const response = await axiosInstance.put(`/file/${file_id}/station/${id}/edit`, data)
         loading.value = false
         return response && response.data 
 
     }
     
-    async function getFile(id) {
+    async function getStation(id) {
         loading.value = true
-        const response = await axiosInstance.get(`/file/${id}`)
+        const response = await axiosInstance.get(`/station/${id}`)
         loading.value = false
         return response && response.data 
     }
 
-    async function deleteFile(id) {
+    async function deleteStation(file_id, id) {
         loading.value = true
-        const response = await axiosInstance.delete(`/file/${id}`)
+        const response = await axiosInstance.delete(`/file/${file_id}/station/${id}`)
         loading.value = false
         return response && response.data
     }
@@ -81,16 +109,16 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function create_tech_measurement(id, data) {
+    async function create_tech_measurement(file_id, id, data) {
         loading.value = true
-        const response = await axiosInstance.post(`/file/${id}/create_tech_measurement`, data)
+        const response = await axiosInstance.post(`/file/${file_id}/station/${id}/create_tech_measurement`, data)
         loading.value = false
         return response && response.data 
     }
 
-    async function getTechMeasurement(id, includeDeleted = false) {
+    async function getTechMeasurement(file_id, id, includeDeleted = false) {
         loading.value = true
-        const response = await axiosInstance.get(`/file/${id}/tech_measurement`, {
+        const response = await axiosInstance.get(`/file/${file_id}/station/${id}/tech_measurement`, {
             params: {
                 includeDeleted: includeDeleted
             }
@@ -110,16 +138,18 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function getStation(id) {
+    async function stationsPerFile(file_id) {
         loading.value = true
-        const response = await axiosInstance.get(`/station/${id}`)
+        const response = await axiosInstance.get(`/file/${file_id}/stations`, {
+            file_id: file_id
+        })
         loading.value = false
         return response && response.data 
     }
 
-    async function updateRelatedStation(id, relatedStationId) {
+    async function updateRelatedStation(file_id, id, relatedStationId) {
         loading.value = true
-        const response = await axiosInstance.put(`/file/${id}`, 
+        const response = await axiosInstance.put(`/file/${file_id}/station/${id}`, 
             {
                 related_station_id: relatedStationId
             })
@@ -129,7 +159,7 @@ export function useApi() {
 
     async function delete_tech_measurement(id, id_tech_measurement) {
         loading.value = true
-        const response = await axiosInstance.delete(`/file/${id}/delete_tech_measurement/${id_tech_measurement}`)
+        const response = await axiosInstance.delete(`/file/${file_id}/station/${id}/delete_tech_measurement/${id_tech_measurement}`)
         loading.value = false
         return response && response.data 
     }
@@ -160,11 +190,29 @@ export function useApi() {
         return response && response.data 
     }
 
+    async function newActivity(file_id, data) {
+        loading.value = true
+        const response = await axiosInstance.post(`/file/${file_id}/activity`, data)
+        loading.value = false
+        return response && response.data 
+    }
+
+    async function getActivities(file_id) {
+        loading.value = true
+        const response = await axiosInstance.get(`/file/${file_id}/activities`)
+        loading.value = false
+        return response && response.data 
+    }
+
     return {
         list,
-        loading,
+        newFile,
         getFile,
         deleteFile,
+        patchFile,
+        loading,
+        getStation,
+        deleteStation,
         create,
         edit,
         getAllTechnicians,
@@ -174,12 +222,14 @@ export function useApi() {
         create_tech_measurement,
         getTechMeasurement,
         listStations,
-        getStation,
+        stationsPerFile,
         updateRelatedStation,
         delete_tech_measurement,
         getAllNonIonizingRadiation,
         getNonIonizingRadiation,
         create_non_ionizing_radiation,
         delete_non_ionizing_radiation,
+        newActivity,
+        getActivities,
     }
 }
