@@ -15,7 +15,6 @@ defineProps({
   title: String,
   techniciansValues: Array,
   technicians: Object,
-  file: Object,
   techMeasurement: Object,
 })
 function submitHandler(fields) {

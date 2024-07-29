@@ -9,19 +9,10 @@ import PropValue from '../components/PropValue.vue';
 import { useTerritory } from '../composables/territory';
 
 
-const { getFile, getTechMeasurement, getStation, delete_tech_measurement } = useApi()
+const { getTechMeasurement, getStation, delete_tech_measurement, getFile } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
-
-
-function viewItem(item) { 
-  router.push(`/file/${item}/create_tech_measurement`)
-}
-
-function goBack() {  
-  router.back()
-}
 
 const file = reactive({})
 const station = reactive({})
@@ -33,22 +24,33 @@ let previewStatus = ref(false)
 
 onBeforeMount(async () => {
     const id = currentRoute.value.params.id
-    const fileResponse = await getFile(currentRoute.value.params.id)
+    const file_id = currentRoute.value.params.file_id
     const stationResponse = await getStation(currentRoute.value.params.id)
-    Object.assign(file, fileResponse.file)
-    Object.assign(station, stationResponse)    
+    Object.assign(station, stationResponse.station)
+    const file_response = await getFile(station.file_id)   
+    Object.assign(file, file_response.file) 
+     
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-      const response = await getTechMeasurement(id)
+      const response = await getTechMeasurement(file_id, id)
       Object.assign(techMeasurement, response.techMeasurement)
       Object.assign(technicians, response.technicians)
 
     } else {
-        const response = await getTechMeasurement(id, true)
+        const response = await getTechMeasurement(file_id, id, true)
         Object.assign(techMeasurement, response.techMeasurement)
         Object.assign(technicians, response.technicians)
     }
+    console.log("TechMeas", techMeasurement)
     
 })
+
+function viewItem(file_id, id) { 
+  router.push(`/file/${file_id}/station/${id}/create_tech_measurement`)
+}
+
+function goBack() {  
+  router.back()
+}
 
 function getTechnician(id) {
   for (const key in technicians) {
@@ -93,7 +95,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       v-if="!previewStatus"
       class="primary right"
       label="Agregar punto de medición"
-      @on-tap="() => viewItem(idPath)"
+      @on-tap="() => viewItem(station.file_id, idPath)"
     />
   </div>
   <heading>Comprobaciones Técnicas Externas</heading>
@@ -102,7 +104,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       <prop-value
         class="prop"
         label="id"
-        :value="file.id"
+        :value="station.id"
       />
       <prop-value
         class="prop double"
@@ -112,7 +114,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       <prop-value
         class="prop"
         label="CCTE/Área"
-        :value="file.area"
+        :value="station.area"
       />
     </display-row>
     <display-row>

@@ -76,7 +76,7 @@
             <my-button
               class="primary"
               label="Ver"
-              @on-tap="() => viewItem(item.id)"
+              @on-tap="() => viewItem(item.file_id, item.id)"
             />
           </div>
         </l-popup>
@@ -125,8 +125,8 @@ async function searchStations(searchText) {
     items.value = search(data, searchText, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
 }
 
-function viewItem(item) {  
-  router.push(`/file/${item}`)
+function viewItem(file_id, id) {  
+  router.push(`/file/${file_id}/station/${id}`)
 }
 
 function pickIcon(station) {

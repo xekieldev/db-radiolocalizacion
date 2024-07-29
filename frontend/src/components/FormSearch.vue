@@ -27,7 +27,7 @@ const props = defineProps({
         <form-kit
           v-model="searchText"
           outer-class="field-text-search"
-          type="text"
+          type="search"
           name="searchInput"
           :placeholder="placeholder"
         />
@@ -53,6 +53,7 @@ const props = defineProps({
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
   flex: 0 0 80%;
   margin: 0;
+  margin-left: 5px;
   background-color: white;
 }
 .search-btn {

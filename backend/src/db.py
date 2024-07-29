@@ -17,10 +17,10 @@ def _set_sqlite_pragma(dbapi_connection, connection_record):
         cursor.execute("PRAGMA foreign_keys=ON;")
         cursor.close()
 
-technician_file = db.Table(
-    "technician_file",
+technician_station = db.Table(
+    "technician_station",
     db.Model.metadata,
-    db.Column("id_file", db.Integer, db.ForeignKey("File.id")),
+    db.Column("id_station", db.Integer, db.ForeignKey("Station.id")),
     db.Column("id_technician", db.Integer, db.ForeignKey("Technician.id")),
 )
 
@@ -31,19 +31,45 @@ technician_tech_measurement = db.Table(
     db.Column("id_technician", db.Integer, db.ForeignKey("Technician.id")),
 )
 
-class Filex(db.Model):   # la clase Producto hereda de db.Model
+file_tracking = db.Table(
+    "file_tracking",
+    db.Model.metadata,
+    db.Column("file_id", db.Integer, db.ForeignKey("File.id")),
+    db.Column("envia", db.String),
+    db.Column("recibe", db.String),
+    db.Column("fecha", db.String),
+    db.Column("hora", db.String),
+    db.Column("usuario", db.String),
+)
+
+class CaseFile(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
     __tablename__= "File"
     id = db.Column(db.Integer, primary_key = True)
-    expediente = db.Column(db.String(50), nullable = False)
     fecha = db.Column(db.String(10))
-    hora = db.Column(db.String(5))
-    area = db.Column(db.String(25))
+    hora = db.Column(db.String(10))
+    expediente = db.Column(db.String(50), nullable = False)
+    tipo = db.Column(db.String(50))
+    area_asignada = db.Column(db.String(25))
+    prioridad = db.Column(db.String(10))
+    nota_inicio = db.Column(db.String(50))
+    nota_fin = db.Column(db.String(50))
+    aeropuerto = db.Column(db.String(50))
+    frecuencia = db.Column(db.Float)
+    unidad = db.Column(db.String(3))
+    provincia = db.Column(db.String(30))
+    localidad = db.Column(db.String(30))
+    usuario = db.Column(db.String(50))
+    motivo = db.Column(db.String(300))
+    fecha_fin = db.Column(db.String(10))
+    hora_fin = db.Column(db.String(10))
+    area_actual = db.Column(db.String(25))
+    domicilio = db.Column(db.String(50))
+    latitud = db.Column(db.Float)
+    longitud = db.Column(db.Float)
+    informe = db.Column(db.String(50))
+    tramitacion = db.Column(db.String(10))
     status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
-    id_technician1 = db.Column(db.Integer)
-    id_technician2 = db.Column(db.Integer)
-    technicians = db.orm.relationship("Technician", secondary="technician_file")
-    
    
     __table_args__ = (
         CheckConstraint("status IN ('Available', 'Deleted')", name='estado_valido'),
@@ -54,7 +80,10 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
     __tablename__= "Station"
     id = db.Column(db.Integer, primary_key = True)
-    status2 = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
+    file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
+    fecha = db.Column(db.String(10))
+    hora = db.Column(db.String(5))
+    area = db.Column(db.String(25))
     identificacion = db.Column(db.String(50), nullable = False)
     emplazamiento = db.Column(db.String(15))
     servicio = db.Column(db.String(6))
@@ -77,6 +106,10 @@ class Station(db.Model):   # la clase Producto hereda de db.Model
     longitud = db.Column(db.Float)
     observaciones = db.Column(db.String(300))
     related_station_id = db.Column(db.Integer)
+    status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
+    id_technician1 = db.Column(db.Integer)
+    id_technician2 = db.Column(db.Integer)
+    technicians = db.orm.relationship("Technician", secondary="technician_station")
 
 class TechMeasurement(db.Model):
     __tablename__= 'TechMeasurement'
@@ -84,7 +117,7 @@ class TechMeasurement(db.Model):
     fecha = db.Column(db.String(10))
     hora = db.Column(db.String(5))
     puntoMedicion = db.Column(db.String(20))
-    file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
+    station_id = db.Column(db.Integer, db.ForeignKey('Station.id'), nullable = False)
     frecMedida = db.Column(db.Float)
     unidadFrecMedida = db.Column(db.String(3))
     anchoBanda =  db.Column(db.Float)
@@ -115,7 +148,6 @@ class TechMeasurement(db.Model):
     status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
 
     
-
 class Technician (db.Model):
     __tablename__ = 'Technician'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -150,8 +182,16 @@ class NonIonizingRadiation (db.Model):
     id_technician2 = db.Column(db.Integer)
 
 
+class Activity (db.Model):
+    __tablename__ = 'Activity'
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
+    fecha = db.Column(db.String(10))
+    detalle = db.Column(db.String(500), nullable = False)
+    
+
 def init_app(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///radioloc.sqlite"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sncte-db.sqlite"
     db.init_app(app)
     with app.app_context():
         db.create_all()  # crea las tablas si no estan creadas, sino sigue

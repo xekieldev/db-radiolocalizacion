@@ -1,6 +1,6 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { ref, watch, reactive, onBeforeMount } from 'vue'
+import { ref, watch, reactive, onBeforeMount, onMounted } from 'vue'
 import { useTerritory } from '../composables/territory'
 import { useLink } from '../composables/link'
 import { useArea } from '../composables/area'
@@ -11,12 +11,12 @@ import { useStationType } from '../composables/stationtype'
 import { useAntenna } from '../composables/antenna'
 import { useFileValidation } from '../composables/filevalidation'
 import { useRouter } from 'vue-router'
-import { useApi} from '../composables/api'
+import { useApi } from '../composables/api'
 import Heading from './Heading.vue'
 
 const router = useRouter()
 const { currentRoute } = useRouter()
-const { getFile } = useApi()
+const { getStation } = useApi()
 const emits = defineEmits(['onSubmit', 'update:station.provincia', 'update:station.localidad']);
 const props = defineProps({
   context: String,
@@ -26,8 +26,8 @@ const props = defineProps({
   technicians: Object,
   techniciansValues: Array,
 })
-const filePath = reactive({})
-const fileId = ref('')
+const stationPath = reactive({})
+const stationId = ref('')
 
 function submitHandler(fields) {
   emits('onSubmit', fields)
@@ -36,13 +36,13 @@ function submitHandler(fields) {
 onBeforeMount( async ()=> {
   try{
 
-    fileId.value = currentRoute.value.query.from.slice(6,)
-    const response = await getFile(fileId.value)  
-    Object.assign(filePath , response.file)
+    stationId.value = currentRoute.value.query.from.slice(16,)  
+    const response = await getStation(stationId.value)        
+    Object.assign(stationPath , response.station)
 
   } catch {
 
-    fileId.value = null
+    stationId.value = null
   
   }
 })
@@ -98,28 +98,16 @@ const { validateFile } = useFileValidation()
   >
     <form-row>
       <form-kit
-        v-if="fileId != null || fileId != undefined"
-        v-model="filePath.expediente"
         type="text"
         label="Expediente"
         name="expediente"
-        validation="required | validateFile"
-        :validation-rules="{ validateFile }"
-        :disabled="true"
-      />
-      <form-kit
-        v-else
         v-model="file.expediente"
-        type="text"
-        label="Expediente"
-        name="expediente"
-        validation="required | validateFile"
-        :validation-rules="{ validateFile }"
+        :disabled="true"
       />
     </form-row>
     <form-row>
       <form-kit
-        v-model="file.fecha"
+        v-model="station.fecha"
         type="date"
         label="Fecha" 
         name="fecha" 
@@ -130,15 +118,15 @@ const { validateFile } = useFileValidation()
         }"
       />
       <form-kit
-        v-model="file.hora"
+        v-model="station.hora"
         type="time"
         label="Hora"
         name="hora"        
       />
       <form-kit
-        v-if="fileId != null || fileId != undefined"
+        v-if="stationId != null || stationId != undefined"
         id="area"
-        v-model="filePath.area"
+        v-model="stationPath.area"
         type="select"
         label="CCTE/Área"
         name="area"
@@ -149,7 +137,7 @@ const { validateFile } = useFileValidation()
       <form-kit
         v-else
         id="area"
-        v-model="file.area"
+        v-model="station.area"
         type="select"
         label="CCTE/Área"
         name="area"
@@ -173,7 +161,7 @@ const { validateFile } = useFileValidation()
         placeholder="Servicio/Sistema"
       />
       <form-kit
-        v-if="fileId != null || fileId != undefined"
+        v-if="stationId != null || stationId != undefined"
         v-model="station.emplazamiento"
         type="select"
         label="Tipo de Emplazamiento"
@@ -331,7 +319,7 @@ const { validateFile } = useFileValidation()
     </form-row>   
     <form-row v-if="router.currentRoute.value.query.rloc == 'true'">
       <form-kit
-        v-if="(fileId == null || fileId == undefined) && station.emplazamiento != 'Estudio'"
+        v-if="(stationId == null || stationId == undefined) && station.emplazamiento != 'Estudio'"
         v-model="station.tipoVinculo" 
         outer-class="field-emplazamiento"
         type="select"
@@ -425,14 +413,14 @@ const { validateFile } = useFileValidation()
     </form-row>
     <form-row>
       <form-kit
-        v-if="fileId != null || fileId != undefined"
+        v-if="stationId != null || stationId != undefined"
         v-model="station.related_station_id"
         outer-class="field-related_station"
         type="hidden"
         label="Estación relacionada"
         name="related_station_id"   
         :disabled="true"
-        :value="fileId"
+        :value="stationId"
       />
     </form-row>      
     <button

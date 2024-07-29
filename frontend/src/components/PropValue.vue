@@ -36,5 +36,8 @@ defineProps({
   text-align: center;
   border-radius: 10px 0 0;
 }
+.value{
+  text-align: center;
+}
 
 </style>

@@ -10,7 +10,7 @@ import FormSearch from '../components/FormSearch.vue'
 import FooterMain from '../components/FooterMain.vue'
 
 
-const { listStations, loading } = useApi()
+const { listStations, loading, deleteStation } = useApi()
 
 const router = useRouter()
 const { getNameByCode } = useTerritory()
@@ -21,23 +21,28 @@ const items = ref([])
 const searchText = ref('')
 
 
-function editItem(item) {
-  if (items.value.find(station => station.id === item).frecuencia != null || items.value.find(station => station.id === item).frecuencia != undefined) {
+function editItem(file_id, id) {
+  if (items.value.find(station => station.id === id).frecuencia != null || items.value.find(station => station.id === id).frecuencia != undefined) {
     
     router.currentRoute.value.query.rloc = 'true'
-    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'true'} })
+    router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'true'} })
 
   } else {
     
     router.currentRoute.value.query.rloc = 'false'
-    router.push({ name: 'editFile', params: { id: item }, query: { rloc: 'false'} })
+    router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'false'} })
 
   }
 }
 
 
-function viewItem(item) {  
-  router.push(`/file/${item}`)
+function viewItem(file_id, id) {  
+  router.push(`/file/${file_id}/station/${id}`)
+}
+
+async function deleteItem(file_id, id) {  
+  await deleteStation(file_id, id)
+  window.location.reload() 
 }
 
 
@@ -107,12 +112,11 @@ function viewMap() {
         v-for="item in items"
         :key="item"
       >
-        <!-- <td><RouterLink :to="'file/'+item.id">{{ item.id }}</RouterLink></td> -->
         <td>
           <my-button
             class="primary center"
             :label="(item.id.toString())"
-            @on-tap="() => viewItem(item.id)"
+            @on-tap="() => viewItem(item.file_id, item.id)"
           />
         </td>
         <!-- <td>{{ item.id }}</td> -->
@@ -130,14 +134,19 @@ function viewMap() {
         <td>{{ item.provincia }} </td>
         <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
         <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          {{ item.status2 }}
+          {{ item.status }}
         </td>
         <td> 
           <div class="action-buttons-container">
             <my-button
               class="primary center"
               label="Editar"
-              @on-tap="() => editItem(item.id)"
+              @on-tap="() => editItem(item.file_id, item.id)"
+            />
+            <my-button
+              class="tertiary center"
+              label="Borrar"
+              @on-tap="() => deleteItem(item.file_id, item.id)"
             />
           <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
           </div>
@@ -197,39 +206,5 @@ tr:nth-child(odd) {
   justify-content: space-between;
 }
   
-/* .field-search {
-  display: flex;
-  // https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping 
-  // flex: 0 0 50%; 
-  margin: 0;
-  
-}
-.search-bar {
-  display: flex;
-  justify-content: end;
-  align-items: end;
-  margin-left: auto;
-  
-}
-.buscar-btn {
-  margin: 0 5px;
-  bottom: 2px;
-  
-}
-.bar-menu {
-  display: flex;
-  justify-content: space-between;
-  top: 2px;
-}
-
-.view-map-container {
-  left: 0;
-  margin-right: auto;
-  
-}
-
-.view-map-button {
-  top: 2px;
-} */
 
 </style>

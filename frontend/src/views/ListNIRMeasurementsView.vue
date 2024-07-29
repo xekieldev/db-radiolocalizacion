@@ -85,7 +85,7 @@ function viewNirMap() {
       </div> 
     </div>
     <div class="nir-measurements-container">
-      <table>
+      <table class="nir-table">
         <tr>
           <th>id</th>
           <th>Expediente</th>
@@ -145,6 +145,9 @@ function viewNirMap() {
   justify-content: center; 
   margin-top: 10px;
   font-size: 12px;
+}
+.nir-table {
+  width: 100%;
 }
 .file-field {
   /* display: flex;

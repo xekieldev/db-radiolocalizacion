@@ -31,12 +31,12 @@ const router = createRouter({
       component: () => import('../views/ListView.vue')
     },
     {
-      path: '/list_technicians',
-      name: 'listTechnicians',
+      path: '/file/create',
+      name: 'newFile',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/ListTechniciansView.vue')
+      component: () => import('../views/FormNewFileView.vue')
     },
     {
       path: '/file/:id',
@@ -47,28 +47,44 @@ const router = createRouter({
       component: () => import('../views/FileDisplayView.vue')
     },
     {
-      path: '/file/:id/edit',
-      name: 'editFile',
+      path: '/list_technicians',
+      name: 'listTechnicians',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FileEditView.vue')
+      component: () => import('../views/ListTechniciansView.vue')
     },
     {
-      path: '/file/create',
-      name: 'createFile',
+      path: '/file/:file_id/station/:id',
+      name: 'station',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FileCreateView.vue')
+      component: () => import('../views/StationDisplayView.vue')
     },
     {
-      path: '/file/createLoc',
-      name: 'createLocFile',
+      path: '/file/:file_id/station/:id/edit',
+      name: 'editStation',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/FileCreateLocView.vue')
+      component: () => import('../views/StationEditView.vue')
+    },
+    {
+      path: '/file/:id/station/create',
+      name: 'createStation',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/StationCreateView.vue')
+    },
+    {
+      path: '/file/:id/station/createLoc',
+      name: 'createLocStation',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/StationCreateLocView.vue')
     },
     {
       path: '/technician/create_technician',
@@ -79,12 +95,20 @@ const router = createRouter({
       component: () => import('../views/FormNewTechnicianView.vue')
     },
     {
-      path: '/file/:id/create_tech_measurement',
+      path: '/file/:file_id/station/:id/create_tech_measurement',
       name: 'createTechMeasurement',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/FormTMView.vue')
+    },
+    {
+      path: '/file/:file_id/activity',
+      name: 'createActivity',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FileDisplayView.vue')
     },
     {
       path: '/technician/:id/delete_technician',
@@ -95,7 +119,7 @@ const router = createRouter({
       component: () => import('../views/FormDeleteTechnicianView.vue')
     },
     {
-      path: '/file/:id/tech_measurement',
+      path: '/file/:file_id/station/:id/tech_measurement',
       name: 'tech_measurement',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -104,7 +128,7 @@ const router = createRouter({
     },
     {
       path: '/station',
-      name: 'station',
+      name: 'stations',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.

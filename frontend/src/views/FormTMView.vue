@@ -8,28 +8,29 @@ import { reactive, onBeforeMount } from "vue";
 const { currentRoute } = useRouter()
 
 
-const {create_tech_measurement, getAllTechnicians, getTechMeasurement, getFile} = useApi()
+const {create_tech_measurement, getAllTechnicians, getTechMeasurement } = useApi()
 const router = useRouter()
-const file = reactive({})
 const technicians = reactive([])
 const techniciansValues = reactive([])
 const techMeasurement = reactive([])
 
 
 onBeforeMount(async () => {
-    const fileResponse = await getFile(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
     const techMeasurementResponse = await getTechMeasurement(currentRoute.value.params.id)
     Object.assign(techniciansValues, techResponse)
-    Object.assign(file, fileResponse.file)
     Object.assign(techMeasurement, techMeasurementResponse)
+    
 })
 
 async function save(fields) {
   try {
     const id = currentRoute.value.params.id
-    await create_tech_measurement(id, fields)
-    router.push(`/file/${id}/tech_measurement`)
+    const file_id = currentRoute.value.params.file_id
+    console.log("id", id)
+    
+    await create_tech_measurement(file_id, id, fields)
+    router.push(`/file/${file_id}/station/${id}/tech_measurement`)
   } catch (error) {
     console.error(error)
   }
@@ -39,7 +40,6 @@ async function save(fields) {
 <template>
   <formtc
     title="Mediciones Técnicas Externas"
-    :file="file"
     :technicians-values="techniciansValues"
     :technicians="technicians"
     :tech-measurement="techMeasurement"

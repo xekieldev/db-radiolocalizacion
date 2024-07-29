@@ -40,6 +40,7 @@ def create_app(test_config=None):
     from src import tech_measurement
     from src import non_ionizing_radiation
     from src import users
+    from src import activities
 
 
     app.register_blueprint(technician.bp)
@@ -47,6 +48,7 @@ def create_app(test_config=None):
     app.register_blueprint(station.bp)
     app.register_blueprint(tech_measurement.bp)
     app.register_blueprint(non_ionizing_radiation.bp)
+    app.register_blueprint(activities.bp)
     app.register_blueprint(users.bp)
 
     # make url_for('index') == url_for('blog.index')
