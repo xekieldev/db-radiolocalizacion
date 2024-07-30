@@ -1,13 +1,20 @@
 <script setup>
+import FormRow from './FormRow.vue'
+import { useArea } from '../composables/area'
 import { ref } from 'vue'
+
+
 
 const user = ref()
 const pass = ref()
-const emit = defineEmits(['onSubmit'])
+const new_pass = ref()
+const new_pass_confirm = ref()
+const emits = defineEmits(['onSubmit'])
+const { area } = useArea()
+
 
 function submitHandler(fields) {
-  emit('onSubmit', fields)
-  
+  emits('onSubmit', fields)
 }
 
 defineProps({
@@ -17,10 +24,11 @@ defineProps({
 </script>
 
 <template>
-  <div class="login-box">
+
+  <div class="change-pass-container">
     <form-kit
       type="form"
-      submit-label="Ingresar"
+      submit-label="Cambiar"
       :actions="false"
       @submit="submitHandler"
     >
@@ -46,33 +54,52 @@ defineProps({
         label="Contraseña"
         name="pass"
       />
+      <form-kit
+        v-model="new_pass"
+        outer-class="field-login"
+        type="password"
+        label="Nueva Contraseña"
+        name="new_pass"
+        validation="required"
+      />
+      <form-kit
+        v-model="new_pass_confirm"
+        outer-class="field-login"
+        type="password"
+        label="Confirmar Nueva Contraseña"
+        name="new_pass_confirm"
+        validation="required|confirm"
+        :validation-messages="{
+          confirm: 'Error. Las contraseñas no coinciden',
+        }"
+        validation-label="Password confirmation no coincide"
+      />
       <p
         v-if="loginError && loginError.response.data === 'Error de login'"
         class="login-error"
       >
         Usuario o contraseña incorrectos
       </p>
-      <div class="login-options">
-        <a href="/change_password">Cambiar contraseña</a>
-        <button
+      <button
         class="login-button"
         type="submit"
       >
-        Ingresar
+        Cambiar
       </button>
-      </div>
-      
+
     </form-kit>
   </div>
+  
 </template>
 
 <style scoped>
 
-.login-box {
+
+.change-pass-container {
       display: flex;
       flex-direction: column;
       margin: auto;
-      margin-top: 10%;
+      margin-top: 5%;
       border: 1px solid gray;
       padding: 0 60px 30px;
       border-radius: 10px;
@@ -117,8 +144,4 @@ defineProps({
   color: red;
   /* font-weight: 500; */
 }
-.login-options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;}
 </style>

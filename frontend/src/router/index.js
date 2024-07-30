@@ -10,6 +10,11 @@ const router = createRouter({
       component: LoginView
     },
     {
+      path: '/change_password',
+      name: 'changePassword',
+      component: () => import('../views/ChangePassView.vue')
+    },
+    {
       path: '/home',
       name: 'home',
       component: () => import('../views/HomeView.vue')

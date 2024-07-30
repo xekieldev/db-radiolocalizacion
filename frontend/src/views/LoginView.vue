@@ -3,6 +3,7 @@ import LoginMain from '../components/LoginMain.vue';
 import { useSession } from '../composables/session'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'
+import MyButton from '../components/MyButton.vue'
 
 
 
@@ -22,6 +23,11 @@ const loginError = ref()
     }
 
   }
+
+function changePass() {
+  router.push({name: "changePassword"})
+
+}
 </script>
 
 <template>
