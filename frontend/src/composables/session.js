@@ -25,6 +25,13 @@ export function useSession() {
         return response && response.data
     }
 
+    async function changePassword(data) {
+        loading.value = true
+        const response = await loginAxiosInstance.patch('/change_password', data)
+        loading.value = false
+        return response && response.data
+    }
+
     async function logout() {
         document.cookie = 'appAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;samesite=lax' 
       }
@@ -34,6 +41,7 @@ export function useSession() {
         logout,
         loggedIn,
         updateLoggedIn,
+        changePassword,
         
     }
 }

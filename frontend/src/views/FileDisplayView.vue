@@ -285,7 +285,7 @@ function closeDiv() {
       />
       <prop-value
         v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.tramitacion == 'Informado'"
-        |class="prop"
+        class="prop"
         label="Nota de Fin"
         :value="file.nota_fin"
       />
