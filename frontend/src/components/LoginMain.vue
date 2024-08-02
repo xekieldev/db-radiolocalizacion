@@ -120,5 +120,6 @@ defineProps({
 .login-options {
   display: flex;
   align-items: center;
-  justify-content: space-between;}
+  justify-content: space-between;
+  }
 </style>

@@ -61,6 +61,9 @@ defineProps({
         label="Nueva Contraseña"
         name="new_pass"
         validation="required"
+        :validation-messages="{
+          required: 'Debe ingresar una contraseña',
+        }"
       />
       <form-kit
         v-model="new_pass_confirm"
@@ -71,8 +74,9 @@ defineProps({
         validation="required|confirm"
         :validation-messages="{
           confirm: 'Error. Las contraseñas no coinciden',
+          required: 'Debe ingresar una contraseña'
         }"
-        validation-label="Password confirmation no coincide"
+        
       />
       <p
         v-if="loginError && loginError.response.data === 'Error de login'"
