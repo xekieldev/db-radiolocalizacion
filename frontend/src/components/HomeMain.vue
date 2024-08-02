@@ -26,7 +26,7 @@ function createLocStation() {
 }
 
 function list() {
-  router.push({name: "list", query: { includeDeleted: 'false'}})
+  router.push({name: "list", query: { includeDeleted: 'false', fileStatus: 'Pendiente'}})
 }
 
 function newFile() { 

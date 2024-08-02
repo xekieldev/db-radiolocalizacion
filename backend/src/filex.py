@@ -73,22 +73,39 @@ def case_file():
 def get_available_files():
     try:
         include_deleted = request.args.get('includeDeleted')
+        file_status = request.args.get('fileStatus')
         usuario = auth.current_user()
         checkUser= User.query.filter_by(usuario = usuario).first()
         if checkUser.area != 'AGCCTYL':
             if include_deleted and include_deleted.lower() == 'true':
                 # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
-                case_file_available = CaseFile.query.filter_by(area_actual = checkUser.area).all()
+                case_file_available = CaseFile.query.filter_by(area_actual = checkUser.area)
+                if file_status is not None:
+                    case_file_available = case_file_available.filter_by(tramitacion = file_status)
+                
+                case_file_available = case_file_available.all()
+
             else:
                 # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
-                case_file_available = CaseFile.query.filter_by(area_actual = checkUser.area, status='Available').all()
+                case_file_available = CaseFile.query.filter_by(area_actual = checkUser.area, status='Available')
+                if file_status is not None:
+                    case_file_available = case_file_available.filter_by(tramitacion = file_status)
+                
+                case_file_available = case_file_available.all()
         else:
             if include_deleted and include_deleted.lower() == 'true':
                 # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
-                case_file_available = CaseFile.query.all()
+                if file_status is not None:
+                    case_file_available = CaseFile.query.filter_by(tramitacion = file_status)
+                
+                case_file_available = case_file_available.all()
             else:
                 # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
-                case_file_available = CaseFile.query.filter_by(status='Available').all()          
+                case_file_available = CaseFile.query.filter_by(status='Available')          
+                if file_status is not None:
+                    case_file_available = case_file_available.filter_by(tramitacion = file_status)
+                
+                case_file_available = case_file_available.all()
 
         return case_files_schema.dump(case_file_available)
 

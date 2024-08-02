@@ -1,6 +1,6 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
@@ -15,8 +15,9 @@ const { search } = useSearch()
 const router = useRouter()
 
 const items = ref([])
+const newItems = ref([])
 const searchText = ref('')
-
+const estado = ref('Pendiente')
 
 
 function viewItem(item) {  
@@ -30,18 +31,55 @@ async function deleteItem(file_id, id) {
 
 onBeforeMount(async () => {
   if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-    const data = await list()
+    console.log("onBeforeMount", estado.value)
+    
+    const data = await list(false, estado.value)
     items.value.push(...data)
   } else {
-      const data = await list(true)
+      const data = await list(true, estado.value)
       items.value.push(...data)    
   }  
 })
 
 async function searchFiles(searchText) {
-  const data = await list(false)
-  items.value = search(data, searchText, ['area','expediente', 'area_actual'])  
+  if(estado.value != 'Todos') {
+    const data = await list(false, estado.value)
+    items.value = search(data, searchText, ['area_asignada','tipo','expediente', 'area_actual'])
+  } else {
+      const data = await list(false, null)
+      items.value = search(data, searchText, ['area_asignada','expediente', 'area_actual'])
+  }
+  
 }
+
+watch(estado, async(newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined && estado != 'Todos') {
+      const data = await list(false, newValue)
+      items.value = ([])
+      items.value.push(...data)
+      newItems.value.push(...data)
+    } else {
+      const data = await list(true, newValue)
+      items.value = ([])
+      items.value.push(...data)   
+      newItems.value.push(...data)
+
+  }  
+
+  if (newValue == 'Todos') {
+    // estado.value = null
+    const data = await list(false, null)
+      items.value = ([])
+      items.value.push(...data)
+      newItems.value.push(...data)
+
+  }
+    
+    router.push({name: "list", query: { includeDeleted: 'false', fileStatus: newValue }})
+
+  }
+})
 
 </script>
 <template>
@@ -52,6 +90,20 @@ async function searchFiles(searchText) {
       placeholder = "Buscar Expedientes"
       @on-submit="searchFiles"
     />
+    <div>
+      <form-kit
+          v-model="estado"
+          type="select"
+          :value="estado"
+          name="estado" 
+          :options="[
+            'Pendiente',
+            'Informado',
+            'Todos',
+          ]"
+          outer-class="short-field"
+        />
+    </div>
   </div>
   <div class="list-container">
     <table class="files-table">
@@ -142,6 +194,11 @@ tr:nth-child(odd) {
   flex-direction: row;
   gap: 1px;
   margin: 0;
+}
+.files-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between
 }
   
 </style>

@@ -129,6 +129,12 @@ watch(province, (newValue, oldValue) => {
       </form-row>
       <form-row>
         <form-kit
+          v-if="tipoTramite == 'Interferencias en Aeropuertos'"
+          type="text"
+          label="Aeropuerto/Aeródromo"
+          name="aeropuerto"
+        />
+        <form-kit
           type="text"
           label="Domicilio"
           name="domicilio"        
@@ -153,11 +159,6 @@ watch(province, (newValue, oldValue) => {
           type="text"
           label="Nota/Expediente de Inicio"
           name="nota_inicio"
-        />
-        <form-kit
-          type="text"
-          label="Aeropuerto/Aeródromo"
-          name="aeropuerto"
         />
       </form-row>
       <form-row>

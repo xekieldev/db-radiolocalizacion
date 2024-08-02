@@ -10,12 +10,13 @@ export function useApi() {
         headers: { Authorization: `Basic ${document.cookie.split('appAuth=')[1]}`}
     })
 
-    async function list(includeDeleted = false) {
+    async function list(includeDeleted = false, fileStatus) {
         loading.value = true
         const response = await axiosInstance.get('/file', {
             params: {
-                includeDeleted: includeDeleted
-            }
+                fileStatus: fileStatus,
+                includeDeleted: includeDeleted,
+            },
         })
         loading.value = false
         return response && response.data 
