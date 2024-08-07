@@ -52,7 +52,7 @@ onBeforeMount(async () => {
     Object.assign(file, response.file)
     currentLocation.value = response.currentArea
     tipoTramite.value = file.tipo
-    console.log(tipoTramite)
+    console.log(file.informe)
     
 
     
@@ -126,7 +126,9 @@ async function patch_file(fields) {
     fields.hora = myTime
 
     await patchFile (file_id, fields)
-    window.location.reload() 
+    // window.location.reload()
+    router.push({name: "list", query: { includeDeleted: 'false', fileStatus: 'Pendiente'}})
+
 
   } catch (error) {
     console.error(error)
@@ -175,7 +177,7 @@ function closeDiv() {
     <my-button
       tabindex="0"
       class="primary options-menu"
-      label="Opciones"
+      label="Acciones"
       @on-tap="openMenu"
     />
   </div>
@@ -186,6 +188,8 @@ function closeDiv() {
           <form-move-file
             :context="tipoTramite"
             :fileNumber="file.expediente"
+            :location="file.area_actual"
+            :informe="file.informe"
             @on-submit="patch_file"
           />
         </div>
@@ -284,6 +288,12 @@ function closeDiv() {
         :value="currentLocation"
       />
       <prop-value
+        v-if="file.tramitacion == 'Informado'"
+        class="prop"
+        label="Informe"
+        :value="file.informe"
+      />
+      <prop-value
         v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.tramitacion == 'Informado'"
         class="prop"
         label="Nota de Fin"
@@ -293,13 +303,6 @@ function closeDiv() {
     
  </div>
 
- <prop-value
-        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.tramitacion == 'Informado'"
-        class="prop double"
-        label="Nota de Fin"
-        :value="file.nota_fin"
-      />
- <br>
  <br>
  
 
