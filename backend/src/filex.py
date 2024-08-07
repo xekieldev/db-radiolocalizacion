@@ -12,7 +12,7 @@ bp = Blueprint("case_file", __name__)
 class CaseFileSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "fecha", "hora", "expediente", "tipo", "area_asignada", "prioridad", "nota_inicio", "nota_fin", "aeropuerto", "usuario", "frecuencia", "unidad", "provincia", "localidad", "motivo","domicilio", "latitud", "longitud", "area_actual", "tramitacion", "status")
+        fields = ("id", "fecha", "hora", "expediente", "tipo", "area_asignada", "prioridad", "nota_inicio", "nota_fin", "aeropuerto", "usuario", "frecuencia", "unidad", "provincia", "localidad", "motivo","domicilio", "latitud", "longitud", "area_actual", "informe", "tramitacion", "status")
 
 case_file_schema = CaseFileSchema()
 case_files_schema = CaseFileSchema( many = True )

@@ -14,7 +14,12 @@ function submitHandler(fields) {
 const props = defineProps({
   context: String,
   fileNumber: String,
+  location: String,
+  informe: String,
 })
+
+console.log(typeof props.informe)
+// debugger
 </script>
 
 <template>
@@ -26,7 +31,7 @@ const props = defineProps({
     <div class="form-end-file-container">
       <form-row>
         <form-kit
-          v-if="context == 'Interferencias en Aeropuertos' && fileNumber != 'A definir'"
+          v-if="context == 'Interferencias en Aeropuertos' && fileNumber != 'A definir' && location == 'AGCCTYL'"
           type="text"
           label="Nota de Fin" 
           name="nota_fin"
@@ -34,7 +39,7 @@ const props = defineProps({
           inner-class="field--report"
         />
         <form-kit
-          v-if="fileNumber != 'A definir'"
+          v-if="fileNumber !== 'A definir' && (informe === undefined || informe === null || informe === '')"
           type="text"
           label="Informe" 
           name="informe" 

@@ -44,7 +44,7 @@ onBeforeMount(async () => {
 async function searchFiles(searchText) {
   if(estado.value != 'Todos') {
     const data = await list(false, estado.value)
-    items.value = search(data, searchText, ['area_asignada','tipo','expediente', 'area_actual'])
+    items.value = search(data, searchText, ['area_asignada','tipo','fecha','expediente', 'area_actual'])
   } else {
       const data = await list(false, null)
       items.value = search(data, searchText, ['area_asignada','expediente', 'area_actual'])
@@ -123,6 +123,7 @@ watch(estado, async(newValue, oldValue) => {
       <tr
         v-for="item in items"
         :key="item"
+        v-bind:class="{ 'red-text': item.prioridad == 'Urgente'}"
       >
         <td>
           <my-button
@@ -199,6 +200,9 @@ tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   justify-content: space-between
+}
+.red-text {
+  color: red;
 }
   
 </style>

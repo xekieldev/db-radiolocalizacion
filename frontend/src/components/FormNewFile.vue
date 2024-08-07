@@ -2,6 +2,7 @@
 import FormRow from './FormRow.vue'
 import Heading from './Heading.vue';
 import { useArea } from '../composables/area';
+import { useAirport } from '../composables/airport';
 import { useType } from '../composables/filetype';
 import { useFileValidation } from '../composables/filevalidation'
 import { ref, watch } from 'vue';
@@ -20,6 +21,7 @@ defineProps({
   techniciansValues: Array,
 })
 const { area } = useArea()
+const{ airport } = useAirport()
 const { type } = useType()
 const { validateFile } = useFileValidation()
 
@@ -127,13 +129,21 @@ watch(province, (newValue, oldValue) => {
           placeholder="Área"
         />
       </form-row>
-      <form-row>
+      <form-row v-if="tipoTramite == 'Interferencias en Aeropuertos'">
         <form-kit
           v-if="tipoTramite == 'Interferencias en Aeropuertos'"
-          type="text"
+          type="select"
           label="Aeropuerto/Aeródromo"
           name="aeropuerto"
+          :options="airport"
         />
+        <form-kit
+          type="text"
+          label="Nota/Expediente de Inicio"
+          name="nota_inicio"
+        />
+      </form-row>
+      <form-row>
         <form-kit
           type="text"
           label="Domicilio"
@@ -144,21 +154,14 @@ watch(province, (newValue, oldValue) => {
           label="Latitud"
           name="latitud"
           step="0.000001"
-
+          outer-class="short-field"
         />
         <form-kit
           type="number"
           label="longitud"
           name="longitud"
           step="0.000001"
-
-        />
-      </form-row>
-      <form-row v-if="tipoTramite == 'Interferencias en Aeropuertos'">
-        <form-kit
-          type="text"
-          label="Nota/Expediente de Inicio"
-          name="nota_inicio"
+          outer-class="short-field"
         />
       </form-row>
       <form-row>
@@ -178,6 +181,7 @@ watch(province, (newValue, oldValue) => {
           :validation-messages="{
             min: 'La frecuencia debe ser mayor que 0.',
           }"
+          outer-class="short-field"
         />
         <form-kit
           type="select"
@@ -185,6 +189,7 @@ watch(province, (newValue, oldValue) => {
           name="unidad"
           value="MHz"
           :options="unidad"
+          outer-class="short-field"
         />
       </form-row>
       <form-row>
@@ -328,7 +333,7 @@ watch(province, (newValue, oldValue) => {
 
 .short-field {
       /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
-      flex: 0 0 10%;
+      flex: 0 0 20%;
 }
 
 
