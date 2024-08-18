@@ -4,10 +4,11 @@ import { ref } from 'vue'
 
 
 export function useApi() {
-    var loading = ref(false);
+    var loading = ref(false);    
     const axiosInstance = axios.create({
         baseURL: import.meta.env.VITE_APP_API_URL,
-        headers: { Authorization: `Basic ${document.cookie.split('appAuth=')[1]}`}
+        withCredentials: true,
+        xsrfCookieName: 'csrf_access_token'
     })
 
     async function list(includeDeleted = false, fileStatus) {

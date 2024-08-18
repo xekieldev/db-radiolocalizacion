@@ -3,8 +3,6 @@ import LoginMain from '../components/LoginMain.vue';
 import { useSession } from '../composables/session'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'
-import MyButton from '../components/MyButton.vue'
-
 
 
 const { login } = useSession()
@@ -13,21 +11,14 @@ const loginError = ref()
 
   async function check(fields) {
     try {
-      await login(fields)
+      const response = await login(fields)
       router.push(`/home`)
 
     } catch (error) {
       console.error(error)
       loginError.value = error
-      
     }
-
   }
-
-function changePass() {
-  router.push({name: "changePassword"})
-
-}
 </script>
 
 <template>

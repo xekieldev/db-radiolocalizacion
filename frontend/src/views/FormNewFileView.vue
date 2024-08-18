@@ -17,7 +17,6 @@ onBeforeMount(async () => {
 
 async function save(fields) {
   try {
-    console.log("fields", fields)
     if( fields.tipo != 'Medición de Radiaciones No Ionizantes (móviles)') {
       fields.area_destino = fields.area
       const response = await newFile(fields)

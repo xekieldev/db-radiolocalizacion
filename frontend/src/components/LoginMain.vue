@@ -10,7 +10,7 @@ function submitHandler(fields) {
   
 }
 
-defineProps({
+const props = defineProps({
       loginError: Object,
 })
 
@@ -47,21 +47,17 @@ defineProps({
         name="pass"
       />
       <p
-        v-if="loginError && loginError.response.data === 'Error de login'"
+        v-if="loginError && loginError.response.data.message === 'Unauthorized'"
         class="login-error"
       >
         Usuario o contraseña incorrectos
       </p>
-      <div class="login-options">
-        <a href="/change_password">Cambiar contraseña</a>
-        <button
+      <button
         class="login-button"
         type="submit"
       >
         Ingresar
       </button>
-      </div>
-      
     </form-kit>
   </div>
 </template>
@@ -117,9 +113,5 @@ defineProps({
   color: red;
   /* font-weight: 500; */
 }
-.login-options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  }
+
 </style>

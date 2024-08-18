@@ -4,13 +4,9 @@ import { useArea } from '../composables/area'
 import { ref } from 'vue'
 
 
-
-const user = ref()
-const pass = ref()
 const new_pass = ref()
 const new_pass_confirm = ref()
 const emits = defineEmits(['onSubmit'])
-const { area } = useArea()
 
 
 function submitHandler(fields) {
@@ -40,20 +36,6 @@ defineProps({
       <p class="login-box-title">
         Área Gestión de CCTE y Laboratorios
       </p>
-      <form-kit
-        v-model="user"
-        outer-class="field-login"
-        type="text"
-        label="Usuario"
-        name="user"
-      />
-      <form-kit
-        v-model="pass"
-        outer-class="field-login"
-        type="password"
-        label="Contraseña"
-        name="pass"
-      />
       <form-kit
         v-model="new_pass"
         outer-class="field-login"

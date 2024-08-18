@@ -3,11 +3,15 @@ import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 import { useRouter } from 'vue-router'
 import FooterMain from '../components/FooterMain.vue'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useSession } from '../composables/session'
 
+
+const { checkUser } = useSession()
 const router = useRouter()
 const filesMenu = ref(false)
 const stationsMenu = ref(false)
+const user_perfil = ref('')
 
 const emits = defineEmits(['update: stationsMenu']);
 
@@ -57,6 +61,11 @@ function nirMeasurements() {
   router.push({ name:"listNIR"})
 }
 
+onMounted( async ()=> {
+    const response = await checkUser()
+    user_perfil.value = response.data.user_perfil
+})
+
 </script>
 
 <template>
@@ -101,18 +110,6 @@ function nirMeasurements() {
           label="Listado de Estaciones"
           @on-tap="stationList"
         />
-        <!-- <my-button
-          tabindex="0"
-          class="quaternary sub-menu-button new-rloc"
-          label="Nueva Radiolocalización"
-          @on-tap="createStation"
-        />
-        <my-button
-          tabindex="0"
-          class="quaternary sub-menu-button new-loc"
-          label="Nueva Localización"
-          @on-tap="createLocStation"
-        /> -->
       </div>
     </div>
     <div class="second-row">
@@ -123,6 +120,7 @@ function nirMeasurements() {
         @on-tap="nirMeasurements"
       />
       <my-button
+        v-if="user_perfil == 'coordinator'"
         tabindex="0"
         class="septenary button technician-manage"
         label="Agregar/Eliminar Técnicos"

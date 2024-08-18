@@ -1,6 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive, ref } from 'vue'
+import { useSession } from '../composables/session'
+import { onBeforeMount, reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTerritory } from '../composables/territory'
 import DisplayRow from '../components/DisplayRow.vue'
@@ -15,6 +16,7 @@ const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, pat
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
+const { checkUser } = useSession()
 
 
 const tipoTramite = ref()
@@ -44,23 +46,19 @@ const file = reactive({})
 const items = ref([])
 const activities = ref([])
 const menu = ref(false)
+const user_perfil = ref('')
+
 
 onBeforeMount(async () => {
   
-    
     const response = await getFile(router.currentRoute.value.path.slice(6))
     Object.assign(file, response.file)
     currentLocation.value = response.currentArea
     tipoTramite.value = file.tipo
-    console.log(file.informe)
-    
-
-    
     
     file.localidad = getNameByCode('city', file.localidad)
     file.provincia = getNameByCode('province', file.provincia)
     const data = await stationsPerFile(file.id)
-    
     items.value.push(...data)
     for (const item in items.value) {
       items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
@@ -88,7 +86,6 @@ function goBack() {
 }
 
 function viewItem(file_id, id) {  
-  console.log("ruta para push", `/file/${file_id}/station/${id}`)
   
   router.push(`/file/${file_id}/station/${id}`)
 }
@@ -126,7 +123,6 @@ async function patch_file(fields) {
     fields.hora = myTime
 
     await patchFile (file_id, fields)
-    // window.location.reload()
     router.push({name: "list", query: { includeDeleted: 'false', fileStatus: 'Pendiente'}})
 
 
@@ -134,7 +130,6 @@ async function patch_file(fields) {
     console.error(error)
   }
 }
-
 
 function openMenu() {
   menu.value = !menu.value
@@ -144,6 +139,12 @@ function closeDiv() {
   menu.value = false
 }
 
+onMounted( async ()=> {
+    const response = await checkUser()
+    // user_area.value = response.data.user_area
+    user_perfil.value = response.data.user_perfil
+
+})
 
 
 </script>
@@ -175,6 +176,7 @@ function closeDiv() {
       />
     </div>
     <my-button
+      v-if="user_perfil === 'coordinator'"
       tabindex="0"
       class="primary options-menu"
       label="Acciones"

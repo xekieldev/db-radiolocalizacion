@@ -1,11 +1,12 @@
 from flask import Blueprint
-from flask import request
+from flask import request,  jsonify
 from src.db import db, CaseFile, Station, TechMeasurement, technician_tech_measurement, technician_station, Technician, file_tracking, ma, User
 from sqlalchemy import exc, insert, delete, select
 from src.technician import technicians_schema
 from src.station import station_schema, stations_schema
 from src.tech_measurement import tech_measurements_schema, tech_measurement_schema
-from src.users import auth
+# from src.users import auth
+from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
 
 
 bp = Blueprint("case_file", __name__)
@@ -19,7 +20,7 @@ case_files_schema = CaseFileSchema( many = True )
 
 
 @bp.route("/file", methods=["POST"])
-@auth.login_required
+@jwt_required()
 def case_file():
     try:
         fecha = request.json.get('fecha')
@@ -46,19 +47,17 @@ def case_file():
         informe = request.json.get('informe')
         tramitacion = 'Pendiente'
         
-      
         caseFile = CaseFile(expediente = expediente, area_asignada = area_asignada, fecha = fecha, hora = hora, tipo = tipo, prioridad = prioridad, nota_inicio = nota_inicio, nota_fin = nota_fin, aeropuerto = aeropuerto, usuario = usuario, frecuencia = frecuencia, unidad = unidad, provincia = provincia, localidad = localidad, motivo = motivo, area_actual = area_actual, fecha_fin = fecha_fin, hora_fin = hora_fin, domicilio = domicilio, latitud = latitud, longitud = longitud, informe = informe, tramitacion = tramitacion)
         db.session.add(caseFile)
         db.session.commit()
 
-        usuario = auth.current_user()
-        checkUser= User.query.filter_by(usuario=usuario).first()
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
         stmt1 = (insert(file_tracking).values(file_id = caseFile.id, envia = checkUser.area, recibe = request.json.get('area_asignada'), fecha = request.json.get('fecha'), hora = request.json.get('hora'), usuario = checkUser.usuario))
         session = db.session
         session.execute(stmt1)
         session.commit()
-
-                
+        
         response = {"id": caseFile.id }
         return response, 201 
     except exc.SQLAlchemyError:
@@ -69,13 +68,13 @@ def case_file():
         return response, 400
 
 @bp.route('/file', methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_available_files():
     try:
         include_deleted = request.args.get('includeDeleted')
         file_status = request.args.get('fileStatus')
-        usuario = auth.current_user()
-        checkUser= User.query.filter_by(usuario = usuario).first()
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
         if checkUser.area != 'AGCCTYL':
             if include_deleted and include_deleted.lower() == 'true':
                 # Si includeDeleted está presente y es 'true', lista todos los archivos, incluidos los eliminados
@@ -114,7 +113,7 @@ def get_available_files():
         return response, 400
     
 @bp.route('/file/<id>', methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_file(id):
     try:
         caseFile = CaseFile.query.get(id)
@@ -131,7 +130,7 @@ def get_file(id):
 
 
 @bp.route('/file/<id>', methods = ['DELETE'])
-@auth.login_required
+@jwt_required()
 def delete_file(id):
     try:
         case_file = CaseFile.query.get(id)
@@ -151,7 +150,7 @@ def delete_file(id):
 
 
 @bp.route('/file/<id>', methods = ['PATCH'])
-@auth.login_required
+@jwt_required()
 def patch_file(id):
     try:
         caseFile = CaseFile.query.get(id)
@@ -172,8 +171,8 @@ def patch_file(id):
             session = db.session
             currentArea = session.execute(stmt).first()
 
-            usuario = auth.current_user()
-            checkUser= User.query.filter_by(usuario = usuario).first()
+            usuario_id = get_jwt_identity()      
+            checkUser= User.query.filter_by(id = usuario_id).first()
             stmt1 = (insert(file_tracking).values(file_id = caseFile.id, envia = currentArea.recibe, recibe = area_destino, fecha = request.json.get('fecha'), hora = request.json.get('hora'), usuario = checkUser.usuario))
             session = db.session
             session.execute(stmt1)

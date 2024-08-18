@@ -77,11 +77,6 @@ function viewNirMap() {
           label="Ver Mapa"
           @on-tap="viewNirMap"
         />
-        <my-button
-          class="secondary right"
-          label="Nueva Medición de RNI"
-          @on-tap="createItem"
-        />
       </div> 
     </div>
     <div class="nir-measurements-container">

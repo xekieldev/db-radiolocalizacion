@@ -11,10 +11,9 @@ const router = useRouter()
 const loginError = ref()
 
 async function newPass(fields) {
-  // debugger
   try {
     await changePassword(fields)
-    router.push(`/`)
+    router.back()
 
   } catch (error) {
     console.error(error)

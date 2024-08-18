@@ -10,7 +10,6 @@ import { useTerritory } from '../composables/territory'
 import { useUnit } from '../composables/unit'
 
 
-
 const emits = defineEmits(['onSubmit'])
 
 
@@ -32,18 +31,14 @@ function submitHandler(fields) {
 }
 
 const currentDate = new Date(); 
-
 const fullHours = currentDate.getHours() < 10 ? "0" + currentDate.getHours() : currentDate.getHours()
 const fullMinutes = currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : currentDate.getMinutes()
 const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
 const myTime = fullHours + ":" + fullMinutes + ":" + fullSeconds
 
-
 const fullMonth = (currentDate.getMonth()+1)<10 ? "0"+(currentDate.getMonth()+1) : (currentDate.getMonth()+1)
 const fullDay = currentDate.getDate()<10 ? "0"+currentDate.getDate() : currentDate.getDate()
 const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
-
-console.log("Fecha y hora", myDate, " @ ", myTime)
 
 const prioridadValue = ref(false)
 const tipoTramite = ref()
