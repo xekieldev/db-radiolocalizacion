@@ -24,8 +24,6 @@ function submitHandler(fields) {
 }
 
 
-// const province = ref(props.station.provincia)
-// const city = ref(props.station.localidad)
 const province = ref()
 const city = ref()
 const { provinces, cities, getProvinceCities } = useTerritory()

@@ -30,17 +30,11 @@ const technicians = reactive({})
 const techniciansValues = reactive({})
 
 onBeforeMount(async () => {
-  console.log(currentRoute.value.params.id)
-  
     const response = await getNonIonizingRadiation(currentRoute.value.params.id)
-    console.log(response)
-    
     const techResponse = await getAllTechnicians()
     Object.assign(nirMeasurement, response)
     Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
-//     station.provincia = getNameByCode("province", response.station.provincia)
-//     station.localidad = getNameByCode("city", response.station.localidad)    
 })
 
 

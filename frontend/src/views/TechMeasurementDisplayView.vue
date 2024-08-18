@@ -2,11 +2,11 @@
 import { useApi } from '../composables/api'
 import { onBeforeMount, reactive, ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import Heading from '../components/Heading.vue';
-import MyButton from '../components/MyButton.vue';
-import DisplayRow from '../components/DisplayRow.vue';
-import PropValue from '../components/PropValue.vue';
-import { useTerritory } from '../composables/territory';
+import Heading from '../components/Heading.vue'
+import MyButton from '../components/MyButton.vue'
+import DisplayRow from '../components/DisplayRow.vue'
+import PropValue from '../components/PropValue.vue'
+import { useTerritory } from '../composables/territory'
 
 
 const { getTechMeasurement, getStation, delete_tech_measurement, getFile } = useApi()
@@ -23,25 +23,23 @@ let previewStatus = ref(false)
 
 
 onBeforeMount(async () => {
-    const id = currentRoute.value.params.id
-    const file_id = currentRoute.value.params.file_id
-    const stationResponse = await getStation(currentRoute.value.params.id)
-    Object.assign(station, stationResponse.station)
-    const file_response = await getFile(station.file_id)   
-    Object.assign(file, file_response.file) 
-     
-    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-      const response = await getTechMeasurement(file_id, id)
+  const id = currentRoute.value.params.id
+  const file_id = currentRoute.value.params.file_id
+  const stationResponse = await getStation(currentRoute.value.params.id)
+  Object.assign(station, stationResponse.station)
+  const file_response = await getFile(station.file_id)   
+  Object.assign(file, file_response.file) 
+    
+  if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
+    const response = await getTechMeasurement(file_id, id)
+    Object.assign(techMeasurement, response.techMeasurement)
+    Object.assign(technicians, response.technicians)
+
+  } else {
+      const response = await getTechMeasurement(file_id, id, true)
       Object.assign(techMeasurement, response.techMeasurement)
       Object.assign(technicians, response.technicians)
-
-    } else {
-        const response = await getTechMeasurement(file_id, id, true)
-        Object.assign(techMeasurement, response.techMeasurement)
-        Object.assign(technicians, response.technicians)
-    }
-    console.log("TechMeas", techMeasurement)
-    
+  }    
 })
 
 function viewItem(file_id, id) { 

@@ -3,7 +3,8 @@ from flask import request
 from flask import url_for
 from src.db import db, NonIonizingRadiation, ma, User
 from sqlalchemy import exc
-from src.users import auth
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 bp = Blueprint("non_ionizing_radiation", __name__)
 class NonIonizingRadiationSchema(ma.Schema):
@@ -16,7 +17,7 @@ non_ionizing_radiations_schema = NonIonizingRadiationSchema( many = True )
 
 
 @bp.route("/non_ionizing_radiation/create", methods=["POST"])
-@auth.login_required
+@jwt_required()
 def non_ionizing_radiation():
     # import pdb; pdb.set_trace()
 
@@ -47,7 +48,7 @@ def non_ionizing_radiation():
 
 
 @bp.route('/non_ionizing_radiation/<id>', methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_non_ionizing_radiations(id): 
     try:
         non_ionizing_radiation = NonIonizingRadiation.query.get(id)
@@ -58,12 +59,12 @@ def get_non_ionizing_radiations(id):
     
 
 @bp.route("/non_ionizing_radiation/", methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_all_non_ionizing_radiations():
     try:
         # import pdb; pdb.set_trace()
-        usuario = auth.current_user()
-        checkUser= User.query.filter_by(usuario=usuario).first()
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
         if checkUser.area != 'AGCCTYL':
             all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area = checkUser.area).all()
         else:
@@ -76,7 +77,7 @@ def get_all_non_ionizing_radiations():
 
 
 @bp.route("/non_ionizing_radiation/<id>/delete_non_ionizing_radiation", methods = ['DELETE'])
-@auth.login_required
+@jwt_required()
 def delete_technician(id):
     try:
         non_ionizing_radiation=NonIonizingRadiation.query.get(id)

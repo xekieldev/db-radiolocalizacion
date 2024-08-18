@@ -1,6 +1,6 @@
 <script setup>
 import FormRow from './FormRow.vue'
-import { ref, watch, reactive, onBeforeMount, onMounted } from 'vue'
+import { ref, watch, reactive, onBeforeMount } from 'vue'
 import { useTerritory } from '../composables/territory'
 import { useLink } from '../composables/link'
 import { useArea } from '../composables/area'
@@ -52,15 +52,12 @@ const city = ref(props.station.localidad)
 const { provinces, cities, getProvinceCities } = useTerritory()
 
 watch(province, (newValue, oldValue) => {
-  // props.station.provincia = newValue
   emits('update:station.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
     
     city.value = cities.value[0].value
     emits('update:station.localidad', newValue)
-
-    // props.station.localidad = city.value.value
 
   }  
 })

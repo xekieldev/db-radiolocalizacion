@@ -1,6 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, ref, watch } from 'vue'
+import { useSession } from '../composables/session'
+import { onBeforeMount, ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
@@ -10,14 +11,16 @@ import FooterMain from '../components/FooterMain.vue'
 
 
 const { list, loading, deleteFile } = useApi()
+const { checkUser } = useSession()
 const { search } = useSearch()
-
 const router = useRouter()
 
 const items = ref([])
 const newItems = ref([])
 const searchText = ref('')
 const estado = ref('Pendiente')
+const user_area = ref('')
+const user_perfil = ref('')
 
 
 function viewItem(item) {  
@@ -31,14 +34,18 @@ async function deleteItem(file_id, id) {
 
 onBeforeMount(async () => {
   if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-    console.log("onBeforeMount", estado.value)
-    
     const data = await list(false, estado.value)
     items.value.push(...data)
   } else {
       const data = await list(true, estado.value)
       items.value.push(...data)    
   }  
+})
+
+onMounted( async ()=> {
+    const response = await checkUser()
+    user_area.value = response.data.user_area
+    user_perfil.value = response.data.user_perfil
 })
 
 async function searchFiles(searchText) {
@@ -68,16 +75,12 @@ watch(estado, async(newValue, oldValue) => {
   }  
 
   if (newValue == 'Todos') {
-    // estado.value = null
     const data = await list(false, null)
-      items.value = ([])
-      items.value.push(...data)
-      newItems.value.push(...data)
-
-  }
-    
+    items.value = ([])
+    items.value.push(...data)
+    newItems.value.push(...data)
+  } 
     router.push({name: "list", query: { includeDeleted: 'false', fileStatus: newValue }})
-
   }
 })
 
@@ -118,7 +121,7 @@ watch(estado, async(newValue, oldValue) => {
         </th>
         <th>Ubicación</th>
         <th>Estado</th>
-        <th>Acciones</th>
+        <th v-if="user_area == 'AGCCTYL' && user_perfil == 'coordinator'">Acciones</th>
       </tr>
       <tr
         v-for="item in items"
@@ -141,7 +144,7 @@ watch(estado, async(newValue, oldValue) => {
         </td>
         <td>{{ item.area_actual }}</td> 
         <td>{{ item.tramitacion }}</td> 
-        <td> 
+        <td v-if="user_area == 'AGCCTYL' && user_perfil == 'coordinator'"> 
           <div class="action-buttons-container">
             <my-button
               class="tertiary center"

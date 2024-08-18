@@ -18,8 +18,6 @@ const props = defineProps({
   informe: String,
 })
 
-console.log(typeof props.informe)
-// debugger
 </script>
 
 <template>
@@ -82,8 +80,6 @@ console.log(typeof props.informe)
 
 <style scoped>
 .form-end-file-container {
-  /* display: flex;
-  flex-direction: row; */
   border: 1px solid gray;
   padding: 10px 40px;
   border-radius: 50px;
@@ -105,13 +101,12 @@ console.log(typeof props.informe)
 
 }
 .submit-button:hover {
-      background-color: #007BFF;
-      color: white;
+  background-color: #007BFF;
+  color: white;
 }
 
 .field-area {
-      flex: 0 0 200px;
-      /* background-color: white; */
+  flex: 0 0 200px;
 }
 
 </style>

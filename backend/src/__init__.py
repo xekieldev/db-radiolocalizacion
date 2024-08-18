@@ -3,13 +3,15 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
+
 
 
 
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app)
+    CORS(app, supports_credentials=True)
    
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -33,6 +35,16 @@ def create_app(test_config=None):
 
     db.init_app(app)
     migrate = Migrate(app, db)
+    app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+    app.config["JWT_TOKEN_LOCATION"]=['cookies']
+    app.config["JWT_COOKIE_SECURE"]=True
+    app.config["JWT_ACCESS_COOKIE_PATH"] = '/'  
+    app.config["JWT_REFRESH_COOKIE_PATH"] = '/'
+    app.config["JWT_COOKIE_SAMESITE"] = "None"
+    # app.config['SESSION_COOKIE_SAMESITE'] = None
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = False
+    jwt = JWTManager(app)
+
 
     from src import technician
     from src import filex

@@ -27,7 +27,6 @@ async function save(fields) {
   try {
     const id = currentRoute.value.params.id
     const file_id = currentRoute.value.params.file_id
-    console.log("id", id)
     
     await create_tech_measurement(file_id, id, fields)
     router.push(`/file/${file_id}/station/${id}/tech_measurement`)

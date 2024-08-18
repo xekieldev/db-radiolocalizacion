@@ -5,7 +5,8 @@ from src.db import Station, Technician, TechMeasurement, ma, User, db, technicia
 from src.technician import technicians_schema
 from src.tech_measurement import tech_measurement_schema, tech_measurements_schema
 from sqlalchemy import exc, insert, delete
-from src.users import auth
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 
 bp = Blueprint("station", __name__)
@@ -22,7 +23,7 @@ station_schema = StationSchema()
 stations_schema = StationSchema(many=True)
 
 @bp.route("/file/<id>/station", methods=["POST"])
-@auth.login_required
+@jwt_required()
 def station(id):
     try:
         file_id = id
@@ -83,7 +84,7 @@ def station(id):
 
     
 @bp.route('/station/<id>', methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_station(id):
     try:
         station = Station.query.get(id)
@@ -98,13 +99,13 @@ def get_station(id):
 
     
 @bp.route("/station", methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_all_stations():
 
     try:
         include_deleted = request.args.get('includeDeleted')
-        usuario = auth.current_user()
-        checkUser= User.query.filter_by(usuario=usuario).first()
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
         station_available = Station.query.filter_by(area=checkUser.area).with_entities(Station.id).all()
         ids_disponibles = [result[0] for result in station_available]
         if checkUser.area != 'AGCCTYL':
@@ -129,7 +130,7 @@ def get_all_stations():
         return response, 500
 
 @bp.route('/file/<file_id>/station/<id>/edit', methods = ['PUT'])
-@auth.login_required
+@jwt_required()
 def edit_station(file_id, id):
     try:
         station = Station.query.get(id)
@@ -229,7 +230,7 @@ def edit_station(file_id, id):
 
 
 @bp.route('/file/<file_id>/station/<id>', methods = ['DELETE'])
-@auth.login_required
+@jwt_required()
 def delete_station(file_id, id):
     try:
         station = Station.query.get(id)
@@ -243,7 +244,7 @@ def delete_station(file_id, id):
         return response, 400
     
 @bp.route("/file/<file_id>/station/<id>/create_tech_measurement", methods=["POST"])
-@auth.login_required
+@jwt_required()
 def tech_measurement(file_id, id):
     # import pdb; pdb.set_trace()
     try:
@@ -311,7 +312,7 @@ def tech_measurement(file_id, id):
     
 
 @bp.route('/file/<file_id>/station/<id>/tech_measurement', methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_tech_measurement(file_id, id):
     try:
         include_deleted = request.args.get('includeDeleted')
@@ -342,7 +343,7 @@ def get_tech_measurement(file_id, id):
     
 
 @bp.route("/file/<file_id>/station/<id_station>/delete_tech_measurement/<id_tech_measurement>", methods = ['DELETE'])
-@auth.login_required
+@jwt_required()
 def delete_tech_measurement(id_station, id_tech_measurement):
     try:
         tech_measurement = TechMeasurement.query.filter_by(station_id=id_station, id=id_tech_measurement).first()
@@ -355,7 +356,7 @@ def delete_tech_measurement(id_station, id_tech_measurement):
 
 
 @bp.route('/file/<file_id>/station/<id>', methods = ['PUT'])
-@auth.login_required
+@jwt_required()
 def update_related_station(file_id, id):
     try:
        
@@ -373,13 +374,13 @@ def update_related_station(file_id, id):
         return response, 400
     
 @bp.route("/file/<file_id>/stations", methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_stations_per_file(file_id):
 
     try:
         include_deleted = request.args.get('includeDeleted')
-        usuario = auth.current_user()
-        checkUser= User.query.filter_by(usuario=usuario).first()
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
         station_available = Station.query.filter_by(file_id=file_id).with_entities(Station.id).all()
         ids_disponibles = [result[0] for result in station_available]
         # import pdb; pdb.set_trace()

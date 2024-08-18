@@ -1,27 +1,22 @@
 import axios from 'axios'
 import { ref } from 'vue'
-
+import { loggedIn, usuario } from '../composables/loginstatus'
 
 export function useSession() {
     const loading = ref(false);
-    const loggedIn = ref(document.cookie.indexOf('Auth') !== -1);
 
     const loginAxiosInstance = axios.create({
-        baseURL: import.meta.env.VITE_APP_API_URL
+        baseURL: import.meta.env.VITE_APP_API_URL,
+        withCredentials: true,
+        xsrfCookieName:'csrf_access_token'
     })
-
-    function updateLoggedIn() {
-        loggedIn.value = document.cookie.indexOf('Auth') !== -1
-    }
 
     async function login(data) {
         loading.value = true
         const response = await loginAxiosInstance.post('/login',data)
-        loading.value = false
-        const fechaActual = new Date()
-        const expirationDate = new Date(fechaActual.getTime() + (30 * 60 * 1000))
-        const expirationDateGMT = expirationDate.toGMTString()
-        document.cookie = `appAuth=${response.data}; expires=${expirationDateGMT};samesite=lax`
+        if (response.status === 201) {
+            loggedIn.value = true
+        }
         return response && response.data
     }
 
@@ -33,14 +28,27 @@ export function useSession() {
     }
 
     async function logout() {
-        document.cookie = 'appAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;samesite=lax' 
+        loading.value = true        
+        const response = await loginAxiosInstance.post('/logout')
+        if (response.status === 200) {
+            loggedIn.value = false
+        }
+        loading.value = false
+        return response
+      }
+
+      async function checkUser() {
+        loading.value = true
+        const response = await loginAxiosInstance.get('/check_user')
+        loading.value = false
+        return response
       }
 
       return {
         login,
         logout,
         loggedIn,
-        updateLoggedIn,
+        checkUser,
         changePassword,
         
     }

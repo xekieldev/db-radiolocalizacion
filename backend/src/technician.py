@@ -3,7 +3,8 @@ from flask import request
 from flask import url_for
 from src.db import db, Technician, ma, User
 from sqlalchemy import exc
-from src.users import auth
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 bp = Blueprint("technician", __name__)
 class TechnicianSchema(ma.Schema):
@@ -16,7 +17,7 @@ technicians_schema = TechnicianSchema( many = True )
 
 
 @bp.route("/technician", methods=["POST"])
-@auth.login_required
+@jwt_required()
 def technician():
     try:
         nombre = request.json.get('nombre')
@@ -36,7 +37,7 @@ def technician():
 
 
 @bp.route('/technician/<id>', methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_technician(id): 
     try:
         technician = Technician.query.get(id)
@@ -47,11 +48,11 @@ def get_technician(id):
     
 
 @bp.route("/technician/", methods = ['GET'])
-@auth.login_required
+@jwt_required()
 def get_all_technicians():
     try:
-        usuario = auth.current_user()
-        checkUser= User.query.filter_by(usuario=usuario).first()
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
         if checkUser.area != 'AGCCTYL':
             all_technicians = Technician.query.filter_by(area = checkUser.area).all()
         else:
@@ -64,7 +65,7 @@ def get_all_technicians():
 
 
 @bp.route("/technician/<id>/delete_technician", methods = ['DELETE'])
-@auth.login_required
+@jwt_required()
 def delete_technician(id):
     try:
         technician=Technician.query.get(id)

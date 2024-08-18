@@ -2,18 +2,31 @@
 import { useSession} from '../composables/session'
 import MyButton from '../components/MyButton.vue';
 import { RouterLink, useRouter } from 'vue-router'
+import { ref, onUpdated, onMounted } from 'vue'
+import { loggedIn, usuario } from '../composables/loginstatus'
 
 
 const router = useRouter()
-const { logout, loggedIn, updateLoggedIn } = useSession()
+const { logout, checkUser, updateLoggedIn } = useSession()
+const user_perfil = ref('')
+
 
 async function doLogout() {
-  await logout()
+  const response = await logout()
+  
   router.push('/')
 }
 
-setInterval(updateLoggedIn, 500);
+onMounted( async ()=> {
+    const response = await checkUser()
+    loggedIn.value = response.data.loggedIn
+})
+onUpdated( async ()=> {
+    const response = await checkUser()
+    usuario.value = response.data.user_usuario
+    user_perfil.value = response.data.user_perfil
 
+})
 </script>
 
 <template>
@@ -58,7 +71,7 @@ setInterval(updateLoggedIn, 500);
           RNI
         </RouterLink>
         <RouterLink
-          v-if="loggedIn"
+          v-if="loggedIn && user_perfil == 'coordinator'"
           to="/list_technicians"
         >
           Técnicos
@@ -70,11 +83,16 @@ setInterval(updateLoggedIn, 500);
           About
         </RouterLink>
       </nav>
+      <div class="menu-name"  v-if="loggedIn">
+        <p>Hola,</p>
+        <a title="Cambiar contraseña" href="/change_password">{{ usuario }}</a>
+
+      </div>
       <my-button
         v-if="loggedIn"
         class="tertiary logout-button"
         label="Salir"
-        @on-tap="() => doLogout()"
+        @on-tap="doLogout"
       />
     </header>
   </div>
@@ -125,4 +143,9 @@ nav {
       margin-top: 5px;
   }
 
+  .menu-name {
+    display: flex;
+    padding: 7px;
+    gap: 3px;
+  }
   </style>
