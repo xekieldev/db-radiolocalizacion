@@ -133,16 +133,17 @@ def get_file(id):
 @jwt_required()
 def delete_file(id):
     try:
+        
         case_file = CaseFile.query.get(id)
         case_file.status = 'Deleted'
         stations_in_file = Station.query.filter_by(file_id = id)
-
         for station in stations_in_file:
             station.status = 'Deleted'
 
         db.session.commit()
-        response = {'id': case_file.id}
-        return response
+        response = {'id': case_file.id, 'status': 200}
+
+        return response, 200
 
     except:
         response = {"message": "input error"}

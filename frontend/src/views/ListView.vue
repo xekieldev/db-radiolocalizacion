@@ -21,15 +21,33 @@ const searchText = ref('')
 const estado = ref('Pendiente')
 const user_area = ref('')
 const user_perfil = ref('')
+const confirm_delete = ref({})
 
 
 function viewItem(item) {  
   router.push(`/file/${item}`)
 }
 
-async function deleteItem(file_id, id) {  
-  await deleteFile(file_id, id)
-  window.location.reload() 
+async function deleteItem(id) {  
+  const response = await deleteFile(id)
+  console.log(response)
+  if(response && response.status === 200){
+    confirm_delete.value[id] = 0
+    items.value=[]
+    const data = await list(false, estado.value)
+    items.value.push(...data)
+  } else {
+      console.error("Failed to delete item", response)
+  }
+  
+  // window.location.reload() 
+}
+const confirm = (id) => {
+  console.log(confirm_delete.value)
+
+  confirm_delete.value[id] = confirm_delete.value[id] === 1 ? 0 : 1
+  console.log(confirm_delete.value)
+
 }
 
 onBeforeMount(async () => {
@@ -147,9 +165,16 @@ watch(estado, async(newValue, oldValue) => {
         <td v-if="user_area == 'AGCCTYL' && user_perfil == 'coordinator'"> 
           <div class="action-buttons-container">
             <my-button
+              v-if="confirm_delete[item.id]!==1"
               class="tertiary center"
               label="Borrar"
-              @on-tap="() => deleteItem(item.file_id, item.id)"
+              @on-tap="() => confirm(item.id)"
+            />
+            <my-button
+              v-if="confirm_delete[item.id]===1"
+              class="tertiary center"
+              label="¿Confirmar?"
+              @on-tap="deleteItem(item.id)"
             />
           </div>
         </td>

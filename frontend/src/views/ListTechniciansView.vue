@@ -18,7 +18,7 @@ function createItem() {
 }
 
 const items = ref([])
-const status = ref({});
+const status = ref({})
 const searchText = ref('')
 
 onBeforeMount(async () => {
@@ -80,7 +80,7 @@ async function searchTechnician(searchText) {
         <td>
           <my-button
             v-if="status[item.id]!=1"
-            class="primary center"
+            class="tertiary center"
             label="Borrar"
             @on-tap="confirmar(item.id)"
           />

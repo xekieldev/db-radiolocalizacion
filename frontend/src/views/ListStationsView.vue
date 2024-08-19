@@ -19,6 +19,8 @@ const { search } = useSearch()
 
 const items = ref([])
 const searchText = ref('')
+const confirm_delete = ref({})
+
 
 
 function editItem(file_id, id) {
@@ -45,6 +47,12 @@ async function deleteItem(file_id, id) {
   window.location.reload() 
 }
 
+const confirm = (id) => {
+  console.log(confirm_delete.value)
+  confirm_delete.value[id] = confirm_delete.value[id] === 1 ? 0 : 1
+  console.log(confirm_delete.value)
+  
+}
 
 onBeforeMount(async () => {
   if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
@@ -144,8 +152,15 @@ function viewMap() {
               @on-tap="() => editItem(item.file_id, item.id)"
             />
             <my-button
+              v-if="confirm_delete[item.id]!==1"
               class="tertiary center"
               label="Borrar"
+              @on-tap="() => confirm(item.id)"
+            />
+            <my-button
+              v-if="confirm_delete[item.id]===1"
+              class="tertiary center"
+              label="¿Confirmar?"
               @on-tap="() => deleteItem(item.file_id, item.id)"
             />
           <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
