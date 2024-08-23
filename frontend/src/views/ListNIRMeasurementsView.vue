@@ -10,7 +10,7 @@ import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
 
 
-const { getAllNonIonizingRadiation, delete_non_ionizing_radiation, loading } = useApi()
+const { getAllNonIonizingRadiation, delete_nir_measurement, loading } = useApi()
 const { getNameByCode, getCoordinates } = useTerritory()
 const router = useRouter()
 const { search } = useSearch()
@@ -40,8 +40,8 @@ async function searchNIRMeasurement(searchText) {
   items.value = search(data, searchText, ['localidad', 'provincia'])  
 }
 
-function viewItem(item) {  
-  router.push(`/non_ionizing_radiation/${item}`)
+function viewItem(file_id, item) {  
+  router.push(`/file/${file_id}/non_ionizing_radiation/${item}`)
 }
 
 const confirmar = (id) => {
@@ -50,7 +50,7 @@ const confirmar = (id) => {
 
 async function del(id) {
   try { 
-    await delete_non_ionizing_radiation(id)
+    await delete_nir_measurement(id)
     status.value[id] = 0
     window.location.reload()
   } catch (error) {
@@ -83,13 +83,13 @@ function viewNirMap() {
       <table class="nir-table">
         <tr>
           <th>id</th>
-          <th>Expediente</th>
+          <!-- <th>id Expediente</th> -->
           <th>Localidad</th>
           <th>Provincia</th>
           <th>Área/CCTE</th>
           <th>Cantidad de Mediciones</th>
           <th>Valor Máximo [%]</th>
-          <th>Acciones</th>
+          <!-- <th>Acciones</th> -->
         </tr>
         <tr
           v-for="item in items"
@@ -99,16 +99,16 @@ function viewNirMap() {
             <my-button
               class="primary center"
               :label="(item.id.toString())"
-              @on-tap="() => viewItem(item.id)"
+              @on-tap="() => viewItem(item.file_id, item.id)"
             />
           </td> 
-          <td class="file-field">{{ item.expediente }}</td> 
+          <!-- <td class="file-field">{{ item.file_id }}</td>  -->
           <td>{{ item.localidad }}</td> 
           <td>{{ item.provincia }}</td>
-          <td>{{ item.area }}</td>
+          <td>{{ item.area_asignada }}</td>
           <td>{{ item.cantidad }}</td>
           <td>{{ item.valor_maximo }}</td>
-          <td>
+          <!-- <td>
             <my-button
               v-if="status[item.id]!=1"
               class="primary center"
@@ -121,7 +121,7 @@ function viewNirMap() {
               label="¿Confirmar?"
               @on-tap="del(item.id)"
             />
-          </td>
+          </td> -->
         </tr>  
       </table>
     </div>

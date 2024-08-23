@@ -10,22 +10,22 @@ bp = Blueprint("non_ionizing_radiation", __name__)
 class NonIonizingRadiationSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "expediente", "fecha", "hora", "area", "cantidad", "valor_maximo", "provincia", "localidad", "tipo", "observaciones", "id_technician1", "id_technician2")
+        fields = ("id", "file_id", "fecha", "hora", "area_asignada", "cantidad", "valor_maximo", "provincia", "localidad", "tipo", "observaciones", "id_technician1", "id_technician2")
 
 non_ionizing_radiation_schema = NonIonizingRadiationSchema()
 non_ionizing_radiations_schema = NonIonizingRadiationSchema( many = True )
 
 
-@bp.route("/non_ionizing_radiation/create", methods=["POST"])
+@bp.route('/file/<id>/non_ionizing_radiation', methods=["POST"])
 @jwt_required()
-def non_ionizing_radiation():
+def non_ionizing_radiation(id):
     # import pdb; pdb.set_trace()
 
     try:
-        expediente = request.json.get('expediente')
+        file_id = id
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
-        area = request.json.get('area')
+        area_asignada = request.json.get('area_asignada')
         cantidad = request.json.get('cantidad')
         valor_maximo = request.json.get('valor_maximo')
         provincia = request.json.get('provincia')
@@ -34,7 +34,7 @@ def non_ionizing_radiation():
         tipo = request.json.get('tipo')
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
-        non_ionizing_radiation = NonIonizingRadiation( expediente = expediente, fecha = fecha, hora = hora, area = area, cantidad = cantidad, valor_maximo = valor_maximo, provincia = provincia, localidad = localidad, tipo = tipo, observaciones = observaciones, id_technician1 = id_technician1, id_technician2 = id_technician2)
+        non_ionizing_radiation = NonIonizingRadiation(file_id = file_id, fecha = fecha, hora = hora, area_asignada = area_asignada, cantidad = cantidad, valor_maximo = valor_maximo, provincia = provincia, localidad = localidad, tipo = tipo, observaciones = observaciones, id_technician1 = id_technician1, id_technician2 = id_technician2)
         r = db.session.add(non_ionizing_radiation)
         db.session.commit()
         response = {"id": non_ionizing_radiation.id }
@@ -66,7 +66,7 @@ def get_all_non_ionizing_radiations():
         usuario_id = get_jwt_identity()      
         checkUser= User.query.filter_by(id = usuario_id).first()
         if checkUser.area != 'AGCCTYL':
-            all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area = checkUser.area).all()
+            all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada = checkUser.area).all()
         else:
             all_non_ionizing_radiations = NonIonizingRadiation.query.all()
 
@@ -90,3 +90,39 @@ def delete_technician(id):
 
 
 
+# @bp.route("/file/<file_id>/non_ionizing_radiation/", methods = ['GET'])
+# @jwt_required()
+# def get_nir_measurements_in_file(file_id):
+#     # import pdb; pdb.set_trace()
+
+#     try:
+
+#         # import pdb; pdb.set_trace()
+#         usuario_id = get_jwt_identity()      
+#         checkUser= User.query.filter_by(id = usuario_id).first()
+#         if checkUser.area != 'AGCCTYL':
+#             all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada = checkUser.area, file_id = file_id).all()
+#         else:
+#             all_non_ionizing_radiations = NonIonizingRadiation.query.all()
+
+#         return non_ionizing_radiations_schema.dump(all_non_ionizing_radiations)
+#     except:
+#         response = {"message": "server error"}
+#         return response, 500
+
+@bp.route("/file/<file_id>/non_ionizing_radiation/", methods=['GET'])
+@jwt_required()
+def get_nir_measurements_in_file(file_id):
+    try:
+        usuario_id = get_jwt_identity()      
+        checkUser = User.query.filter_by(id=usuario_id).first()
+
+        if checkUser.area != 'AGCCTYL':
+            all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada=checkUser.area, file_id=file_id).all()
+        else:
+            all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(file_id=file_id).all()
+
+        return non_ionizing_radiations_schema.dump(all_non_ionizing_radiations)
+    except:
+        response = {"message": "server error"}
+        return response, 500

@@ -23,7 +23,10 @@ async function save(fields) {
       router.push(`/file/${response.id}`)
     } else {
       const response = await newFile(fields)
-      await create_non_ionizing_radiation(fields)
+      console.log("file", response.id)
+      console.log(fields)
+      
+      await create_non_ionizing_radiation(response.id, fields)
       router.push(`/list_non_ionizing_radiation/`)
     }
     

@@ -179,13 +179,20 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function create_non_ionizing_radiation(data) {
+    async function getNIRMeasurementInFile(file_id, id) {
         loading.value = true
-        const response = await axiosInstance.post('/non_ionizing_radiation/create', data)
+        const response = await axiosInstance.get(`/file/${file_id}/non_ionizing_radiation`)
         loading.value = false
         return response && response.data 
     }
-    async function delete_non_ionizing_radiation(id) {
+
+    async function create_non_ionizing_radiation(id, data) {
+        loading.value = true
+        const response = await axiosInstance.post(`/file/${id}/non_ionizing_radiation`, data)
+        loading.value = false
+        return response && response.data 
+    }
+    async function delete_nir_measurement(id) {
         loading.value = true
         const response = await axiosInstance.delete(`/non_ionizing_radiation/${id}/delete_non_ionizing_radiation`)
         loading.value = false
@@ -230,7 +237,8 @@ export function useApi() {
         getAllNonIonizingRadiation,
         getNonIonizingRadiation,
         create_non_ionizing_radiation,
-        delete_non_ionizing_radiation,
+        delete_nir_measurement,
+        getNIRMeasurementInFile,
         newActivity,
         getActivities,
     }

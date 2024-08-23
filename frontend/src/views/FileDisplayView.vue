@@ -12,7 +12,7 @@ import FormNewActivity from '../components/FormNewActivity.vue'
 import FormMoveFile from '../components/FormMoveFile.vue'
 import FooterMain from '../components/FooterMain.vue'
 
-const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, patchFile } = useApi()
+const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, patchFile, getNIRMeasurementInFile } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
@@ -43,10 +43,12 @@ async function deleteItem(file_id, id) {
 }
 
 const file = reactive({})
+const nirMeasurement = reactive({})
 const items = ref([])
 const activities = ref([])
 const menu = ref(false)
 const user_perfil = ref('')
+
 
 
 onBeforeMount(async () => {
@@ -69,6 +71,12 @@ onBeforeMount(async () => {
     const activities_response = await getActivities(file_id)
     activities.value.push(...activities_response)
     
+    const nirResponse = await getNIRMeasurementInFile(file.id)
+    Object.assign(nirMeasurement, nirResponse[0])
+    console.log(nirMeasurement)
+    nirMeasurement.localidad = getNameByCode("city", nirMeasurement.localidad)
+    nirMeasurement.provincia = getNameByCode("province", nirMeasurement.provincia)
+
 })
 
 
@@ -211,6 +219,7 @@ onMounted( async ()=> {
         :value="file.fecha + ' ' + file.hora"
       />
       <prop-value
+        
         class="prop"
         label="Tipo de trámite"
         :value="file.tipo"
@@ -234,11 +243,13 @@ onMounted( async ()=> {
         :value="file.nota_inicio"
       />
       <prop-value
+        v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
         class="prop double"
         label="Usuario"
         :value="file.usuario"
       />
       <prop-value
+        v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
         class="prop double"
         label="Frecuencia"
         :value="file.frecuencia + ' ' + file.unidad" 
@@ -247,7 +258,9 @@ onMounted( async ()=> {
     <display-row>
       
     </display-row>
-    <display-row>
+    <display-row 
+      v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
+    >
       <prop-value
         class="prop double"
         label="Localidad"
@@ -259,7 +272,33 @@ onMounted( async ()=> {
         :value="file.provincia"
       />
     </display-row>
-    <display-row>
+    <display-row 
+      v-if="tipoTramite === 'Medición de Radiaciones No Ionizantes (móviles)'"
+    >
+      <prop-value
+        class="prop double"
+        label="Localidad"
+        :value="nirMeasurement.localidad"
+      />
+      <prop-value
+        class="prop double"
+        label="Provincia"
+        :value="nirMeasurement.provincia"
+      />
+      <prop-value
+        class="prop double"
+        label="Cantidad"
+        :value="nirMeasurement.cantidad"
+      />
+      <prop-value
+        class="prop double"
+        label="Valor Máximo [%]"
+        :value="nirMeasurement.valor_maximo"
+      />
+    </display-row>
+    <display-row
+      v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
+    >
       <prop-value
         class="prop double"
         label="Localidad"
@@ -278,6 +317,7 @@ onMounted( async ()=> {
     </display-row>
     <display-row>
       <prop-value
+        v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
         class="prop double"
         label="Motivo"
         :value="file.motivo"
