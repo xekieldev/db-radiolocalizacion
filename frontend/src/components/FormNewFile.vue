@@ -99,9 +99,7 @@ watch(province, (newValue, oldValue) => {
           outer-class="short-field"
         />
     </form-row>
-    
-    <div v-if="tipoTramite != 'Medición de Radiaciones No Ionizantes (móviles)'">
-      <form-row>
+    <form-row>
         <form-kit
           v-model="province"
           :options="provinces"
@@ -124,6 +122,9 @@ watch(province, (newValue, oldValue) => {
           placeholder="Área"
         />
       </form-row>
+    
+    <div v-if="tipoTramite != 'Medición de Radiaciones No Ionizantes (móviles)'">
+      
       <form-row v-if="tipoTramite == 'Interferencias en Aeropuertos'">
         <form-kit
           v-if="tipoTramite == 'Interferencias en Aeropuertos'"
@@ -214,31 +215,8 @@ watch(province, (newValue, oldValue) => {
           label="Hora"
           name="hora" 
         />
-        <form-kit
-          type="select"
-          :options="area"
-          label="CCTE/Área"
-          name="area" 
-        />
-
-      </form-row>
-      <form-row>
-        <form-kit
-          v-model="province"
-          :options="provinces"
-          type="select"
-          label="Provincia"
-          name="provincia"        
-        />
-        <form-kit
-          v-model="city"
-          :options="cities"
-          type="select"
-          label="Localidad"
-          name="localidad"  
-        />
-      </form-row>
-      <form-row>
+      <!-- </form-row>
+      <form-row> -->
         <form-kit
           type="number"
           label="Cantidad de mediciones"

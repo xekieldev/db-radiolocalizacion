@@ -168,10 +168,10 @@ class User (db.Model):
 class NonIonizingRadiation (db.Model):
     __tablename__ = 'NonIonizingRadiation'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    expediente = db.Column(db.String(50), nullable = False)
+    file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
     fecha = db.Column(db.String(10))
     hora = db.Column(db.String(5))
-    area = db.Column(db.String(25))
+    area_asignada = db.Column(db.String(25))
     cantidad = db.Column(db.Integer)
     valor_maximo = db.Column(db.Float)
     provincia = db.Column(db.String(30))
