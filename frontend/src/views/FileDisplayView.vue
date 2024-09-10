@@ -301,7 +301,7 @@ onMounted( async ()=> {
     >
       <prop-value
         class="prop double"
-        label="Localidad"
+        label="Domicilio"
         :value="file.domicilio"
       />
       <prop-value
