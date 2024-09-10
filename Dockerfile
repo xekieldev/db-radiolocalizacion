@@ -26,4 +26,8 @@ RUN python -m venv .venv
 RUN .venv/bin/pip install -e .
 RUN .venv/bin/pip install -r requirements.txt
 CMD .venv/bin/flask --app src run --debug && nginx -c /etc/nginx/default.conf
-
+# WORKDIR /script
+# COPY ./script/run.sh /app/run.sh
+# WORKDIR /app
+# RUN chmod +x /app/run.sh
+# CMD ["/bin/sh", "/app/run.sh"]
