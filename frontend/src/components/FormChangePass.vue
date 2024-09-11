@@ -1,6 +1,4 @@
 <script setup>
-import FormRow from './FormRow.vue'
-import { useArea } from '../composables/area'
 import { ref } from 'vue'
 
 
@@ -28,37 +26,31 @@ defineProps({
       :actions="false"
       @submit="submitHandler"
     >
-      <img
-        class="login-img"
-        src="../../img/Logo.png"
-        alt="logo"
-      >
-      <p class="login-box-title">
-        Área Gestión de CCTE y Laboratorios
-      </p>
-      <form-kit
-        v-model="new_pass"
-        outer-class="field-login"
-        type="password"
-        label="Nueva Contraseña"
-        name="new_pass"
-        validation="required"
-        :validation-messages="{
-          required: 'Debe ingresar una contraseña',
-        }"
-      />
-      <form-kit
-        v-model="new_pass_confirm"
-        outer-class="field-login"
-        type="password"
-        label="Confirmar Nueva Contraseña"
-        name="new_pass_confirm"
-        validation="required|confirm"
-        :validation-messages="{
-          confirm: 'Error. Las contraseñas no coinciden',
-          required: 'Debe ingresar una contraseña'
-        }"
-        
+    <p class="login-box-title">
+      Cambiar contraseña   
+    </p>
+    <form-kit
+      v-model="new_pass"
+      outer-class="field-login"
+      type="password"
+      label="Nueva Contraseña"
+      name="new_pass"
+      validation="required"
+      :validation-messages="{
+        required: 'Debe ingresar una contraseña',
+      }"
+    />
+    <form-kit
+      v-model="new_pass_confirm"
+      outer-class="field-login"
+      type="password"
+      label="Confirmar Nueva Contraseña"
+      name="new_pass_confirm"
+      validation="required|confirm"
+      :validation-messages="{
+        confirm: 'Error. Las contraseñas no coinciden',
+        required: 'Debe ingresar una contraseña'
+      }"
       />
       <p
         v-if="loginError && loginError.response.data === 'Error de login'"
@@ -122,6 +114,7 @@ defineProps({
       color: white;
 }
 .login-box-title {
+  font-size: 20px;;
       font-weight: 700;
       align-self: center;
       padding: 5px 10px 15px;

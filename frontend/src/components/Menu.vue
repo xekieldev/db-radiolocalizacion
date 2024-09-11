@@ -139,7 +139,7 @@ nav {
     border: 0;
   }
   .logout-button {
-      height: 34px; 
+      /* height: 34px;  */
       margin-top: 5px;
   }
 

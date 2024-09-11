@@ -30,6 +30,7 @@ const props = defineProps({
           type="search"
           name="searchInput"
           :placeholder="placeholder"
+          style="height: 35px;"
         />
         <my-button
           class="senary right search-btn"
@@ -47,6 +48,7 @@ const props = defineProps({
   flex-direction: row;
   gap: 10px; 
   /* margin: 0 10px; */
+  
 }
 .field-text-search {
   display: flex;
@@ -58,6 +60,7 @@ const props = defineProps({
 }
 .search-btn {
   background-color: white;
+  height: 100%;
 }
 
 
