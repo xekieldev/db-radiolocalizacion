@@ -39,6 +39,8 @@ function handleClick() {
   border: 1px solid #007BFF;
   font-weight: 500;  
   color: #007BFF;  
+  white-space: nowrap;
+  height: 100%;
 }
 
 .primary:hover {
@@ -48,20 +50,30 @@ function handleClick() {
 .secondary {
   border: 1px solid #28A745;
   font-weight: 500;  
-  color: #28A745
+  color: #28A745;
+  white-space: nowrap;
+  height: 100%;
+
+
 }
 .secondary:hover {
   background-color: #28A745;
   color: white;
+  height: 100%;
+
 }
 .tertiary {
   border: 1px solid #DC3545;
   font-weight: 500;  
   color: #DC3545;
+  height: 100%;
+
 }
 .tertiary:hover {
   background-color: #DC3545;
   color: white;
+  height: 100%;
+
 }
 
 .quaternary {

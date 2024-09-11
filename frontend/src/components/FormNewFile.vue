@@ -42,6 +42,7 @@ const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
 
 const prioridadValue = ref(false)
 const tipoTramite = ref()
+const noFrecuency = ref(false)
 const { unidad } = useUnit()
 
 
@@ -139,7 +140,7 @@ watch(province, (newValue, oldValue) => {
           name="nota_inicio"
         />
       </form-row>
-      <form-row>
+      <form-row v-if="!(tipoTramite == 'Descargo' || tipoTramite == 'Interferencias en Aeropuertos') ">
         <form-kit
           type="text"
           label="Domicilio"
@@ -160,13 +161,22 @@ watch(province, (newValue, oldValue) => {
           outer-class="short-field"
         />
       </form-row>
-      <form-row>
+      <form-row v-if="tipoTramite != 'Descargo'">
         <form-kit
           type="text"
           label="Usuario"
           name="usuario"
         />
+        <div class="checkbox-container">
+          <form-kit
+            v-model="noFrecuency"
+            type="checkbox"
+            label="Sin dato de frecuencia"
+            outer-class="frecuency-checkbox"
+          />
+        </div>
         <form-kit
+          v-if="noFrecuency == false"
           type="number"
           label="Frecuencia"
           name="frecuencia"
@@ -179,7 +189,8 @@ watch(province, (newValue, oldValue) => {
           }"
           outer-class="short-field"
         />
-        <form-kit
+        <form-kit 
+          v-if="noFrecuency == false"
           type="select"
           label="Unidad"
           name="unidad"
@@ -308,7 +319,17 @@ watch(province, (newValue, oldValue) => {
       /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
       flex: 0 0 20%;
 }
-
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 16%;
+  
+}
+.frecuency-checkbox {
+  align-self: center;
+  margin-bottom: 0;
+}
 
 </style>
   

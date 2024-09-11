@@ -79,7 +79,9 @@ onBeforeMount(async () => {
 
 })
 
-
+function newFile() { 
+  router.push({name: "newFile"})
+}
 
 function createStation() { 
   router.push({name: "createStation", query: { rloc: 'true' }})
@@ -157,7 +159,13 @@ onMounted( async ()=> {
 
 </script>
 <template>
-    <div class="go-back-button">
+    <div class="options-button">
+      <my-button
+        tabindex="0"
+        class="secondary right"
+        label="Alta Expediente"
+        @on-tap="newFile"
+      />
       <my-button
         tabindex="0"
         class="primary"
@@ -235,7 +243,7 @@ onMounted( async ()=> {
         :value="file.prioridad"
       />
     </display-row>
-    <display-row>
+    <display-row v-if="tipoTramite != 'Descargo'">
       <prop-value
         v-if="tipoTramite == 'Interferencias en Aeropuertos'"
         class="prop double"   
@@ -248,12 +256,21 @@ onMounted( async ()=> {
         label="Usuario"
         :value="file.usuario"
       />
-      <prop-value
-        v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
-        class="prop double"
-        label="Frecuencia"
-        :value="file.frecuencia + ' ' + file.unidad" 
-      />
+      <div v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'">
+        <prop-value
+          v-if="file.frecuencia == undefined || file.frecuencia == null"
+          class="prop double"
+          label="Frecuencia"
+          value="---" 
+        />
+        <prop-value
+          v-else
+          class="prop double"
+          label="Frecuencia"
+          :value="file.frecuencia + ' ' + file.unidad" 
+        />
+      </div>
+      
     </display-row>
     <display-row>
       
@@ -297,7 +314,7 @@ onMounted( async ()=> {
       />
     </display-row>
     <display-row
-      v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
+      v-if="!(tipoTramite == 'Medición de Radiaciones No Ionizantes (móviles)' || tipoTramite == 'Descargo')"
     >
       <prop-value
         class="prop double"
@@ -347,10 +364,6 @@ onMounted( async ()=> {
 
  <br>
  
-
-
-
-
     <div class="stations-table-container" v-if="items.length > 0">
       <h2 class="file-titles">Estaciones relacionadas</h2>
       <table class="stations-table">
@@ -434,8 +447,6 @@ onMounted( async ()=> {
     
     <footer-main class="footer-main"/>
 
-      
-    
 </template>
 
 <style scoped>
@@ -444,6 +455,7 @@ onMounted( async ()=> {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 10px;
 }
 
 .status{
@@ -463,7 +475,7 @@ onMounted( async ()=> {
   display: flex;
   flex-direction: row;
   gap: 5px;
-  padding: 10px;
+  /* padding: 10px; */
   justify-content: space-between;
 }
 
@@ -539,14 +551,19 @@ tr:nth-child(odd) {
   
 }
 
-.go-back-button {
+/* .go-back-button {
   display: flex;
   flex-direction: row;
   gap: 10px;
   justify-content: end;
   margin: 5px 0;
+} */
+.options-button {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  margin: 5px 0;
 }
-
 .close-button {
   position: absolute;
   top: 0px;

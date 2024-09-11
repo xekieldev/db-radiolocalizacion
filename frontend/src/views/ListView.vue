@@ -28,6 +28,10 @@ function viewItem(item) {
   router.push(`/file/${item}`)
 }
 
+function newFile() { 
+  router.push({name: "newFile"})
+}
+
 async function deleteItem(id) {  
   const response = await deleteFile(id)
   console.log(response)
@@ -111,7 +115,13 @@ watch(estado, async(newValue, oldValue) => {
       placeholder = "Buscar Expedientes"
       @on-submit="searchFiles"
     />
-    <div>
+    <div class="list-sub-actions">
+      <my-button
+        tabindex="0"
+        class="secondary center"
+        label="Alta Expediente"
+        @on-tap="newFile"
+      />
       <form-kit
           v-model="estado"
           type="select"
@@ -123,6 +133,7 @@ watch(estado, async(newValue, oldValue) => {
             'Todos',
           ]"
           outer-class="short-field"
+          style="height: 35px; padding: 8px 30px 8px 10px;"
         />
     </div>
   </div>
@@ -131,13 +142,13 @@ watch(estado, async(newValue, oldValue) => {
       <tr>
         <th>id</th>
         <th>Expediente</th>
-        <th>Área</th>
+        <th>Área asignada</th>
         <th>Tipo de trámite</th>
         <th>Fecha y hora</th>
         <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           Status
         </th>
-        <th>Ubicación</th>
+        <th>Ubicación actual</th>
         <th>Estado</th>
         <th v-if="user_area == 'AGCCTYL' && user_perfil == 'coordinator'">Acciones</th>
       </tr>
@@ -227,10 +238,20 @@ tr:nth-child(odd) {
 .files-menu {
   display: flex;
   flex-direction: row;
-  justify-content: space-between
+  justify-content: space-between;
 }
 .red-text {
   color: red;
 }
-  
+.list-sub-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+}
+.short-field {
+  margin-bottom: 0;
+}
+
+
 </style>

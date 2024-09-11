@@ -54,11 +54,14 @@ async function searchTechnician(searchText) {
       placeholder = "Buscar Técnicos"
       @on-submit="searchTechnician"
     />
-    <my-button
-      class="secondary right"
-      label="Nuevo Técnico"
-      @on-tap="createItem"
-    />
+    <div>
+      <my-button
+        class="secondary right"
+        label="Nuevo Técnico"
+        @on-tap="createItem"
+      />
+    </div>
+    
   </div>
   <div class="technicians-list-container"> 
     <table class="technicians-table">

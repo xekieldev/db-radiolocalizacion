@@ -91,11 +91,13 @@ function viewMap() {
       placeholder = "Buscar Estaciones"
       @on-submit="searchStations"
     />
+    <div>
       <my-button
         class="secondary right view-map-button"
         label="Ver Mapa"
         @on-tap="viewMap"
       />
+    </div>
   </div>
 
   <div class="list-container">
@@ -220,6 +222,5 @@ tr:nth-child(odd) {
   flex-direction: row;
   justify-content: space-between;
 }
-  
 
 </style>
