@@ -1,7 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
 import { useSession } from '../composables/session'
-import { onBeforeMount, ref, watch, onMounted } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
@@ -11,7 +11,7 @@ import FooterMain from '../components/FooterMain.vue'
 
 
 const { list, loading, deleteFile } = useApi()
-const { checkUser } = useSession()
+const { userData } = useSession()
 const { search } = useSearch()
 const router = useRouter()
 
@@ -22,6 +22,10 @@ const estado = ref('Pendiente')
 const user_area = ref('')
 const user_perfil = ref('')
 const confirm_delete = ref({})
+
+
+user_area.value = userData.value.user_area
+user_perfil.value = userData.value.user_perfil
 
 
 function viewItem(item) {  
@@ -43,15 +47,9 @@ async function deleteItem(id) {
   } else {
       console.error("Failed to delete item", response)
   }
-  
-  // window.location.reload() 
 }
 const confirm = (id) => {
-  console.log(confirm_delete.value)
-
   confirm_delete.value[id] = confirm_delete.value[id] === 1 ? 0 : 1
-  console.log(confirm_delete.value)
-
 }
 
 onBeforeMount(async () => {
@@ -62,12 +60,6 @@ onBeforeMount(async () => {
       const data = await list(true, estado.value)
       items.value.push(...data)    
   }  
-})
-
-onMounted( async ()=> {
-    const response = await checkUser()
-    user_area.value = response.data.user_area
-    user_perfil.value = response.data.user_perfil
 })
 
 async function searchFiles(searchText) {

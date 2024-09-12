@@ -2,31 +2,28 @@
 import { useSession} from '../composables/session'
 import MyButton from '../components/MyButton.vue';
 import { RouterLink, useRouter } from 'vue-router'
-import { ref, onUpdated, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { loggedIn, usuario } from '../composables/loginstatus'
 
 
 const router = useRouter()
-const { logout, checkUser, updateLoggedIn } = useSession()
+const { logout, userData } = useSession()
 const user_perfil = ref('')
+
+watch(userData, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+      loggedIn.value = userData.value.loggedIn
+      usuario.value = userData.value.user_usuario
+      user_perfil.value = userData.value.user_perfil
+  }
+})
 
 
 async function doLogout() {
   const response = await logout()
-  
   router.push('/')
 }
 
-onMounted( async ()=> {
-    const response = await checkUser()
-    loggedIn.value = response.data.loggedIn
-})
-onUpdated( async ()=> {
-    const response = await checkUser()
-    usuario.value = response.data.user_usuario
-    user_perfil.value = response.data.user_perfil
-
-})
 </script>
 
 <template>

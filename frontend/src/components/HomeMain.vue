@@ -3,11 +3,11 @@ import Heading from '../components/Heading.vue';
 import MyButton from '../components/MyButton.vue';
 import { useRouter } from 'vue-router'
 import FooterMain from '../components/FooterMain.vue'
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useSession } from '../composables/session'
 
 
-const { checkUser } = useSession()
+const { userData } = useSession()
 const router = useRouter()
 const filesMenu = ref(false)
 const stationsMenu = ref(false)
@@ -15,18 +15,11 @@ const user_perfil = ref('')
 
 const emits = defineEmits(['update: stationsMenu']);
 
+user_perfil.value = userData.value.user_perfil
+
 function closeDiv() {
   filesMenu.value = false
   stationsMenu.value = false
-}
-
-
-function createStation() { 
-  router.push({name: "createStation", query: { rloc: 'true' }})
-}
-
-function createLocStation() { 
-  router.push({name: "createStation", query: { rloc: 'false' }})
 }
 
 function list() {
@@ -44,13 +37,11 @@ function listTechnicians() {
 function fileOptions() {
   filesMenu.value = !filesMenu.value
   stationsMenu.value = false
-
 }
+
 function stationsOptions() {
   stationsMenu.value = !stationsMenu.value
   filesMenu.value = false
-
-
 }
 
 function stationList() {
@@ -60,11 +51,6 @@ function stationList() {
 function nirMeasurements() {
   router.push({ name:"listNIR"})
 }
-
-onMounted( async ()=> {
-    const response = await checkUser()
-    user_perfil.value = response.data.user_perfil
-})
 
 </script>
 
@@ -136,9 +122,7 @@ onMounted( async ()=> {
 .home-container {
   display: flex;
   flex-direction: column;
-  align-content: space-between;
-  /* column-gap: 30px; */
-  
+  align-content: space-between;  
 }
 .home-buttons {
   display: flex;

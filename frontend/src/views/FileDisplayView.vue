@@ -1,7 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
 import { useSession } from '../composables/session'
-import { onBeforeMount, reactive, ref, onMounted } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTerritory } from '../composables/territory'
 import DisplayRow from '../components/DisplayRow.vue'
@@ -16,7 +16,7 @@ const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, pat
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
-const { checkUser } = useSession()
+const { userData } = useSession()
 
 
 const tipoTramite = ref()
@@ -50,6 +50,7 @@ const menu = ref(false)
 const user_perfil = ref('')
 
 
+user_perfil.value = userData.value.user_perfil
 
 onBeforeMount(async () => {
   
@@ -71,12 +72,13 @@ onBeforeMount(async () => {
     const activities_response = await getActivities(file_id)
     activities.value.push(...activities_response)
     
-    const nirResponse = await getNIRMeasurementInFile(file.id)
-    Object.assign(nirMeasurement, nirResponse[0])
-    console.log(nirMeasurement)
-    nirMeasurement.localidad = getNameByCode("city", nirMeasurement.localidad)
-    nirMeasurement.provincia = getNameByCode("province", nirMeasurement.provincia)
-
+    if (file.tipo == 'Medición de Radiaciones No Ionizantes (móviles)') {
+      const nirResponse = await getNIRMeasurementInFile(file.id)
+      Object.assign(nirMeasurement, nirResponse[0])
+      nirMeasurement.localidad = getNameByCode("city", nirMeasurement.localidad)
+      nirMeasurement.provincia = getNameByCode("province", nirMeasurement.provincia)
+    }
+    
 })
 
 function newFile() { 
@@ -148,13 +150,6 @@ function openMenu() {
 function closeDiv() {
   menu.value = false
 }
-
-onMounted( async ()=> {
-    const response = await checkUser()
-    // user_area.value = response.data.user_area
-    user_perfil.value = response.data.user_perfil
-
-})
 
 
 </script>

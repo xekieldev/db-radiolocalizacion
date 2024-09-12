@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { loggedIn, usuario } from '../composables/loginstatus'
+import { loggedIn, userData } from '../composables/loginstatus'
 
 export function useSession() {
-    const loading = ref(false);
+    const loading = ref(false)
 
     const loginAxiosInstance = axios.create({
         baseURL: import.meta.env.VITE_APP_API_URL,
@@ -16,6 +16,8 @@ export function useSession() {
         const response = await loginAxiosInstance.post('/login',data)
         if (response.status === 201) {
             loggedIn.value = true
+            const response_user = await loginAxiosInstance.get('/check_user')
+            userData.value = response_user.data            
         }
         return response && response.data
     }
@@ -37,19 +39,12 @@ export function useSession() {
         return response
       }
 
-      async function checkUser() {
-        loading.value = true
-        const response = await loginAxiosInstance.get('/check_user')
-        loading.value = false
-        return response
-      }
-
       return {
         login,
         logout,
         loggedIn,
-        checkUser,
         changePassword,
+        userData,
         
     }
 }
