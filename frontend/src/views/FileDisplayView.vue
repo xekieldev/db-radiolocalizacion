@@ -11,12 +11,13 @@ import MyButton from '../components/MyButton.vue'
 import FormNewActivity from '../components/FormNewActivity.vue'
 import FormMoveFile from '../components/FormMoveFile.vue'
 import FooterMain from '../components/FooterMain.vue'
+import { perfil } from '../composables/loginstatus'
+
 
 const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, patchFile, getNIRMeasurementInFile } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
-const { userData } = useSession()
 
 
 const tipoTramite = ref()
@@ -47,10 +48,7 @@ const nirMeasurement = reactive({})
 const items = ref([])
 const activities = ref([])
 const menu = ref(false)
-const user_perfil = ref('')
 
-
-user_perfil.value = userData.value.user_perfil
 
 onBeforeMount(async () => {
   
@@ -108,7 +106,9 @@ async function save(fields) {
     const file_id = currentRoute.value.params.id
     
     await newActivity (file_id, fields)
-    window.location.reload() 
+    // window.location.reload() 
+    const activities_response = await getActivities(file_id)
+    activities.value = activities_response
 
   } catch (error) {
     console.error(error)
@@ -187,7 +187,7 @@ function closeDiv() {
       />
     </div>
     <my-button
-      v-if="user_perfil === 'coordinator'"
+      v-if="perfil === 'coordinator'"
       tabindex="0"
       class="primary options-menu"
       label="Acciones"

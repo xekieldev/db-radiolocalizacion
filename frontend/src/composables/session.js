@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { loggedIn, userData } from '../composables/loginstatus'
+import { loggedIn, userData, usuario, perfil } from '../composables/loginstatus'
 
 export function useSession() {
     const loading = ref(false)
@@ -17,7 +17,12 @@ export function useSession() {
         if (response.status === 201) {
             loggedIn.value = true
             const response_user = await loginAxiosInstance.get('/check_user')
-            userData.value = response_user.data            
+            userData.value = response_user.data 
+            loggedIn.value = response_user.data.loggedIn
+            usuario.value = response_user.data.usuario
+            perfil.value = response_user.data.perfil     
+            console.log('session', perfil)
+                  
         }
         return response && response.data
     }
@@ -39,12 +44,20 @@ export function useSession() {
         return response
       }
 
+      async function checkUser(data) {
+        loading.value = true
+        const response = await loginAxiosInstance.get('/check_user')
+        loading.value = false
+        return response && response.data
+    }
+
       return {
         login,
         logout,
         loggedIn,
+        checkUser,
         changePassword,
-        userData,
+        
         
     }
 }

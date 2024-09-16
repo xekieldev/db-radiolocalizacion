@@ -5,9 +5,20 @@ import { ref } from 'vue'
 
 const emits = defineEmits(['onSubmit'])
 const searchText = ref('')
+const searchFlag = ref(true)
 
 function submitHandler() {
-  emits('onSubmit', searchText.value)
+  if (!searchFlag.value) {
+    emits('onSubmit', searchText.value)
+    searchFlag.value = true
+    return
+  }
+
+  if (searchText.value.trim()) {
+    emits('onSubmit', searchText.value)
+    searchFlag.value = false
+    searchText.value = ''
+  } 
 }
 
 const props = defineProps({
@@ -33,10 +44,17 @@ const props = defineProps({
           style="height: 35px;"
         />
         <my-button
+          v-if="searchFlag"
           class="senary right search-btn"
           label="Buscar"
           @on-tap="submitHandler"
-      />
+        />
+        <my-button
+          v-else
+          class="senary right search-btn"
+          label="Actualizar"
+          @on-tap="submitHandler"
+        />
       </form-row>
     </div>
   </form-kit>

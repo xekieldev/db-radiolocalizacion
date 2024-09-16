@@ -95,10 +95,10 @@ def login_status():
         user_id = get_jwt_identity() 
         if user_id:
             jwt_data = get_jwt()
-            user_area = jwt_data["area"]
-            user_perfil = jwt_data["perfil"]
-            user_usuario = jwt_data["usuario"]
-            return jsonify(loggedIn=True, user_id = user_id, user_area= user_area, user_perfil = user_perfil, user_usuario = user_usuario), 200
+            area = jwt_data["area"]
+            perfil = jwt_data["perfil"]
+            usuario = jwt_data["usuario"]
+            return jsonify(loggedIn=True, user_id = user_id, area= area, perfil = perfil, usuario = usuario), 200
                 
         else:
             return jsonify({"loggedIn": False}), 401

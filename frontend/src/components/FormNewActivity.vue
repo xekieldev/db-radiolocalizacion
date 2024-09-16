@@ -3,10 +3,13 @@ import FormRow from './FormRow.vue'
 import { ref } from 'vue'
 
 const emits = defineEmits(['onSubmit'])
-const searchText = ref('')
+const activityDate = ref('')
+const activityText = ref('')
 
 function submitHandler(fields) {
   emits('onSubmit', fields)
+  activityDate.value = ''
+  activityText.value = ''
 }
 
 </script>
@@ -22,6 +25,7 @@ function submitHandler(fields) {
       <div class="new-activity">
         <form-row >
           <form-kit
+            v-model="activityDate"
             type="date"
             label="Fecha" 
             name="fecha" 
@@ -33,6 +37,7 @@ function submitHandler(fields) {
             outer-class="field-date"
           />
           <form-kit
+            v-model="activityText"
             type="text"
             label="Detalle" 
             name="detalle" 

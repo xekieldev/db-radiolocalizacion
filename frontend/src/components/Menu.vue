@@ -2,21 +2,13 @@
 import { useSession} from '../composables/session'
 import MyButton from '../components/MyButton.vue';
 import { RouterLink, useRouter } from 'vue-router'
-import { ref, watch } from 'vue'
-import { loggedIn, usuario } from '../composables/loginstatus'
+import { ref, onMounted, onUpdated, onBeforeMount } from 'vue'
+import { loggedIn, usuario, userData, perfil } from '../composables/loginstatus'
 
 
 const router = useRouter()
-const { logout, userData } = useSession()
-const user_perfil = ref('')
+const { logout } = useSession()
 
-watch(userData, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-      loggedIn.value = userData.value.loggedIn
-      usuario.value = userData.value.user_usuario
-      user_perfil.value = userData.value.user_perfil
-  }
-})
 
 
 async function doLogout() {
@@ -68,7 +60,7 @@ async function doLogout() {
           RNI
         </RouterLink>
         <RouterLink
-          v-if="loggedIn && user_perfil == 'coordinator'"
+          v-if="loggedIn && perfil == 'coordinator'"
           to="/list_technicians"
         >
           Técnicos

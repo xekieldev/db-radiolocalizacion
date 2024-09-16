@@ -1,7 +1,21 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import BarMenu from './components/Menu.vue'
+import { onMounted } from 'vue'
+import { useSession } from './composables/session'
+import { loggedIn, usuario, userData, perfil } from './composables/loginstatus'
 
+const { checkUser } = useSession()
+
+
+onMounted(async() => {
+    const response = await checkUser()
+    userData.value = response
+    
+    loggedIn.value = response.loggedIn
+    usuario.value = response.usuario
+    perfil.value = response.perfil
+})
 
 </script>
 

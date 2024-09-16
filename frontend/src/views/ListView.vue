@@ -8,10 +8,11 @@ import MyButton from '../components/MyButton.vue'
 import FormSearch from '../components/FormSearch.vue'
 import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
+import { loggedIn, usuario, userData, perfil } from '../composables/loginstatus'
+
 
 
 const { list, loading, deleteFile } = useApi()
-const { userData } = useSession()
 const { search } = useSearch()
 const router = useRouter()
 
@@ -20,12 +21,10 @@ const newItems = ref([])
 const searchText = ref('')
 const estado = ref('Pendiente')
 const user_area = ref('')
-const user_perfil = ref('')
 const confirm_delete = ref({})
 
 
 user_area.value = userData.value.user_area
-user_perfil.value = userData.value.user_perfil
 
 
 function viewItem(item) {  
@@ -142,7 +141,7 @@ watch(estado, async(newValue, oldValue) => {
         </th>
         <th>Ubicación actual</th>
         <th>Estado</th>
-        <th v-if="user_area == 'AGCCTYL' && user_perfil == 'coordinator'">Acciones</th>
+        <th v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'">Acciones</th>
       </tr>
       <tr
         v-for="item in items"
@@ -165,7 +164,7 @@ watch(estado, async(newValue, oldValue) => {
         </td>
         <td>{{ item.area_actual }}</td> 
         <td>{{ item.tramitacion }}</td> 
-        <td v-if="user_area == 'AGCCTYL' && user_perfil == 'coordinator'"> 
+        <td v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"> 
           <div class="action-buttons-container">
             <my-button
               v-if="confirm_delete[item.id]!==1"

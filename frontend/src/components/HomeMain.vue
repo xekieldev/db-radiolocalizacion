@@ -5,17 +5,17 @@ import { useRouter } from 'vue-router'
 import FooterMain from '../components/FooterMain.vue'
 import { ref } from 'vue';
 import { useSession } from '../composables/session'
+import { perfil } from '../composables/loginstatus'
 
 
-const { userData } = useSession()
+
+// const { userData } = useSession()
 const router = useRouter()
 const filesMenu = ref(false)
 const stationsMenu = ref(false)
-const user_perfil = ref('')
 
 const emits = defineEmits(['update: stationsMenu']);
 
-user_perfil.value = userData.value.user_perfil
 
 function closeDiv() {
   filesMenu.value = false
@@ -106,7 +106,7 @@ function nirMeasurements() {
         @on-tap="nirMeasurements"
       />
       <my-button
-        v-if="user_perfil == 'coordinator'"
+        v-if="perfil == 'coordinator'"
         tabindex="0"
         class="septenary button technician-manage"
         label="Agregar/Eliminar Técnicos"
