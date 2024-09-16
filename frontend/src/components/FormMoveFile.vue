@@ -26,7 +26,7 @@ const props = defineProps({
   :actions="false"
   @submit="submitHandler"
   >
-    <div class="form-end-file-container">
+    <div class="form-actions-file-container">
       <form-row>
         <form-kit
           v-if="context == 'Interferencias en Aeropuertos' && fileNumber != 'A definir' && location == 'AGCCTYL'"
@@ -79,10 +79,11 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.form-end-file-container {
+.form-actions-file-container {
   border: 1px solid gray;
   padding: 10px 40px;
   border-radius: 50px;
+  margin-top: 5px;
   margin-bottom: 5px;
   width: 100%;
   box-sizing: border-box;
