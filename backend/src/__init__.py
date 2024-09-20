@@ -37,8 +37,8 @@ def create_app(test_config=None):
     app.config["JWT_SECRET_KEY"] = "SNCTE-DB-V#1.0"  # Change this!
     app.config["JWT_TOKEN_LOCATION"]=['cookies']
     app.config["JWT_COOKIE_SECURE"]=True
-    app.config["JWT_ACCESS_COOKIE_PATH"] = '/'  
-    app.config["JWT_REFRESH_COOKIE_PATH"] = '/'
+    app.config["JWT_ACCESS_COOKIE_PATH"] = os.getenv('API_BASE_PATH') if os.getenv('API_BASE_PATH') != None else ''  
+    app.config["JWT_REFRESH_COOKIE_PATH"] = os.getenv('API_BASE_PATH') if os.getenv('API_BASE_PATH') != None else '' 
     app.config["JWT_COOKIE_SAMESITE"] = "None"
     # app.config['SESSION_COOKIE_SAMESITE'] = None
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
