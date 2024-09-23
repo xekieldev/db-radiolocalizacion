@@ -116,7 +116,7 @@ function viewMap() {
         <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           Status
         </th>
-        <th>Acciones</th>
+        <!-- <th>Acciones</th> -->
       </tr>
       <tr
         v-for="item in items"
@@ -146,7 +146,7 @@ function viewMap() {
         <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           {{ item.status }}
         </td>
-        <td> 
+        <!-- <td> 
           <div class="action-buttons-container">
             <my-button
               class="primary center"
@@ -165,9 +165,8 @@ function viewMap() {
               label="¿Confirmar?"
               @on-tap="() => deleteItem(item.file_id, item.id)"
             />
-          <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
           </div>
-        </td>
+        </td> -->
       </tr>
     </table>
     <div class="status">

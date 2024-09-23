@@ -8,7 +8,10 @@ import { useFileValidation } from '../composables/filevalidation'
 import { ref, watch } from 'vue';
 import { useTerritory } from '../composables/territory'
 import { useUnit } from '../composables/unit'
+import { userData } from '../composables/loginstatus'
 
+
+const userArea = userData.value.area
 
 const emits = defineEmits(['onSubmit'])
 
@@ -23,6 +26,8 @@ const { area } = useArea()
 const{ airport } = useAirport()
 const { type } = useType()
 const { validateFile } = useFileValidation()
+const centrosAllowedTypes = [{ value: 'Tareas Programadas', label: 'Tareas Programadas'}, { value: 'Medición de Radiaciones No Ionizantes (móviles)', label: 'Medición de Radiaciones No Ionizantes (móviles)'}, { value:'Tareas de Oficio', label:'Tareas de Oficio'}]
+
 
 function submitHandler(fields) {
   fields.fecha = myDate
@@ -61,6 +66,10 @@ watch(province, (newValue, oldValue) => {
   }  
 })
 
+function getFileTypeOptions(user_area) {
+  if(user_area == 'AGCCTYL') return [...type]  
+  if (area.findIndex(item => item.value == user_area) != -1) return [...centrosAllowedTypes]
+}
 
 </script>
 
@@ -85,7 +94,7 @@ watch(province, (newValue, oldValue) => {
         type="select"
         label="Tipo de Trámite"
         name="tipo"
-        :options="type"
+        :options="getFileTypeOptions(userArea)"
         placeholder="Seleccione"
       />
       <form-kit

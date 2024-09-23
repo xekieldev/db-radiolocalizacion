@@ -1,11 +1,16 @@
 <script setup>
 import FormRow from './FormRow.vue'
 import { useArea } from '../composables/area'
+import { useExternalArea } from '../composables/externalareas'
+import { userData } from '../composables/loginstatus'
 
 
 const emits = defineEmits(['onSubmit'])
 const { area } = useArea()
-
+const { externalArea } = useExternalArea()
+const centrosAllowedAreas = [{ value: 'AGCCTYL', label: 'AGCCTYL'}, { value: 'Guarda Temporal', label: 'Guarda Temporal'}]
+// const areasExternas = [{value:'ACRA#ENACOM', label:'ACRA#ENACOM'},{value: 'DNSA#ENACOM', label: 'DNSA#ENACOM'}]
+const userArea = userData.value.area
 
 function submitHandler(fields) {
   emits('onSubmit', fields)
@@ -17,6 +22,11 @@ const props = defineProps({
   location: String,
   informe: String,
 })
+
+function getAreasOptions(user_area) {
+  if(user_area == 'AGCCTYL') return [...externalArea, ...area]  
+  if (area.findIndex(item => item.value == user_area) != -1) return [...centrosAllowedAreas]
+}
 
 </script>
 
@@ -46,11 +56,12 @@ const props = defineProps({
         <form-kit
           v-if="fileNumber != 'A definir'"
           type="select"
-          :options="area"
+          :options="getAreasOptions(userArea)"
           label="Área destino"
           name="area_destino"
           placeholder="Área"
           outer-class="field-area"
+          
 
         />  
         <form-kit

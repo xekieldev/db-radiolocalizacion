@@ -76,6 +76,7 @@ function nirMeasurements() {
           @on-tap="list"
         />
         <my-button
+          v-if="perfil == 'coordinator'"
           tabindex="0"
           class="quaternary sub-menu-button new-file"
           label="Alta Expediente"

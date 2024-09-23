@@ -284,7 +284,7 @@ const { validateFile } = useFileValidation()
         placeholder="Sistema irradiante"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee'"
         v-model="station.polarizacion"
         type="select"
         label="Polarización"
@@ -293,14 +293,14 @@ const { validateFile } = useFileValidation()
         placeholder="Polarización"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee'"
         v-model="station.cantidad"
         type="text"
         label="Cantidad"
         name="cantidad"
       />
       <form-kit
-        v-if="router.currentRoute.value.query.rloc == 'true'"
+        v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee'"
         v-model="station.altura"
         type="number"
         label="Altura Media"

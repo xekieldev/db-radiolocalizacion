@@ -252,19 +252,40 @@ watch(
         :value="station.irradiante"
       />
       <prop-value
+        v-if="station.irradiante != 'No posee'"
         class="prop"
         label="Cantidad"
         :value="station.cantidad"
       />
       <prop-value
+        v-else
+        class="prop"
+        label="Cantidad"
+        value="---"
+      />
+      <prop-value
+        v-if="station.irradiante != 'No posee'"
         class="prop"
         label="Polarización"
         :value="station.polarizacion"
       />
       <prop-value
+        v-else
+        class="prop"
+        label="Polarización"
+        value="---"
+      />
+      <prop-value
+        v-if="station.irradiante != 'No posee'"
         class="prop"
         label="Altura [m]"
         :value="station.altura"
+      />
+      <prop-value
+        v-else
+        class="prop"
+        label="Altura [m]"
+        value="---"
       />
     </display-row>
     <display-row v-if="station.frecuencia && station.frecuenciaVinc">
@@ -350,6 +371,7 @@ watch(
     class="buttons-container"
   >
     <my-button
+      v-if="file.tramitacion != 'Finalizado'"
       class="tertiary right"
       label="Editar"
       @on-tap="() => editItem(station.file_id, station.id)"

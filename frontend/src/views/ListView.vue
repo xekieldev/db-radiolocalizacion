@@ -24,8 +24,9 @@ const user_area = ref('')
 const confirm_delete = ref({})
 
 
-user_area.value = userData.value.user_area
+user_area.value = userData.value.area
 
+console.log('user_area', user_area)
 
 function viewItem(item) {  
   router.push(`/file/${item}`)
@@ -108,6 +109,7 @@ watch(estado, async(newValue, oldValue) => {
     />
     <div class="list-sub-actions">
       <my-button
+        v-if="perfil == 'coordinator'"
         tabindex="0"
         class="secondary center"
         label="Alta Expediente"
@@ -121,6 +123,7 @@ watch(estado, async(newValue, oldValue) => {
           :options="[
             'Pendiente',
             'Informado',
+            'Finalizado',
             'Todos',
           ]"
           outer-class="short-field"
