@@ -156,6 +156,7 @@ function closeDiv() {
 <template>
     <div class="options-button">
       <my-button
+        v-if="perfil == 'coordinator'"
         tabindex="0"
         class="secondary right"
         label="Alta Expediente"
@@ -174,12 +175,14 @@ function closeDiv() {
   <div class="menu-container">
     <div class="left-options">
       <my-button
+        v-if="file.tramitacion != 'Finalizado'"
         tabindex="0"
         class="secondary"
         label="Nueva Radiolocalización"
         @on-tap="createStation"
       />
       <my-button
+        v-if="file.tramitacion != 'Finalizado'"
         tabindex="0"
         class="secondary"
         label="Nueva Localización"
@@ -187,7 +190,7 @@ function closeDiv() {
       />
     </div>
     <my-button
-      v-if="perfil === 'coordinator'"
+      v-if="perfil === 'coordinator' && file.tramitacion != 'Finalizado'"
       tabindex="0"
       class="primary options-menu"
       label="Acciones"
@@ -375,7 +378,9 @@ function closeDiv() {
           <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
             Status
           </th>
-          <th>Acciones</th>
+          <th v-if="file.tramitacion != 'Finalizado'">
+            Acciones
+          </th>
         </tr>
         <tr
           v-for="item in items"
@@ -405,14 +410,16 @@ function closeDiv() {
           <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
             {{ item.status }}
           </td>
-          <td> 
+          <td v-if="file.tramitacion != 'Finalizado'"> 
             <div class="action-buttons-container">
               <my-button
+                v-if="file.tramitacion != 'Finalizado'"
                 class="primary center"
                 label="Editar"
                 @on-tap="() => editItem(item.file_id, item.id)"
               />
               <my-button
+                v-if="file.tramitacion != 'Finalizado'"
                 class="tertiary center"
                 label="Borrar"
                 @on-tap="() => deleteItem(item.file_id, item.id)"
@@ -425,7 +432,8 @@ function closeDiv() {
     </div>
 
     <form-new-activity
-     @on-submit="save"
+      v-if="file.tramitacion != 'Finalizado'"
+      @on-submit="save"
     />
 
   

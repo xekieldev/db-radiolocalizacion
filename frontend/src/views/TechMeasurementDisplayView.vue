@@ -90,7 +90,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       @on-tap="print"
     />
     <my-button
-      v-if="!previewStatus"
+      v-if="!previewStatus && file.tramitacion != 'Finalizado'"
       class="primary right"
       label="Agregar punto de medición"
       @on-tap="() => viewItem(station.file_id, idPath)"

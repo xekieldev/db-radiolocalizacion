@@ -86,7 +86,7 @@ def get_available_files():
 
             else:
                 # Si no se proporciona o es diferente de 'true', lista solo los archivos disponibles
-                case_file_available = CaseFile.query.filter_by(area_actual = checkUser.area, status='Available')
+                case_file_available = CaseFile.query.filter_by(area_asignada = checkUser.area, status='Available')
                 if file_status is not None:
                     case_file_available = case_file_available.filter_by(tramitacion = file_status)
                 
@@ -161,6 +161,8 @@ def patch_file(id):
         if caseFile and area_destino and caseFile.expediente != 'A definir':
             if area_destino == 'AGCCTYL':
                 caseFile.tramitacion = 'Informado'
+            elif area_destino != caseFile.area_asignada:
+                caseFile.tramitacion = 'Finalizado'
             else:
                 caseFile.tramitacion = 'Pendiente'
             
