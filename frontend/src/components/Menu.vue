@@ -24,9 +24,9 @@ async function doLogout() {
       <img
         alt="ENACOM logo"
         class="logo"
-        src="../../img/Logo.png"
-        width="100"
-        height="100"
+        src="../../img/new_logo.png"
+        width="220"
+        height="80"
       >
       <nav>
         <RouterLink
@@ -91,8 +91,10 @@ async function doLogout() {
 header {
     display: flex;
     flex-direction: row;
-    background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
+    /* background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%); */
     width: 100%;
+    border-bottom: 1px solid #0B1742;
+    margin-bottom: 15px;
   
   }
   
@@ -105,7 +107,7 @@ nav {
   }
   
   nav a.router-link-exact-active {
-    color: #426aaf;
+    color: #005297;
   }
   
   nav a.router-link-exact-active:hover {

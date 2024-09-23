@@ -109,12 +109,12 @@ function handleClick() {
   color: white;
 }
 .septenary {
-  border: 2px solid #426aaf;
+  border: 1px solid #0B1742;
   box-shadow: 2px 5px 2px 2px gray;
-  background-color: #ececec;
+  /* background-color: #C6C6C6; */
   font-size: 16px;
   font-weight: 700;  
-  color: #426aaf; 
+  color: #0B1742; 
   height: 150px;
   width: 250px;
   text-align: center;
@@ -122,7 +122,7 @@ function handleClick() {
   padding-top: 50px;
 }
 .septenary:hover {
-  background-color: #426aaf;
+  background-color: #0074A6;
   color: white;
 }
 .center {

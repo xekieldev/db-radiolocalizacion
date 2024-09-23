@@ -389,9 +389,7 @@ watch(
     <img
       alt="ENACOM logo"
       class="logo"
-      src="../../img/Logo.png"
-      width="100"
-      height="100"
+      src="../../img/new_logo.png"
     > 
   </div>
 </template>
@@ -399,11 +397,13 @@ watch(
 <style scoped>
 .print-header {
   display: flex;
-  background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
+  background: white;
   width: 100%;
   justify-content: space-between;
   align-items: baseline;
   position: absolute;
+  border-bottom: 1px solid #0B1742;
+  margin-bottom: 15px;
 }
 .page {
   position: absolute;
@@ -482,6 +482,11 @@ watch(
 .text-related-stations {
   font-size: 13px;
   font-weight: 500;
+}
+.logo {
+  width: 220px;
+  height: 80px;
+  padding-bottom: 1px;
 }
 
 </style>

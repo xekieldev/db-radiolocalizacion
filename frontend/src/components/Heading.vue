@@ -13,6 +13,7 @@
   display: flex;
   font-size: 25px;
   font-weight: 500;
+  color: #0B1742;
   justify-content: center;
   width: 100%;
   flex-direction: row;

@@ -26,7 +26,7 @@ const props = defineProps({
     >
       <img
         class="login-img"
-        src="../../img/Logo.png"
+        src="../../img/new_logo.png"
         alt="logo"
       >
       <p class="login-box-title">
@@ -67,19 +67,22 @@ const props = defineProps({
 .login-box {
       display: flex;
       flex-direction: column;
-      margin: auto;
-      margin-top: 10%;
-      border: 1px solid gray;
+      align-items: center;
+      /* margin: auto; */
+      margin: 10%;
+      border: 1px solid #C6C6C6;
       padding: 0 60px 30px;
       border-radius: 10px;
-      box-shadow: 5px 5px 5px 5px gray;
+      /* box-shadow: 5px 5px 5px 5px gray; */
       /* width: 400px; */
+      column-gap: 20px;
+      
 }
 
 .login-img {
       margin: 0 auto;
-      height: 70px;
-      width: 70px;
+      height: 80px;
+      width: 220px;
       margin: 15px auto;
       margin-bottom: 5px;
 }
@@ -87,6 +90,7 @@ const props = defineProps({
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
   flex: 0 0 50%;
   width: 300px;
+  margin-bottom: 20px;
 }
 .login-button {
       background-color: white;
@@ -99,6 +103,7 @@ const props = defineProps({
       font-weight: 500;  
       color: #007BFF;  
       align-self: flex-end;
+      width: 100%;
 }
 .login-button:hover {
       background-color: #007BFF;

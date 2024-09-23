@@ -352,9 +352,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
     <img
       alt="ENACOM logo"
       class="logo"
-      src="../../img/Logo.png"
-      width="100"
-      height="100"
+      src="../../img/new_logo.png"
     > 
   </div>
 </template>
@@ -412,13 +410,20 @@ async function del_tech_measurement(id, id_tech_measurement) {
 .preview-header {
   display: flex;
   position: absolute;
-  background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%);
+  background: white;
   width: 100%;
   justify-content: space-between;
   align-items: baseline;
+  border-bottom: 1px solid #0B1742;
+  margin-bottom: 15px;
 }
 .back-preview-button {
   align-self: center;
+}
+.logo {
+  width:220px;
+  height:80px;
+  padding-bottom: 1px;
 }
 
 </style>
