@@ -74,14 +74,15 @@ defineProps({
 
 
 .change-pass-container {
-      display: flex;
+  display: flex;
       flex-direction: column;
-      margin: auto;
-      margin-top: 5%;
-      border: 1px solid gray;
+      align-items: center;
+      /* margin: auto; */
+      margin: 10%;
+      border: 1px solid #C6C6C6;
       padding: 0 60px 30px;
       border-radius: 10px;
-      box-shadow: 5px 5px 5px 5px gray;
+      /* box-shadow: 5px 5px 5px 5px gray; */
       /* width: 400px; */
 }
 
@@ -96,6 +97,8 @@ defineProps({
   /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
   flex: 0 0 50%;
   width: 300px;
+  margin-bottom: 20px;
+
 }
 .login-button {
       background-color: white;
@@ -108,6 +111,7 @@ defineProps({
       font-weight: 500;  
       color: #007BFF;  
       align-self: flex-end;
+      width: 100%;
 }
 .login-button:hover {
       background-color: #007BFF;
@@ -115,9 +119,9 @@ defineProps({
 }
 .login-box-title {
   font-size: 20px;;
-      font-weight: 700;
-      align-self: center;
-      padding: 5px 10px 15px;
+  font-weight: 700;
+  align-self: center;
+  padding: 20px 10px 15px;
 }
 .login-error {
   color: red;

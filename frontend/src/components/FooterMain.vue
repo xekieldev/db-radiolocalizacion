@@ -6,7 +6,7 @@
   <!-- <div> -->
     <footer class="footer-container">
       <img
-        src="../../img/Logo.png"
+        src="../../img/new_logo_s.png"
         alt="logo-enacom"
         class="logo-enacom"
       >
@@ -27,6 +27,6 @@
   box-sizing: border-box; /* Asegura que el padding se incluya en el ancho total del footer */
 }
 .logo-enacom {
-  height: 50px;
+  height: 40px;
 }
 </style>

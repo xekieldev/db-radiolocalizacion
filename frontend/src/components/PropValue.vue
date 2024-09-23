@@ -29,8 +29,8 @@ defineProps({
 }
 .label{
   width: 100%;
-  background-color: #cbcdce;
-  color: #0e0e0e;
+  background-color: #C6C6C6;
+  color: #0B1742;
   padding: 5px;
   font-weight: 700;
   text-align: center;
