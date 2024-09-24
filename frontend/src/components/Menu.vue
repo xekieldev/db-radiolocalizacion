@@ -25,8 +25,6 @@ async function doLogout() {
         alt="ENACOM logo"
         class="logo"
         src="../../img/new_logo.png"
-        width="220"
-        height="80"
       >
       <nav>
         <RouterLink
@@ -138,5 +136,8 @@ nav {
     display: flex;
     padding: 7px;
     gap: 3px;
+  }
+  .logo {
+    height: 90px;
   }
   </style>

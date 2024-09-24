@@ -8,7 +8,7 @@ import DisplayRow from '../components/DisplayRow.vue'
 import PropValue from '../components/PropValue.vue'
 import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
-
+import { printFlag } from '../composables/printflag'
 
 const { getStation, getAllTechnicians, getFile } = useApi()
 const { currentRoute } = useRouter()
@@ -55,7 +55,7 @@ const file = reactive({})
 const station = reactive({})
 const technicians = reactive({})
 const techniciansValues = reactive({})
-const printFlag = reactive({isActive: false})
+// const printFlag = reactive({isActive: false})
 
 onBeforeMount(async () => {
   
@@ -484,8 +484,7 @@ watch(
   font-weight: 500;
 }
 .logo {
-  width: 220px;
-  height: 80px;
+  height: 90px;
   padding-bottom: 1px;
 }
 
