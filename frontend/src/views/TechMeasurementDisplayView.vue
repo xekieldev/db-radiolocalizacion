@@ -421,8 +421,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
   align-self: center;
 }
 .logo {
-  width:220px;
-  height:80px;
+  height:90px;
   padding-bottom: 1px;
 }
 

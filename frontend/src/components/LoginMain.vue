@@ -69,7 +69,7 @@ const props = defineProps({
       flex-direction: column;
       align-items: center;
       /* margin: auto; */
-      margin: 10%;
+      margin: 5% 15%;
       border: 1px solid #0B1742;
       padding: 0 60px 30px;
       border-radius: 10px;
@@ -82,7 +82,7 @@ const props = defineProps({
 .login-img {
       margin: 0 auto;
       height: 80px;
-      width: 220px;
+      /* width: 220px; */
       margin: 15px auto;
       margin-bottom: 5px;
 }
