@@ -75,15 +75,13 @@ defineProps({
 
 .change-pass-container {
   display: flex;
-      flex-direction: column;
-      align-items: center;
-      /* margin: auto; */
-      margin: 10%;
-      border: 1px solid #C6C6C6;
-      padding: 0 60px 30px;
-      border-radius: 10px;
-      /* box-shadow: 5px 5px 5px 5px gray; */
-      /* width: 400px; */
+  flex-direction: column;
+  align-items: center;
+  margin: 5% 15%;
+  border: 1px solid #0B1742;
+  padding: 0 60px 30px;
+  border-radius: 10px;
+  column-gap: 20px;
 }
 
 .login-img {
@@ -98,7 +96,6 @@ defineProps({
   flex: 0 0 50%;
   width: 300px;
   margin-bottom: 20px;
-
 }
 .login-button {
       background-color: white;

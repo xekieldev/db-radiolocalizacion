@@ -7,6 +7,7 @@ import MyButton from '../components/MyButton.vue'
 import DisplayRow from '../components/DisplayRow.vue'
 import PropValue from '../components/PropValue.vue'
 import { useTerritory } from '../composables/territory'
+import { printFlag } from '../composables/printflag'
 
 
 const { getTechMeasurement, getStation, delete_tech_measurement, getFile } = useApi()
@@ -19,7 +20,7 @@ const station = reactive({})
 const techMeasurement = reactive({})
 const technicians = reactive({})
 const idPath = ref(currentRoute.value.params.id)
-let previewStatus = ref(false)
+// let previewStatus = ref(false)
 
 
 onBeforeMount(async () => {
@@ -70,11 +71,11 @@ async function del_tech_measurement(id, id_tech_measurement) {
   }
 
   function print() {  
-  previewStatus.value = true
-  if(previewStatus.value){
+  printFlag.isActive = true
+  if(printFlag.isActive){
     nextTick(() => {
       window.print()
-      previewStatus.value = false
+      printFlag.isActive = false
     })
   }
 }
@@ -84,13 +85,13 @@ async function del_tech_measurement(id, id_tech_measurement) {
 <template>
   <div class="buttons-container">
     <my-button
-      v-if="!previewStatus"
+      v-if="!printFlag.isActive"
       class="quinary right"
       label="Imprimir"
       @on-tap="print"
     />
     <my-button
-      v-if="!previewStatus && file.tramitacion != 'Finalizado'"
+      v-if="!printFlag.isActive && file.tramitacion != 'Finalizado'"
       class="primary right"
       label="Agregar punto de medición"
       @on-tap="() => viewItem(station.file_id, idPath)"
@@ -321,7 +322,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       </display-row>
       <display-row class="status-container">
         <prop-value
-          v-if="!previewStatus"
+          v-if="!printFlag.isActive"
           class="prop status"
           label="Status"
           :value=" techMeasurement[index].status"
@@ -329,7 +330,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
       </display-row>
       <div class="buttons-container delete-btn">
         <my-button
-          v-if="!previewStatus"
+          v-if="!printFlag.isActive"
           class="tertiary right"
           label="Borrar"
           @on-tap="() => del_tech_measurement(idPath, techMeasurement[index].id)"
@@ -339,14 +340,14 @@ async function del_tech_measurement(id, id_tech_measurement) {
   </div>  
   <div class="buttons-container">
     <my-button
-      v-if="!previewStatus"
+      v-if="!printFlag.isActive"
       class="primary right"
       label="Volver"
       @on-tap="goBack()"
     />
   </div>
   <div
-    v-if="previewStatus"
+    v-if="printFlag.isActive"
     class="preview-header"
   >
     <img
