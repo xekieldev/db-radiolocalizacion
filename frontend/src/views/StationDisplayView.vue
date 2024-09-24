@@ -158,7 +158,7 @@ watch(
         @on-tap="() => viewItem(station.file_id, station.id)"
       />
       <my-button
-        v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora' && !printFlag.isActive"
+        v-if="station.emplazamiento == 'PLANTA TRANSMISORA' || station.emplazamiento == 'Planta Transmisora' && !printFlag.isActive && file.tramitacion != 'Finalizado'"
         class="secondary right"
         label="Agregar Estudio"
         @on-tap="redirectToCreate"

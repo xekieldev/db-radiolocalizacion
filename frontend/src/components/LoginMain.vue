@@ -70,7 +70,7 @@ const props = defineProps({
       align-items: center;
       /* margin: auto; */
       margin: 10%;
-      border: 1px solid #C6C6C6;
+      border: 1px solid #0B1742;
       padding: 0 60px 30px;
       border-radius: 10px;
       /* box-shadow: 5px 5px 5px 5px gray; */
@@ -93,20 +93,20 @@ const props = defineProps({
   margin-bottom: 20px;
 }
 .login-button {
-      background-color: white;
+      background-color: #0B1742;
       margin-top: 10px;
       padding: 10px 18px;
       border-radius: 20px;
       font-weight: 800;
       cursor: pointer;
-      border: 1px solid #007BFF;
-      font-weight: 500;  
-      color: #007BFF;  
+      border: 1px solid #0B1742;
+      font-weight: 600;  
+      color: white;  
       align-self: flex-end;
       width: 100%;
 }
 .login-button:hover {
-      background-color: #007BFF;
+      background-color: #005297;
       color: white;
 }
 .login-box-title {
