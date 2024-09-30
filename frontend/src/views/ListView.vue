@@ -35,6 +35,10 @@ function viewItem(item) {
 function newFile() { 
   router.push({name: "newFile"})
 }
+function editItem(id) {
+  router.push(`/file/${id}/edit`)
+  
+}
 
 async function deleteItem(id) {  
   const response = await deleteFile(id)
@@ -169,6 +173,11 @@ watch(estado, async(newValue, oldValue) => {
         <td>{{ item.tramitacion }}</td> 
         <td v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"> 
           <div class="action-buttons-container">
+            <my-button
+              class="primary center"
+              label="Editar"
+              @on-tap="() => editItem(item.id)"
+            />
             <my-button
               v-if="confirm_delete[item.id]!==1"
               class="tertiary center"

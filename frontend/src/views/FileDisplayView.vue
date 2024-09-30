@@ -293,12 +293,12 @@ function closeDiv() {
       <prop-value
         class="prop double"
         label="Localidad"
-        :value="nirMeasurement.localidad"
+        :value="file.localidad"
       />
       <prop-value
         class="prop double"
         label="Provincia"
-        :value="nirMeasurement.provincia"
+        :value="file.provincia"
       />
       <prop-value
         class="prop double"
@@ -310,6 +310,14 @@ function closeDiv() {
         label="Valor Máximo [%]"
         :value="nirMeasurement.valor_maximo"
       />
+    <display-row>
+      <prop-value
+        class="prop"
+        label="Observaciones"
+        :value="nirMeasurement.observaciones"
+      />
+    </display-row>
+
     </display-row>
     <display-row
       v-if="!(tipoTramite == 'Medición de Radiaciones No Ionizantes (móviles)' || tipoTramite == 'Descargo')"

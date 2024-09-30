@@ -5,23 +5,29 @@ import { useArea } from '../composables/area';
 import { useAirport } from '../composables/airport';
 import { useType } from '../composables/filetype';
 import { useFileValidation } from '../composables/filevalidation'
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { useTerritory } from '../composables/territory'
 import { useUnit } from '../composables/unit'
 import { userData } from '../composables/loginstatus'
+import { useRouter } from 'vue-router'
+
 
 
 const userArea = userData.value.area
+const emits = defineEmits(['onSubmit', 'update:file.provincia', 'update:file.localidad']);
+const { currentRoute } = useRouter()
 
-const emits = defineEmits(['onSubmit'])
 
 
-defineProps({
+const props = defineProps({
   context: String,
   title: String,
+  file: Object,
+  nirMeas: Object,
   technicians: Object,
   techniciansValues: Array,
 })
+
 const { area } = useArea()
 const{ airport } = useAirport()
 const { type } = useType()
@@ -30,40 +36,45 @@ const centrosAllowedTypes = [{ value: 'Tareas Programadas', label: 'Tareas Progr
 
 
 function submitHandler(fields) {
-  fields.fecha = myDate
-  fields.hora = myTime
+  // fields.fecha = myDate
+  // fields.hora = myTime
   emits('onSubmit', fields)
 }
 
 const currentDate = new Date(); 
 const fullHours = currentDate.getHours() < 10 ? "0" + currentDate.getHours() : currentDate.getHours()
 const fullMinutes = currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : currentDate.getMinutes()
-const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
-const myTime = fullHours + ":" + fullMinutes + ":" + fullSeconds
+// const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
+const myTime = fullHours + ":" + fullMinutes// + ":" + fullSeconds
 
 const fullMonth = (currentDate.getMonth()+1)<10 ? "0"+(currentDate.getMonth()+1) : (currentDate.getMonth()+1)
 const fullDay = currentDate.getDate()<10 ? "0"+currentDate.getDate() : currentDate.getDate()
 const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
 
 const prioridadValue = ref(false)
-const tipoTramite = ref()
+// const tipoTramite = props.file ? ref(props.file.tipo) : ''
 const noFrecuency = ref(false)
 const { unidad } = useUnit()
 
 
-const province = ref()
-const city = ref()
+const province = ref(props.file.provincia)
+const city = ref(props.file.localidad)
+
 const { provinces, cities, getProvinceCities } = useTerritory()
 
+watchEffect(() => {
+  if(props.file.provincia) province.value = props.file.provincia
+  if(props.file.localidad) city.value = props.file.localidad
+})
 
 watch(province, (newValue, oldValue) => {
-
+  console.log('newValue', 'oldValue', newValue, oldValue)
+  emits('update:file.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
-    
     city.value = cities.value[0].value
-
-  }  
+    emits('update:file.localidad', newValue)
+  }
 })
 
 function getFileTypeOptions(user_area) {
@@ -83,6 +94,39 @@ function getFileTypeOptions(user_area) {
   >
     <form-row>
       <form-kit
+        v-if="currentRoute.name !== 'editFile'"
+        v-model="file.fecha"
+        type="hidden"
+        label="Fecha"
+        name="fecha"
+        :value="myDate"
+      />
+      <form-kit
+        v-else
+        v-model="file.fecha"
+        type="date"
+        label="Fecha"
+        name="fecha"
+        outer-class="shorter-field"
+      />
+      <form-kit
+        v-if="currentRoute.name !== 'editFile'"
+        v-model="file.hora"
+        type="hidden"
+        label="Hora"
+        name="hora"
+        :value="myTime"
+      />
+      <form-kit
+        v-else
+        v-model="file.hora"
+        type="time"
+        label="Hora"
+        name="hora"
+        outer-class="shorter-field"
+      />
+      <form-kit
+        v-model="file.expediente"
         type="text"
         label="Expediente"
         name="expediente"
@@ -90,7 +134,7 @@ function getFileTypeOptions(user_area) {
         :validation-rules="{ validateFile }"
       />
       <form-kit
-        v-model="tipoTramite"
+        v-model="file.tipo"
         type="select"
         label="Tipo de Trámite"
         name="tipo"
@@ -98,16 +142,17 @@ function getFileTypeOptions(user_area) {
         placeholder="Seleccione"
       />
       <form-kit
-          value="Normal"
-          type="select"
-          label="Prioridad"
-          name="prioridad" 
-          :options="[
-            'Urgente',
-            'Normal',
-          ]"
-          outer-class="short-field"
-        />
+        v-model="file.prioridad"
+        value="Normal"
+        type="select"
+        label="Prioridad"
+        name="prioridad" 
+        :options="[
+          'Urgente',
+          'Normal',
+        ]"
+        outer-class="short-field"
+      />
     </form-row>
     <form-row>
         <form-kit
@@ -125,6 +170,7 @@ function getFileTypeOptions(user_area) {
           name="localidad"  
         />
         <form-kit
+          v-model="file.area_asignada"
           type="select"
           label="CCTE/Área asignada"
           name="area_asignada"
@@ -133,29 +179,33 @@ function getFileTypeOptions(user_area) {
         />
       </form-row>
     
-    <div v-if="tipoTramite != 'Medición de Radiaciones No Ionizantes (móviles)'">
+    <div v-if="file.tipo && file.tipo != 'Medición de Radiaciones No Ionizantes (móviles)'">
       
-      <form-row v-if="tipoTramite == 'Interferencias en Aeropuertos'">
+      <form-row v-if="file.tipo == 'Interferencias en Aeropuertos'">
         <form-kit
-          v-if="tipoTramite == 'Interferencias en Aeropuertos'"
+          v-if="file.tipo && file.tipo == 'Interferencias en Aeropuertos'"
+          v-model="file.aeropuerto"
           type="select"
           label="Aeropuerto/Aeródromo"
           name="aeropuerto"
           :options="airport"
         />
         <form-kit
+          v-model="file.nota_inicio"
           type="text"
           label="Nota/Expediente de Inicio"
           name="nota_inicio"
         />
       </form-row>
-      <form-row v-if="!(tipoTramite == 'Descargo' || tipoTramite == 'Interferencias en Aeropuertos') ">
+      <form-row v-if="file.tipo && !(file.tipo == 'Descargo' || file.tipo == 'Interferencias en Aeropuertos') ">
         <form-kit
+          v-model="file.domicilio"
           type="text"
           label="Domicilio"
           name="domicilio"        
         />
         <form-kit
+          v-model="file.latitud"
           type="number"
           label="Latitud"
           name="latitud"
@@ -163,6 +213,7 @@ function getFileTypeOptions(user_area) {
           outer-class="short-field"
         />
         <form-kit
+          v-model="file.longitud"
           type="number"
           label="longitud"
           name="longitud"
@@ -170,8 +221,9 @@ function getFileTypeOptions(user_area) {
           outer-class="short-field"
         />
       </form-row>
-      <form-row v-if="tipoTramite != 'Descargo'">
+      <form-row v-if="file.tipo != 'Descargo'">
         <form-kit
+          v-model="file.usuario"
           type="text"
           label="Usuario"
           name="usuario"
@@ -185,6 +237,7 @@ function getFileTypeOptions(user_area) {
           />
         </div>
         <form-kit
+          v-model="file.frecuencia"
           v-if="noFrecuency == false"
           type="number"
           label="Frecuencia"
@@ -199,6 +252,7 @@ function getFileTypeOptions(user_area) {
           outer-class="short-field"
         />
         <form-kit 
+          v-model="file.unidad"
           v-if="noFrecuency == false"
           type="select"
           label="Unidad"
@@ -210,6 +264,7 @@ function getFileTypeOptions(user_area) {
       </form-row>
       <form-row>
         <form-kit
+          v-model="file.motivo"
           type="textarea"
           label="Motivo"
           name="motivo"
@@ -218,9 +273,10 @@ function getFileTypeOptions(user_area) {
       </form-row>
     </div>
     
-    <div class="NIR-file" v-if="tipoTramite === 'Medición de Radiaciones No Ionizantes (móviles)'">
+    <div class="NIR-file" v-if="file.tipo && file.tipo === 'Medición de Radiaciones No Ionizantes (móviles)'">
       <form-row>
         <form-kit
+          v-model="file.fecha"
           type="date"
           label="Fecha"
           name="fecha" 
@@ -231,18 +287,19 @@ function getFileTypeOptions(user_area) {
           }"
         />
         <form-kit
+          v-model="file.hora"
           type="time"
           label="Hora"
           name="hora" 
         />
-      <!-- </form-row>
-      <form-row> -->
         <form-kit
+          v-model="nirMeas.cantidad"
           type="number"
           label="Cantidad de mediciones"
           name="cantidad" 
         />
         <form-kit
+          v-model="nirMeas.valor_maximo"
           type="number"
           label="Valor Medido Máximo [%]"
           name="valor_maximo" 
@@ -257,6 +314,7 @@ function getFileTypeOptions(user_area) {
       </form-row>
       <form-row>
         <form-kit
+          v-model="nirMeas.observaciones"
           type="textarea"
           label="Observaciones"
           name="observaciones"
@@ -327,6 +385,10 @@ function getFileTypeOptions(user_area) {
 .short-field {
       /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
       flex: 0 0 20%;
+}
+.shorter-field {
+      /* https://stackoverflow.com/questions/30684759/flexbox-how-to-get-divs-to-fill-up-100-of-the-container-width-without-wrapping */
+      flex: 0 0 10%;
 }
 .checkbox-container {
   display: flex;
