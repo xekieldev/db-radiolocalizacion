@@ -312,9 +312,16 @@ function closeDiv() {
       />
     <display-row>
       <prop-value
+        v-if="nirMeasurement.observaciones"
         class="prop"
         label="Observaciones"
         :value="nirMeasurement.observaciones"
+      />
+      <prop-value
+        v-else
+        class="prop"
+        label="Observaciones"
+        value="---"
       />
     </display-row>
 

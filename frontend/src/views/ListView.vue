@@ -148,7 +148,7 @@ watch(estado, async(newValue, oldValue) => {
         </th>
         <th>Ubicación actual</th>
         <th>Estado</th>
-        <th v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'">Acciones</th>
+        <th v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'" class="action-column">Acciones</th>
       </tr>
       <tr
         v-for="item in items"
@@ -235,8 +235,11 @@ tr:nth-child(odd) {
 .action-buttons-container {
   display: flex;
   flex-direction: row;
-  gap: 1px;
+  gap: 5px;
   margin: 0;
+}
+.action-column {
+  width: 30px;
 }
 .files-menu {
   display: flex;
