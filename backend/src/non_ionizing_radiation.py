@@ -1,16 +1,17 @@
 from flask import Blueprint
 from flask import request
 from flask import url_for
-from src.db import db, NonIonizingRadiation, ma, User
+from src.db import db, NonIonizingRadiation, ma, User, CaseFile
 from sqlalchemy import exc
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import jsonify
 
 
 bp = Blueprint("non_ionizing_radiation", __name__)
 class NonIonizingRadiationSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "file_id", "fecha", "hora", "area_asignada", "cantidad", "valor_maximo", "provincia", "localidad", "tipo", "observaciones", "id_technician1", "id_technician2")
+        fields = ("id", "file_id", "fecha", "hora", "area_asignada", "cantidad", "valor_maximo", "tipo", "observaciones", "id_technician1", "id_technician2")
 
 non_ionizing_radiation_schema = NonIonizingRadiationSchema()
 non_ionizing_radiations_schema = NonIonizingRadiationSchema( many = True )
@@ -25,16 +26,12 @@ def non_ionizing_radiation(id):
         file_id = id
         fecha = request.json.get('fecha')
         hora = request.json.get('hora')
-        area_asignada = request.json.get('area_asignada')
         cantidad = request.json.get('cantidad')
         valor_maximo = request.json.get('valor_maximo')
-        provincia = request.json.get('provincia')
-        localidad = request.json.get('localidad')
         observaciones = request.json.get('observaciones')
-        tipo = request.json.get('tipo')
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
-        non_ionizing_radiation = NonIonizingRadiation(file_id = file_id, fecha = fecha, hora = hora, area_asignada = area_asignada, cantidad = cantidad, valor_maximo = valor_maximo, provincia = provincia, localidad = localidad, tipo = tipo, observaciones = observaciones, id_technician1 = id_technician1, id_technician2 = id_technician2)
+        non_ionizing_radiation = NonIonizingRadiation(file_id = file_id, fecha = fecha, hora = hora, cantidad = cantidad, valor_maximo = valor_maximo, observaciones = observaciones, id_technician1 = id_technician1, id_technician2 = id_technician2)
         r = db.session.add(non_ionizing_radiation)
         db.session.commit()
         response = {"id": non_ionizing_radiation.id }
@@ -62,15 +59,19 @@ def get_non_ionizing_radiations(id):
 @jwt_required()
 def get_all_non_ionizing_radiations():
     try:
-        # import pdb; pdb.set_trace()
         usuario_id = get_jwt_identity()      
         checkUser= User.query.filter_by(id = usuario_id).first()
-        if checkUser.area != 'AGCCTYL':
-            all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada = checkUser.area).all()
-        else:
-            all_non_ionizing_radiations = NonIonizingRadiation.query.all()
+        all_non_ionizing_radiations = db.session.query(NonIonizingRadiation, CaseFile.fecha, CaseFile.hora, CaseFile.localidad, CaseFile.provincia, CaseFile.expediente, CaseFile.area_asignada).join(CaseFile, NonIonizingRadiation.file_id == CaseFile.id).all()
+        # import pdb; pdb.set_trace()
+        
+        return jsonify([{ **{col.name: getattr(row.NonIonizingRadiation, col.name) for col in NonIonizingRadiation.__table__.columns}, "fecha": row.fecha, "hora": row.hora,"expediente": row.expediente, "area_asignada": row.area_asignada, "localidad": row.localidad, "provincia": row.provincia } for row in all_non_ionizing_radiations])
 
-        return non_ionizing_radiations_schema.dump(all_non_ionizing_radiations)
+        # all_non_ionizing_radiations = db.session.query(NonIonizingRadiation).join(CaseFile)
+        # if checkUser.area != 'AGCCTYL':
+        #     all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada = checkUser.area).all()
+        # else:
+        #     all_non_ionizing_radiations = NonIonizingRadiation.query.all()
+        # return non_ionizing_radiations_schema.dump(all_non_ionizing_radiations)
     except:
         response = {"message": "server error"}
         return response, 500

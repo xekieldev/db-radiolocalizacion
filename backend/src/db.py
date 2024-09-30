@@ -31,6 +31,13 @@ technician_tech_measurement = db.Table(
     db.Column("id_technician", db.Integer, db.ForeignKey("Technician.id")),
 )
 
+technician_nir = db.Table(
+    "technician_nir",
+    db.Model.metadata,
+    db.Column("id_nir", db.Integer, db.ForeignKey("NonIonizingRadiation.id")),
+    db.Column("id_technician", db.Integer, db.ForeignKey("Technician.id")),
+)
+
 file_tracking = db.Table(
     "file_tracking",
     db.Model.metadata,
@@ -171,15 +178,13 @@ class NonIonizingRadiation (db.Model):
     file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
     fecha = db.Column(db.String(10))
     hora = db.Column(db.String(5))
-    area_asignada = db.Column(db.String(25))
     cantidad = db.Column(db.Integer)
     valor_maximo = db.Column(db.Float)
-    provincia = db.Column(db.String(30))
-    localidad = db.Column(db.String(30))
-    tipo = db.Column(db.String(20))
     observaciones = db.Column(db.String(200))
     id_technician1 = db.Column(db.Integer)
     id_technician2 = db.Column(db.Integer)
+    technicians = db.orm.relationship("Technician", secondary="technician_nir")
+
 
 
 class Activity (db.Model):

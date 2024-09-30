@@ -67,6 +67,73 @@ def case_file():
         response = { "message": "input error" }
         return response, 400
 
+@bp.route("/file/<id>", methods=["PUT"])
+@jwt_required()
+def edit_file(id):
+    try:
+        caseFile = CaseFile.query.get(id)
+        if caseFile:    
+            fecha = request.json.get('fecha')
+            hora = request.json.get('hora')
+            expediente = request.json.get('expediente')
+            tipo = request.json.get('tipo')
+            area_asignada = request.json.get('area_asignada')
+            prioridad = request.json.get('prioridad')
+            nota_inicio = request.json.get('nota_inicio')
+            nota_fin = request.json.get('nota_fin')
+            aeropuerto = request.json.get('aeropuerto')
+            usuario = request.json.get('usuario')
+            frecuencia = request.json.get('frecuencia')
+            unidad = request.json.get('unidad')
+            provincia = request.json.get('provincia')
+            localidad = request.json.get('localidad')
+            motivo = request.json.get('motivo')
+            fecha_fin = request.json.get('fecha_fin')
+            hora_fin = request.json.get('hora_fin')
+            area_actual = request.json.get('area_asignada')
+            domicilio = request.json.get('domicilio')
+            latitud = request.json.get('latitud')
+            longitud = request.json.get('longitud')
+            informe = request.json.get('informe')
+            tramitacion = 'Pendiente'
+
+            caseFile.fecha = fecha
+            caseFile.hora = hora
+            caseFile.expediente = expediente
+            caseFile.tipo = tipo
+            caseFile.area_asignada = area_asignada
+            caseFile.prioridad = prioridad
+            caseFile.nota_inicio = nota_inicio
+            caseFile.nota_fin = nota_fin
+            caseFile.aeropuerto = aeropuerto
+            caseFile.usuario = usuario
+            caseFile.frecuencia = frecuencia
+            caseFile.unidad = unidad
+            caseFile.provincia = provincia
+            caseFile.localidad = localidad
+            caseFile.motivo = motivo
+            caseFile.fecha_fin = fecha_fin
+            caseFile.hora_fin = hora_fin
+            caseFile.area_actual = area_actual
+            caseFile.domicilio = domicilio
+            caseFile.latitud = latitud
+            caseFile.longitud = longitud
+            caseFile.informe = informe
+            caseFile.tramitacion = tramitacion
+        
+        
+            db.session.commit()   
+            response = {"id": caseFile.id }
+            return response, 201 
+        else:
+            return {"error": "id not found"}, 404        
+    except exc.SQLAlchemyError:
+        response = { "message": "database error" }
+        return response, 500
+    except:
+        response = { "message": "input error" }
+        return response, 400
+
 @bp.route('/file', methods = ['GET'])
 @jwt_required()
 def get_available_files():
