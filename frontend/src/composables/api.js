@@ -37,6 +37,13 @@ export function useApi() {
         return response && response.data 
     }
 
+    async function editFile(id, data) {
+        loading.value = true
+        const response = await axiosInstance.put(`/file/${id}`, data)
+        loading.value = false
+        return response && response.data 
+    }
+
     async function patchFile(file_id, data) {
         loading.value = true
         const response = await axiosInstance.patch(`/file/${file_id}`, data)
@@ -179,7 +186,7 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function getNIRMeasurementInFile(file_id, id) {
+    async function getNIRMeasurementInFile(file_id) {
         loading.value = true
         const response = await axiosInstance.get(`/file/${file_id}/non_ionizing_radiation`)
         loading.value = false
@@ -217,6 +224,7 @@ export function useApi() {
         list,
         newFile,
         getFile,
+        editFile,
         deleteFile,
         patchFile,
         loading,

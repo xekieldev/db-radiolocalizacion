@@ -9,6 +9,8 @@ const { create_non_ionizing_radiation, newFile, getAllTechnicians } = useApi()
 const router = useRouter()
 const technicians = reactive([])
 const techniciansValues = reactive([])
+const file = reactive({})
+const nirMeas = reactive({})
 
 onBeforeMount(async () => {
     const techResponse = await getAllTechnicians()
@@ -41,6 +43,8 @@ async function save(fields) {
   <fnewfile
     title="Alta Expediente"
     context="Expedientes" 
+    :file = file
+    :nirMeas = nirMeas
     :technicians = "technicians"
     :techniciansValues = "techniciansValues"
     @on-submit="save"

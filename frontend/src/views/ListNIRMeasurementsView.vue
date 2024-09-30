@@ -10,7 +10,7 @@ import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
 
 
-const { getAllNonIonizingRadiation, delete_nir_measurement, loading } = useApi()
+const { getAllNonIonizingRadiation, delete_nir_measurement, loading, getFile } = useApi()
 const { getNameByCode, getCoordinates } = useTerritory()
 const router = useRouter()
 const { search } = useSearch()
@@ -27,7 +27,8 @@ const searchText = ref('')
 
 onBeforeMount(async () => {
   const data = await getAllNonIonizingRadiation()
-  items.value.push(...data)    
+  items.value.push(...data)  
+  console.log('rni items', items.value[0])    
   for (const item in items.value) {
     coordinates.value = getCoordinates(items.value[item].localidad)
     items.value[item].localidad = getNameByCode("city", items.value[item].localidad)

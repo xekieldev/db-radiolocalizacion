@@ -34,10 +34,13 @@ onBeforeMount(async () => {
     const response = await getNonIonizingRadiation(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
     Object.assign(nirMeasurement, response)
-    nirMeasurement.localidad = getNameByCode("city", nirMeasurement.localidad)
-    nirMeasurement.provincia = getNameByCode("province", nirMeasurement.provincia)
+    
     const fileResponse = await getFile(nirMeasurement.file_id)
     Object.assign(file, fileResponse.file)
+    file.localidad = getNameByCode("city", file.localidad)
+    file.provincia = getNameByCode("province", file.provincia)
+    console.log("Display NIR", file)
+    
     Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
 })
@@ -59,31 +62,30 @@ onBeforeMount(async () => {
       />
       <prop-value
         class="prop"
+        label="Fecha y hora"
+        :value="nirMeasurement.fecha + ' ' + nirMeasurement.hora"
+      />
+      <prop-value
+        class="prop"
         label="Expediente"
         :value="file.expediente"
       />
       <prop-value
         class="prop"
         label="Área"
-        :value="nirMeasurement.area_asignada"
+        :value="file.area_asignada"
       />
     </display-row>
     <display-row> 
-      
-      <prop-value
-        class="prop"
-        label="Fecha y hora"
-        :value="nirMeasurement.fecha + ' ' + nirMeasurement.hora"
-      />
       <prop-value
         class="prop"
         label="Localidad"
-        :value="nirMeasurement.localidad"
+        :value="file.localidad"
       />
       <prop-value
         class="prop"
-        label="Área"
-        :value="nirMeasurement.provincia"
+        label="Provincia"
+        :value="file.provincia"
       />
       <prop-value
         class="prop"
