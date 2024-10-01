@@ -72,7 +72,7 @@ function print() {
         window.print()        
         printFlag.isActive = false
       }
-    }, 200) /
+    }, 200)
   })
 }
 
