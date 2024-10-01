@@ -50,7 +50,7 @@ onBeforeMount(async () => {
 </script>
 <template>
   <heading>
-    Mediciones de RNI
+    Mediciones de RNI (móviles)
   </heading>
 
   <div class="container">

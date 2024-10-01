@@ -153,7 +153,7 @@ watch(estado, async(newValue, oldValue) => {
       <tr
         v-for="item in items"
         :key="item"
-        v-bind:class="{ 'red-text': item.prioridad == 'Urgente'}"
+        v-bind:class="{ 'red-text': item.prioridad == 'Urgente' || item.tipo === 'Interferencias en Aeropuertos'}"
       >
         <td>
           <my-button

@@ -18,23 +18,21 @@ const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, pat
 const { currentRoute } = useRouter()
 const router = useRouter()
 const { getNameByCode } = useTerritory()
-
-
 const tipoTramite = ref()
 const currentLocation = ref()
-
+const file = reactive({})
+const nirMeasurement = reactive({})
+const items = ref([])
+const activities = ref([])
+const menu = ref(false)
 
 function editItem(file_id, id) {
   if (items.value.find(station => station.id === id).frecuencia != null || items.value.find(station => station.id === id).frecuencia != undefined) {
-    
     router.currentRoute.value.query.rloc = 'true'
     router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'true'} })
-
   } else {
-    
     router.currentRoute.value.query.rloc = 'false'
     router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'false'} })
-
   }
 }
 
@@ -43,20 +41,11 @@ async function deleteItem(file_id, id) {
   window.location.reload() 
 }
 
-const file = reactive({})
-const nirMeasurement = reactive({})
-const items = ref([])
-const activities = ref([])
-const menu = ref(false)
-
-
 onBeforeMount(async () => {
-  
     const response = await getFile(router.currentRoute.value.path.slice(6))
     Object.assign(file, response.file)
     currentLocation.value = response.currentArea
-    tipoTramite.value = file.tipo
-    
+    tipoTramite.value = file.tipo 
     file.localidad = getNameByCode('city', file.localidad)
     file.provincia = getNameByCode('province', file.provincia)
     const data = await stationsPerFile(file.id)
@@ -66,10 +55,8 @@ onBeforeMount(async () => {
       items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
     }
     const file_id = currentRoute.value.params.id
-    
     const activities_response = await getActivities(file_id)
     activities.value.push(...activities_response)
-    
     if (file.tipo == 'Medición de Radiaciones No Ionizantes (móviles)') {
       const nirResponse = await getNIRMeasurementInFile(file.id)
       Object.assign(nirMeasurement, nirResponse[0])
@@ -96,10 +83,8 @@ function goBack() {
 }
 
 function viewItem(file_id, id) {  
-  
   router.push(`/file/${file_id}/station/${id}`)
 }
-
 
 async function save(fields) {
   try {
@@ -120,9 +105,8 @@ const currentDate = new Date();
 
 const fullHours = currentDate.getHours() < 10 ? "0" + currentDate.getHours() : currentDate.getHours()
 const fullMinutes = currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : currentDate.getMinutes()
-const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
-const myTime = fullHours + ":" + fullMinutes + ":" + fullSeconds
-
+// const fullSeconds = currentDate.getSeconds() < 10 ? "0" + currentDate.getSeconds() : currentDate.getSeconds()
+const myTime = fullHours + ":" + fullMinutes //+ ":" + fullSeconds
 
 const fullMonth = (currentDate.getMonth()+1)<10 ? "0"+(currentDate.getMonth()+1) : (currentDate.getMonth()+1)
 const fullDay = currentDate.getDate()<10 ? "0"+currentDate.getDate() : currentDate.getDate()
@@ -133,11 +117,8 @@ async function patch_file(fields) {
     const file_id = currentRoute.value.params.id
     fields.fecha = myDate
     fields.hora = myTime
-
     await patchFile (file_id, fields)
     router.push({name: "list", query: { includeDeleted: 'false', fileStatus: 'Pendiente'}})
-
-
   } catch (error) {
     console.error(error)
   }
@@ -145,8 +126,8 @@ async function patch_file(fields) {
 
 function openMenu() {
   menu.value = !menu.value
-
 }
+
 function closeDiv() {
   menu.value = false
 }
@@ -236,7 +217,7 @@ function closeDiv() {
         :value="file.area_asignada"
       />
       <prop-value
-        class="prop double"
+        class="prop"
         label="Prioridad"
         :value="file.prioridad"
       />
@@ -268,13 +249,9 @@ function closeDiv() {
           :value="file.frecuencia + ' ' + file.unidad" 
         />
       </div>
-      
-    </display-row>
-    <display-row>
-      
     </display-row>
     <display-row 
-      v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)'"
+      v-if="tipoTramite !== 'Medición de Radiaciones No Ionizantes (móviles)' && tipoTramite !== 'Interferencias en Aeropuertos'"
     >
       <prop-value
         class="prop double"
@@ -327,7 +304,7 @@ function closeDiv() {
 
     </display-row>
     <display-row
-      v-if="!(tipoTramite == 'Medición de Radiaciones No Ionizantes (móviles)' || tipoTramite == 'Descargo')"
+      v-if="!(tipoTramite == 'Medición de Radiaciones No Ionizantes (móviles)' || tipoTramite == 'Descargo' || tipoTramite == 'Interferencias en Aeropuertos')"
     >
       <prop-value
         class="prop double"

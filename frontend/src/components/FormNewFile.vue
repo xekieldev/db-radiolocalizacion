@@ -154,7 +154,7 @@ function getFileTypeOptions(user_area) {
         outer-class="short-field"
       />
     </form-row>
-    <form-row>
+    <form-row v-if="file.tipo != 'Interferencias en Aeropuertos'">
         <form-kit
           v-model="province"
           :options="provinces"
@@ -195,6 +195,14 @@ function getFileTypeOptions(user_area) {
           type="text"
           label="Nota/Expediente de Inicio"
           name="nota_inicio"
+        />
+        <form-kit
+          v-model="file.area_asignada"
+          type="select"
+          label="CCTE/Área asignada"
+          name="area_asignada"
+          :options="area"
+          placeholder="Área"
         />
       </form-row>
       <form-row v-if="file.tipo && !(file.tipo == 'Descargo' || file.tipo == 'Interferencias en Aeropuertos') ">
