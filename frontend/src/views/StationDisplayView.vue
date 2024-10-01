@@ -27,7 +27,6 @@ const redirectToCreate = () => {
     router.push({ name: 'createStation', params: { id: file_id }, query: { rloc: 'true', from: currentPath.value } })
   } else {
     router.push({ name: 'createLocStation', params: { id: file_id }, query: { rloc: 'false', from: currentPath.value } })
-
   }
 }
 
@@ -39,31 +38,25 @@ function editItem(file_id, id) {
   if (station.frecuencia != null || station.frecuencia != undefined) {
     router.currentRoute.value.query.rloc = 'true'
     router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'true'} })
-
   } else {
     router.currentRoute.value.query.rloc = 'false'
     router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'false'} })
-
   }
 }
+
 function goBack() {  
   router.back()
-
 }
 
 const file = reactive({})
 const station = reactive({})
 const technicians = reactive({})
 const techniciansValues = reactive({})
-// const printFlag = reactive({isActive: false})
 
 onBeforeMount(async () => {
-  
     const response = await getStation(currentRoute.value.params.id)
     Object.assign(station, response.station)
-    const techResponse = await getAllTechnicians()
     Object.assign(technicians, response.technicians)
-    Object.assign(techniciansValues, techResponse)
     station.provincia = getNameByCode("province", response.station.provincia)
     station.localidad = getNameByCode("city", response.station.localidad) 
     const file_response = await getFile(station.file_id)
@@ -73,19 +66,17 @@ onBeforeMount(async () => {
 function print() {
   printFlag.isActive = true
   nextTick(() => {
-    // Usa un bucle para verificar el estado del DOM hasta que esté listo
     const checkDomReady = setInterval(() => {
       if (document.querySelector('.print-header')) {
         clearInterval(checkDomReady)
         window.print()        
         printFlag.isActive = false
       }
-    }, 200) // Verificar cada 100 ms
+    }, 200) /
   })
 }
 
 function viewRelatedStation(file_id, id) {
-  // router.push(`/station/${item}`)
   router.push({ name: 'station', params: { file_id: file_id, id: id }})
 }
 
@@ -93,13 +84,10 @@ watch(
   () => route.params.id,
   async newId => {
     const response = await getStation(newId)
-    // Object.assign(file, response.file)
     Object.assign(station, response.station)
     Object.assign(technicians, response.technicians)
     station.provincia = getNameByCode("province", response.station.provincia)
-    station.localidad = getNameByCode("city", response.station.localidad)
-
-    
+    station.localidad = getNameByCode("city", response.station.localidad)  
   }
 )
 

@@ -1,8 +1,9 @@
 from flask import Blueprint
 from flask import request
 from flask import url_for
-from src.db import db, NonIonizingRadiation, ma, User, CaseFile
-from sqlalchemy import exc
+from src.db import db, NonIonizingRadiation, ma, User, CaseFile, technician_nir, Technician
+from src.technician import technicians_schema
+from sqlalchemy import exc, insert
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify
 
@@ -20,8 +21,6 @@ non_ionizing_radiations_schema = NonIonizingRadiationSchema( many = True )
 @bp.route('/file/<id>/non_ionizing_radiation', methods=["POST"])
 @jwt_required()
 def non_ionizing_radiation(id):
-    # import pdb; pdb.set_trace()
-
     try:
         file_id = id
         fecha = request.json.get('fecha')
@@ -32,9 +31,23 @@ def non_ionizing_radiation(id):
         id_technician1 = request.json.get('id_technician1')
         id_technician2 = request.json.get('id_technician2')
         non_ionizing_radiation = NonIonizingRadiation(file_id = file_id, fecha = fecha, hora = hora, cantidad = cantidad, valor_maximo = valor_maximo, observaciones = observaciones, id_technician1 = id_technician1, id_technician2 = id_technician2)
+
         r = db.session.add(non_ionizing_radiation)
         db.session.commit()
-        response = {"id": non_ionizing_radiation.id }
+        stmt1 = (
+        insert(technician_nir).
+        values(id_nir = non_ionizing_radiation.id, id_technician = request.json.get('id_technician1'))
+        )
+        stmt2 = (
+        insert(technician_nir).
+        values(id_nir = non_ionizing_radiation.id, id_technician = request.json.get('id_technician2'))
+        )
+        session = db.session
+        session.execute(stmt1)
+        session.execute(stmt2)
+        session.commit()
+
+        response = {"id_nir": non_ionizing_radiation.id }
         return response, 201 
     except exc.SQLAlchemyError:
         response = { "message": "database error" }
@@ -49,7 +62,10 @@ def non_ionizing_radiation(id):
 def get_non_ionizing_radiations(id): 
     try:
         non_ionizing_radiation = NonIonizingRadiation.query.get(id)
-        return non_ionizing_radiation_schema.dump(non_ionizing_radiation)
+        technicians = (db.session.query(Technician).join(technician_nir).filter(technician_nir.c.id_nir==id))
+        return {"nir": non_ionizing_radiation_schema.dump(non_ionizing_radiation),
+                "technicians": technicians_schema.dump(technicians)}
+                
     except:
         response = {"message": "input error"}
         return response, 400
@@ -61,17 +77,11 @@ def get_all_non_ionizing_radiations():
     try:
         usuario_id = get_jwt_identity()      
         checkUser= User.query.filter_by(id = usuario_id).first()
-        all_non_ionizing_radiations = db.session.query(NonIonizingRadiation, CaseFile.fecha, CaseFile.hora, CaseFile.localidad, CaseFile.provincia, CaseFile.expediente, CaseFile.area_asignada).join(CaseFile, NonIonizingRadiation.file_id == CaseFile.id).all()
-        # import pdb; pdb.set_trace()
-        
+        if checkUser.area != 'AGCCTYL':
+            all_non_ionizing_radiations = db.session.query(NonIonizingRadiation, CaseFile.fecha, CaseFile.hora, CaseFile.localidad, CaseFile.provincia, CaseFile.expediente, CaseFile.area_asignada).join(CaseFile, NonIonizingRadiation.file_id == CaseFile.id).filter_by(area_asignada = checkUser.area).all()
+        else:
+            all_non_ionizing_radiations = db.session.query(NonIonizingRadiation, CaseFile.fecha, CaseFile.hora, CaseFile.localidad, CaseFile.provincia, CaseFile.expediente, CaseFile.area_asignada).join(CaseFile, NonIonizingRadiation.file_id == CaseFile.id).all()
         return jsonify([{ **{col.name: getattr(row.NonIonizingRadiation, col.name) for col in NonIonizingRadiation.__table__.columns}, "fecha": row.fecha, "hora": row.hora,"expediente": row.expediente, "area_asignada": row.area_asignada, "localidad": row.localidad, "provincia": row.provincia } for row in all_non_ionizing_radiations])
-
-        # all_non_ionizing_radiations = db.session.query(NonIonizingRadiation).join(CaseFile)
-        # if checkUser.area != 'AGCCTYL':
-        #     all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada = checkUser.area).all()
-        # else:
-        #     all_non_ionizing_radiations = NonIonizingRadiation.query.all()
-        # return non_ionizing_radiations_schema.dump(all_non_ionizing_radiations)
     except:
         response = {"message": "server error"}
         return response, 500
