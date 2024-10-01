@@ -15,14 +15,11 @@ const { currentRoute } = useRouter()
 const router = useRouter()
 const route = useRoute()
 const { getNameByCode } = useTerritory()
-
-
 const currentPath = ref('')
 
 
 function goBack() {  
   router.back()
-
 }
 
 const nirMeasurement = reactive({})
@@ -33,26 +30,20 @@ const file = reactive({})
 onBeforeMount(async () => {
     const response = await getNonIonizingRadiation(currentRoute.value.params.id)
     const techResponse = await getAllTechnicians()
-    Object.assign(nirMeasurement, response)
-    
+    Object.assign(nirMeasurement, response.nir)
     const fileResponse = await getFile(nirMeasurement.file_id)
     Object.assign(file, fileResponse.file)
     file.localidad = getNameByCode("city", file.localidad)
-    file.provincia = getNameByCode("province", file.provincia)
-    console.log("Display NIR", file)
-    
+    file.provincia = getNameByCode("province", file.provincia)    
     Object.assign(technicians, response.technicians)
     Object.assign(techniciansValues, techResponse)
 })
-
-
 
 </script>
 <template>
   <heading>
     Mediciones de RNI (móviles)
   </heading>
-
   <div class="container">
     <display-row> 
       <prop-value
@@ -97,7 +88,15 @@ onBeforeMount(async () => {
         label="Valor máximo [%]"
         :value="nirMeasurement.valor_maximo"
       />
-     
+    <display-row>
+      <prop-value
+        v-for="value, index in technicians"
+        :key="value"
+        class="prop technicians"
+        label="Técnico"
+        :value=" technicians[index].apellido + ', ' + technicians[index].nombre"
+      />
+    </display-row>
     </display-row>
     <br>
     <div class="color-code">
@@ -132,16 +131,6 @@ onBeforeMount(async () => {
         <p class="box-text">P > 100</p>
       </div>
     </div>
-    
-    <display-row>
-      <prop-value
-        v-for="value, index in technicians"
-        :key="value"
-        class="prop technicians"
-        label="Técnico"
-        :value=" technicians[index].apellido + ', ' + technicians[index].nombre"
-      />
-    </display-row>
   </div>
   
 </template>
