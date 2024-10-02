@@ -8,6 +8,22 @@ import FooterMain from '../components/FooterMain.vue';
     <heading>Base de Datos de Radiolocalizaciones y Mediciones Técnicas Externas</heading>
     <div class="about-text">
       <h3 class="version-titles">
+        Versión: 3.0
+      </h3><br>
+      <h4 class="version-titles">
+        En esta versión:
+      </h4>
+      <ul class="items-version">
+        <li>Gestión de expedientes, alta, pase entre Áreas y borrado</li>
+        <li>Campos selectivos para alta de expedientes</li>
+        <li>Seguimiento de expedientes en los CCTE</li>
+        <li>Visualización de lugares de medición Radiaciones No Ionizantes móviles</li>
+        <li>Autenticación con roles para cada CCTE (Coordinador y Técnico)</li>
+        <li>Carga de actividades para cada expedientes</li>
+        <li>Fácil identificación de expedientes prioritarios</li>
+        <li>Y más!</li>
+      </ul><br>
+      <h3 class="version-titles">
         Versión: 2.0
       </h3><br>
       <h4 class="version-titles">
@@ -55,7 +71,7 @@ import FooterMain from '../components/FooterMain.vue';
 <style scoped>
 .about {
   text-align: center;
-  width: 900px;
+  width: 100%;
 }
 
 .version-titles {
