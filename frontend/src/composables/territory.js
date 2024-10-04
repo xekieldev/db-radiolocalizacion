@@ -1,6 +1,8 @@
 import { ref } from 'vue'
-import provincesDataRaw from "../../../data/provincias.json"
-import citiesDataRaw from "../../../data/localidades.json"
+// import provincesDataRaw from "../../../data/provincias.json"
+// import citiesDataRaw from "../../../data/localidades.json"
+import provincesDataRaw from "../../data/provincias.json"
+import citiesDataRaw from "../../data/localidades.json"
 
 const provincesData = provincesDataRaw.provincias
 const citiesData = citiesDataRaw.localidades

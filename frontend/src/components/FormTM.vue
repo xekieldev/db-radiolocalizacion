@@ -5,7 +5,8 @@ import { useTerritory } from '../composables/territory';
 import { ref, watch } from 'vue';
 import Heading from './Heading.vue';
 
-import citiesDataRaw from "../../../data/localidades.json"
+// import citiesDataRaw from "../../../data/localidades.json"
+import citiesDataRaw from "../../data/localidades.json"
 
 const citiesData = citiesDataRaw.localidades
 
