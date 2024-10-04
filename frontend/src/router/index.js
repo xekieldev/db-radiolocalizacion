@@ -189,5 +189,12 @@ const router = createRouter({
     },  
   ]
 })
-
+// router.beforeEach((to, from, next) => {
+//   if(to.name === 'stations') {
+//     next({name: 'login'})
+//   }
+//   else {
+//     next()
+//   }
+// });
 export default router
