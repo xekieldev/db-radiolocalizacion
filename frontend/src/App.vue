@@ -21,7 +21,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <div v-bind:class="['wrapper', { 'wrapper-to-print': printFlag.isActive}]">
+  <div :class="['wrapper', { 'wrapper-to-print': printFlag.isActive}]">
     <bar-menu />
     <RouterView />
   </div>

@@ -83,7 +83,6 @@ watch(province, (newValue, oldValue) => {
         label="CCTE/Área"
         name="area" 
       />
-
     </form-row>
     <form-row>
       <form-kit

@@ -19,7 +19,6 @@ onBeforeMount( () => {
         longitude.value = position.coords.longitude
         zoom.value = 10
         console.log("Coordenadas de mi ubicación: ",latitude.value, longitude.value)
-
       },
       error => {
          console.log(error.message);

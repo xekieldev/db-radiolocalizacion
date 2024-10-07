@@ -19,7 +19,7 @@ function createItem() {
 
 const items = ref([])
 const status = ref({})
-const searchText = ref('')
+const textToSearch = ref('')
 
 onBeforeMount(async () => {
   const data = await getAllTechnicians()
@@ -40,9 +40,9 @@ async function del(id) {
   }  
 }
 
-async function searchTechnician(searchText) {
+async function searchTechnician(textToSearch) {
   const data = await getAllTechnicians()    
-  items.value = search(data, searchText, ['apellido','nombre', 'area'])    
+  items.value = search(data, textToSearch, ['apellido','nombre', 'area'])    
 }
 
 </script>
@@ -50,8 +50,8 @@ async function searchTechnician(searchText) {
   <heading>Gestión de Técnicos</heading>
   <div class="technicians-menu">
     <form-search 
-      :searchText = "searchText"
-      placeholder = "Buscar Técnicos"
+      :text-to-search="textToSearch"
+      placeholder="Buscar Técnicos"
       @on-submit="searchTechnician"
     />
     <div>
@@ -61,7 +61,6 @@ async function searchTechnician(searchText) {
         @on-tap="createItem"
       />
     </div>
-    
   </div>
   <div class="technicians-list-container"> 
     <table class="technicians-table">
@@ -97,10 +96,10 @@ async function searchTechnician(searchText) {
       </tr>
     </table>
     <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
+      <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
   </div>
-  <footer-main class="footer-main"/>
+  <footer-main class="footer-main" />
 </template>
 
 <style scoped>

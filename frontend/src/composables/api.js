@@ -166,7 +166,7 @@ export function useApi() {
         return response && response.data
     }
 
-    async function delete_tech_measurement(id, id_tech_measurement) {
+    async function delete_tech_measurement(file_id, id, id_tech_measurement) {
         loading.value = true
         const response = await axiosInstance.delete(`/file/${file_id}/station/${id}/delete_tech_measurement/${id_tech_measurement}`)
         loading.value = false

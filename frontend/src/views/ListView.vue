@@ -1,6 +1,5 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { useSession } from '../composables/session'
 import { onBeforeMount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue'
@@ -8,7 +7,7 @@ import MyButton from '../components/MyButton.vue'
 import FormSearch from '../components/FormSearch.vue'
 import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
-import { loggedIn, usuario, userData, perfil } from '../composables/loginstatus'
+import { userData, perfil } from '../composables/loginstatus'
 
 
 
@@ -18,15 +17,12 @@ const router = useRouter()
 
 const items = ref([])
 const newItems = ref([])
-const searchText = ref('')
+const textToSearch = ref('')
 const estado = ref('Pendiente')
 const user_area = ref('')
 const confirm_delete = ref({})
 
-
 user_area.value = userData.value.area
-
-console.log('user_area', user_area)
 
 function viewItem(item) {  
   router.push(`/file/${item}`)
@@ -42,7 +38,6 @@ function editItem(id) {
 
 async function deleteItem(id) {  
   const response = await deleteFile(id)
-  console.log(response)
   if(response && response.status === 200){
     confirm_delete.value[id] = 0
     items.value=[]
@@ -66,20 +61,20 @@ onBeforeMount(async () => {
   }  
 })
 
-async function searchFiles(searchText) {
+async function searchFiles(textToSearch) {
   if(estado.value != 'Todos') {
     const data = await list(false, estado.value)
-    items.value = search(data, searchText, ['area_asignada','tipo','fecha','expediente', 'area_actual'])
+    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','expediente', 'area_actual'])
   } else {
       const data = await list(false, null)
-      items.value = search(data, searchText, ['area_asignada','expediente', 'area_actual'])
+      items.value = search(data, textToSearch, ['area_asignada','expediente', 'area_actual'])
   }
   
 }
 
 watch(estado, async(newValue, oldValue) => {
   if (newValue !== oldValue) {
-    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined && estado != 'Todos') {
+    if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined && estado.value != 'Todos') {
       const data = await list(false, newValue)
       items.value = ([])
       items.value.push(...data)
@@ -107,8 +102,8 @@ watch(estado, async(newValue, oldValue) => {
   <heading>Gestión de Expedientes</heading>
   <div class="files-menu">
     <form-search 
-      :searchText = "searchText"
-      placeholder = "Buscar Expedientes"
+      :text-to-search="textToSearch"
+      placeholder="Buscar Expedientes"
       @on-submit="searchFiles"
     />
     <div class="list-sub-actions">
@@ -120,19 +115,19 @@ watch(estado, async(newValue, oldValue) => {
         @on-tap="newFile"
       />
       <form-kit
-          v-model="estado"
-          type="select"
-          :value="estado"
-          name="estado" 
-          :options="[
-            'Pendiente',
-            'Informado',
-            'Finalizado',
-            'Todos',
-          ]"
-          outer-class="short-field"
-          style="height: 35px; padding: 8px 30px 8px 10px;"
-        />
+        v-model="estado"
+        type="select"
+        :value="estado"
+        name="estado" 
+        :options="[
+          'Pendiente',
+          'Informado',
+          'Finalizado',
+          'Todos',
+        ]"
+        outer-class="short-field"
+        style="height: 35px; padding: 8px 30px 8px 10px;"
+      />
     </div>
   </div>
   <div class="list-container">
@@ -148,12 +143,17 @@ watch(estado, async(newValue, oldValue) => {
         </th>
         <th>Ubicación actual</th>
         <th>Estado</th>
-        <th v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'" class="action-column">Acciones</th>
+        <th
+          v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"
+          class="action-column"
+        >
+          Acciones
+        </th>
       </tr>
       <tr
         v-for="item in items"
         :key="item"
-        v-bind:class="{ 'red-text': item.prioridad == 'Urgente' || item.tipo === 'Interferencias en Aeropuertos'}"
+        :class="{ 'red-text': item.prioridad == 'Urgente' || item.tipo === 'Interferencias en Aeropuertos'}"
       >
         <td>
           <my-button
@@ -195,10 +195,10 @@ watch(estado, async(newValue, oldValue) => {
       </tr>      
     </table>
     <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
+      <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
   </div>
-  <footer-main class="footer-main"/>
+  <footer-main class="footer-main" />
 </template>
 
 <style scoped>

@@ -10,13 +10,15 @@ import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
 import { printFlag } from '../composables/printflag'
 
-const { getStation, getAllTechnicians, getFile } = useApi()
+const { getStation, getFile } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
 const route = useRoute()
 const { getNameByCode } = useTerritory()
 
-
+const file = reactive({})
+const station = reactive({})
+const technicians = reactive({})
 const currentPath = ref('')
 
 const redirectToCreate = () => {
@@ -47,11 +49,6 @@ function editItem(file_id, id) {
 function goBack() {  
   router.back()
 }
-
-const file = reactive({})
-const station = reactive({})
-const technicians = reactive({})
-const techniciansValues = reactive({})
 
 onBeforeMount(async () => {
     const response = await getStation(currentRoute.value.params.id)

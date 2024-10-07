@@ -4,18 +4,11 @@ import MyButton from '../components/MyButton.vue';
 import { useRouter } from 'vue-router'
 import FooterMain from '../components/FooterMain.vue'
 import { ref } from 'vue';
-import { useSession } from '../composables/session'
 import { perfil } from '../composables/loginstatus'
 
-
-
-// const { userData } = useSession()
 const router = useRouter()
 const filesMenu = ref(false)
 const stationsMenu = ref(false)
-
-const emits = defineEmits(['update: stationsMenu']);
-
 
 function closeDiv() {
   filesMenu.value = false
@@ -56,67 +49,83 @@ function nirMeasurements() {
 
 <template>
   <div class="home-container">
-  <heading class="home-title">
-    Base de Datos del Sistema Nacional de Comprobación Técnica de Emisiones
-  </heading>
-  <div class="home-buttons">
-    <div class="first-row">
-      <my-button
-        tabindex="0"
-        class="septenary button file-manage"
-        label="Gestión de Expedientes"
-        @on-tap="fileOptions"
-      />
-      <div class="file-options" v-if="filesMenu == true">
-        <button class="close-button" @click="closeDiv">x</button>
+    <heading class="home-title">
+      Base de Datos del Sistema Nacional de Comprobación Técnica de Emisiones
+    </heading>
+    <div class="home-buttons">
+      <div class="first-row">
         <my-button
           tabindex="0"
-          class="quaternary sub-menu-button stations-list"
-          label="Listado de Expedientes"
-          @on-tap="list"
+          class="septenary button file-manage"
+          label="Gestión de Expedientes"
+          @on-tap="fileOptions"
+        />
+        <div
+          v-if="filesMenu == true"
+          class="file-options"
+        >
+          <button
+            class="close-button"
+            @click="closeDiv"
+          >
+            x
+          </button>
+          <my-button
+            tabindex="0"
+            class="quaternary sub-menu-button stations-list"
+            label="Listado de Expedientes"
+            @on-tap="list"
+          />
+          <my-button
+            v-if="perfil == 'coordinator'"
+            tabindex="0"
+            class="quaternary sub-menu-button new-file"
+            label="Alta Expediente"
+            @on-tap="newFile"
+          />
+        </div>
+        <my-button
+          tabindex="0"
+          class="septenary button station-manage"
+          label="Gestión de Estaciones"
+          @on-tap="stationsOptions"
+        />
+        <div
+          v-if="stationsMenu == true"
+          class="stations-options"
+        >
+          <button
+            class="close-button"
+            @click="closeDiv"
+          >
+            x
+          </button>
+          <my-button
+            tabindex="0"
+            class="quaternary sub-menu-button stations-list"
+            label="Listado de Estaciones"
+            @on-tap="stationList"
+          />
+        </div>
+      </div>
+      <div class="second-row">
+        <my-button
+          tabindex="0"
+          class="septenary button nir-measurements"
+          label="Mediciones de RNI móvil"
+          @on-tap="nirMeasurements"
         />
         <my-button
           v-if="perfil == 'coordinator'"
           tabindex="0"
-          class="quaternary sub-menu-button new-file"
-          label="Alta Expediente"
-          @on-tap="newFile"
-        />
-      </div>
-      <my-button
-        tabindex="0"
-        class="septenary button station-manage"
-        label="Gestión de Estaciones"
-        @on-tap="stationsOptions"
-      />
-      <div class="stations-options" v-if="stationsMenu == true">
-        <button class="close-button" @click="closeDiv">x</button>
-        <my-button
-          tabindex="0"
-          class="quaternary sub-menu-button stations-list"
-          label="Listado de Estaciones"
-          @on-tap="stationList"
-        />
+          class="septenary button technician-manage"
+          label="Agregar/Eliminar Técnicos"
+          @on-tap="listTechnicians"
+        /> 
       </div>
     </div>
-    <div class="second-row">
-      <my-button
-        tabindex="0"
-        class="septenary button nir-measurements"
-        label="Mediciones de RNI móvil"
-        @on-tap="nirMeasurements"
-      />
-      <my-button
-        v-if="perfil == 'coordinator'"
-        tabindex="0"
-        class="septenary button technician-manage"
-        label="Agregar/Eliminar Técnicos"
-        @on-tap="listTechnicians"
-      /> 
-    </div>
+    <footer-main class="footer-main" />
   </div>
-  <footer-main class="footer-main"/>
-</div>
 </template>
 
 <style scoped>

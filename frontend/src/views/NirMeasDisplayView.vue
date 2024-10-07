@@ -1,26 +1,16 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { onBeforeMount, reactive, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { onBeforeMount, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTerritory } from '../composables/territory'
-import Mapa from '../components/MapMain.vue'
 import DisplayRow from '../components/DisplayRow.vue'
 import PropValue from '../components/PropValue.vue'
 import Heading from '../components/Heading.vue'
-import MyButton from '../components/MyButton.vue'
 
 
 const { getNonIonizingRadiation, getAllTechnicians, getFile } = useApi()
 const { currentRoute } = useRouter()
-const router = useRouter()
-const route = useRoute()
 const { getNameByCode } = useTerritory()
-const currentPath = ref('')
-
-
-function goBack() {  
-  router.back()
-}
 
 const nirMeasurement = reactive({})
 const technicians = reactive({})
@@ -88,51 +78,70 @@ onBeforeMount(async () => {
         label="Valor máximo [%]"
         :value="nirMeasurement.valor_maximo"
       />
-    <display-row>
-      <prop-value
-        v-for="value, index in technicians"
-        :key="value"
-        class="prop technicians"
-        label="Técnico"
-        :value=" technicians[index].apellido + ', ' + technicians[index].nombre"
-      />
-    </display-row>
+      <display-row>
+        <prop-value
+          v-for="value, index in technicians"
+          :key="value"
+          class="prop technicians"
+          label="Técnico"
+          :value=" technicians[index].apellido + ', ' + technicians[index].nombre"
+        />
+      </display-row>
     </display-row>
     <br>
     <div class="color-code">
-      <div v-bind:class="['box-attributes', 'maya-blue', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) <= 1 }]" >
-        <p class="box-text">P &le; 1</p>
+      <div :class="['box-attributes', 'maya-blue', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) <= 1 }]">
+        <p class="box-text">
+          P &le; 1
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'dodger-blue', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 1 && parseFloat(nirMeasurement.valor_maximo) <= 2 }]">
-        <p class="box-text">1 &lt; P &le; 2</p>
+      <div :class="['box-attributes', 'dodger-blue', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 1 && parseFloat(nirMeasurement.valor_maximo) <= 2 }]">
+        <p class="box-text">
+          1 &lt; P &le; 2
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'cerulen-blue', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 2 && parseFloat(nirMeasurement.valor_maximo) <= 4 }]">
-        <p class="box-text">2 &lt; P &le; 4</p>
+      <div :class="['box-attributes', 'cerulen-blue', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 2 && parseFloat(nirMeasurement.valor_maximo) <= 4 }]">
+        <p class="box-text">
+          2 &lt; P &le; 4
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'light-green', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 4 && parseFloat(nirMeasurement.valor_maximo) <= 8 }]">
-        <p class="box-text">4 &lt; P &le; 8</p>        
+      <div :class="['box-attributes', 'light-green', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 4 && parseFloat(nirMeasurement.valor_maximo) <= 8 }]">
+        <p class="box-text">
+          4 &lt; P &le; 8
+        </p>        
       </div>
-      <div v-bind:class="['box-attributes', 'lime-green', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 8 && parseFloat(nirMeasurement.valor_maximo) <= 15 }]">
-        <p class="box-text">8 &lt; P &le; 15</p>
+      <div :class="['box-attributes', 'lime-green', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 8 && parseFloat(nirMeasurement.valor_maximo) <= 15 }]">
+        <p class="box-text">
+          8 &lt; P &le; 15
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'green', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 15 && parseFloat(nirMeasurement.valor_maximo) <= 20 }]">
-        <p class="box-text">15 &lt; P &le; 20</p>
+      <div :class="['box-attributes', 'green', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 15 && parseFloat(nirMeasurement.valor_maximo) <= 20 }]">
+        <p class="box-text">
+          15 &lt; P &le; 20
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'golden-yellow', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 20 && parseFloat(nirMeasurement.valor_maximo) <= 35 }]">
-        <p class="box-text">20 &lt; P &le; 35</p>
+      <div :class="['box-attributes', 'golden-yellow', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 20 && parseFloat(nirMeasurement.valor_maximo) <= 35 }]">
+        <p class="box-text">
+          20 &lt; P &le; 35
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'orange', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 35 && parseFloat(nirMeasurement.valor_maximo) <= 50 }]">
-        <p class="box-text">35 &lt; P &le; 50</p>
+      <div :class="['box-attributes', 'orange', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 35 && parseFloat(nirMeasurement.valor_maximo) <= 50 }]">
+        <p class="box-text">
+          35 &lt; P &le; 50
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'orange-red', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 50 && parseFloat(nirMeasurement.valor_maximo) <= 100 }]">
-        <p class="box-text">50 &lt; P &le; 100</p>
+      <div :class="['box-attributes', 'orange-red', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 50 && parseFloat(nirMeasurement.valor_maximo) <= 100 }]">
+        <p class="box-text">
+          50 &lt; P &le; 100
+        </p>
       </div>
-      <div v-bind:class="['box-attributes', 'red', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 100 }]" >
-        <p class="box-text">P > 100</p>
+      <div :class="['box-attributes', 'red', { 'marked-border': parseFloat(nirMeasurement.valor_maximo) > 100 }]">
+        <p class="box-text">
+          P > 100
+        </p>
       </div>
     </div>
   </div>
-  
 </template>
 
 <style scoped>

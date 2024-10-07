@@ -1,7 +1,7 @@
 <script setup>
 import { useApi } from '../composables/api'
 import { useTerritory } from '../composables/territory'
-import { onBeforeMount, reactive, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue'
 import MyButton from '../components/MyButton.vue'
@@ -10,25 +10,19 @@ import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
 
 
-const { getAllNonIonizingRadiation, delete_nir_measurement, loading, getFile } = useApi()
+const { getAllNonIonizingRadiation, loading } = useApi()
 const { getNameByCode, getCoordinates } = useTerritory()
 const router = useRouter()
 const { search } = useSearch()
 
-function createItem() {  
-  router.push('/non_ionizing_radiation/create')
-}
-
 const items = ref([])
-const status = ref({})
 const coordinates = ref({})
-const searchText = ref('')
+const textoToSearch = ref('')
 
 
 onBeforeMount(async () => {
   const data = await getAllNonIonizingRadiation()
   items.value.push(...data)  
-  console.log('rni items', items.value[0])    
   for (const item in items.value) {
     coordinates.value = getCoordinates(items.value[item].localidad)
     items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
@@ -36,29 +30,15 @@ onBeforeMount(async () => {
   }
 })  
 
-async function searchNIRMeasurement(searchText) {
+async function searchNIRMeasurement(textoToSearch) {
   const data = await getAllNonIonizingRadiation()
-  items.value = search(data, searchText, ['localidad', 'provincia'])  
+  items.value = search(data, textoToSearch, ['localidad', 'provincia'])  
 }
 
 function viewItem(file_id, item) {  
   router.push(`/file/${file_id}/non_ionizing_radiation/${item}`)
 }
 
-const confirmar = (id) => {
-  status.value[id] = status.value[id] === 1 ? 0 : 1
-}
-
-async function del(id) {
-  try { 
-    await delete_nir_measurement(id)
-    status.value[id] = 0
-    window.location.reload()
-  } catch (error) {
-    console.error(error)
-  }  
-}
-  
 function viewNirMap() {  
   router.push(`/nir_map`)
 }
@@ -66,50 +46,50 @@ function viewNirMap() {
 </script>
 <template>
   <heading>Listado de Mediciones de Radiaciones No Ionizantes</heading>
-    <div class="nir-menu">
-      <form-search 
-        :searchText = "searchText"
-        placeholder = "Buscar mediciones de RNI"
-        @on-submit="searchNIRMeasurement"
+  <div class="nir-menu">
+    <form-search 
+      :text-to-search="textoToSearch"
+      placeholder="Buscar mediciones de RNI"
+      @on-submit="searchNIRMeasurement"
+    />
+    <div class="right-section">
+      <my-button
+        class="secondary right view-map-button"
+        label="Ver Mapa"
+        @on-tap="viewNirMap"
       />
-      <div class="right-section">
-        <my-button
-          class="secondary right view-map-button"
-          label="Ver Mapa"
-          @on-tap="viewNirMap"
-        />
-      </div> 
-    </div>
-    <div class="nir-measurements-container">
-      <table class="nir-table">
-        <tr>
-          <th>id</th>
-          <!-- <th>id Expediente</th> -->
-          <th>Localidad</th>
-          <th>Provincia</th>
-          <th>Área/CCTE</th>
-          <th>Cantidad de Mediciones</th>
-          <th>Valor Máximo [%]</th>
-          <!-- <th>Acciones</th> -->
-        </tr>
-        <tr
-          v-for="item in items"
-          :key="item"
-        >
-          <td>
-            <my-button
-              class="primary center"
-              :label="(item.id.toString())"
-              @on-tap="() => viewItem(item.file_id, item.id)"
-            />
-          </td> 
-          <!-- <td class="file-field">{{ item.file_id }}</td>  -->
-          <td>{{ item.localidad }}</td> 
-          <td>{{ item.provincia }}</td>
-          <td>{{ item.area_asignada }}</td>
-          <td>{{ item.cantidad }}</td>
-          <td>{{ item.valor_maximo }}</td>
-          <!-- <td>
+    </div> 
+  </div>
+  <div class="nir-measurements-container">
+    <table class="nir-table">
+      <tr>
+        <th>id</th>
+        <!-- <th>id Expediente</th> -->
+        <th>Localidad</th>
+        <th>Provincia</th>
+        <th>Área/CCTE</th>
+        <th>Cantidad de Mediciones</th>
+        <th>Valor Máximo [%]</th>
+        <!-- <th>Acciones</th> -->
+      </tr>
+      <tr
+        v-for="item in items"
+        :key="item"
+      >
+        <td>
+          <my-button
+            class="primary center"
+            :label="(item.id.toString())"
+            @on-tap="() => viewItem(item.file_id, item.id)"
+          />
+        </td> 
+        <!-- <td class="file-field">{{ item.file_id }}</td>  -->
+        <td>{{ item.localidad }}</td> 
+        <td>{{ item.provincia }}</td>
+        <td>{{ item.area_asignada }}</td>
+        <td>{{ item.cantidad }}</td>
+        <td>{{ item.valor_maximo }}</td>
+        <!-- <td>
             <my-button
               v-if="status[item.id]!=1"
               class="primary center"
@@ -123,13 +103,13 @@ function viewNirMap() {
               @on-tap="del(item.id)"
             />
           </td> -->
-        </tr>  
-      </table>
-    </div>
-    <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
-    </div>
-  <footer-main class="footer-main"/>
+      </tr>  
+    </table>
+  </div>
+  <div class="status">
+    <span><strong>Loading:</strong> {{ loading }}</span>
+  </div>
+  <footer-main class="footer-main" />
 </template>
 
 <style scoped>

@@ -16,7 +16,7 @@ function submitHandler(fields) {
   emits('onSubmit', fields)
 }
 
-const props = defineProps({
+defineProps({
   context: String,
   fileNumber: String,
   location: String,
@@ -32,9 +32,9 @@ function getAreasOptions(user_area) {
 
 <template>
   <form-kit
-  type="form"
-  :actions="false"
-  @submit="submitHandler"
+    type="form"
+    :actions="false"
+    @submit="submitHandler"
   >
     <div class="form-actions-file-container">
       <form-row>
@@ -61,8 +61,6 @@ function getAreasOptions(user_area) {
           name="area_destino"
           placeholder="Área"
           outer-class="field-area"
-          
-
         />  
         <form-kit
           v-if="fileNumber == 'A definir'"
@@ -83,9 +81,7 @@ function getAreasOptions(user_area) {
           Asignar
         </button>
       </form-row>
-      
     </div>
-      
   </form-kit>
 </template>
 

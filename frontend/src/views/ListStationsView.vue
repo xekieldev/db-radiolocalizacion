@@ -10,7 +10,7 @@ import FormSearch from '../components/FormSearch.vue'
 import FooterMain from '../components/FooterMain.vue'
 
 
-const { listStations, loading, deleteStation } = useApi()
+const { listStations, loading } = useApi()
 
 const router = useRouter()
 const { getNameByCode } = useTerritory()
@@ -18,40 +18,10 @@ const { search } = useSearch()
 
 
 const items = ref([])
-const searchText = ref('')
-const confirm_delete = ref({})
-
-
-
-function editItem(file_id, id) {
-  if (items.value.find(station => station.id === id).frecuencia != null || items.value.find(station => station.id === id).frecuencia != undefined) {
-    
-    router.currentRoute.value.query.rloc = 'true'
-    router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'true'} })
-
-  } else {
-    
-    router.currentRoute.value.query.rloc = 'false'
-    router.push({ name: 'editStation', params: { file_id: file_id, id: id }, query: { rloc: 'false'} })
-
-  }
-}
-
+const textoToSearch = ref('')
 
 function viewItem(file_id, id) {  
   router.push(`/file/${file_id}/station/${id}`)
-}
-
-async function deleteItem(file_id, id) {  
-  await deleteStation(file_id, id)
-  window.location.reload() 
-}
-
-const confirm = (id) => {
-  console.log(confirm_delete.value)
-  confirm_delete.value[id] = confirm_delete.value[id] === 1 ? 0 : 1
-  console.log(confirm_delete.value)
-  
 }
 
 onBeforeMount(async () => {
@@ -72,9 +42,9 @@ onBeforeMount(async () => {
     }      
 })
 
-async function searchStations(searchText) {
+async function searchStations(textoToSearch) {
   const data = await listStations(false)
-  items.value = search(data, searchText, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
+  items.value = search(data, textoToSearch, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
 }
 
 function viewMap() {  
@@ -87,8 +57,8 @@ function viewMap() {
   <heading>Listado de Estaciones</heading>
   <div class="stations-menu">
     <form-search 
-      :searchText = "searchText"
-      placeholder = "Buscar Estaciones"
+      :text-to-search="textoToSearch"
+      placeholder="Buscar Estaciones"
       @on-submit="searchStations"
     />
     <div>
@@ -170,10 +140,10 @@ function viewMap() {
       </tr>
     </table>
     <div class="status">
-        <span><strong>Loading:</strong> {{ loading }}</span>
+      <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
   </div>
-  <footer-main class="footer-main"/>
+  <footer-main class="footer-main" />
 </template>
 
 <style scoped>

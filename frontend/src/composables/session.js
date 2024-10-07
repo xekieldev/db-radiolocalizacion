@@ -20,9 +20,7 @@ export function useSession() {
             userData.value = response_user.data 
             loggedIn.value = response_user.data.loggedIn
             usuario.value = response_user.data.usuario
-            perfil.value = response_user.data.perfil     
-            console.log('session', perfil)
-                  
+            perfil.value = response_user.data.perfil                       
         }
         return response && response.data
     }
@@ -44,7 +42,7 @@ export function useSession() {
         return response
       }
 
-      async function checkUser(data) {
+      async function checkUser() {
         loading.value = true
         const response = await loginAxiosInstance.get('/check_user')
         loading.value = false

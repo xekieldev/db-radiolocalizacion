@@ -64,22 +64,16 @@ import { LMap, LTileLayer, LMarker, LIcon, LPopup } from "@vue-leaflet/vue-leafl
 import { onBeforeMount, ref } from "vue";
 import { useApi } from '../composables/api'
 import { useTerritory } from "../composables/territory";
-import MyButton from "./MyButton.vue";
-import { useRouter } from 'vue-router'
 import PropValue from "./PropValue.vue";
-import FormRow from "./FormRow.vue";
 import { useIconsMap } from "../composables/iconsmap"
-import genericIcon from "../../img/map_icons/generic.png"
 
 
 const { getAllNonIonizingRadiation } = useApi()
 const { getNameByCode, getCoordinates } = useTerritory()
 const { getIconUrl } = useIconsMap()
-const router = useRouter()
 
 
 const items = ref([])
-// const searchText = ref()
 
 onBeforeMount(async () => {
 

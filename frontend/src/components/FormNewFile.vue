@@ -51,8 +51,6 @@ const fullMonth = (currentDate.getMonth()+1)<10 ? "0"+(currentDate.getMonth()+1)
 const fullDay = currentDate.getDate()<10 ? "0"+currentDate.getDate() : currentDate.getDate()
 const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
 
-const prioridadValue = ref(false)
-// const tipoTramite = props.file ? ref(props.file.tipo) : ''
 const noFrecuency = ref(false)
 const { unidad } = useUnit()
 
@@ -68,7 +66,6 @@ watchEffect(() => {
 })
 
 watch(province, (newValue, oldValue) => {
-  console.log('newValue', 'oldValue', newValue, oldValue)
   emits('update:file.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
@@ -155,32 +152,31 @@ function getFileTypeOptions(user_area) {
       />
     </form-row>
     <form-row v-if="file.tipo != 'Interferencias en Aeropuertos'">
-        <form-kit
-          v-model="province"
-          :options="provinces"
-          type="select"
-          label="Provincia"
-          name="provincia"        
-        />
-        <form-kit
-          v-model="city"
-          :options="cities"
-          type="select"
-          label="Localidad"
-          name="localidad"  
-        />
-        <form-kit
-          v-model="file.area_asignada"
-          type="select"
-          label="CCTE/Área asignada"
-          name="area_asignada"
-          :options="area"
-          placeholder="Área"
-        />
-      </form-row>
+      <form-kit
+        v-model="province"
+        :options="provinces"
+        type="select"
+        label="Provincia"
+        name="provincia"        
+      />
+      <form-kit
+        v-model="city"
+        :options="cities"
+        type="select"
+        label="Localidad"
+        name="localidad"  
+      />
+      <form-kit
+        v-model="file.area_asignada"
+        type="select"
+        label="CCTE/Área asignada"
+        name="area_asignada"
+        :options="area"
+        placeholder="Área"
+      />
+    </form-row>
     
     <div v-if="file.tipo && file.tipo != 'Medición de Radiaciones No Ionizantes (móviles)'">
-      
       <form-row v-if="file.tipo == 'Interferencias en Aeropuertos'">
         <form-kit
           v-if="file.tipo && file.tipo == 'Interferencias en Aeropuertos'"
@@ -245,8 +241,8 @@ function getFileTypeOptions(user_area) {
           />
         </div>
         <form-kit
-          v-model="file.frecuencia"
           v-if="noFrecuency == false"
+          v-model="file.frecuencia"
           type="number"
           label="Frecuencia"
           name="frecuencia"
@@ -260,8 +256,8 @@ function getFileTypeOptions(user_area) {
           outer-class="short-field"
         />
         <form-kit 
-          v-model="file.unidad"
           v-if="noFrecuency == false"
+          v-model="file.unidad"
           type="select"
           label="Unidad"
           name="unidad"
@@ -281,7 +277,10 @@ function getFileTypeOptions(user_area) {
       </form-row>
     </div>
     
-    <div class="NIR-file" v-if="file.tipo && file.tipo === 'Medición de Radiaciones No Ionizantes (móviles)'">
+    <div
+      v-if="file.tipo && file.tipo === 'Medición de Radiaciones No Ionizantes (móviles)'"
+      class="NIR-file"
+    >
       <form-row>
         <form-kit
           v-model="file.fecha"

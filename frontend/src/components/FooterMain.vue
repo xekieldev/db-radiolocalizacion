@@ -4,13 +4,13 @@
 
 <template>
   <!-- <div> -->
-    <footer class="footer-container">
-      <img
-        src="../../img/new_logo_s.png"
-        alt="logo-enacom"
-        class="logo-enacom"
-      >
-    </footer>
+  <footer class="footer-container">
+    <img
+      src="../../img/new_logo_s.png"
+      alt="logo-enacom"
+      class="logo-enacom"
+    >
+  </footer>
   <!-- </div> -->
 </template>
 

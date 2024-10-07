@@ -16,14 +16,16 @@ function submitHandler(fields) {
 
 <template>
   <form-kit
-  type="form"
-  :actions="false"
-  @submit="submitHandler"
+    type="form"
+    :actions="false"
+    @submit="submitHandler"
   >
     <div class="activities-container">
-      <h2 class="activity-title">Actividades</h2>
+      <h2 class="activity-title">
+        Actividades
+      </h2>
       <div class="new-activity">
-        <form-row >
+        <form-row>
           <form-kit
             v-model="activityDate"
             type="date"
@@ -48,10 +50,8 @@ function submitHandler(fields) {
             Agregar
           </button>
         </form-row>
-
       </div>
     </div>
-      
   </form-kit>
 </template>
 

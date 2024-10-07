@@ -10,7 +10,7 @@ function submitHandler(fields) {
   
 }
 
-const props = defineProps({
+defineProps({
       loginError: Object,
 })
 

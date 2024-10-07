@@ -41,7 +41,7 @@ async function save(fields) {
     :technicians-values="techniciansValues"
     @on-submit="save"
   />
-  <footer-main/>
+  <footer-main />
 </template>
 
 <style scoped>

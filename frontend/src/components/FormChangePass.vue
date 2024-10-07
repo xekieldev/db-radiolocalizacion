@@ -18,7 +18,6 @@ defineProps({
 </script>
 
 <template>
-
   <div class="change-pass-container">
     <form-kit
       type="form"
@@ -26,31 +25,31 @@ defineProps({
       :actions="false"
       @submit="submitHandler"
     >
-    <p class="login-box-title">
-      Cambiar contraseña   
-    </p>
-    <form-kit
-      v-model="new_pass"
-      outer-class="field-login"
-      type="password"
-      label="Nueva Contraseña"
-      name="new_pass"
-      validation="required"
-      :validation-messages="{
-        required: 'Debe ingresar una contraseña',
-      }"
-    />
-    <form-kit
-      v-model="new_pass_confirm"
-      outer-class="field-login"
-      type="password"
-      label="Confirmar Nueva Contraseña"
-      name="new_pass_confirm"
-      validation="required|confirm"
-      :validation-messages="{
-        confirm: 'Error. Las contraseñas no coinciden',
-        required: 'Debe ingresar una contraseña'
-      }"
+      <p class="login-box-title">
+        Cambiar contraseña   
+      </p>
+      <form-kit
+        v-model="new_pass"
+        outer-class="field-login"
+        type="password"
+        label="Nueva Contraseña"
+        name="new_pass"
+        validation="required"
+        :validation-messages="{
+          required: 'Debe ingresar una contraseña',
+        }"
+      />
+      <form-kit
+        v-model="new_pass_confirm"
+        outer-class="field-login"
+        type="password"
+        label="Confirmar Nueva Contraseña"
+        name="new_pass_confirm"
+        validation="required|confirm"
+        :validation-messages="{
+          confirm: 'Error. Las contraseñas no coinciden',
+          required: 'Debe ingresar una contraseña'
+        }"
       />
       <p
         v-if="loginError && loginError.response.data === 'Error de login'"
@@ -64,10 +63,8 @@ defineProps({
       >
         Cambiar
       </button>
-
     </form-kit>
   </div>
-  
 </template>
 
 <style scoped>

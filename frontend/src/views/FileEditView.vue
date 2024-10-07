@@ -43,7 +43,7 @@ async function save(fields) {
     title="Editar Expediente"
     context="Radiolocalizacion" 
     :file="file"
-    :nirMeas="nirMeas"
+    :nir-meas="nirMeas"
     :technicians="technicians"
     :technicians-values="techniciansValues"
     @on-submit="save"
