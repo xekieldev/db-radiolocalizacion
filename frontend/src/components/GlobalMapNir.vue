@@ -24,6 +24,7 @@
         <l-icon
           :icon-size="[55, 35]"
           :icon-url="pickIcon()"
+          :icon-anchor="[20, 35]"
         />
         <l-popup
           :options="{}"

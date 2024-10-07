@@ -20,6 +20,7 @@
         <l-icon
           :icon-size="[50, 50]"
           :icon-url="antenaImage"
+          :icon-anchor="[25, 40]"
         />
         <l-popup>Coordenadas: {{ position[0] }}, {{ position[1] }}</l-popup>
       </l-marker>
