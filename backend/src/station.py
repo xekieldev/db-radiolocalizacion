@@ -344,7 +344,7 @@ def get_tech_measurement(file_id, id):
 
 @bp.route("/file/<file_id>/station/<id_station>/delete_tech_measurement/<id_tech_measurement>", methods = ['DELETE'])
 @jwt_required()
-def delete_tech_measurement(id_station, id_tech_measurement):
+def delete_tech_measurement(file_id, id_station, id_tech_measurement):
     try:
         tech_measurement = TechMeasurement.query.filter_by(station_id=id_station, id=id_tech_measurement).first()
         tech_measurement.status='Deleted'

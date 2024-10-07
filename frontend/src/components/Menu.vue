@@ -2,17 +2,13 @@
 import { useSession} from '../composables/session'
 import MyButton from '../components/MyButton.vue';
 import { RouterLink, useRouter } from 'vue-router'
-import { ref, onMounted, onUpdated, onBeforeMount } from 'vue'
-import { loggedIn, usuario, userData, perfil } from '../composables/loginstatus'
-
+import { loggedIn, usuario, perfil } from '../composables/loginstatus'
 
 const router = useRouter()
 const { logout } = useSession()
 
-
-
 async function doLogout() {
-  const response = await logout()
+  await logout()
   router.push('/')
 }
 
@@ -70,10 +66,15 @@ async function doLogout() {
           About
         </RouterLink>
       </nav>
-      <div class="menu-name"  v-if="loggedIn">
+      <div
+        v-if="loggedIn"
+        class="menu-name"
+      >
         <p>Hola,</p>
-        <a title="Cambiar contraseña" href="/change_password">{{ usuario }}</a>
-
+        <a
+          title="Cambiar contraseña"
+          href="/change_password"
+        >{{ usuario }}</a>
       </div>
       <my-button
         v-if="loggedIn"

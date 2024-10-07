@@ -21,17 +21,17 @@ function submitHandler() {
   } 
 }
 
-const props = defineProps({
-  searchText: String,
+defineProps({
+  textToSearch: String,
   placeholder: String,
 })
 </script>
 
 <template>
   <form-kit
-  type="form"
-  :actions="false"
-  @submit="submitHandler"
+    type="form"
+    :actions="false"
+    @submit="submitHandler"
   >
     <div class="form-search-container">
       <form-row class="search-bar">

@@ -9,7 +9,6 @@ import { useService } from '../composables/service'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
 import { useAntenna } from '../composables/antenna'
-import { useFileValidation } from '../composables/filevalidation'
 import { useRouter } from 'vue-router'
 import { useApi } from '../composables/api'
 import Heading from './Heading.vue'
@@ -69,7 +68,6 @@ const { servicio } = useService()
 const { antenna } = useAntenna()
 const { unidad } = useUnit()
 const { emplazamiento } = useStationType()
-const { validateFile } = useFileValidation()
 
 
 </script>
@@ -95,10 +93,10 @@ const { validateFile } = useFileValidation()
   >
     <form-row>
       <form-kit
+        v-model="file.expediente"
         type="text"
         label="Expediente"
         name="expediente"
-        v-model="file.expediente"
         :disabled="true"
       />
     </form-row>

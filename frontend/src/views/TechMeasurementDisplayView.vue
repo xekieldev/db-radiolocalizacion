@@ -9,7 +9,6 @@ import PropValue from '../components/PropValue.vue'
 import { useTerritory } from '../composables/territory'
 import { printFlag } from '../composables/printflag'
 
-
 const { getTechMeasurement, getStation, delete_tech_measurement, getFile } = useApi()
 const { currentRoute } = useRouter()
 const router = useRouter()
@@ -20,24 +19,23 @@ const station = reactive({})
 const techMeasurement = reactive({})
 const technicians = reactive({})
 const idPath = ref(currentRoute.value.params.id)
-// let previewStatus = ref(false)
+const file_id = ref(currentRoute.value.params.file_id)
 
 
 onBeforeMount(async () => {
   const id = currentRoute.value.params.id
-  const file_id = currentRoute.value.params.file_id
   const stationResponse = await getStation(currentRoute.value.params.id)
   Object.assign(station, stationResponse.station)
   const file_response = await getFile(station.file_id)   
   Object.assign(file, file_response.file) 
     
   if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
-    const response = await getTechMeasurement(file_id, id)
+    const response = await getTechMeasurement(file_id.value, id)
     Object.assign(techMeasurement, response.techMeasurement)
     Object.assign(technicians, response.technicians)
 
   } else {
-      const response = await getTechMeasurement(file_id, id, true)
+      const response = await getTechMeasurement(file_id.value, id, true)
       Object.assign(techMeasurement, response.techMeasurement)
       Object.assign(technicians, response.technicians)
   }    
@@ -60,9 +58,9 @@ function getTechnician(id) {
   return ''
 }
 
-async function del_tech_measurement(id, id_tech_measurement) {
+async function del_tech_measurement(file_id, id, id_tech_measurement) {
     try { 
-      await delete_tech_measurement(id, id_tech_measurement)
+      await delete_tech_measurement(file_id, id, id_tech_measurement)
       window.location.reload() 
 
     } catch (error) {
@@ -333,7 +331,7 @@ async function del_tech_measurement(id, id_tech_measurement) {
           v-if="!printFlag.isActive"
           class="tertiary right"
           label="Borrar"
-          @on-tap="() => del_tech_measurement(idPath, techMeasurement[index].id)"
+          @on-tap="() => del_tech_measurement(file_id, idPath, techMeasurement[index].id)"
         />
       </div>
     </div>

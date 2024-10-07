@@ -2,8 +2,8 @@
   <div class="global-map-container">
     <div class="menu-container">
       <form-search 
-        :searchText = "searchText"
-        placeholder = "Buscar Estaciones"
+        :text-to-search="textToSearch"
+        placeholder="Buscar Estaciones"
         @on-submit="searchStations"
       />
     </div>
@@ -108,7 +108,7 @@ const router = useRouter()
 
 
 const items = ref([])
-const searchText = ref('')
+const textToSearch = ref('')
 
 onBeforeMount(async () => {
 
@@ -120,9 +120,9 @@ onBeforeMount(async () => {
       }
 })
 
-async function searchStations(searchText) {
+async function searchStations(textToSearch) {
     const data = await listStations(false)
-    items.value = search(data, searchText, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
+    items.value = search(data, textToSearch, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
 }
 
 function viewItem(file_id, id) {  

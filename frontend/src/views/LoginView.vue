@@ -11,7 +11,7 @@ const loginError = ref()
 
   async function check(fields) {
     try {
-      const response = await login(fields)
+      await login(fields)
       router.push(`/home`)
 
     } catch (error) {

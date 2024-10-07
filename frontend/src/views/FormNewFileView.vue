@@ -24,10 +24,7 @@ async function save(fields) {
       const response = await newFile(fields)
       router.push(`/file/${response.id}`)
     } else {
-      const response = await newFile(fields)
-      console.log("file", response.id)
-      console.log(fields)
-      
+      const response = await newFile(fields)      
       await create_non_ionizing_radiation(response.id, fields)
       router.push(`/list_non_ionizing_radiation/`)
     }
@@ -43,10 +40,10 @@ async function save(fields) {
   <fnewfile
     title="Alta Expediente"
     context="Expedientes" 
-    :file = file
-    :nirMeas = nirMeas
-    :technicians = "technicians"
-    :techniciansValues = "techniciansValues"
+    :file="file"
+    :nir-meas="nirMeas"
+    :technicians="technicians"
+    :technicians-values="techniciansValues"
     @on-submit="save"
   />
 </template>

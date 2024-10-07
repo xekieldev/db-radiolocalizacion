@@ -59,7 +59,7 @@ async function save(fields) {
     
     @on-submit="save"
   />
-  <footer-main/>
+  <footer-main />
 </template>
 
 <style scoped>

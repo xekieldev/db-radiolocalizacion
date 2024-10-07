@@ -1,6 +1,5 @@
 <script setup>
 import { useApi } from '../composables/api'
-import { useSession } from '../composables/session'
 import { onBeforeMount, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTerritory } from '../composables/territory'
@@ -46,8 +45,10 @@ onBeforeMount(async () => {
     Object.assign(file, response.file)
     currentLocation.value = response.currentArea
     tipoTramite.value = file.tipo 
-    file.localidad = getNameByCode('city', file.localidad)
-    file.provincia = getNameByCode('province', file.provincia)
+    if (tipoTramite.value !== 'Interferencias en Aeropuertos') {
+      file.localidad = getNameByCode('city', file.localidad)
+      file.provincia = getNameByCode('province', file.provincia)
+    }
     const data = await stationsPerFile(file.id)
     items.value.push(...data)
     for (const item in items.value) {
@@ -135,24 +136,24 @@ function closeDiv() {
 
 </script>
 <template>
-    <div class="options-button">
-      <my-button
-        v-if="perfil == 'coordinator'"
-        tabindex="0"
-        class="secondary right"
-        label="Alta Expediente"
-        @on-tap="newFile"
-      />
-      <my-button
-        tabindex="0"
-        class="primary"
-        label="Volver"
-        @on-tap="goBack"
-      />
-    </div>
-   <heading>
-      {{ file.expediente }}
-    </heading>
+  <div class="options-button">
+    <my-button
+      v-if="perfil == 'coordinator'"
+      tabindex="0"
+      class="secondary right"
+      label="Alta Expediente"
+      @on-tap="newFile"
+    />
+    <my-button
+      tabindex="0"
+      class="primary"
+      label="Volver"
+      @on-tap="goBack"
+    />
+  </div>
+  <heading>
+    {{ file.expediente }}
+  </heading>
   <div class="menu-container">
     <div class="left-options">
       <my-button
@@ -178,22 +179,29 @@ function closeDiv() {
       @on-tap="openMenu"
     />
   </div>
-  <div class="file-options" v-if="menu == true">
-        <button class="close-button" @click="closeDiv">x</button>
-        <!-- <br> -->
-        <div class="actions-menu">
-          <form-move-file
-            :context="tipoTramite"
-            :fileNumber="file.expediente"
-            :location="file.area_actual"
-            :informe="file.informe"
-            @on-submit="patch_file"
-          />
-        </div>
-      </div>
+  <div
+    v-if="menu == true"
+    class="file-options"
+  >
+    <button
+      class="close-button"
+      @click="closeDiv"
+    >
+      x
+    </button>
+    <!-- <br> -->
+    <div class="actions-menu">
+      <form-move-file
+        :context="tipoTramite"
+        :file-number="file.expediente"
+        :location="file.area_actual"
+        :informe="file.informe"
+        @on-submit="patch_file"
+      />
+    </div>
+  </div>
 
   <div class="file-container">
-   
     <display-row>
       <prop-value
         class="prop"
@@ -287,21 +295,20 @@ function closeDiv() {
         label="Valor Máximo [%]"
         :value="nirMeasurement.valor_maximo"
       />
-    <display-row>
-      <prop-value
-        v-if="nirMeasurement.observaciones"
-        class="prop"
-        label="Observaciones"
-        :value="nirMeasurement.observaciones"
-      />
-      <prop-value
-        v-else
-        class="prop"
-        label="Observaciones"
-        value="---"
-      />
-    </display-row>
-
+      <display-row>
+        <prop-value
+          v-if="nirMeasurement.observaciones"
+          class="prop"
+          label="Observaciones"
+          :value="nirMeasurement.observaciones"
+        />
+        <prop-value
+          v-else
+          class="prop"
+          label="Observaciones"
+          value="---"
+        />
+      </display-row>
     </display-row>
     <display-row
       v-if="!(tipoTramite == 'Medición de Radiaciones No Ionizantes (móviles)' || tipoTramite == 'Descargo' || tipoTramite == 'Interferencias en Aeropuertos')"
@@ -349,99 +356,109 @@ function closeDiv() {
         :value="file.nota_fin"
       />
     </display-row>
-    
- </div>
+  </div>
 
- <br>
+  <br>
  
-    <div class="stations-table-container" v-if="items.length > 0">
-      <h2 class="file-titles">Estaciones relacionadas</h2>
-      <table class="stations-table">
-        <tr>
-          <th>id</th>
-          <th>Identificación</th>
-          <th>Servicio</th>
-          <th>Frecuencia</th>
-          <th>Emplazamiento</th>
-          <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
-          <th>Domicilio</th>
-          <th>Localidad</th>
-          <th>Provincia</th>
-          <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-            Status
-          </th>
-          <th v-if="file.tramitacion != 'Finalizado'">
-            Acciones
-          </th>
-        </tr>
-        <tr
-          v-for="item in items"
-          :key="item"
-        >
-          <td>
-            <my-button
-              class="primary center"
-              :label="(item.id.toString())"
-              @on-tap="() => viewItem(item.file_id, item.id)"
-            />
-          </td>
-          <!-- <td>{{ item.id }}</td> -->
-          <td>{{ item.identificacion }}</td> 
-          <td>{{ item.servicio }}</td> 
-          <td v-if="item.frecuencia">
-            {{ item.frecuencia +" "+item.unidad }}
-          </td>
-          <td v-else>
-            ---
-          </td>
-          <td>{{ item.emplazamiento }}</td>
-          <td>{{ item.domicilio }}</td>
-          <td>{{ item.localidad }} </td>
-          <td>{{ item.provincia }} </td>
-          <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
-          <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-            {{ item.status }}
-          </td>
-          <td v-if="file.tramitacion != 'Finalizado'"> 
-            <div class="action-buttons-container">
-              <my-button
-                v-if="file.tramitacion != 'Finalizado'"
-                class="primary center"
-                label="Editar"
-                @on-tap="() => editItem(item.file_id, item.id)"
-              />
-              <my-button
-                v-if="file.tramitacion != 'Finalizado'"
-                class="tertiary center"
-                label="Borrar"
-                @on-tap="() => deleteItem(item.file_id, item.id)"
-              />
-            <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <form-new-activity
-      v-if="file.tramitacion != 'Finalizado'"
-      @on-submit="save"
-    />
-
-  
-    <table v-if="activities && activities.length > 0">
+  <div
+    v-if="items.length > 0"
+    class="stations-table-container"
+  >
+    <h2 class="file-titles">
+      Estaciones relacionadas
+    </h2>
+    <table class="stations-table">
       <tr>
-        <th class="date-field">Fecha</th>
-        <th>Detalle</th>
+        <th>id</th>
+        <th>Identificación</th>
+        <th>Servicio</th>
+        <th>Frecuencia</th>
+        <th>Emplazamiento</th>
+        <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
+        <th>Domicilio</th>
+        <th>Localidad</th>
+        <th>Provincia</th>
+        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+          Status
+        </th>
+        <th v-if="file.tramitacion != 'Finalizado'">
+          Acciones
+        </th>
       </tr>
-      <tr v-for="activity in activities" :key="activity">
-        <td class="date-field">{{ activity.fecha }}</td>
-        <td>{{ activity.detalle }}</td>
+      <tr
+        v-for="item in items"
+        :key="item"
+      >
+        <td>
+          <my-button
+            class="primary center"
+            :label="(item.id.toString())"
+            @on-tap="() => viewItem(item.file_id, item.id)"
+          />
+        </td>
+        <!-- <td>{{ item.id }}</td> -->
+        <td>{{ item.identificacion }}</td> 
+        <td>{{ item.servicio }}</td> 
+        <td v-if="item.frecuencia">
+          {{ item.frecuencia +" "+item.unidad }}
+        </td>
+        <td v-else>
+          ---
+        </td>
+        <td>{{ item.emplazamiento }}</td>
+        <td>{{ item.domicilio }}</td>
+        <td>{{ item.localidad }} </td>
+        <td>{{ item.provincia }} </td>
+        <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
+        <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
+          {{ item.status }}
+        </td>
+        <td v-if="file.tramitacion != 'Finalizado'"> 
+          <div class="action-buttons-container">
+            <my-button
+              v-if="file.tramitacion != 'Finalizado'"
+              class="primary center"
+              label="Editar"
+              @on-tap="() => editItem(item.file_id, item.id)"
+            />
+            <my-button
+              v-if="file.tramitacion != 'Finalizado'"
+              class="tertiary center"
+              label="Borrar"
+              @on-tap="() => deleteItem(item.file_id, item.id)"
+            />
+            <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
+          </div>
+        </td>
       </tr>
     </table>
-    
-    <footer-main class="footer-main"/>
+  </div>
 
+  <form-new-activity
+    v-if="file.tramitacion != 'Finalizado'"
+    @on-submit="save"
+  />
+
+  
+  <table v-if="activities && activities.length > 0">
+    <tr>
+      <th class="date-field">
+        Fecha
+      </th>
+      <th>Detalle</th>
+    </tr>
+    <tr
+      v-for="activity in activities"
+      :key="activity"
+    >
+      <td class="date-field">
+        {{ activity.fecha }}
+      </td>
+      <td>{{ activity.detalle }}</td>
+    </tr>
+  </table>
+    
+  <footer-main class="footer-main" />
 </template>
 
 <style scoped>
