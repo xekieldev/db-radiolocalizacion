@@ -64,7 +64,11 @@ import CPLDIcon from "../../img/map_icons/CPLD.png";
 import FXIcon from "../../img/map_icons/FX.png";
 import SIDUPIcon from "../../img/map_icons/SIDUP.png";
 import SMARIcon from "../../img/map_icons/SMAR.png";    
-import NIRIcon from "../../img/map_icons/NIR.png";    
+import NIRIcon from "../../img/map_icons/NIR.png";
+import avion from "../../img/map_icons/avion.png"    
+import Personal from "../../img/map_icons/Personal.png"    
+import Movistar from "../../img/map_icons/Movistar.png"    
+import Claro from "../../img/map_icons/Claro.png"    
 
 const iconsMap = { 
     FM: FMIcon,
@@ -133,7 +137,11 @@ const iconsMap = {
     FX: FXIcon,
     SIDUP: SIDUPIcon,
     SMAR: SMARIcon,  
-    NIR: NIRIcon,  
+    NIR: NIRIcon,
+    'Interferencias en Aeropuertos': avion,
+    'Personal': Personal,
+    'Movistar': Movistar,
+    'Claro': Claro,
 }
 
 

@@ -156,6 +156,14 @@ const router = createRouter({
       component: () => import('../views/MapStationsView.vue')
     },
     {
+      path: '/files_map',
+      name: 'filesMap',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/MapFilesView.vue')
+    },
+    {
       path: '/list_non_ionizing_radiation',
       name: 'listNIR',
       // route level code-splitting

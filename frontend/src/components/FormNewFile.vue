@@ -54,6 +54,7 @@ const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
 const noFrecuency = ref(false)
 const { unidad } = useUnit()
 
+console.log('localidad', props.file.localidad)
 
 const province = ref(props.file.provincia)
 const city = ref(props.file.localidad)
@@ -63,13 +64,29 @@ const { provinces, cities, getProvinceCities } = useTerritory()
 watchEffect(() => {
   if(props.file.provincia) province.value = props.file.provincia
   if(props.file.localidad) city.value = props.file.localidad
+  console.log(city)
+  
+  if(props.file.tipo === 'Interferencias en Aeropuertos') {
+    const selectedAirport = airport.find( item =>  item.label === props.file.aeropuerto)
+    if( selectedAirport ) {
+      props.file.latitud = selectedAirport.latitude
+      props.file.longitud = selectedAirport.longitude
+        console.log(props.file.latitud, props.file.longitud)
+      }
+  } else if (currentRoute.value.path.includes('create')) {
+    props.file.latitud = null
+    props.file.longitud = null
+    console.log(currentRoute)
+    
+  }
+
 })
 
 watch(province, (newValue, oldValue) => {
   emits('update:file.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
-    city.value = cities.value[0].value
+    // city.value = cities.value[0].value
     emits('update:file.localidad', newValue)
   }
 })
@@ -186,6 +203,21 @@ function getFileTypeOptions(user_area) {
           name="aeropuerto"
           :options="airport"
         />
+        <form-kit
+          v-model="file.latitud"
+          type="hidden"
+          label="Latitud"
+          name="latitud"   
+          :disabled="true"
+        />
+        <form-kit
+          v-model="file.longitud"
+          type="hidden"
+          label="Longitud"
+          name="longitud"   
+          :disabled="true"
+        />
+        <!-- {{ file.aeropuerto.latitude }} -->
         <form-kit
           v-model="file.nota_inicio"
           type="text"
