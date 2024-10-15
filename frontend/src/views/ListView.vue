@@ -31,9 +31,13 @@ function viewItem(item) {
 function newFile() { 
   router.push({name: "newFile"})
 }
+
 function editItem(id) {
-  router.push(`/file/${id}/edit`)
-  
+  router.push(`/file/${id}/edit`) 
+}
+
+function viewMap() {  
+  router.push(`/files_map`)
 }
 
 async function deleteItem(id) {  
@@ -106,7 +110,13 @@ watch(estado, async(newValue, oldValue) => {
       placeholder="Buscar Expedientes"
       @on-submit="searchFiles"
     />
+    
     <div class="list-sub-actions">
+      <my-button
+        class="secondary right view-map-button"
+        label="Ver Mapa"
+        @on-tap="viewMap"
+      />
       <my-button
         v-if="perfil == 'coordinator'"
         tabindex="0"
