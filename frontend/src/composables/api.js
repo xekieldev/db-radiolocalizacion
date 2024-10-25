@@ -220,6 +220,23 @@ export function useApi() {
         return response && response.data 
     }
 
+    async function getStatistics(fechaInicio, fechaFin, income, outcome, pending) {
+        loading.value = true
+        console.log('fechas', fechaFin, fechaInicio, 'stat_type', income, outcome, pending)
+        
+        const response = await axiosInstance.get(`/statistics`, {
+            params: {
+                fechaInicio: fechaInicio,
+                fechaFin: fechaFin,
+                income: income,
+                outcome: outcome,
+                pending: pending,
+            }
+        })
+        loading.value = false
+        return response && response.data 
+    }
+
     return {
         list,
         newFile,
@@ -249,5 +266,6 @@ export function useApi() {
         getNIRMeasurementInFile,
         newActivity,
         getActivities,
+        getStatistics,
     }
 }

@@ -7,6 +7,7 @@ from src.station import station_schema, stations_schema
 from src.tech_measurement import tech_measurements_schema, tech_measurement_schema
 # from src.users import auth
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+from sqlalchemy import and_
 
 
 bp = Blueprint("case_file", __name__)
@@ -257,6 +258,106 @@ def patch_file(id):
 
         response = {"id": caseFile.id }
         return response, 201 
+    except:
+        response = {"message": "input error"}
+        return response, 400
+
+@bp.route('/statistics', methods = ['GET'])
+@jwt_required()
+def statistics():
+    try:
+        file_status = 'Pendiente'
+        fecha_inicio = request.args.get('fechaInicio')
+        fecha_fin = request.args.get('fechaFin')
+        income = request.args.get('income') == 'true'
+        outcome = request.args.get('outcome') == 'true'
+        pending = request.args.get('pending') == 'true'
+
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
+        # if checkUser.area != 'AGCCTYL':  
+        response_by_area = []
+        response_by_type = []
+        case_file_available = CaseFile.query.filter_by(status='Available')      
+        areas = ['Buenos Aires', 'Lima', 'Córdoba', 'Salta', 'Posadas', 'Neuquén', 'Comodoro Rivadavia']
+        types= ['Interferencias en Aeropuertos',
+                'Interferencias en Estaciones Radioeléctricas',
+                'Interferencias en Estaciones de Radiodifusión',
+                'Inspección de Estaciones Radioeléctricas',
+                'Inspección de Estaciones de Radiodifusión',
+                'Radiolocalización de Estaciones Radioeléctricas',
+                'Radiolocalización de Estaciones de Radiodifusión',
+                'Detectar actividad',
+                'Intervenciones por Denuncias del Público en general',
+                'Medición de Radiaciones No Ionizantes',
+                'Otros',
+                'Medición de Radiaciones No Ionizantes (móviles)',
+                'Descargo']
+        print(fecha_inicio)
+        if fecha_inicio == '' and fecha_fin == '':
+            fecha_inicio = None
+            fecha_fin = None
+        # Ingesados
+        if income:
+            print(income, fecha_inicio, fecha_fin)
+            if fecha_inicio == None or fecha_fin == None:
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(area_asignada= area).count() 
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+                for type in types:
+                    stat_by_type = case_file_available.filter_by(tipo= type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            else:
+                case_file_available = case_file_available.filter(CaseFile.fecha >= fecha_inicio, CaseFile.fecha <= fecha_fin)
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(area_asignada= area).count()
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+
+                for type in types:
+                    stat_by_type = case_file_available.filter_by(tipo= type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            
+            return {'Area': response_by_area, 'Tipo': response_by_type}
+        if outcome:
+            file_status = 'Informado'
+            if fecha_inicio == None or fecha_fin == None:
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count() 
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+                for type in types:
+                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            else:
+                case_file_available = case_file_available.filter(CaseFile.fecha >= fecha_inicio, CaseFile.fecha <= fecha_fin)
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count()
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+
+                for type in types:
+                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            
+            return {'Area': response_by_area, 'Tipo': response_by_type}
+        if pending:
+            if fecha_inicio == None or fecha_fin == None:
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count() 
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+                for type in types:
+                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            else:
+                case_file_available = case_file_available.filter(CaseFile.fecha >= fecha_inicio, CaseFile.fecha <= fecha_fin)
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count()
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+
+                for type in types:
+                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            
+            return {'Area': response_by_area, 'Tipo': response_by_type}
+        return {"message": "No se seleccionó ningún tipo de filtro válido"}, 400
     except:
         response = {"message": "input error"}
         return response, 400
