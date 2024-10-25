@@ -43,6 +43,12 @@ async function doLogout() {
         </RouterLink>
         <RouterLink
           v-if="loggedIn"
+          to="/statistics?type=pending"
+        >
+          Estadísticas
+        </RouterLink>
+        <RouterLink
+          v-if="loggedIn"
           to="/station?includeDeleted=false"
         >
           Estaciones
