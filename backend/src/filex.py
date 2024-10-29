@@ -366,7 +366,10 @@ def statistics():
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
 
                 for type in types:
-                    stat_by_type = case_file_available.filter(case_file_data.tipo == type).count()
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter(case_file_data.tipo == type).count()
+                    else:
+                        stat_by_type = case_file_available.filter(case_file_data.tipo == type, case_file_data.area_asignada == selected_area).count()
                     response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
             else:
                 case_file_available = (
@@ -388,7 +391,10 @@ def statistics():
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
 
                 for type in types:
-                    stat_by_type = case_file_available.filter(case_file_data.tipo == type).count()
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter_by(tipo = type).count()
+                    else:
+                        stat_by_type = case_file_available.filter_by(tipo = type, area_asignada = selected_area).count()
                     response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
                         
             return {'Area': response_by_area, 'Tipo': response_by_type}

@@ -1,15 +1,28 @@
 import axios from 'axios'
 import { ref } from 'vue'
-
+import { useRouter } from 'vue-router'
+import { loggedIn } from './loginstatus';
 
 
 export function useApi() {
+    const router = useRouter()
     var loading = ref(false);    
     const axiosInstance = axios.create({
         baseURL: import.meta.env.VITE_APP_API_URL,
         withCredentials: true,
         xsrfCookieName: 'csrf_access_token'
     })
+
+    axiosInstance.interceptors.response.use(
+        response => response, // Si la respuesta es exitosa, la retorna sin cambios
+        error => {
+            if (error.response && error.response.status === 401) {
+                loggedIn.value = false                
+                router.push({ name: 'login' }) // Redirige al login si hay un 401
+            }
+            return Promise.reject(error)
+        }
+    )
 
     async function list(includeDeleted = false, fileStatus) {
         loading.value = true
