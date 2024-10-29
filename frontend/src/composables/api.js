@@ -220,17 +220,17 @@ export function useApi() {
         return response && response.data 
     }
 
-    async function getStatistics(fechaInicio, fechaFin, income, outcome, pending) {
+    async function getStatistics(startDate, endDate, type, area) {
         loading.value = true
-        console.log('fechas', fechaFin, fechaInicio, 'stat_type', income, outcome, pending)
+        // console.log('fechas', startDate, endDate, 'stat_type', income, outcome, pending)
         
         const response = await axiosInstance.get(`/statistics`, {
             params: {
-                fechaInicio: fechaInicio,
-                fechaFin: fechaFin,
-                income: income,
-                outcome: outcome,
-                pending: pending,
+                startDate: startDate,
+                endDate: endDate,
+                type : type,
+                area: area,
+                
             }
         })
         loading.value = false

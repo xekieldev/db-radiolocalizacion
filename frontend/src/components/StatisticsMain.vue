@@ -5,6 +5,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router'
 import { useApi } from '../composables/api'
 import { getNode } from '@formkit/core'
+import FormRow from './FormRow.vue';
 
 const router = useRouter()
 const { getStatistics } = useApi()
@@ -22,7 +23,7 @@ const items = ref({})
 
 onMounted(async ()=> {
 
-  items.value = await getStatistics(props.startDate, props.endDate, props.type == 'inbound', props.type == 'outbound', props.type == 'pending')
+  items.value = await getStatistics(props.startDate, props.endDate, props.type, props.selectedArea)
 
 })
 
@@ -44,6 +45,12 @@ type: {
     return ['inbound', 'outbound', 'pending'].includes(value)
   }
 },
+selectedArea: {
+  validator(value) {
+    // The value must match one of these strings
+    return ['Buenos Aires', 'Lima', 'Córdoba', 'Salta', 'Posadas', 'Neuquén', 'Comodoro Rivadavia'].includes(value)
+  }
+},
 })
 
 
@@ -52,6 +59,7 @@ function handleFormChange(data) {
     startDate: props.startDate, 
     endDate: props.endDate, 
     type: props.type,
+    area: props.selectedArea
   })
   
   console.log('function', data)
@@ -60,6 +68,7 @@ function handleFormChange(data) {
     startDate: props.startDate, 
     endDate: props.endDate, 
     type: props.type,
+    area: props.selectedArea,
     ...data
   }})
 }
@@ -67,7 +76,8 @@ function handleFormChange(data) {
 watch(()=> props, async (newValue, oldValue) => {
   console.log(newValue)
   // props.type = newValue.type
-  items.value = await getStatistics( newValue.startDate, newValue.endDate, newValue.type == 'inbound', newValue.type == 'outbound', newValue.type == 'pending')
+  items.value = await getStatistics( newValue.startDate, newValue.endDate, newValue.type, newValue.selectedArea)
+console.log('para tablas', items.value)
   
 }, {deep: true})
 
@@ -78,8 +88,8 @@ watch(()=> props, async (newValue, oldValue) => {
   <heading>{{ title }}</heading>
   <div class="stat-container">
   <div class="stat-menu">
-    <h3>Seleccione tipo</h3>
-    <div class="stat-type-btns">
+    <h4 class="titles">Seleccione tipo</h4>
+    <div class="type-btns-container">
       <my-button
         class="primary"
         :class="{ 'selected-btn': 'inbound' == type}"
@@ -91,8 +101,6 @@ watch(()=> props, async (newValue, oldValue) => {
         :class="{ 'selected-btn': 'outbound' == type}"
         label="Egresados"
         @on-tap="() => handleFormChange({type: 'outbound'})"
-
-
       />
       <my-button
         class="primary"
@@ -103,26 +111,16 @@ watch(()=> props, async (newValue, oldValue) => {
       />
     </div>
     <br>
-    <h3>Seleccione fechas</h3>
+    <h4 class="titles">Seleccione fechas</h4>
 
     <form-kit
-      name="dates"
-      id="dates"
-      type="form"
-      submit-label="Cargar"
-      :config="{ validationVisibility: 'submit',
-                validation:'required', 
-                validationMessages:{ required:'Campo obligatorio', 
-                                      
-                }
-      }"
-      :actions="false"
+      type="group"
     >
-    <!-- <form-row> -->
-      <!-- {{formkit}} -->
+    <div class="dates-container">
       <form-kit
         id="startDate"
         type="date"
+        outer-class="date-input"
         label="Fecha de Inicio"
         v-model="startDate"
         name="startDate"
@@ -135,47 +133,90 @@ watch(()=> props, async (newValue, oldValue) => {
       />
       <form-kit
         type="date"
+        outer-class="date-input"
         label="Fecha de Fin"
         v-model="endDate"
-        name="fechaFin"
-        validation="date_after:04-30-2024"
+        name="endDate"
+        validation="date_after_node:startDate"
         validation-visibility="live"
         :validation-messages="{
-          date_after: 'La fecha debe ser posterior al 01/05/2024.',
+          date_after_node: 'La fecha debe ser posterior a la Fecha de Inicio',
         }"
         @change="(event) => handleFormChange({endDate: event.target.value })"
-
       />
-      
+    </div>
     </form-kit>
+    <h4 class="titles">Seleccione Área/CCTE</h4>
+    <div class="type-btns-container">
+      <my-button
+        class="primary area-btn"
+        :class="{ 'selected-btn': 'Buenos Aires' == selectedArea}"
+        label="Buenos Aires"
+        @on-tap="() => handleFormChange({area: 'Buenos Aires'})"
+      />
+      <my-button
+        class="primary area-btn"
+        :class="{ 'selected-btn': 'Lima' == selectedArea}"
+        label="Lima"
+        @on-tap="() => handleFormChange({area: 'Lima'})"
+      />
+      <my-button
+        class="primary area-btn"
+        :class="{ 'selected-btn': 'Córdoba' == selectedArea}"
+        label="Córdoba"
+        @on-tap="() => handleFormChange({area: 'Córdoba'})"
+      />
+      <my-button
+        class="primary area-btn"
+        :class="{ 'selected-btn': 'Salta' == selectedArea}"
+        label="Salta"
+        @on-tap="() => handleFormChange({area: 'Salta'})"
+      />      
+      <my-button
+        class="primary area-btn"
+        :class="{ 'selected-btn': 'Posadas' == selectedArea}"
+        label="Posadas"
+        @on-tap="() => handleFormChange({area: 'Posadas'})"
+      />
+      <my-button
+        class="primary area-btn"
+        :class="{ 'selected-btn': 'Neuquén' == selectedArea}"
+        label="Neuquén"
+        @on-tap="() => handleFormChange({area: 'Neuquén'})"
+      />
+      <my-button
+        class="primary"
+        :class="{ 'selected-btn': 'Comodoro Rivadavia' == selectedArea}"
+        label="Comodoro Rivadavia"
+        @on-tap="() => handleFormChange({area: 'Comodoro Rivadavia'})"
+      />
+    </div>
     
   </div>
   <div class="screen">
     <div class="titles-general">
-      <h2 v-if="inbound">Trámites Ingresados</h2>
-      <h2 v-if="outbound">Trámites Egresados</h2>
-      <h2 v-if="pending">Trámites Pendientes</h2>
+      
     </div>
     
     <div class="tables">
       <div class="area-table">
-        <h4 class="tables-title">Por CCTE/Área</h4>
+        <h4 class="titles">Por CCTE/Área</h4>
         <table>
           <tr>
             <th>Centro/Área</th>
             <th>Cantidad</th>
           </tr>
-          <tr 
+          <tr
             v-for="(item, index) in items.Area"
                 :key="index"
           >
-            <td>{{ item.area }}</td>
-            <td>{{ item.cantidad }}</td>
+            <td :class="{ 'selected-area': item.area == selectedArea}">{{ item.area }}</td>
+            <td :class="{ 'selected-area': item.area == selectedArea}">{{ item.cantidad }}</td>
           </tr> 
         </table>
       </div>
       <div class="type-table">
-        <h4 class="tables-title">Por Tipo</h4>
+        <h4 class="titles">Por Tipo</h4>
         <table>
           <tr>
             <th>Tipo</th>
@@ -219,6 +260,8 @@ tr:nth-child(odd) {
   height: 100%;
   width: 22%;
   padding: 10px;
+  min-width: 170px;
+
 }
 
 .stat-container {
@@ -227,11 +270,13 @@ tr:nth-child(odd) {
   gap: 20px;
 }
 
-.stat-type-btns {
+.type-btns-container {
   display: flex;
   flex-direction: row;
-  gap: 3px;
+  width: 100%;
+  gap: 5px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .submit-button {
@@ -243,7 +288,6 @@ tr:nth-child(odd) {
   border: 1px solid #007BFF;
   font-weight: 600;  
   color: white;
-
 }
 .submit-button:hover {
   background-color: #005ec2;
@@ -268,17 +312,29 @@ tr:nth-child(odd) {
 
 .selected-btn {
   background-color: #007BFF;
-  /* margin: 10px 0 20px;
-  padding: 10px 18px;
-  border-radius: 20px; */
   cursor: pointer;
   border: 1px solid #007BFF;
   font-weight: 600;  
   color: white;
+  
 }
 
-.tables-title {
+.area-btn {
+  flex: 1;
+}
+
+.selected-area {
+  background-color: #7cd7fe;
+  color: black;
+  /* font-style: italic; */
   font-weight: 500;
+}
+
+.titles {
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
 }
 .screen {
   display: flex;
@@ -287,6 +343,22 @@ tr:nth-child(odd) {
 .titles-general {
   display: flex;
   justify-content: center;
+}
+
+.dates-container {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  /* width: 100%; */
+  flex-wrap: wrap;
+  /* flex-wrap: wrap-reverse; */
+}
+
+.date-input {
+  flex: 1;
+  min-width: 125px;
+  /* flex-wrap: wrap; */
+  /* justify-self: center; */
 }
 
 </style>

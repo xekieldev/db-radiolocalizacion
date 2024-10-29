@@ -7,7 +7,8 @@ from src.station import station_schema, stations_schema
 from src.tech_measurement import tech_measurements_schema, tech_measurement_schema
 # from src.users import auth
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
-from sqlalchemy import and_
+from sqlalchemy import and_, func, or_
+from sqlalchemy.orm import aliased
 
 
 bp = Blueprint("case_file", __name__)
@@ -265,14 +266,14 @@ def patch_file(id):
 @bp.route('/statistics', methods = ['GET'])
 @jwt_required()
 def statistics():
+    case_file_data = aliased(CaseFile)
+    case_file_track = aliased(file_tracking)
     try:
         file_status = 'Pendiente'
-        fecha_inicio = request.args.get('fechaInicio')
-        fecha_fin = request.args.get('fechaFin')
-        income = request.args.get('income') == 'true'
-        outcome = request.args.get('outcome') == 'true'
-        pending = request.args.get('pending') == 'true'
-
+        start_date = request.args.get('startDate')
+        end_date = request.args.get('endDate')
+        type = request.args.get('type')
+        selected_area = request.args.get('area')
         usuario_id = get_jwt_identity()      
         checkUser= User.query.filter_by(id = usuario_id).first()
         # if checkUser.area != 'AGCCTYL':  
@@ -283,71 +284,185 @@ def statistics():
         types= ['Interferencias en Aeropuertos',
                 'Interferencias en Estaciones Radioeléctricas',
                 'Interferencias en Estaciones de Radiodifusión',
+                'Interferencias Celulares',
                 'Inspección de Estaciones Radioeléctricas',
                 'Inspección de Estaciones de Radiodifusión',
                 'Radiolocalización de Estaciones Radioeléctricas',
                 'Radiolocalización de Estaciones de Radiodifusión',
                 'Detectar actividad',
-                'Intervenciones por Denuncias del Público en general',
+                'Denuncias del Público en general',
                 'Medición de Radiaciones No Ionizantes',
                 'Otros',
                 'Medición de Radiaciones No Ionizantes (móviles)',
                 'Descargo']
-        print(fecha_inicio)
-        if fecha_inicio == '' and fecha_fin == '':
-            fecha_inicio = None
-            fecha_fin = None
+        if start_date == '' and end_date == '':
+            start_date = None
+            end_date = None
         # Ingesados
-        if income:
-            print(income, fecha_inicio, fecha_fin)
-            if fecha_inicio == None or fecha_fin == None:
+        if type == 'inbound':
+            if start_date == None and end_date == None:
                 for area in areas:
                     stat_by_area = case_file_available.filter_by(area_asignada= area).count() 
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
                 for type in types:
-                    stat_by_type = case_file_available.filter_by(tipo= type).count()
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter_by(tipo= type).count()
+                    else:
+                        stat_by_type = case_file_available.filter_by(tipo= type, area_asignada = selected_area).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            elif start_date == None and end_date != None:
+                case_file_available = case_file_available.filter(CaseFile.fecha <= end_date)
+                for area in areas:
+                    stat_by_area = case_file_available.filter_by(area_asignada= area).count() 
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+                for type in types:
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter_by(tipo= type).count()
+                    else:
+                        stat_by_type = case_file_available.filter_by(tipo= type, area_asignada = selected_area).count()
                     response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
             else:
-                case_file_available = case_file_available.filter(CaseFile.fecha >= fecha_inicio, CaseFile.fecha <= fecha_fin)
+                case_file_available = case_file_available.filter(CaseFile.fecha >= start_date, CaseFile.fecha <= end_date)
                 for area in areas:
                     stat_by_area = case_file_available.filter_by(area_asignada= area).count()
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
-
                 for type in types:
-                    stat_by_type = case_file_available.filter_by(tipo= type).count()
-                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter_by(tipo= type).count()
+                    else:
+                        stat_by_type = case_file_available.filter_by(tipo= type, area_asignada = selected_area).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})            
             
             return {'Area': response_by_area, 'Tipo': response_by_type}
-        if outcome:
+        # Egresados
+        if type =='outbound':
             file_status = 'Informado'
-            if fecha_inicio == None or fecha_fin == None:
+            if start_date == None and end_date == None:
+
                 for area in areas:
-                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count() 
+                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada = area).count() 
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
                 for type in types:
-                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo = type).count()
+                    else:
+                        stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo = type, area_asignada = selected_area).count()
                     response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
-            else:
-                case_file_available = case_file_available.filter(CaseFile.fecha >= fecha_inicio, CaseFile.fecha <= fecha_fin)
+            elif start_date == None and end_date != None:
+                case_file_available = (
+                    db.session.query(
+                        case_file_data,
+                        func.max(case_file_track.c.fecha).label("fecha_informe")  # Obtenemos la fecha más reciente del tracking
+                    )
+                    .join(case_file_track, case_file_data.id == case_file_track.c.file_id)
+                    .filter(
+                        case_file_data.tramitacion == file_status,  # Filtro de estado
+                        case_file_track.c.fecha <= end_date  # Filtro de fecha de fin
+                    )
+                    .group_by(case_file_data.id, case_file_data.tramitacion, case_file_data.fecha)  # Agrupamos por los campos relevantes
+                )
                 for area in areas:
-                    stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count()
+                    stat_by_area = case_file_available.filter(case_file_data.area_asignada == area).count()
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
 
                 for type in types:
-                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    stat_by_type = case_file_available.filter(case_file_data.tipo == type).count()
                     response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
-            
+            else:
+                case_file_available = (
+                    db.session.query(
+                        case_file_data,
+                        func.max(case_file_track.c.fecha).label("fecha_informe")  # Obtenemos la fecha más reciente del tracking
+                    )
+                    .join(case_file_track, case_file_data.id == case_file_track.c.file_id)
+                    .filter(
+                        case_file_data.tramitacion == file_status,  # Filtro de estado
+                        case_file_data.fecha >= start_date,  # Filtro de fecha de inicio
+                        case_file_track.c.fecha <= end_date  # Filtro de fecha de fin
+                    )
+                    .group_by(case_file_data.id, case_file_data.tramitacion, case_file_data.fecha)  # Agrupamos por los campos relevantes
+                )
+
+                for area in areas:
+                    stat_by_area = case_file_available.filter(case_file_data.area_asignada == area).count()
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+
+                for type in types:
+                    stat_by_type = case_file_available.filter(case_file_data.tipo == type).count()
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+                        
             return {'Area': response_by_area, 'Tipo': response_by_type}
-        if pending:
-            if fecha_inicio == None or fecha_fin == None:
+        # Pendientes
+        if type == 'pending':
+            if start_date == None and end_date == None:
                 for area in areas:
                     stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count() 
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
                 for type in types:
-                    stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo= type).count()
+                    if selected_area == None:
+                        stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo = type).count()
+                    else:
+                        stat_by_type = case_file_available.filter_by(tramitacion = file_status, tipo = type, area_asignada = selected_area).count()
                     response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+            elif start_date is None and end_date is not None:
+                # Subconsulta de expedientes que cumplen con la fecha de ingreso y condiciones de tramitación
+                case_file_available = (
+                    db.session.query(
+                        CaseFile.id,
+                        CaseFile.fecha.label("fecha_ingreso"),
+                        CaseFile.tramitacion,
+                        func.max(file_tracking.c.fecha).label("fecha_informe"),
+                        CaseFile.area_asignada,
+                        CaseFile.tipo
+                    )
+                    .outerjoin(file_tracking, CaseFile.id == file_tracking.c.file_id)
+                    .filter(
+                        CaseFile.fecha <= end_date  # Incluir solo expedientes con fecha de ingreso <= end_date
+                    )
+                    .group_by(CaseFile.id, CaseFile.fecha, CaseFile.tramitacion, CaseFile.area_asignada, CaseFile.tipo)
+                    .having(
+                        # Excluir expedientes en estado "Informado" con fecha de informe <= end_date
+                        ~((CaseFile.tramitacion == 'Informado') & (func.max(file_tracking.c.fecha) <= end_date))
+                    )
+                    .subquery(name="case_file_available")
+                )
+
+                # Inicialización de las listas de respuesta
+                response_by_area = []
+                response_by_type = []
+
+                # Conteo por área
+                for area in areas:
+                    stat_by_area = (
+                        db.session.query(case_file_available.c.id)
+                        .filter(case_file_available.c.area_asignada == area)
+                        .count()
+                    )
+                    response_by_area.append({'area': area, 'cantidad': stat_by_area})
+
+                # Conteo por tipo, con o sin área seleccionada
+                for type in types:
+                    if selected_area is None:
+                        # Conteo solo por tipo
+                        stat_by_type = (
+                            db.session.query(case_file_available.c.id)
+                            .filter(case_file_available.c.tipo == type)
+                            .count()
+                        )
+                    else:
+                        # Conteo por tipo y área
+                        stat_by_type = (
+                            db.session.query(case_file_available.c.id)
+                            .filter(case_file_available.c.tipo == type, case_file_available.c.area_asignada == selected_area)
+                            .count()
+                        )
+                    response_by_type.append({'tipo': type, 'cantidad': stat_by_type})
+
+                # Retorno de resultados
+                return {'Area': response_by_area, 'Tipo': response_by_type}
+
             else:
-                case_file_available = case_file_available.filter(CaseFile.fecha >= fecha_inicio, CaseFile.fecha <= fecha_fin)
+                case_file_available = case_file_available.filter(CaseFile.fecha >= start_date, CaseFile.fecha <= end_date)
                 for area in areas:
                     stat_by_area = case_file_available.filter_by(tramitacion = file_status, area_asignada= area).count()
                     response_by_area.append({'area': area, 'cantidad': stat_by_area})
