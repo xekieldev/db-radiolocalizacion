@@ -4,20 +4,10 @@ import MyButton from './MyButton.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router'
 import { useApi } from '../composables/api'
-import { getNode } from '@formkit/core'
-import FormRow from './FormRow.vue';
 
 const router = useRouter()
 const { getStatistics } = useApi()
 
-
-console.log(getNode('startDate'))
-
-
-// const fileStatus = ref('pending')
-const inbound = ref(true)
-const outbound = ref(false)
-const pending = ref(false)
 const items = ref({})
 
 
@@ -118,22 +108,19 @@ console.log('para tablas', items.value)
     >
     <div class="dates-container">
       <form-kit
-        id="startDate"
         type="date"
+        style="background: white"
         outer-class="date-input"
         label="Fecha de Inicio"
         v-model="startDate"
         name="startDate"
-        validation="date_after:04-30-2024"
-        validation-visibility="live"
-        :validation-messages="{
-          date_after: 'La fecha debe ser posterior al 01/05/2024.',
-        }"
         @change="(event) => handleFormChange({startDate: event.target.value })"
       />
       <form-kit
         type="date"
+        style="background: white"
         outer-class="date-input"
+        inner-class="date-input-field"
         label="Fecha de Fin"
         v-model="endDate"
         name="endDate"
@@ -360,5 +347,10 @@ tr:nth-child(odd) {
   /* flex-wrap: wrap; */
   /* justify-self: center; */
 }
+
+.formkit-input.date-input-field {
+  background: white;
+}
+
 
 </style>

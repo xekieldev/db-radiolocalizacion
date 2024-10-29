@@ -8,11 +8,13 @@ import { perfil } from '../composables/loginstatus'
 
 const router = useRouter()
 const filesMenu = ref(false)
+const mapsMenu = ref(false)
 const stationsMenu = ref(false)
 
 function closeDiv() {
   filesMenu.value = false
   stationsMenu.value = false
+  mapsMenu.value = false
 }
 
 function list() {
@@ -30,11 +32,19 @@ function listTechnicians() {
 function fileOptions() {
   filesMenu.value = !filesMenu.value
   stationsMenu.value = false
+  mapsMenu.value = false
 }
 
 function stationsOptions() {
   stationsMenu.value = !stationsMenu.value
   filesMenu.value = false
+  mapsMenu.value = false
+}
+
+function mapOptions() {
+  mapsMenu.value = !mapsMenu.value
+  filesMenu.value = false
+  stationsMenu.value = false
 }
 
 function stationList() {
@@ -45,12 +55,28 @@ function nirMeasurements() {
   router.push({ name:"listNIR"})
 }
 
+function statistics() {
+  router.push({ name:"statistics", query: { type: 'pending'}})
+}
+
+function filesMap() {
+  router.push({ name:"filesMap"})
+}
+
+function stationsMap() {
+  router.push({ name:"map"})
+}
+
+function nirMap() {
+  router.push({ name:"nirMap"})
+}
+
 </script>
 
 <template>
   <div class="home-container">
     <heading class="home-title">
-      Base de Datos del Sistema Nacional de Comprobación Técnica de Emisiones
+      Sistema de Gestión  Sistema Nacional de Comprobación Técnica de Emisiones
     </heading>
     <div class="home-buttons">
       <div class="first-row">
@@ -86,6 +112,12 @@ function nirMeasurements() {
         </div>
         <my-button
           tabindex="0"
+          class="septenary button statistics"
+          label="Estadísticas"
+          @on-tap="statistics"
+        />
+        <my-button
+          tabindex="0"
           class="septenary button station-manage"
           label="Gestión de Estaciones"
           @on-tap="stationsOptions"
@@ -116,6 +148,41 @@ function nirMeasurements() {
           @on-tap="nirMeasurements"
         />
         <my-button
+          tabindex="0"
+          class="septenary button maps"
+          label="Mapas"
+          @on-tap="mapOptions"
+        />
+        <div
+          v-if="mapsMenu == true"
+          class="file-options"
+        >
+          <button
+            class="close-button"
+            @click="closeDiv"
+          >
+            x
+          </button>
+          <my-button
+            tabindex="0"
+            class="quaternary sub-menu-button files-map"
+            label="Expedientes"
+            @on-tap="filesMap"
+          />
+          <my-button
+            tabindex="0"
+            class="quaternary sub-menu-button stations-map"
+            label="Estaciones"
+            @on-tap="stationsMap"
+          />
+          <my-button
+            tabindex="0"
+            class="quaternary sub-menu-button nir-map"
+            label="RNI móvil"
+            @on-tap="nirMap"
+          />
+        </div>
+        <my-button
           v-if="perfil == 'coordinator'"
           tabindex="0"
           class="septenary button technician-manage"
@@ -138,7 +205,7 @@ function nirMeasurements() {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 80px;
   gap: 10px;
   align-items: center;
 }
@@ -162,49 +229,79 @@ function nirMeasurements() {
   background-image: url(../../img/listado.png);
   background-repeat: no-repeat;
   background-size: 30px;
-  background-position: center left 15px;
+  background-position: center left 25px;
 }
 .new-file {
   background-image: url(../../img/new-file.png);
   background-repeat: no-repeat;
   background-size: 30px;
-  background-position: center left 15px;
+  background-position: center left 25px;
 }
 .new-rloc {
   background-image: url(../../img/antena-parabolica.png);
   background-repeat: no-repeat;
   background-size: 30px;
-  background-position: center left 15px;
+  background-position: center left 25px;
 }
 .new-loc {
   background-image: url(../../img/mapa.png);
   background-repeat: no-repeat;
   background-size: 30px;
-  background-position: center left 15px;
+  background-position: center left 25px;
 }
 .file-manage {
   background-image: url(../../img/expediente.png);
   background-repeat: no-repeat;
   background-size: 50px;
-  background-position: center top 15px;
+  background-position: center top 25px;
 }
 .station-manage {
   background-image: url(../../img/estacion-de-radio.png);
   background-repeat: no-repeat;
   background-size: 50px;
-  background-position: center top 15px;
+  background-position: center top 25px;
 }
 .technician-manage {
   background-image: url(../../img/conexion-inalambrica.png);
   background-repeat: no-repeat;
   background-size: 50px;
-  background-position: center top 15px;
+  background-position: center top 25px;
 }
 .nir-measurements {
   background-image: url(../../img/camioneta-rni.png);
   background-repeat: no-repeat;
   background-size: 50px;
-  background-position: center top 15px;
+  background-position: center top 25px;
+}
+.statistics {
+  background-image: url(../../img/estadisticas.png);
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center top 25px;
+}
+.maps {
+  background-image: url(../../img/mapa-arg.png);
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center top 25px;
+}
+.files-map {
+  background-image: url(../../img/files-map.png);
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center left 25px;
+}
+.stations-map {
+  background-image: url(../../img/station-map.png);
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center left 25px;
+}
+.nir-map {
+  background-image: url(../../img/nir-map.png);
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center left 25px;
 }
 .home-title {
   text-align: center;

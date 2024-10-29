@@ -37,6 +37,7 @@ function handleClick() {
 
 .primary {
   border: 1px solid #007BFF;
+  background: white;
   font-weight: 500;  
   color: #007BFF;  
   white-space: nowrap;
@@ -87,7 +88,7 @@ function handleClick() {
   align-items: center;
 }
 .quaternary:hover {
-  background-color: #426aaf;
+  background-color: #42af4f;
   color: white;
 }
 .quinary {
@@ -116,7 +117,7 @@ function handleClick() {
   font-weight: 700;  
   color: #0B1742; 
   height: 150px;
-  width: 250px;
+  width: 210px;
   text-align: center;
   align-items: center;
   padding-top: 50px;
