@@ -290,7 +290,7 @@ def statistics():
                 'Radiolocalización de Estaciones Radioeléctricas',
                 'Radiolocalización de Estaciones de Radiodifusión',
                 'Detectar actividad',
-                'Denuncias del Público en general',
+                'Denuncias del Público en General',
                 'Medición de Radiaciones No Ionizantes',
                 'Otros',
                 'Medición de Radiaciones No Ionizantes (móviles)',
