@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import FooterMain from '../components/FooterMain.vue'
 import StatisticsMain from '../components/StatisticsMain.vue'
 import { useRouter } from 'vue-router'
+import PieChart from '../components/PieChart.vue'
 
 
 const items = ref({})
@@ -24,15 +25,19 @@ watch(()=> router, (newValue, oldValue) => {
 
 </script>
 <template>
-  <statistics-main
+  <div class="statistics-view">
+    <statistics-main
     title="Estadísticas"
     :items="items"
     :type="type"
     :selectedArea="selectedArea"
     :startDate="startDate"
     :endDate="endDate"
-  />
+    />
+
  
+  </div>
+  
   <footer-main class="footer-main" />
 
 </template>

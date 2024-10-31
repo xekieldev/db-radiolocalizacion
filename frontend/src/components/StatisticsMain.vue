@@ -4,17 +4,52 @@ import MyButton from './MyButton.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router'
 import { useApi } from '../composables/api'
+import PieChart from './PieChart.vue';
 
 const router = useRouter()
 const { getStatistics } = useApi()
 
 const items = ref({})
+const chartLabels = ref([])
+const chartValues = ref([])
+const chartData = ref({
+  labels: [], // Inicializa con un array vacío
+  datasets: [
+    {
+      backgroundColor: [],
+      data: [],
+    }
+  ]
+})
+const chartColors = ref([])
 
 
 onMounted(async ()=> {
 
   items.value = await getStatistics(props.startDate, props.endDate, props.type, props.selectedArea)
 
+  if (items.value.Tipo && Array.isArray(items.value.Tipo)) {
+    items.value.Tipo.forEach((item, index) => {
+      chartLabels.value[index] = item.tipo
+      chartValues.value[index] = item.cantidad
+      const baseRed = 0
+      const baseGreen = 0
+      const baseBlue = 255
+      const alpha = 0.1 + index * 0.05 // Ajusta el nivel de transparencia para cada color
+
+      chartColors.value[index] = `rgba(${baseRed}, ${baseGreen}, ${baseBlue - index * 10}, ${alpha})`
+    })
+  }
+
+  chartData.value = {
+  labels: chartLabels.value,
+  datasets: [
+    {
+      backgroundColor: chartColors.value,
+      data: chartValues.value,
+    }
+  ]
+}
 })
 
 
@@ -68,6 +103,29 @@ watch(()=> props, async (newValue, oldValue) => {
   // props.type = newValue.type
   items.value = await getStatistics( newValue.startDate, newValue.endDate, newValue.type, newValue.selectedArea)
 console.log('para tablas', items.value)
+
+if (items.value.Tipo && Array.isArray(items.value.Tipo)) {
+    items.value.Tipo.forEach((item, index) => {
+      chartLabels.value[index] = item.tipo
+      chartValues.value[index] = item.cantidad
+      const baseRed = 0
+      const baseGreen = 0
+      const baseBlue = 255
+      const alpha = 0.1 + index * 0.05 // Ajusta el nivel de transparencia para cada color
+
+      chartColors.value[index] = `rgba(${baseRed}, ${baseGreen}, ${baseBlue - index * 10}, ${alpha})`
+    })
+  }
+
+chartData.value = {
+  labels: chartLabels.value,
+  datasets: [
+    {
+      backgroundColor: chartColors.value,
+      data: chartValues.value,
+    }
+  ]
+}
   
 }, {deep: true})
 
@@ -75,9 +133,10 @@ console.log('para tablas', items.value)
 </script>
 
 <template>
-  <heading>{{ title }}</heading>
+  <heading>{{ title }} {{ selectedArea }} </heading>
   <div class="stat-container">
   <div class="stat-menu">
+    <h2 class="titles">Filtros</h2>
     <h4 class="titles">Seleccione tipo</h4>
     <div class="type-btns-container">
       <my-button
@@ -218,8 +277,12 @@ console.log('para tablas', items.value)
           </tr> 
       </table>
       </div>   
+    </div>
   </div>
-</div>
+  <div class="pie-container">
+      <pie-chart
+        :chartData="chartData"/>
+  </div>
 </div>
 </template>
 
@@ -352,5 +415,11 @@ tr:nth-child(odd) {
   background: white;
 }
 
+.pie-container {
+  width: 30%;
+  flex:1;
+  justify-self: start;
+  padding-top: 35px;;
+}
 
 </style>
