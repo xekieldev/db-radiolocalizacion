@@ -24,7 +24,7 @@
         >
           <l-icon
             v-if="item.tipo"
-            :icon-size="[25, 25]"
+            :icon-size="[35, 35]"
             :icon-url="pickIcon(item)"
             :icon-anchor="[12, 12]"
           />
@@ -100,7 +100,7 @@ const props = defineProps({
 
 function pickIcon(item) {
   let icon = ''
-  if (item.tipo.trim() === 'Interferencias en Estaciones Radioeléctricas'){
+  if (item.tipo.trim() === 'Interferencias Celulares'){
     if(item.usuario.trim() === 'Personal') icon = getIconUrl('Personal')     
     else if(item.usuario.trim() === 'Movistar') icon = getIconUrl('Movistar')
     else if(item.usuario.trim() === 'Claro') icon = getIconUrl('Claro')

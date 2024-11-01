@@ -78,17 +78,17 @@ function handleClick() {
 }
 
 .quaternary {
-  border: 1px solid #426aaf;
+  border: 1px solid #0074A6;
   font-weight: 500;  
   padding: 5px 10px 5px 50px;
-  color: #426aaf; 
+  color: #0074A6; 
   height: 45px;
   width: 250px;
   text-align: center;
   align-items: center;
 }
 .quaternary:hover {
-  background-color: #42af4f;
+  background-color: #0074A6;
   color: white;
 }
 .quinary {

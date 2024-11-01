@@ -86,7 +86,7 @@ watch(province, (newValue, oldValue) => {
   emits('update:file.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
-    // city.value = cities.value[0].value
+    city.value = cities.value[0].value
     emits('update:file.localidad', newValue)
   }
 })
