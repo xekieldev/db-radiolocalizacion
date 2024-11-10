@@ -69,6 +69,19 @@ import avion from "../../img/map_icons/avion.png"
 import Personal from "../../img/map_icons/Personal.png"    
 import Movistar from "../../img/map_icons/Movistar.png"    
 import Claro from "../../img/map_icons/Claro.png"    
+import actividad from "../../img/map_icons/actividad.png" 
+import ref_icon from "../../img/map_icons/ref_icon.png"
+import descargo from "../../img/map_icons/descargo.png"
+import IER from "../../img/map_icons/IER.png"
+import IERad from "../../img/map_icons/IERad.png"
+import InspER from "../../img/map_icons/InspER.png"
+import InspERad from "../../img/map_icons/InspERad.png"
+import RadER from "../../img/map_icons/RadER.png"
+import RadERad from "../../img/map_icons/RadERad.png"
+import DA from "../../img/map_icons/DA.png"
+import DPG from "../../img/map_icons/DPG.png"
+import otro from "../../img/map_icons/otro.png"
+import RNI from "../../img/map_icons/RNI.png"
 
 const iconsMap = { 
     FM: FMIcon,
@@ -142,6 +155,20 @@ const iconsMap = {
     'Personal': Personal,
     'Movistar': Movistar,
     'Claro': Claro,
+    // 'Detectar actividad': actividad,
+    'Interferencias en Estaciones Radioeléctricas': IER,
+    'Interferencias en Estaciones de Radiodifusión': IERad,
+    // 'Interferencias Celulares': ref_icon,
+    'Inspección de Estaciones Radioeléctricas': InspER,
+    'Inspección de Estaciones de Radiodifusión': InspERad,
+    'Radiolocalización de Estaciones Radioeléctricas': RadER,
+    'Radiolocalización de Estaciones de Radiodifusión': RadERad,
+    'Detectar actividad': DA,
+    'Denuncias del Público en General': DPG,
+    'Medición de Radiaciones No Ionizantes': RNI,
+    'Otros': otro,
+    'Medición de Radiaciones No Ionizantes (móviles)': ref_icon,
+    'Descargo': descargo,
 }
 
 
