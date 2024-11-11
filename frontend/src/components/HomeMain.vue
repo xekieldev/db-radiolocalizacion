@@ -76,7 +76,7 @@ function nirMap() {
 <template>
   <div class="home-container">
     <heading class="home-title">
-      Sistema de Gestión  Sistema Nacional de Comprobación Técnica de Emisiones
+      Sistema de Gestión de Expedientes<br/>Sistema Nacional de Comprobación Técnica de Emisiones (SNCTE)
     </heading>
     <div class="home-buttons">
       <div class="first-row">
@@ -205,7 +205,7 @@ function nirMap() {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 60px;
   gap: 10px;
   align-items: center;
 }

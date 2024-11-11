@@ -32,10 +32,10 @@ onMounted(async() => {
 .wrapper {
   display: flex;
   flex-direction: column;
-  width: 95vw;
+  width: 100%;
   margin: 0 auto;
   min-height: 100vh;
-  padding: 1px;
+  /* padding: 1px; */
   /* font-size: 11px; */
 }
 

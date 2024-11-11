@@ -99,7 +99,7 @@ header {
     /* background: linear-gradient(to right, white 0%, #cacaca 25%, #cacaca 75%, white 100%); */
     width: 100%;
     border-bottom: 1px solid #0B1742;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
   
   }
   

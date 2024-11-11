@@ -74,7 +74,8 @@
       </l-marker-cluster-group>
     </l-map>
     <div class="map-references">
-      <h2>Referencias</h2>
+      <h2 class="heading">Mapa de Expedientes</h2>
+      <h3 class="heading">Referencias</h3>
       <h4 class="reference-item">
         <img class="reference-icon" :src="getIconUrl('Interferencias en Aeropuertos')" alt="">
         Interferencias en Aeropuertos
@@ -150,6 +151,7 @@ import { useTerritory } from "../composables/territory";
 import MyButton from "./MyButton.vue";
 import { useRouter } from 'vue-router'
 import PropValue from "./PropValue.vue";
+import Heading from '../components/Heading.vue';
 
 const { getIconUrl } = useIconsMap()
 const { getNameByCode } = useTerritory()
@@ -193,7 +195,7 @@ function viewItem(file_id) {
 .global-map-container {
   height: 700px;
   width: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   position: relative;
 }
 
@@ -241,5 +243,8 @@ function viewItem(file_id) {
   padding-top: 3px;
   font-weight: 600;
 
+}
+.heading {
+  font-weight: 500;
 }
 </style>

@@ -94,52 +94,79 @@ textToSearch = ''
 
 
 <template>
-  <heading>Mapa de Expedientes</heading>
-  <div class="buttons-container">
-    <my-button
-      class="primary right"
-      label="Volver"
-      @on-tap="goBack"
-    />
-  </div>
-  <div class="view-map-container">
-    <div class="form-search-container">
-      <form-search
-        class="search-input"
-        :text-to-search="textToSearch"
-        placeholder="Buscar Expedientes"
-        @on-submit="searchFiles"
+  <div class="map-files">
+    <!-- <heading class="map-heading">Mapa de Expedientes</heading> -->
+    <!-- <div class="buttons-container">
+      <my-button
+        class="primary map-btn"
+        label="Volver"
+        @on-tap="goBack"
+      />
+    </div> -->
+    <div class="view-map-container">
+      <div class="form-search-container">
+        <form-search
+          class="search-input"
+          :text-to-search="textToSearch"
+          placeholder="Buscar Expedientes"
+          @on-submit="searchFiles"
+        />
+      </div>
+      
+      <general-map
+        class="general-map"
+        v-if="latitude"
+        :zoom="zoom"
+        :position="[ latitude.toString(), longitude.toString()]"
+        :files="files"
       />
     </div>
-    
-    <general-map
-      class="general-map"
-      v-if="latitude"
-      :zoom="zoom"
-      :position="[ latitude.toString(), longitude.toString()]"
-      :files="files"
-    />
   </div>
   
 </template>
 
 
 <style scoped>
+
+.map-files {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 91px);
+  width: 100%;
+  position: relative;
+}
 .buttons-container {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  justify-content: end;
-  /* margin: 0 5px; */
+  justify-content: right;
+  margin: 0 5px;
+  position: absolute;
+  z-index: 2;
 }
 .view-map-container {
-  position: relative
+  height: 100%;
+  position: relative;
 }
 
 .form-search-container {
   position: absolute;  
   /* background-color: white; */
   top: 25px;
-  z-index: 3000;
+  z-index: 2;
 }
+
+.general-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+.map-heading {
+  position: absolute;
+  z-index: 2;
+}
+
 </style>
