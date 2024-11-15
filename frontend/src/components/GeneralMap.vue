@@ -73,68 +73,6 @@
         </l-marker>
       </l-marker-cluster-group>
     </l-map>
-    <div class="map-references">
-      <h2 class="heading">Mapa de Expedientes</h2>
-      <h3 class="heading">Referencias</h3>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Interferencias en Aeropuertos')" alt="">
-        Interferencias en Aeropuertos
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Interferencias en Estaciones Radioeléctricas')" alt="">
-        Interferencias en Estaciones Radioeléctricas
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Interferencias en Estaciones de Radiodifusión')" alt="">
-        Interferencias en Estaciones de Radiodifusión
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Personal')" alt="">
-        <img class="reference-icon" :src="getIconUrl('Claro')" alt="">
-        <img class="reference-icon" :src="getIconUrl('Movistar')">
-        Interferencias Celulares
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Inspección de Estaciones Radioeléctricas')" alt="">
-        Inspección de Estaciones Radioeléctricas
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Inspección de Estaciones de Radiodifusión')" alt="">
-        Inspección de Estaciones de Radiodifusión
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Radiolocalización de Estaciones Radioeléctricas')" alt="">
-        Radiolocalización de Estaciones Radioeléctricas
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Radiolocalización de Estaciones de Radiodifusión')" alt="">
-        Radiolocalización de Estaciones de Radiodifusión
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Detectar actividad')" alt="">
-        Detectar actividad
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Denuncias del Público en General')" alt="">
-        Denuncias del Público en General
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Medición de Radiaciones No Ionizantes')" alt="">
-        Medición de Radiaciones No Ionizantes
-      </h4>
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Otros')" alt="">
-        Otros
-      </h4>
-      <!-- <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Inspección de Estaciones Radioeléctricas')" alt="">
-        Medición de Radiaciones No Ionizantes (móviles)
-      </h4 >
-      <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Descargo')" alt="">
-        Descargo
-      </h4> -->
-    </div>
   </div>
 </template>
 
@@ -219,32 +157,5 @@ function viewItem(file_id) {
 .view-button {
   margin-top: 5px;
   width: 100%;
-}
-.map-references {
-  /* display: flex;
-  flex-direction: column; */
-  position: absolute;
-  bottom: 10px; /* Puedes ajustar la posición según prefieras */
-  left: 10px;
-  background-color: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 1000; 
-  font-size: 12px;
-}
-.reference-icon {
-  height: 23px;
-  padding-right: 5px;
-}
-
-.reference-item {
-  display: flex;
-  align-items: center;
-  padding-top: 3px;
-  font-weight: 600;
-
-}
-.heading {
-  font-weight: 500;
 }
 </style>

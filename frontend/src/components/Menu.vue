@@ -60,6 +60,12 @@ async function doLogout() {
           RNI
         </RouterLink>
         <RouterLink
+          v-if="loggedIn"
+          to="/files_map"
+        >
+          Mapa de expedientes
+        </RouterLink>
+        <RouterLink
           v-if="loggedIn && perfil == 'coordinator'"
           to="/list_technicians"
         >
@@ -100,6 +106,7 @@ header {
     width: 100%;
     border-bottom: 1px solid #0B1742;
     /* margin-bottom: 15px; */
+    z-index: 1000;
   
   }
   
@@ -123,7 +130,7 @@ nav {
     display: inline-block;
     padding: 0 1rem;
     border-left: 1px solid var(--color-border);
-    color: black;
+    color: #0B1742;
     text-decoration: none;
     font-weight: 700;
   }
@@ -137,6 +144,7 @@ nav {
   .logout-button {
       /* height: 34px;  */
       margin-top: 5px;
+      margin-right: 30px ;
   }
 
   .menu-name {
@@ -146,5 +154,6 @@ nav {
   }
   .logo {
     height: 90px;
+    padding: 0 10px;
   }
   </style>

@@ -69,6 +69,7 @@ import PropValue from "./PropValue.vue";
 import { useIconsMap } from "../composables/iconsmap"
 
 
+
 const { getAllNonIonizingRadiation } = useApi()
 const { getNameByCode, getCoordinates } = useTerritory()
 const { getIconUrl } = useIconsMap()
@@ -108,7 +109,7 @@ defineProps({
 .global-map-container {
   height: 700px;
   width: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   position: relative;
   background: linear-gradient(to right, rgba(202, 202, 202, 0), #cacaca, rgba(202, 202, 202, 0));
 }

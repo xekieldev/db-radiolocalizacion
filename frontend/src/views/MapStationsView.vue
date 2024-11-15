@@ -4,6 +4,10 @@ import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
 import Gmap from '../components/GlobalMap.vue'
 import MyButton from '../components/MyButton.vue'
+import { useIconsMap } from "../composables/iconsmap"
+
+
+const { getIconUrl } = useIconsMap()
 
 
 let latitude = ref()
@@ -37,28 +41,75 @@ function goBack() {
 
 
 <template>
-  <heading>Mapa de Estaciones</heading>
-  <div class="buttons-container">
+  <!-- <heading>Mapa de Estaciones</heading> -->
+  <!-- <div class="buttons-container">
     <my-button
       class="primary right"
       label="Volver"
       @on-tap="goBack"
     />
-  </div>
-  <gmap
+  </div> -->
+  <div class="stations-map-container">
+    <gmap
+    class="stations-map"
     v-if="latitude"
     :zoom="zoom"
     :position="[ latitude.toString(), longitude.toString()]"
   />
+    <div class="map-references">
+      <h2 class="heading">Mapa de Estaciones detectadas</h2>
+      <h3 class="heading">Referencias</h3>
+      <h4 class="reference-item">
+        <img class="reference-icon" :src="getIconUrl('Otros')" alt="">
+        Servicios
+      </h4>
+    </div>
+  </div>
+  
 </template>
 
 
 <style scoped>
-.buttons-container {
+
+.stations-map-container {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: end;
-  /* margin: 0 5px; */
+  flex-direction: column;
+  height: calc(100vh - 91px);
+  width: 100%;
+  position: relative;
+}
+.stations-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+.map-references {
+  /* display: flex;
+  flex-direction: column; */
+  position: absolute;
+  bottom: 10px; /* Puedes ajustar la posición según prefieras */
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000; 
+  font-size: 12px;
+}
+.reference-icon {
+  height: 23px;
+  padding-right: 5px;
+}
+.reference-item {
+  display: flex;
+  align-items: center;
+  padding-top: 3px;
+  font-weight: 600;
+}
+.heading {
+  font-weight: 500;
 }
 </style>

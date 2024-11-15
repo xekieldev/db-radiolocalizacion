@@ -433,31 +433,32 @@ function closeDiv() {
       </tr>
     </table>
   </div>
-
-  <form-new-activity
-    v-if="file.tramitacion != 'Finalizado'"
-    @on-submit="save"
-  />
-
   
-  <table v-if="activities && activities.length > 0">
-    <tr>
-      <th class="date-field">
-        Fecha
-      </th>
-      <th>Detalle</th>
-    </tr>
-    <tr
-      v-for="activity in activities"
-      :key="activity"
-    >
-      <td class="date-field">
-        {{ activity.fecha }}
-      </td>
-      <td>{{ activity.detalle }}</td>
-    </tr>
-  </table>
-    
+  <div class="activities-container">
+
+    <form-new-activity
+      v-if="file.tramitacion != 'Finalizado'"
+      @on-submit="save"
+    />
+
+    <table v-if="activities && activities.length > 0">
+      <tr>
+        <th class="date-field">
+          Fecha
+        </th>
+        <th>Detalle</th>
+      </tr>
+      <tr
+        v-for="activity in activities"
+        :key="activity"
+      >
+        <td class="date-field">
+          {{ activity.fecha }}
+        </td>
+        <td>{{ activity.detalle }}</td>
+      </tr>
+    </table>
+  </div>
   <footer-main class="footer-main" />
 </template>
 
@@ -468,6 +469,7 @@ function closeDiv() {
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+  padding: 0 30px;
 }
 
 .status{
@@ -489,6 +491,7 @@ function closeDiv() {
   gap: 5px;
   /* padding: 10px; */
   justify-content: space-between;
+  padding: 0 30px;
 }
 
 .left-options {
@@ -529,7 +532,7 @@ tr:nth-child(odd) {
 }
 
 .date-field {
-  width: 200px;
+  width: 20%;
 }
 .action-buttons-container {
   display: flex;
@@ -550,18 +553,14 @@ tr:nth-child(odd) {
   width: 100%;
   margin-top: 20px;
   border-top: solid 1px gray;
-
+  padding: 0 30px;
 }
 
 .field-date {
       flex: 0 0 25%;
 }
 
-.add-activity {
-  display: flex;
-  flex-direction: row;
-  
-}
+
 
 /* .go-back-button {
   display: flex;
@@ -575,6 +574,8 @@ tr:nth-child(odd) {
   justify-content: end;
   gap: 10px;
   margin: 5px 0;
+  padding: 0 30px;
+
 }
 .close-button {
   position: absolute;
@@ -586,7 +587,7 @@ tr:nth-child(odd) {
   font-weight: 300;
   cursor: pointer;
   z-index: 100;
-  padding: 0;
+  padding: 0 30px;
 }
 
 .options-menu {
@@ -594,4 +595,7 @@ tr:nth-child(odd) {
   align-items: flex-end;
 }
 
+.actions-menu {
+  padding: 0 30px;
+}
 </style>

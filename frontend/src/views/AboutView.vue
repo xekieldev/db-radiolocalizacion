@@ -72,6 +72,7 @@ import FooterMain from '../components/FooterMain.vue';
 .about {
   text-align: center;
   width: 100%;
+  padding: 0 30px;
 }
 
 .version-titles {

@@ -2,8 +2,12 @@
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Heading from '../components/Heading.vue';
-import GNirmap from '../components/GlobalMapNir.vue'
+import GNirMap from '../components/GlobalMapNir.vue'
 import MyButton from '../components/MyButton.vue'
+import { useIconsMap } from "../composables/iconsmap"
+
+
+const { getIconUrl } = useIconsMap()
 
 
 let latitude = ref()
@@ -36,28 +40,57 @@ function goBack() {
 
 
 <template>
-  <heading>Mapa de Mediciones de RNI</heading>
-  <div class="buttons-container">
-    <my-button
-      class="primary right"
-      label="Volver"
-      @on-tap="goBack"
-    />
-  </div>
-  <g-nirmap
+  <div class="nir-map-container">
+    <g-nir-map
     v-if="latitude"
     :zoom="zoom"
     :position="[ latitude.toString(), longitude.toString()]"
   />
+  <div class="map-references">
+      <h2 class="heading">Mapa de RNI móviles</h2>
+      <h3 class="heading">Referencias</h3>
+      <h4 class="reference-item">
+        <img class="reference-icon" :src="getIconUrl('Medición de Radiaciones No Ionizantes')" alt="">
+        Localidad medida
+      </h4>
+    </div>
+  </div>
+  
 </template>
 
 
 <style scoped>
-.buttons-container {
+
+.nir-map-container {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: end;
-  margin: 0 5px;
+  flex-direction: column;
+  height: calc(100vh - 91px);
+  width: 100%;
+  position: relative;
+}
+.map-references {
+  /* display: flex;
+  flex-direction: column; */
+  position: absolute;
+  bottom: 10px; /* Puedes ajustar la posición según prefieras */
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000; 
+  font-size: 12px;
+}
+.reference-icon {
+  height: 23px;
+  padding-right: 5px;
+}
+.reference-item {
+  display: flex;
+  align-items: center;
+  padding-top: 3px;
+  font-weight: 600;
+}
+.heading {
+  font-weight: 500;
 }
 </style>

@@ -17,45 +17,51 @@ function submitHandler(fields) {
 </script>
 
 <template>
-  <heading>{{ title }}</heading>
-  <form-kit
-    type="form"
-    submit-label="Guardar"
-    :actions="false"
-    @submit="submitHandler"
-  >
-    <form-row>
-      <form-kit
-        type="text"
-        label="Nombre"
-        name="nombre"
-      />
-    </form-row>
-    <form-row>
-      <form-kit
-        type="text"
-        label="Apellido"
-        name="apellido" 
-      />
-    </form-row>
-    <form-row>
-      <form-kit
-        type="select"
-        :options="area"
-        label="CCTE/Área"
-        name="area" 
-      />
-    </form-row>
-    <button
-      class="submit-technician-button"
+  <div class="new-technician-container">
+    <heading>{{ title }}</heading>
+    <form-kit
+      type="form"
+      submit-label="Guardar"
+      :actions="false"
+      @submit="submitHandler"
     >
-      Guardar
-    </button>
-  </form-kit>
+      <form-row>
+        <form-kit
+          type="text"
+          label="Nombre"
+          name="nombre"
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="text"
+          label="Apellido"
+          name="apellido" 
+        />
+      </form-row>
+      <form-row>
+        <form-kit
+          type="select"
+          :options="area"
+          label="CCTE/Área"
+          name="area" 
+        />
+      </form-row>
+      <button
+        class="submit-technician-button"
+      >
+        Guardar
+      </button>
+    </form-kit>
+  </div>
 </template>
 
   
 <style scoped>
+
+.new-technician-container {
+  padding: 0 30px;
+}
 
 .submit-technician-button {
       background-color: white;

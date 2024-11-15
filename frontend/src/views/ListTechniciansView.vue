@@ -109,6 +109,7 @@ async function searchTechnician(textToSearch) {
   width: 100%;
   justify-content: center;
   margin-top: 10px;
+  padding: 0 30px;
 }
 .technicians-table {
   font-size: 12px;
@@ -143,6 +144,7 @@ tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 0 30px;
 }
 
 </style>

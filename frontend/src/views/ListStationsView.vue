@@ -154,6 +154,7 @@ function viewMap() {
   width: 100%;
   justify-content: center;
   /* font-size: 14px; */
+  padding: 0 30px;
 }
 .status{
     background-color: lightyellow;
@@ -190,6 +191,7 @@ tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 0 30px;
 }
 
 </style>
