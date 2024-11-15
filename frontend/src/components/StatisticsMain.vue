@@ -318,6 +318,7 @@ tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  padding: 0 30px;
 }
 
 .type-btns-container {

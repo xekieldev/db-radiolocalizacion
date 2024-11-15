@@ -120,7 +120,7 @@ watch(estado, async(newValue, oldValue) => {
       <my-button
         v-if="perfil == 'coordinator'"
         tabindex="0"
-        class="secondary center"
+        class="primary center"
         label="Alta Expediente"
         @on-tap="newFile"
       />
@@ -219,6 +219,7 @@ watch(estado, async(newValue, oldValue) => {
   width: 100%;
   justify-content: center;
   margin-top: 10px;
+  padding: 0 30px;
 }
 .status{
     background-color: lightyellow;
@@ -255,6 +256,7 @@ tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 0 30px;
 }
 .red-text {
   color: red;

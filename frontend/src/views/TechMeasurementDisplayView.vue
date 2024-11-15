@@ -326,7 +326,7 @@ async function del_tech_measurement(file_id, id, id_tech_measurement) {
           :value=" techMeasurement[index].status"
         />
       </display-row>
-      <div class="buttons-container delete-btn">
+      <div class="delete-btn">
         <my-button
           v-if="!printFlag.isActive"
           class="tertiary right"
@@ -372,7 +372,8 @@ async function del_tech_measurement(file_id, id, id_tech_measurement) {
     flex-direction: row;
     gap: 10px;
     justify-content: end;
-    margin: 5px;
+    margin-top: 5px;
+    padding: 0 30px;
     padding-bottom: 5px;
 }
 .title-testigo {
@@ -387,15 +388,20 @@ async function del_tech_measurement(file_id, id, id_tech_measurement) {
   display: inline-flex;
   width: 50%; 
 }
+.measurement-point-group {
+  padding: 0 30px;
+}
 .reference-group {
   padding-bottom: 10px;;
   border-bottom: solid 1px lightblue;
   /* text-transform: uppercase; */
+  padding: 0 30px;
 }
 .testigo-group {
   padding-bottom: 10px;;
   border-bottom: solid 1px lightblue;
   /* text-transform: uppercase; */
+  padding: 0 30px;
 }
 .status {
   flex: 0 0 15%;
@@ -404,7 +410,12 @@ async function del_tech_measurement(file_id, id, id_tech_measurement) {
   justify-content: left;
 }
 .delete-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
   border-bottom: 1px solid lightblue;
+  padding-bottom: 5px;
+
 }
 .preview-header {
   display: flex;
@@ -415,6 +426,7 @@ async function del_tech_measurement(file_id, id, id_tech_measurement) {
   align-items: baseline;
   border-bottom: 1px solid #0B1742;
   margin-bottom: 15px;
+  z-index: 2000;
 }
 .back-preview-button {
   align-self: center;

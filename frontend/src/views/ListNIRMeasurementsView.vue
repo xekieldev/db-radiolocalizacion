@@ -116,11 +116,13 @@ function viewNirMap() {
 
 .status{
   background-color: lightyellow;
+  margin: 0 30px;
 }
 .nir-measurements-container{
   justify-content: center; 
   margin-top: 10px;
   font-size: 12px;
+  padding: 0 30px;
 }
 .nir-table {
   width: 100%;
@@ -158,6 +160,7 @@ tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 0 30px;
 }
 .right-section {
   display: flex;
