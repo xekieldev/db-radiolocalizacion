@@ -1,0 +1,1 @@
+DROP VIEW IF EXISTS view_file_tracking_status;

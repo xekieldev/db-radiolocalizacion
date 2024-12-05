@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from sqlalchemy import CheckConstraint
+import os
+from sqlalchemy.sql import text
 
 # create the extension
 db = SQLAlchemy()
@@ -40,7 +42,7 @@ technician_nir = db.Table(
 
 file_tracking = db.Table(
     "file_tracking",
-    db.Model.metadata,
+    # db.Model.metadata,
     db.Column("file_id", db.Integer, db.ForeignKey("File.id")),
     db.Column("envia", db.String),
     db.Column("recibe", db.String),
@@ -48,6 +50,20 @@ file_tracking = db.Table(
     db.Column("hora", db.String),
     db.Column("usuario", db.String),
 )
+
+# view_file_tracking_status = db.Table(
+#     "view_file_tracking_status",
+#     db.Model.metadata,
+#     db.Column("id", db.Integer),
+#     db.Column("tramitacion", db.String),
+#     db.Column("status", db.String),
+#     db.Column("envia", db.String),
+#     db.Column("recibe", db.String),
+#     db.Column("fecha", db.String),
+#     db.Column("hora", db.String),
+#     db.Column("estado", db.String),
+#     db.Column("indice_estado", db.Integer),
+# )
 
 class CaseFile(db.Model):   # la clase Producto hereda de db.Model
     # define los campos de la tabla
@@ -194,9 +210,29 @@ class Activity (db.Model):
     fecha = db.Column(db.String(10))
     detalle = db.Column(db.String(500), nullable = False)
     
+def execute_sql_file(app, file_name):
+    # Ruta al archivo SQL
+    sql_file_path = os.path.join(os.path.dirname(__file__), 'sql', file_name)
+    
+    # Leer el contenido del archivo SQL
+    try:
+        with open(sql_file_path, 'r') as file:
+            sql_query = file.read()
+        
+        # Ejecutar la consulta
+        with app.app_context():
+            db.session.execute(text(sql_query))
+            db.session.commit()
+            print("Comando sql ejecutado exitosamente.")
+    except Exception as e:
+        print(f"Error al ejecutar comando sql: {e}")
 
 def init_app(app):
+    print("Estoy entrando!")
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sncte-db.sqlite"
+    # app.config["SQLALCHEMY_BINDS"] = {'main': 'sqlite:///sncte-db.sqlite'}
     db.init_app(app)
     with app.app_context():
         db.create_all()  # crea las tablas si no estan creadas, sino sigue
+        execute_sql_file(app, 'drop_views.sql')
+        execute_sql_file(app, 'vista_estado.sql')
