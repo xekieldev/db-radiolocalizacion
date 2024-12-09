@@ -78,7 +78,7 @@ class CaseFile(db.Model):   # la clase Producto hereda de db.Model
     nota_inicio = db.Column(db.String(50))
     nota_fin = db.Column(db.String(50))
     aeropuerto = db.Column(db.String(50))
-    frecuencia = db.Column(db.Float)
+    frecuencia = db.Column(db.Float, nullable=True)
     unidad = db.Column(db.String(3))
     provincia = db.Column(db.String(30))
     localidad = db.Column(db.String(30))
@@ -88,8 +88,8 @@ class CaseFile(db.Model):   # la clase Producto hereda de db.Model
     hora_fin = db.Column(db.String(10))
     area_actual = db.Column(db.String(25))
     domicilio = db.Column(db.String(50))
-    latitud = db.Column(db.Float)
-    longitud = db.Column(db.Float)
+    latitud = db.Column(db.Float, nullable=True)
+    longitud = db.Column(db.Float, nullable=True)
     informe = db.Column(db.String(50))
     tramitacion = db.Column(db.String(10))
     status = db.Column(db.String(10), nullable=False, default='Available', server_default='Available')
@@ -229,7 +229,8 @@ def execute_sql_file(app, file_name):
 
 def init_app(app):
     print("Estoy entrando!")
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sncte-db.sqlite"
+    # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sncte-db.sqlite"
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DB_PATH"] ## Variable de ambiente. Ejecutar: export DB_PATH=sqlite:///sncte-db.sqlite 
     # app.config["SQLALCHEMY_BINDS"] = {'main': 'sqlite:///sncte-db.sqlite'}
     db.init_app(app)
     with app.app_context():
