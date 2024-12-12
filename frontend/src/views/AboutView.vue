@@ -4,9 +4,23 @@ import FooterMain from '../components/FooterMain.vue';
 </script>
 
 <template>
+  
   <div class="about">
-    <heading>Base de Datos de Radiolocalizaciones y Mediciones Técnicas Externas</heading>
+    <heading class="about-title">
+      Sistema de Gestión de Expedientes<br/>Sistema Nacional de Comprobación Técnica de Emisiones (SNCTE)
+    </heading>
     <div class="about-text">
+      <h3 class="version-titles">
+        Versión: 4.0
+      </h3><br>
+      <h4 class="version-titles">
+        En esta versión:
+      </h4>
+      <ul class="items-version">
+        <li>Visualización de estadísticas automáticas por fechas y áreas</li>
+        <li>Visualización de expedientes en el mapa con agrupación por zonas</li>
+        <li>Y más!</li>
+      </ul><br>
       <h3 class="version-titles">
         Versión: 3.0
       </h3><br>
@@ -74,6 +88,11 @@ import FooterMain from '../components/FooterMain.vue';
   width: 100%;
   padding: 0 30px;
 }
+
+.about-title {
+  text-align: center;
+}
+
 
 .version-titles {
   text-align: left;
