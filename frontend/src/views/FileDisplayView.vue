@@ -503,8 +503,9 @@ function closeDiv() {
 .stations-table-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin-top: 20px;
+  /* width: 100%; */
+  /* padding: 30px; */
+  margin: 30px;
   border-top: solid 1px gray;
 
 }
@@ -512,7 +513,7 @@ function closeDiv() {
 .stations-table{
   justify-content: center; 
   margin-top: 10px;
-  /* font-size: 12px; */
+  word-wrap: break-word;
 }
 
 th, td{
@@ -552,7 +553,7 @@ tr:nth-child(odd) {
   flex-direction: column;
   width: 100%;
   margin-top: 20px;
-  border-top: solid 1px gray;
+  /* border-top: solid 1px gray; */
   padding: 0 30px;
 }
 
