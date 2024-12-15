@@ -332,7 +332,12 @@ watch(
         />
       </display-row>
       <mapa
-        v-if="station.latitud"
+        v-if="station.latitud && !printFlag.isActive"
+        class="mapa"
+        :position="[ station.latitud, station.longitud ]"
+      />
+      <mapa
+        v-else
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
       />
