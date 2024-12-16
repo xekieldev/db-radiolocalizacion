@@ -447,6 +447,7 @@ function closeDiv() {
           Fecha
         </th>
         <th>Detalle</th>
+        <th class="usuario-field">Usuario</th>
       </tr>
       <tr
         v-for="activity in activities"
@@ -456,6 +457,7 @@ function closeDiv() {
           {{ activity.fecha }}
         </td>
         <td>{{ activity.detalle }}</td>
+        <td>{{ activity.usuario }}</td>
       </tr>
     </table>
   </div>
@@ -598,5 +600,9 @@ tr:nth-child(odd) {
 
 .actions-menu {
   padding: 0 30px;
+}
+
+.usuario-field {
+  width: 15%;
 }
 </style>

@@ -43,6 +43,7 @@ function submitHandler(fields) {
             type="text"
             label="Detalle" 
             name="detalle" 
+            help="Detalle de las tareas o actividades durante la ejecución del expediente. Máximo 500 caracteres."
           />
           <button
             class="submit-button"
@@ -74,14 +75,14 @@ function submitHandler(fields) {
 }
 .submit-button {
       background-color: white;
-      margin: 10px 0 16px;
+      margin: 8px 0 16px;
       padding: 10px 18px;
       border-radius: 20px;
       cursor: pointer;
       border: 1px solid #007BFF;
       font-weight: 600;  
       color: #007BFF;  
-      align-self: flex-end;
+      align-self: center
 
 }
 .submit-button:hover {

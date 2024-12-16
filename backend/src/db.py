@@ -209,6 +209,7 @@ class Activity (db.Model):
     file_id = db.Column(db.Integer, db.ForeignKey('File.id'), nullable = False)
     fecha = db.Column(db.String(10))
     detalle = db.Column(db.String(500), nullable = False)
+    usuario = db.Column(db.String(20))
     
 def execute_sql_file(app, file_name):
     # Ruta al archivo SQL

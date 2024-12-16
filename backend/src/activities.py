@@ -12,7 +12,7 @@ bp = Blueprint("activities", __name__)
 class ActivitySchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "fecha", "file_id", "detalle")
+        fields = ("id", "fecha", "file_id", "detalle", "usuario")
 
 activity_schema = ActivitySchema()
 activities_schema = ActivitySchema( many = True )
@@ -20,11 +20,16 @@ activities_schema = ActivitySchema( many = True )
 @bp.route("/file/<file_id>/activity", methods=["POST"])
 @jwt_required()
 def new_activity(file_id):
-    try:               
+    try:     
+        usuario_id = get_jwt_identity()      
+        checkUser= User.query.filter_by(id = usuario_id).first()
+        # import pdb; pdb.set_trace()
+
         fecha = request.json.get('fecha')
         file_id = file_id
         detalle = request.json.get('detalle')
-        activity = Activity(fecha = fecha, file_id = file_id, detalle = detalle)
+        usuario = checkUser.usuario
+        activity = Activity(fecha = fecha, file_id = file_id, detalle = detalle, usuario = usuario)
         db.session.add(activity)
         db.session.commit()
         response = {"activity_id": activity.id }
@@ -42,6 +47,7 @@ def new_activity(file_id):
 def get_files_activities(file_id):
 
     try:
+
         activities = Activity.query.filter_by(file_id = file_id)
         return activities_schema.dump(activities)
         
