@@ -104,6 +104,12 @@ function getFileTypeOptions(user_area) {
     <form-kit
       type="form"
       submit-label="Guardar"
+      :config="{ validationVisibility: 'submit',
+                validation:'required', 
+                validationMessages:{ required:'Campo obligatorio', 
+                                      validateFile:'Formato incorrecto',
+                }
+      }"
       :actions="false"
       @submit="submitHandler"
     >

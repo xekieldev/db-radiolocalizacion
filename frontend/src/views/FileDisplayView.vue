@@ -87,6 +87,10 @@ function viewItem(file_id, id) {
   router.push(`/file/${file_id}/station/${id}`)
 }
 
+function viewNirMeas(file_id, id) {  
+  router.push(`/file/${file_id}/non_ionizing_radiation/${id}`)
+}
+
 async function save(fields) {
   try {
     const file_id = currentRoute.value.params.id
@@ -169,6 +173,13 @@ function closeDiv() {
         class="secondary"
         label="Nueva Localización"
         @on-tap="createLocStation"
+      />
+      <my-button
+        v-if="file.tipo === 'Medición de Radiaciones No Ionizantes (móviles)'"
+        tabindex="0"
+        class="primary"
+        label="Ver Resultados RNI"
+        @on-tap="viewNirMeas(file.id, nirMeasurement.id)"
       />
     </div>
     <my-button
@@ -285,16 +296,16 @@ function closeDiv() {
         label="Provincia"
         :value="file.provincia"
       />
-      <prop-value
+      <!-- <prop-value
         class="prop double"
         label="Cantidad"
         :value="nirMeasurement.cantidad"
       />
       <prop-value
         class="prop double"
-        label="Valor Máximo [%]"
+        label="Valor Máximo [%]"`
         :value="nirMeasurement.valor_maximo"
-      />
+      /> -->
       <display-row>
         <prop-value
           v-if="nirMeasurement.observaciones"

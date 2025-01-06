@@ -6,8 +6,9 @@ import { useTerritory } from '../composables/territory'
 import DisplayRow from '../components/DisplayRow.vue'
 import PropValue from '../components/PropValue.vue'
 import Heading from '../components/Heading.vue'
+import MyButton from '../components/MyButton.vue'
 
-
+const router = useRouter()
 const { getNonIonizingRadiation, getAllTechnicians, getFile } = useApi()
 const { currentRoute } = useRouter()
 const { getNameByCode } = useTerritory()
@@ -29,8 +30,20 @@ onBeforeMount(async () => {
     Object.assign(techniciansValues, techResponse)
 })
 
+function goBack() {  
+  router.back()
+}
+
 </script>
 <template>
+  <div class="options-button">
+    <my-button
+      tabindex="0"
+      class="primary"
+      label="Volver"
+      @on-tap="goBack"
+    />
+  </div>
   <heading>
     Mediciones de RNI (móviles)
   </heading>
@@ -250,5 +263,13 @@ onBeforeMount(async () => {
   align-items: center;
   justify-content: center;
   background-color: #ff0000;
+}
+.options-button {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  margin: 5px 0;
+  padding: 0 30px;
+
 }
 </style>
