@@ -41,17 +41,25 @@ async function deleteItem(file_id, id) {
 }
 
 onBeforeMount(async () => {
+  console.log('ruta', router.currentRoute.value.path.slice(6))
+  
     const response = await getFile(router.currentRoute.value.path.slice(6))
     Object.assign(file, response.file)
     currentLocation.value = response.currentArea
     tipoTramite.value = file.tipo 
     if (tipoTramite.value !== 'Interferencias en Aeropuertos') {
+      console.log('file.provincia y localidad',file.localidad, file.provincia)
+      
       file.localidad = getNameByCode('city', file.localidad)
       file.provincia = getNameByCode('province', file.provincia)
     }
+    console.log('file.id', file.id)
+    
     const data = await stationsPerFile(file.id)
     items.value.push(...data)
     for (const item in items.value) {
+      console.log(items.value[item].localidad, items.value[item].provincia)
+      
       items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
       items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
     }
@@ -60,9 +68,16 @@ onBeforeMount(async () => {
     activities.value.push(...activities_response)
     if (file.tipo == 'Medición de Radiaciones No Ionizantes (móviles)') {
       const nirResponse = await getNIRMeasurementInFile(file.id)
-      Object.assign(nirMeasurement, nirResponse[0])
-      nirMeasurement.localidad = getNameByCode("city", nirMeasurement.localidad)
-      nirMeasurement.provincia = getNameByCode("province", nirMeasurement.provincia)
+      console.log(nirResponse[0])
+      
+      if (nirResponse && nirResponse.length > 0) {
+          Object.assign(nirMeasurement, nirResponse[0])
+      } else {
+          console.error("nirResponse no contiene datos válidos")
+      }
+      
+      // nirMeasurement.localidad = getNameByCode("city", nirMeasurement.localidad)
+      // nirMeasurement.provincia = getNameByCode("province", nirMeasurement.provincia)
     }
     
 })
@@ -296,16 +311,16 @@ function closeDiv() {
         label="Provincia"
         :value="file.provincia"
       />
-      <!-- <prop-value
+      <prop-value
         class="prop double"
         label="Cantidad"
         :value="nirMeasurement.cantidad"
       />
       <prop-value
         class="prop double"
-        label="Valor Máximo [%]"`
+        label="Valor Máximo [%]"
         :value="nirMeasurement.valor_maximo"
-      /> -->
+      />
       <display-row>
         <prop-value
           v-if="nirMeasurement.observaciones"

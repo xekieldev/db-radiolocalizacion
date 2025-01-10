@@ -223,12 +223,12 @@ watch(
         <prop-value
           class="prop"
           label="Latitud"
-          :value="station.latitud"
+          :value="station.latitud || 0"
         />
         <prop-value
           class="prop"
           label="Longitud"
-          :value="station.longitud"
+          :value="station.longitud || 0"
         />
       </display-row>
       <display-row v-if="station.frecuencia">
@@ -332,6 +332,11 @@ watch(
         />
       </display-row>
       <mapa
+        v-if="station.latitud !== undefined && station.latitud !== null"
+        class="mapa"
+        :position="[ station.latitud, station.longitud ]"
+      />
+      <!-- <mapa
         v-if="station.latitud && !printFlag.isActive"
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
@@ -340,7 +345,7 @@ watch(
         v-else
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
-      />
+      /> -->
       <display-row>
         <prop-value
           v-for="value, index in technicians"

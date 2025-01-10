@@ -11,8 +11,8 @@
     <l-map
       ref="map"
       :zoom="zoom"
+      :useGlobalLeaflet="true" 
       :center="[position[0] , position[1]]"
-      :use-global-leaflet="false"
       :options="{ zoomControl: false }"
       :min-zoom="1"
       draggable="false"
@@ -24,71 +24,78 @@
         name="OpenStreetMap"
         :max-zoom="19"
       />
-      <l-marker
-        v-for="item in items"
-        :key="item.id"
-        :lat-lng="[ item.latitud , item.longitud ]"
-      >
-        <l-icon
-          :icon-size="[55, 35]"
-          :icon-url="pickIcon(item)"
-          :icon-anchor="[20, 35]"
-        />
-        <l-popup
-          :options="{}"
-          class="popup-content"
+      <l-marker-cluster-group>
+        <l-marker
+          v-for="item in items"
+          :key="item.id"
+          :lat-lng="[ item.latitud , item.longitud ]"
         >
-          <p class="popup-title">
-            Datos de la estación - id: {{ item.id }}
-          </p>
-          <prop-value
-            class="prop"
-            label="Identificación"
-            :value="item.identificacion"
+          <l-icon
+            :icon-size="[55, 35]"
+            :icon-url="pickIcon(item)"
+            :icon-anchor="[20, 35]"
           />
-          <prop-value
-            v-if="item.frecuencia == null"
-            class="prop"
-            label="Frecuencia"
-            value="---"
-          />
-          <prop-value
-            v-else
-            class="prop"
-            label="Frecuencia"
-            :value="item.frecuencia + ' ' + item.unidad"
-          />
-          <prop-value
-            class="prop"
-            label="Emplazamiento"
-            :value="item.emplazamiento"
-          />
-          <prop-value
-            class="prop"
-            label="Localidad"
-            :value="item.localidad"
-          />
-          <prop-value
-            class="prop"
-            label="Provincia"
-            :value="item.provincia"
-          /><br>
-          <div class="popup-buttons">
-            <my-button
-              class="primary"
-              label="Ver"
-              @on-tap="() => viewItem(item.file_id, item.id)"
+          <l-popup
+            :options="{}"
+            class="popup-content"
+          >
+            <p class="popup-title">
+              Datos de la estación - id: {{ item.id }}
+            </p>
+            <prop-value
+              class="prop"
+              label="Identificación"
+              :value="item.identificacion"
             />
-          </div>
-        </l-popup>
-      </l-marker>
+            <prop-value
+              v-if="item.frecuencia == null"
+              class="prop"
+              label="Frecuencia"
+              value="---"
+            />
+            <prop-value
+              v-else
+              class="prop"
+              label="Frecuencia"
+              :value="item.frecuencia + ' ' + item.unidad"
+            />
+            <prop-value
+              class="prop"
+              label="Emplazamiento"
+              :value="item.emplazamiento"
+            />
+            <prop-value
+              class="prop"
+              label="Localidad"
+              :value="item.localidad"
+            />
+            <prop-value
+              class="prop"
+              label="Provincia"
+              :value="item.provincia"
+            /><br>
+            <div class="popup-buttons">
+              <my-button
+                class="primary"
+                label="Ver"
+                @on-tap="() => viewItem(item.file_id, item.id)"
+              />
+            </div>
+          </l-popup>
+        </l-marker>
+      </l-marker-cluster-group>
+
     </l-map>
   </div>
 </template>
 
 <script setup>
-import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer, LMarker, LIcon, LPopup } from "@vue-leaflet/vue-leaflet";
+import L from 'leaflet'
+// globalThis.L = L
+import { LMap, LTileLayer, LIcon, LPopup, LMarker } from '@vue-leaflet/vue-leaflet'
+import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
+import 'leaflet/dist/leaflet.css'
+import 'vue-leaflet-markercluster/dist/style.css'
 import { onBeforeMount, ref } from "vue";
 import { useApi } from '../composables/api'
 import { useTerritory } from "../composables/territory";

@@ -23,6 +23,7 @@ onBeforeMount(async () => {
   Object.assign(file, response.file)  
   Object.assign(nirMeas, nir_response[0])
   Object.assign(techniciansValues, techResponse)  
+  technicians.push(nirMeas.id_technician1, nirMeas.id_technician2)
 
 })
 

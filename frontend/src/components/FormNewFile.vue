@@ -54,10 +54,11 @@ const myDate = currentDate.getFullYear() + "-" + fullMonth + "-" + fullDay
 const noFrecuency = ref(false)
 const { unidad } = useUnit()
 
-console.log('localidad', props.file.localidad)
 
 const province = ref(props.file.provincia)
 const city = ref(props.file.localidad)
+console.log('tecnicos', props.technicians)
+
 
 const { provinces, cities, getProvinceCities } = useTerritory()
 
@@ -86,8 +87,9 @@ watch(province, (newValue, oldValue) => {
   emits('update:file.provincia', newValue)
   getProvinceCities(newValue)
   if (newValue !== oldValue) {
-    city.value = cities.value[0].value
-    emits('update:file.localidad', newValue)
+    const currentCity = props.file.localidad;
+    city.value = currentCity || cities.value[0]?.value || null;
+    emits('update:file.localidad', city.value);
   }
 })
 
@@ -370,7 +372,7 @@ function getFileTypeOptions(user_area) {
         <form-row>
           <form-kit
             v-if="technicians && technicians.length>1"
-            v-model="technicians[0].id"
+            v-model="technicians[0]"
             type="select"
             label="Técnico"
             name="id_technician1"
@@ -387,7 +389,7 @@ function getFileTypeOptions(user_area) {
           />
           <form-kit
             v-if="technicians && technicians.length>1"
-            v-model="technicians[1].id"
+            v-model="technicians[1]"
             type="select"
             label="Técnico"
             name="id_technician2"

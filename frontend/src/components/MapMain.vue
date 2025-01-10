@@ -2,8 +2,8 @@
   <div class="map-container">
     <l-map
       ref="map"
-      :zoom="19"
-      :center="[position[0] , position[1]]"
+      :zoom="18"
+      :center="[position[0] || 0 , position[1] || 0]"
       :use-global-leaflet="false"
       :options="{ zoomControl: true }"
       :min-zoom="1"
@@ -16,13 +16,13 @@
         name="OpenStreetMap"
         :max-zoom="19"
       />
-      <l-marker :lat-lng="[position[0] , position[1] ]">
+      <l-marker :lat-lng="[position[0] || 0 , position[1] || 0]">
         <l-icon
           :icon-size="[50, 50]"
           :icon-url="antenaImage"
           :icon-anchor="[25, 40]"
         />
-        <l-popup>Coordenadas: {{ position[0] }}, {{ position[1] }}</l-popup>
+        <l-popup>Coordenadas: {{ position[0] || 0 }}, {{ position[1] ||0 }}</l-popup>
       </l-marker>
     </l-map>
   </div>
@@ -33,7 +33,7 @@ import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LIcon, LPopup } from "@vue-leaflet/vue-leaflet";
 import antenaImage from "../../img/antena.png";
 
-defineProps({
+const props = defineProps({
   
   position: {
     type: Array,
