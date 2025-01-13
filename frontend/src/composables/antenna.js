@@ -108,6 +108,7 @@ export function useAntenna() {
         { value:'Suma de dipolos', label:'Suma de dipolos'},
         { value:'V invertida', label:'V invertida'},
         { value:'Ver observaciones', label:'Ver observaciones'},
+        { value:'Circular', label:'Circular'},
         {
             value:'---',
             label:'---'

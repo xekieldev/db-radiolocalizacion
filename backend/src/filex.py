@@ -5,6 +5,7 @@ from src.db import db, CaseFile, Station, TechMeasurement, technician_tech_measu
 from sqlalchemy import exc, insert, delete, select
 from src.technician import technicians_schema
 from src.station import station_schema, stations_schema
+from src.non_ionizing_radiation import delete_nir
 from src.tech_measurement import tech_measurements_schema, tech_measurement_schema
 # from src.users import auth
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
@@ -236,7 +237,8 @@ def delete_file(id):
         stations_in_file = Station.query.filter_by(file_id = id)
         for station in stations_in_file:
             station.status = 'Deleted'
-
+        if case_file.tipo == 'Medición de Radiaciones No Ionizantes (móviles)':
+            delete_nir(id)
         db.session.commit()
         response = {'id': case_file.id, 'status': 200}
 

@@ -283,7 +283,7 @@ const { emplazamiento } = useStationType()
           placeholder="Sistema irradiante"
         />
         <form-kit
-          v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee'"
+          v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee' && station.irradiante !== '---' && station.irradiante !== 'Ver observaciones' && station.irradiante !== 'No se pudo determinar'"
           v-model="station.polarizacion"
           type="select"
           label="Polarización"
@@ -292,14 +292,14 @@ const { emplazamiento } = useStationType()
           placeholder="Polarización"
         />
         <form-kit
-          v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee'"
+          v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee' && station.irradiante !== '---' && station.irradiante !== 'Ver observaciones' && station.irradiante !== 'No se pudo determinar'"
           v-model="station.cantidad"
           type="text"
           label="Cantidad"
           name="cantidad"
         />
         <form-kit
-          v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee'"
+          v-if="router.currentRoute.value.query.rloc == 'true' && station.irradiante !== 'No posee' && station.irradiante !== '---' && station.irradiante !== 'Ver observaciones' && station.irradiante !== 'No se pudo determinar'"
           v-model="station.altura"
           type="number"
           label="Altura Media"

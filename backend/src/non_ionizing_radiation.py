@@ -87,11 +87,11 @@ def get_all_non_ionizing_radiations():
         return response, 500
 
 
-@bp.route("/non_ionizing_radiation/<id>/delete_non_ionizing_radiation", methods = ['DELETE'])
+@bp.route("/file/<file_id>/non_ionizing_radiation/", methods = ['DELETE'])
 @jwt_required()
-def delete_technician(id):
+def delete_nir(file_id):
     try:
-        non_ionizing_radiation=NonIonizingRadiation.query.get(id)
+        non_ionizing_radiation=NonIonizingRadiation.query.filter_by(file_id = file_id).first()
         db.session.delete(non_ionizing_radiation)
         db.session.commit()
         return non_ionizing_radiation_schema.jsonify(non_ionizing_radiation)

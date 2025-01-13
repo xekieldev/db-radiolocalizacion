@@ -190,7 +190,7 @@ function closeDiv() {
         @on-tap="createLocStation"
       />
       <my-button
-        v-if="file.tipo === 'Medición de Radiaciones No Ionizantes (móviles)'"
+        v-if="file.tipo === 'Medición de Radiaciones No Ionizantes (móviles)' && false"
         tabindex="0"
         class="primary"
         label="Ver Resultados RNI"
@@ -311,7 +311,7 @@ function closeDiv() {
         label="Provincia"
         :value="file.provincia"
       />
-      <prop-value
+      <!-- <prop-value
         class="prop double"
         label="Cantidad"
         :value="nirMeasurement.cantidad"
@@ -320,7 +320,7 @@ function closeDiv() {
         class="prop double"
         label="Valor Máximo [%]"
         :value="nirMeasurement.valor_maximo"
-      />
+      /> -->
       <display-row>
         <prop-value
           v-if="nirMeasurement.observaciones"
