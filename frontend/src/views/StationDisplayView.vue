@@ -238,7 +238,7 @@ watch(
           :value="station.irradiante"
         />
         <prop-value
-          v-if="station.irradiante != 'No posee'"
+          v-if="station.irradiante != 'No posee' && station.irradiante !== '---' && station.irradiante !== 'Ver observaciones' && station.irradiante !== 'No se pudo determinar' && station.irradiante !== 'No se observa'"
           class="prop"
           label="Cantidad"
           :value="station.cantidad"
@@ -250,7 +250,7 @@ watch(
           value="---"
         />
         <prop-value
-          v-if="station.irradiante != 'No posee'"
+          v-if="station.irradiante != 'No posee' && station.irradiante !== '---' && station.irradiante !== 'Ver observaciones' && station.irradiante !== 'No se pudo determinar' && station.irradiante !== 'No se observa'"
           class="prop"
           label="Polarización"
           :value="station.polarizacion"
@@ -262,7 +262,7 @@ watch(
           value="---"
         />
         <prop-value
-          v-if="station.irradiante != 'No posee'"
+          v-if="station.irradiante != 'No posee' && station.irradiante !== '---' && station.irradiante !== 'Ver observaciones' && station.irradiante !== 'No se pudo determinar' && station.irradiante !== 'No se observa'"
           class="prop"
           label="Altura [m]"
           :value="station.altura"
