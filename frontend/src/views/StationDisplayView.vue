@@ -331,12 +331,12 @@ watch(
           value="---"
         />
       </display-row>
-      <mapa
+      <!-- <mapa
         v-if="station.latitud !== undefined && station.latitud !== null"
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
-      />
-      <!-- <mapa
+      /> -->
+      <mapa
         v-if="station.latitud && !printFlag.isActive"
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
@@ -345,7 +345,7 @@ watch(
         v-else
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
-      /> -->
+      />
       <display-row>
         <prop-value
           v-for="value, index in technicians"
