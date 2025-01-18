@@ -6,10 +6,11 @@ import { useRouter } from 'vue-router'
 import FooterMain from '../components/FooterMain.vue'
 
 
-const { create , getAllTechnicians} = useApi()
+const { create , getAllTechnicians, getFile} = useApi()
 const router = useRouter()
 const { currentRoute } = useRouter()
 const station = reactive([])
+const file = reactive({})
 const technicians = reactive([])
 const techniciansValues = reactive([])
 
@@ -17,6 +18,8 @@ const techniciansValues = reactive([])
 onBeforeMount(async () => {
     const techResponse = await getAllTechnicians()
     Object.assign(techniciansValues, techResponse)
+    const file_response = await getFile(currentRoute.value.params.id)
+    Object.assign(file, file_response.file)
 })
 
 async function save(fields) {
@@ -35,7 +38,8 @@ async function save(fields) {
 <template>
   <frloc
     title="Datos de Localización"
-    context="Localizacion" 
+    context="Localizacion"
+    :file="file" 
     :station="station"
     :technicians="technicians"
     :technicians-values="techniciansValues"

@@ -116,7 +116,7 @@ onMounted(async ()=> {
     // Recorrer items.value y contar los areas
     items.value.forEach((item) => {
       if (countByArea[item.area_asignada] !== undefined) {
-        if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo") {
+        if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo" && item.tipo != "Tareas Programadas") {
           countByArea[item.area_asignada]++
         }
       }
@@ -125,7 +125,7 @@ onMounted(async ()=> {
       // Recorrer items.value y contar los areas
       items.value.forEach((item) => {
         if (countByArea[item.recibe] !== undefined) {
-          if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo") {
+          if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo" && item.tipo != "Tareas Programadas") {
             countByArea[item.recibe]++
           }
         }
@@ -273,7 +273,7 @@ watch(()=> props, async (newValue, oldValue) => {
     // Recorrer items.value y contar los areas
     items.value.forEach((item) => {
       if (countByArea[item.area_asignada] !== undefined) {
-        if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo") {
+        if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo" && item.tipo != "Tareas Programadas") {
           countByArea[item.area_asignada]++
         }
       }
@@ -282,7 +282,7 @@ watch(()=> props, async (newValue, oldValue) => {
     // Recorrer items.value y contar los areas
       items.value.forEach((item) => {
         if (countByArea[item.area_asignada] !== undefined) {
-          if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo") {
+          if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo" && item.tipo != "Tareas Programadas") {
             countByArea[item.area_asignada]++
           }
         }
@@ -291,7 +291,7 @@ watch(()=> props, async (newValue, oldValue) => {
       // Recorrer items.value y contar los areas
       items.value.forEach((item) => {
         if (countByArea[item.recibe] !== undefined) {
-          if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo") {
+          if (item.tipo !== "Medición de Radiaciones No Ionizantes (móviles)" && item.tipo != "Descargo" && item.tipo != "Tareas Programadas") {
             countByArea[item.recibe]++
           }
         }
