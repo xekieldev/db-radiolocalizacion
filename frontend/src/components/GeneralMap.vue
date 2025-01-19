@@ -109,17 +109,12 @@ function pickIcon(item) {
   if (item.tipo.trim() === 'Interferencias Celulares'){
     icon = getIconUrl(item.usuario)     
   } else{
-    if(getIconUrl(item.tipo) != null || getIconUrl(item.tipo) != undefined){ 
-      console.log('item tipo', item.tipo, getIconUrl(item.tipo))
-      icon = getIconUrl(item.tipo)
-    } else {
-       icon = genericIcon
-    }
-   
-  } 
-     
-  console.log('icon', icon)
-   
+      if(getIconUrl(item.tipo) != null || getIconUrl(item.tipo) != undefined){ 
+        icon = getIconUrl(item.tipo)
+      } else {
+          icon = genericIcon
+      }
+  }
   return icon
 }
 

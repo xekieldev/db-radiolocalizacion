@@ -235,7 +235,6 @@ export function useApi() {
 
     async function getStatistics(startDate, endDate, type, area) {
         loading.value = true
-        // console.log('fechas', startDate, endDate, 'stat_type', income, outcome, pending)
         
         const response = await axiosInstance.get(`/statistics`, {
             params: {

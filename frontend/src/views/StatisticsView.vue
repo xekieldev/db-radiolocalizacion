@@ -14,7 +14,6 @@ const startDate = ref(router.currentRoute.value.query.startDate)
 const endDate = ref(router.currentRoute.value.query.endDate)
 
 watch(()=> router, (newValue, oldValue) => {
-  console.log(newValue)
   type.value = newValue.currentRoute.value.query.type
   startDate.value = newValue.currentRoute.value.query.startDate
   endDate.value = newValue.currentRoute.value.query.endDate

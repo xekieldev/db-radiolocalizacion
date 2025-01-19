@@ -95,7 +95,6 @@ const emit = defineEmits(['onSubmit'])
 onMounted(async ()=> {
   items.value = await getStatistics( props.startDate, props.endDate, props.type, props.selectedArea)
   nirStat.value = await getAllNonIonizingRadiation()
-  console.log(nirStat.value.filter((item => item.area_asignada ==='Salta')).reduce((sum, item) => sum + item.cantidad, 0))
   
     
   areaToShow.forEach((area) => {
@@ -214,9 +213,7 @@ function handleFormChange(data) {
 }
 
 watch(()=> props, async (newValue, oldValue) => {
-  items.value = await getStatistics( newValue.startDate, newValue.endDate, newValue.type, newValue.selectedArea)
-  console.log('Items', items.value)
-  
+  items.value = await getStatistics( newValue.startDate, newValue.endDate, newValue.type, newValue.selectedArea)  
   areaToShow.forEach((area) => {
       countByArea[area] = 0
       // countNIRByArea[area] =0
@@ -266,8 +263,6 @@ watch(()=> props, async (newValue, oldValue) => {
       }
     ]
   }
-    
-  // console.log("NIR por area", countNIRByArea)
   
   if (newValue.type === 'inbound') {
     // Recorrer items.value y contar los areas

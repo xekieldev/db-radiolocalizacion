@@ -27,7 +27,6 @@ const props = defineProps({
 })
 const stationPath = reactive({})
 const stationId = ref('')
-console.log('file', props.file)
 
 function submitHandler(fields) {
   emits('onSubmit', fields)

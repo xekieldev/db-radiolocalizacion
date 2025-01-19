@@ -82,7 +82,6 @@ textToSearch = ''
       files.value = []
       const data = await list(false, estado.value)
       files.value.push(...data)
-      console.log(files)
 
       files.value.forEach(() => {
       files.value = files.value.filter(item => {
