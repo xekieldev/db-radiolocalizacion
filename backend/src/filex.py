@@ -260,12 +260,16 @@ def patch_file(id):
         if caseFile and area_destino and caseFile.expediente != 'A definir':
             if area_destino == 'AGCCTYL':
                 caseFile.tramitacion = 'Informado'
+                caseFile.informe = informe
             elif area_destino != caseFile.area_asignada:
                 caseFile.tramitacion = 'Finalizado'
+                if caseFile.tipo == 'Interferencias en Aeropuertos':
+                    nota_fin = request.json.get('nota_fin')
+                    caseFile.nota_fin = nota_fin
             else:
                 caseFile.tramitacion = 'Pendiente'
             
-            caseFile.informe = informe
+            # caseFile.informe = informe
             caseFile.area_actual = area_destino
             db.session.commit()
 
