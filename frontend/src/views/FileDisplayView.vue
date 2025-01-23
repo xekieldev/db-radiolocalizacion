@@ -351,18 +351,18 @@ function closeDiv() {
     </display-row>
     <display-row>
       <prop-value
-        class="prop"
-        label="Ubicación actual"
-        :value="currentLocation"
-      />
-      <prop-value
-        v-if="file.tramitacion == 'Informado'"
+        v-if="file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado'"
         class="prop"
         label="Informe"
         :value="file.informe"
       />
       <prop-value
-        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.tramitacion == 'Informado'"
+        class="prop"
+        label="Ubicación actual"
+        :value="currentLocation"
+      />
+      <prop-value
+        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.nota_fin && file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado'"
         class="prop"
         label="Nota de Fin"
         :value="file.nota_fin"
