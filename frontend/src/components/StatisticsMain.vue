@@ -32,6 +32,7 @@ const fileType = [
   'Denuncias del Público en General',
   'Medición de Radiaciones No Ionizantes',
   'Otros',
+  'Inspección Aeronave',
   // 'Medición de Radiaciones No Ionizantes (móviles)',
   // 'Descargo'
 ]
@@ -135,6 +136,7 @@ onMounted(async ()=> {
   fileType.forEach((type) => {
     countByType[type] = 0;
   })
+  console.log(items.value)
   
   if (props.type === 'inbound' && props.selectedArea) {
     items.value.forEach((item) => {
