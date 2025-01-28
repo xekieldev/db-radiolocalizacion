@@ -47,7 +47,7 @@ function goBack() {
   <heading>
     Mediciones de RNI (móviles)
   </heading>
-  <div class="container">
+  <div class="nir-container">
     <display-row> 
       <prop-value
         class="prop"
@@ -159,11 +159,12 @@ function goBack() {
 
 <style scoped>
 
-.container {
+.nir-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   /* text-transform: uppercase; */
+  padding: 0 30px;
 }
 .prop:hover {
   background-color: #bdc0c2;

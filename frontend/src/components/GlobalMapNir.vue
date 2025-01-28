@@ -50,7 +50,7 @@
           />
           <prop-value
             class="prop"
-            label="Valor Máximo"
+            label="Valor Máximo [%]"
             :value="item.valor_maximo"
           />
         </l-popup>
@@ -111,7 +111,7 @@ defineProps({
   width: 100%;
   /* margin-top: 10px; */
   position: relative;
-  background: linear-gradient(to right, rgba(202, 202, 202, 0), #cacaca, rgba(202, 202, 202, 0));
+  /* background: linear-gradient(to right, rgba(202, 202, 202, 0), #cacaca, rgba(202, 202, 202, 0)); */
 }
 
 .menu-container {
