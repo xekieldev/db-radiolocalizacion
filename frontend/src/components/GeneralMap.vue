@@ -112,7 +112,9 @@ function pickIcon(item) {
       if(getIconUrl(item.tipo) != null || getIconUrl(item.tipo) != undefined){ 
         icon = getIconUrl(item.tipo)
       } else {
-          icon = genericIcon
+          // icon = genericIcon
+          icon = getIconUrl('Otros')
+
       }
   }
   return icon

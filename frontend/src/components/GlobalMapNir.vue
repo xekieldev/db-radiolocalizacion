@@ -22,7 +22,7 @@
         :lat-lng="[ item.coordinates.lat , item.coordinates.lon ]"
       >
         <l-icon
-          :icon-size="[55, 35]"
+          :icon-size="[35, 35]"
           :icon-url="pickIcon()"
           :icon-anchor="[20, 35]"
         />
@@ -107,7 +107,7 @@ defineProps({
 <style scoped>
 
 .global-map-container {
-  height: 700px;
+  height: 100%;
   width: 100%;
   /* margin-top: 10px; */
   position: relative;

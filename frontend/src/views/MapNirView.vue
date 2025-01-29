@@ -50,7 +50,7 @@ function goBack() {
       <h2 class="heading">Mapa de RNI móviles</h2>
       <h3 class="heading">Referencias</h3>
       <h4 class="reference-item">
-        <img class="reference-icon" :src="getIconUrl('Medición de Radiaciones No Ionizantes')" alt="">
+        <img class="reference-icon" :src="getIconUrl('Medición de Radiaciones No Ionizantes (móviles)')" alt="">
         Localidad medida
       </h4>
     </div>

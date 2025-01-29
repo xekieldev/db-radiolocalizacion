@@ -107,9 +107,10 @@ const { emplazamiento } = useStationType()
           type="date"
           label="Fecha" 
           name="fecha" 
-          validation="date_after:04-30-2024"
-          validation-visibility="live"
+          validation="required|date_after:04-30-2024"
+          validation-visibility="submit"
           :validation-messages="{
+            required: 'Este campo es obligatorio.',
             date_after: 'La fecha debe ser posterior al 01/05/2024.',
           }"
         />
@@ -206,9 +207,10 @@ const { emplazamiento } = useStationType()
           type="text"
           label="Clase de Emisión"
           name="claseEmision"
-          :validation="[['matches', /^[A-Z]{1}(\d{1}|[X]{1})[A-Z]{1}([A-Z]{1,2})?$/]]"
-          validation-visibility="live"
+          :validation="[['required'],['matches', /^[A-Z]{1}(\d{1}|[X]{1})[A-Z]{1}([A-Z]{1,2})?$/]]"
+          validation-visibility="submit"
           :validation-messages="{
+            required: 'Este campo es obligatorio.',
             matches: 'Ingrese una clase de emision válida.',
           }"
         />
@@ -243,9 +245,10 @@ const { emplazamiento } = useStationType()
           label="Latitud"
           name="latitud"
           step="0.000001"
-          validation="between:0,-90"
-          validation-visibility="live"
+          validation="required|between:0,-90"
+          validation-visibility="submit"
           :validation-messages="{
+            required: 'Este campo es obligatorio.',
             between: 'Ingrese un valor de latitud entre -90 y 0.',
           }"
         />
@@ -255,9 +258,10 @@ const { emplazamiento } = useStationType()
           label="Longitud"
           name="longitud"
           step="0.000001"
-          validation="between:0,-180"
-          validation-visibility="live"
+          validation="required|between:0,-180"
+          validation-visibility="submit"
           :validation-messages="{
+            required: 'Este campo es obligatorio.',
             between: 'Ingrese un valor de latitud entre -180 y 0.',
           }"
         />

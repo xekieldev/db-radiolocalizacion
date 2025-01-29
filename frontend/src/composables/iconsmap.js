@@ -167,7 +167,7 @@ const iconsMap = {
     'Denuncias del Público en General': DPG,
     'Medición de Radiaciones No Ionizantes': RNI,
     'Otros': otro,
-    'Medición de Radiaciones No Ionizantes (móviles)': ref_icon,
+    'Medición de Radiaciones No Ionizantes (móviles)': NIRIcon,
     'Descargo': descargo,
 }
 
