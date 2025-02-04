@@ -329,8 +329,46 @@ export function useAirport() {
         longitude: -65.37579,
       },
       {
-        value: 'OTRO',
-        label: 'OTRO',
+        value: 'OTRO BUENOS AIRES',
+        label: 'OTRO BUENOS AIRES',
+        latitude: -34.7511,
+        longitude: -58.4986,
+      },
+      {
+        value: 'OTRO LIMA',
+        label: 'OTRO LIMA',
+        latitude: -34.6093056,
+        longitude: -58.3750549,
+      },
+      {
+        value: 'OTRO CÓRDOBA',
+        label: 'OTRO CÓRDOBA',
+        latitude: -31.3308,
+        longitude: -64.1472,
+      },
+      {
+        value: 'OTRO SALTA',
+        label: 'OTRO SALTA',
+        latitude: -24.7661,
+        longitude: -65.4636,
+      },
+      {
+        value: 'OTRO POSADAS',
+        label: 'OTRO POSADAS',
+        latitude: -27.3675,
+        longitude: -55.9275,
+      },
+      {
+        value: 'OTRO NEUQUÉN',
+        label: 'OTRO NEUQUÉN',
+        latitude: -38.9689,
+        longitude: -68.0414,
+      },
+      {
+        value: 'OTRO COMODORO RIVADAVIA',
+        label: 'OTRO COMODORO RIVADAVIA',
+        latitude: -45.8739,
+        longitude: -67.5661,
       }]
 
     return { airport }
