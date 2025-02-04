@@ -11,6 +11,7 @@ from src.tech_measurement import tech_measurements_schema, tech_measurement_sche
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import aliased
+from datetime import datetime
 from datetime import date
 
 
@@ -263,6 +264,8 @@ def patch_file(id):
                 caseFile.informe = informe
             elif area_destino != caseFile.area_asignada:
                 caseFile.tramitacion = 'Finalizado'
+                caseFile.fecha_fin = datetime.today().strftime('%Y-%m-%d')
+                caseFile.hora_fin = datetime.today().strftime('%H:%M')
                 if caseFile.tipo == 'Interferencias en Aeropuertos':
                     nota_fin = request.json.get('nota_fin')
                     caseFile.nota_fin = nota_fin

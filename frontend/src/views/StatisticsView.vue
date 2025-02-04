@@ -43,6 +43,9 @@ watch(()=> router, (newValue, oldValue) => {
 
 <style scoped>
 
-
+.footer-main {
+  margin-top: auto;
+  margin-bottom: 0;
+}
 
 </style>
