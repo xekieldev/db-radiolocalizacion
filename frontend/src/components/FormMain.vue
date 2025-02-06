@@ -9,12 +9,14 @@ import { useService } from '../composables/service'
 import { useUnit } from '../composables/unit'
 import { useStationType } from '../composables/stationtype'
 import { useAntenna } from '../composables/antenna'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useApi } from '../composables/api'
 import Heading from './Heading.vue'
 
 const router = useRouter()
 const { currentRoute } = useRouter()
+const route = useRoute()
+
 const { getStation } = useApi()
 const emits = defineEmits(['onSubmit', 'update:station.provincia', 'update:station.localidad']);
 const props = defineProps({
@@ -34,11 +36,10 @@ function submitHandler(fields) {
 
 onBeforeMount( async ()=> {
   try{
-
-    stationId.value = currentRoute.value.query.from.slice(16,)  
+    const from = route.query.from
+    stationId.value = from ? from.split('/').pop() : null
     const response = await getStation(stationId.value)        
     Object.assign(stationPath , response.station)
-
   } catch {
 
     stationId.value = null
