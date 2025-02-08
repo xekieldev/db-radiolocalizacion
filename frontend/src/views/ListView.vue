@@ -8,11 +8,13 @@ import FormSearch from '../components/FormSearch.vue'
 import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
 import { userData, perfil } from '../composables/loginstatus'
+import { useTerritory } from '../composables/territory'
 
 
 
 const { list, loading, deleteFile } = useApi()
 const { search } = useSearch()
+const { getNameByCode } = useTerritory()
 const router = useRouter()
 
 const items = ref([])
@@ -59,6 +61,15 @@ onBeforeMount(async () => {
   if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
     const data = await list(false, estado.value)
     items.value.push(...data)
+    items.value.forEach((item) => {
+      console.log(item)
+      
+      if (item.tipo !== 'Interferencias en Aeropuertos') {      
+      item.localidad = getNameByCode('city', item.localidad)
+      item.provincia = getNameByCode('province', item.provincia)
+    }  
+    })
+      
   } else {
       const data = await list(true, estado.value)
       items.value.push(...data)    
@@ -147,6 +158,7 @@ watch(estado, async(newValue, oldValue) => {
         <th>Expediente</th>
         <th>Área asignada</th>
         <th>Tipo de trámite</th>
+        <th>Localidad</th>
         <th>Fecha y hora</th>
         <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           Status
@@ -175,6 +187,8 @@ watch(estado, async(newValue, oldValue) => {
         <td>{{ item.expediente }}</td> 
         <td>{{ item.area_asignada }}</td> 
         <td>{{ item.tipo }}</td> 
+        <td v-if="item.tipo != 'Interferencias en Aeropuertos'">{{ item.localidad + " (" + item.provincia + ")" }}</td> 
+        <td v-else>{{ item.aeropuerto }}</td> 
         <td>{{ item.fecha +" "+item.hora }}</td> 
         <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           {{ item.status }}
