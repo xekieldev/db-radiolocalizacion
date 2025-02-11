@@ -56,7 +56,7 @@
               v-if="item.localidad"
               class="prop"
               label="Localidad (Provincia)"
-              :value="getNameByCode('city', item.localidad) + ' (' + getNameByCode('province', item.provincia)+')'"
+              :value="item.localidad + ' (' + item.provincia +')'"
             />
             <prop-value
               v-if="item.frecuencia"

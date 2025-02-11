@@ -11,6 +11,19 @@ import FooterMain from '../components/FooterMain.vue';
     </heading>
     <div class="about-text">
       <h3 class="version-titles">
+        Versión: 4.1
+      </h3><br>
+      <h4 class="version-titles">
+        En esta versión:
+      </h4>
+      <ul class="items-version">
+        <li>Agregado de campos a la lista de Expedientes</li>
+        <li>Ampliación de campos de búsqueda en lista y mapa de expedientes</li>
+        <li>Mejoras visuales en diferentes componentes</li>
+        <li>Agregado de campos en estadísticas</li>
+        <li>Corrección de errores</li>
+      </ul><br>
+      <h3 class="version-titles">
         Versión: 4.0
       </h3><br>
       <h4 class="version-titles">

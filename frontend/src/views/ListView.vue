@@ -19,7 +19,7 @@ const router = useRouter()
 
 const items = ref([])
 const newItems = ref([])
-const textToSearch = ref('')
+const inputTextToSearch = ref('')
 const estado = ref('Pendiente')
 const user_area = ref('')
 const confirm_delete = ref({})
@@ -62,12 +62,10 @@ onBeforeMount(async () => {
     const data = await list(false, estado.value)
     items.value.push(...data)
     items.value.forEach((item) => {
-      console.log(item)
-      
       if (item.tipo !== 'Interferencias en Aeropuertos') {      
-      item.localidad = getNameByCode('city', item.localidad)
-      item.provincia = getNameByCode('province', item.provincia)
-    }  
+        item.localidad = getNameByCode('city', item.localidad)
+        item.provincia = getNameByCode('province', item.provincia)
+      }  
     })
       
   } else {
@@ -79,10 +77,22 @@ onBeforeMount(async () => {
 async function searchFiles(textToSearch) {
   if(estado.value != 'Todos') {
     const data = await list(false, estado.value)
-    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','expediente', 'area_actual'])
+    data.forEach((item) => {
+      if (item.tipo !== 'Interferencias en Aeropuertos') {      
+        item.localidad = getNameByCode('city', item.localidad)
+        item.provincia = getNameByCode('province', item.provincia)
+      }  
+    })
+    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad'])
   } else {
       const data = await list(false, null)
-      items.value = search(data, textToSearch, ['area_asignada','expediente', 'area_actual'])
+      data.forEach((item) => {
+        if (item.tipo !== 'Interferencias en Aeropuertos') {      
+          item.localidad = getNameByCode('city', item.localidad)
+          item.provincia = getNameByCode('province', item.provincia)
+        }  
+      })
+      items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad'])
   }
   
 }
@@ -93,19 +103,36 @@ watch(estado, async(newValue, oldValue) => {
       const data = await list(false, newValue)
       items.value = ([])
       items.value.push(...data)
+      items.value.forEach((item) => {
+        if (item.tipo !== 'Interferencias en Aeropuertos') {      
+          item.localidad = getNameByCode('city', item.localidad)
+          item.provincia = getNameByCode('province', item.provincia)
+        }  
+      })
       newItems.value.push(...data)
     } else {
-      const data = await list(true, newValue)
-      items.value = ([])
-      items.value.push(...data)   
-      newItems.value.push(...data)
-
-  }  
+        const data = await list(true, newValue)
+        items.value = ([])
+        items.value.push(...data)
+        items.value.forEach((item) => {
+          if (item.tipo !== 'Interferencias en Aeropuertos') {      
+            item.localidad = getNameByCode('city', item.localidad)
+            item.provincia = getNameByCode('province', item.provincia)
+          }  
+        }) 
+        newItems.value.push(...data)
+    }  
 
   if (newValue == 'Todos') {
     const data = await list(false, null)
     items.value = ([])
     items.value.push(...data)
+    items.value.forEach((item) => {
+      if (item.tipo !== 'Interferencias en Aeropuertos') {      
+        item.localidad = getNameByCode('city', item.localidad)
+        item.provincia = getNameByCode('province', item.provincia)
+      }  
+    })
     newItems.value.push(...data)
   } 
     router.push({name: "list", query: { includeDeleted: 'false', fileStatus: newValue }})
@@ -117,7 +144,7 @@ watch(estado, async(newValue, oldValue) => {
   <heading>Gestión de Expedientes</heading>
   <div class="files-menu">
     <form-search 
-      :text-to-search="textToSearch"
+      :text-to-search="inputTextToSearch"
       placeholder="Buscar Expedientes"
       @on-submit="searchFiles"
     />
@@ -158,7 +185,8 @@ watch(estado, async(newValue, oldValue) => {
         <th>Expediente</th>
         <th>Área asignada</th>
         <th>Tipo de trámite</th>
-        <th>Localidad</th>
+        <th>Localidad/Aeropuerto</th>
+        <th>Provincia</th>
         <th>Fecha y hora</th>
         <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           Status
@@ -187,8 +215,10 @@ watch(estado, async(newValue, oldValue) => {
         <td>{{ item.expediente }}</td> 
         <td>{{ item.area_asignada }}</td> 
         <td>{{ item.tipo }}</td> 
-        <td v-if="item.tipo != 'Interferencias en Aeropuertos'">{{ item.localidad + " (" + item.provincia + ")" }}</td> 
+        <td v-if="item.tipo != 'Interferencias en Aeropuertos'">{{ item.localidad }}</td> 
         <td v-else>{{ item.aeropuerto }}</td> 
+        <td v-if="item.tipo != 'Interferencias en Aeropuertos'">{{ item.provincia }}</td> 
+        <td v-else>---</td> 
         <td>{{ item.fecha +" "+item.hora }}</td> 
         <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
           {{ item.status }}

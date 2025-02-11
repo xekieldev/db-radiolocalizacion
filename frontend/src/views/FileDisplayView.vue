@@ -617,4 +617,9 @@ tr:nth-child(odd) {
 .usuario-field {
   width: 15%;
 }
+
+.footer-main {
+  margin-top: auto;
+  margin-bottom: 0;
+}
 </style>

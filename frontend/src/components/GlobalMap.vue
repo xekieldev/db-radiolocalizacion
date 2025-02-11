@@ -76,7 +76,7 @@
             /><br>
             <div class="popup-buttons">
               <my-button
-                class="primary"
+                class="primary view-button"
                 label="Ver"
                 @on-tap="() => viewItem(item.file_id, item.id)"
               />
@@ -201,7 +201,12 @@ defineProps({
 .popup-buttons {
   display: flex;
   justify-content: flex-end;
-  margin-right: 10px;
+  /* margin-right: 10px; */
+}
+
+.view-button {
+  width: 100%;
+
 }
 .popup-content {
   font-size: 10px;

@@ -8,15 +8,17 @@ import FormSearch from '../components/FormSearch.vue'
 import { useApi } from '../composables/api'
 import { useSearch } from '../composables/search'
 import { useIconsMap } from "../composables/iconsmap"
+import { useTerritory } from '../composables/territory';
 
 
 const { getIconUrl } = useIconsMap()
+const { getNameByCode } = useTerritory()
 
 
 let latitude = ref()
 let longitude = ref()
 let zoom = ref()
-let textToSearch = ref('')
+let inputTextToSearch = ref('')
 const router = useRouter()
 const { list, loading, deleteFile } = useApi()
 const { search } = useSearch()
@@ -53,12 +55,16 @@ onBeforeMount(async() => {
             data = await list(true, estado.value)
         }  
         files.value.push(...data)
-        files.value.forEach(() => {
-          files.value = files.value.filter(item => {
-            return !(item.tipo === 'Medición de Radiaciones No Ionizantes (móviles)' || item.tipo === 'Descargo')
-          })
-          clearInterval(checkDomReady)
+        files.value = files.value.map(item => {
+          if (item.tipo !== 'Interferencias en Aeropuertos') {
+            item.localidad = getNameByCode('city', item.localidad)
+            item.provincia = getNameByCode('province', item.provincia)
+          }
+          return item
+        }).filter(item => {
+          return !(item.tipo === 'Medición de Radiaciones No Ionizantes (móviles)' || item.tipo === 'Descargo')
         })
+        clearInterval(checkDomReady)
       } catch(error) {
           console.log(error.response)
           clearInterval(checkDomReady)  
@@ -72,22 +78,24 @@ function goBack() {
 }
 
 async function searchFiles(textToSearch) {
-  if(textToSearch.value != '' && textToSearch != '') {
-  //   const data = await list(false, estado.value)
-    files.value = search(files.value, textToSearch, ['area_asignada','tipo','usuario','fecha','expediente', 'area_actual'])
-textToSearch = ''    
+  if(textToSearch != '') {
+    files.value = search(files.value, textToSearch, ['area_asignada','tipo','usuario','fecha','expediente', 'area_actual','localidad','provincia','prioridad'])
+    textToSearch = ''    
   } else {
-   
     if(router.currentRoute.value.query.includeDeleted === 'false' || router.currentRoute.value.query.includeDeleted === undefined) {
       files.value = []
       const data = await list(false, estado.value)
       files.value.push(...data)
-
-      files.value.forEach(() => {
-      files.value = files.value.filter(item => {
-        return !(item.tipo === 'Medición de Radiaciones No Ionizantes (móviles)' || item.tipo === 'Descargo')
-      })
-    })}
+      files.value = files.value.map(item => {
+        if (item.tipo !== 'Interferencias en Aeropuertos') {
+          item.localidad = getNameByCode('city', item.localidad)
+          item.provincia = getNameByCode('province', item.provincia)
+        }
+        return item
+        }).filter(item => {
+          return !(item.tipo === 'Medición de Radiaciones No Ionizantes (móviles)' || item.tipo === 'Descargo')
+        })
+    }
   }
   
 }
@@ -109,7 +117,7 @@ textToSearch = ''
       <div class="form-search-container">
         <form-search
           class="search-input"
-          :text-to-search="textToSearch"
+          :text-to-search="inputTextToSearch"
           placeholder="Buscar Expedientes"
           @on-submit="searchFiles"
         />

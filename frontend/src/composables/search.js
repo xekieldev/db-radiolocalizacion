@@ -10,12 +10,6 @@ export function useSearch() {
           let result = id == searchString
           for (let i = 0; i < targetProps.length; i++) {
             const prop = targetProps[i]            
-            if (prop == 'localidad') {
-              item[prop] = getNameByCode('city', item[prop])              
-            }
-            if (prop == 'provincia') {
-              item[prop] = getNameByCode('province', item[prop])              
-            }
             result = result || item[prop]?.toString?.().toLowerCase().includes(searchString)        
             // result = result || (item[prop] !== null && item[prop] !== undefined ? item[prop].toString() : '').toLowerCase().includes(searchString)        
           }
