@@ -622,4 +622,10 @@ tr:nth-child(odd) {
   margin-top: auto;
   margin-bottom: 0;
 }
+
+.actions-menu {
+  display: flex;
+  max-width: fit-content;
+  margin-left: auto;
+}
 </style>

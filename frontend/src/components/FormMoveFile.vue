@@ -67,6 +67,7 @@ function getAreasOptions(user_area) {
           type="text"
           label="Expediente" 
           name="expediente" 
+          outer-class="field-report"
         />
         <button
           v-if="fileNumber != 'A definir'"
@@ -105,16 +106,21 @@ function getAreasOptions(user_area) {
   border: 1px solid #007BFF;
   font-weight: 600;  
   color: #007BFF;  
-  align-self: flex-end;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-
+  align-self: flex-end;
 }
+
 .submit-button:hover {
   background-color: #007BFF;
   color: white;
+  margin-right: auto;
 }
 
 .field-area {
-  flex: 0 0 200px;
+  width: 250px;
 }
+.field-report {
+  width: 350px;
+} 
+
 
 </style>
