@@ -107691,6 +107691,22 @@
                 "lat": -54.8036404601709,
                 "lon": -68.3160624772532
             }
+        },
+        {
+            "id": "908651",
+            "nombre": "San Javier",
+            "nombre_completo": "Comuna San Javier",
+            "provincia": {
+                "id": "90",
+                "nombre": "Tucumán",
+                "interseccion": 0.0
+            },
+            "fuente": "IGN",
+            "categoria": "Comuna",
+            "centroide": {
+                "lon": -65.390594672862,
+                "lat": -26.7866671612729
+            }
         }
     ],
     "total": 4142,

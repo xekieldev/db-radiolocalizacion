@@ -14,11 +14,11 @@ export function useTerritory() {
   
   function getTerritories() {
     provinces.value = provincesData.map(p => ({ label: p.nombre.toUpperCase(), value: p.id }))
-    cities.value = citiesData.map(c => ({ label: c.nombre, value: c.id }))
+    cities.value = citiesData.map(c => ({ label: c.nombre.toUpperCase(), value: c.id }))
   }
 
   function getProvinceCities(provinceId) {
-    cities.value = citiesData.filter(c => c.provincia.id === provinceId).map(c => ({ label: c.nombre, value: c.id , province: c.provincia.id }))
+    cities.value = citiesData.filter(c => c.provincia.id === provinceId).map(c => ({ label: c.nombre.toUpperCase(), value: c.id , province: c.provincia.id }))
   }
 
   function getNameByCode(kind, code){
