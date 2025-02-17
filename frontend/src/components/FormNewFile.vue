@@ -126,6 +126,7 @@ function getFileTypeOptions(user_area) {
           label="Fecha"
           name="fecha"
           outer-class="shorter-field"
+          :disabled="file.tramitacion != 'Pendiente'"
         />
         <form-kit
           v-if="currentRoute.name !== 'editFile'"
@@ -142,6 +143,7 @@ function getFileTypeOptions(user_area) {
           label="Hora"
           name="hora"
           outer-class="shorter-field"
+          :disabled="file.tramitacion != 'Pendiente'"
         />
         <form-kit
           v-model="file.expediente"
@@ -194,6 +196,7 @@ function getFileTypeOptions(user_area) {
           name="area_asignada"
           :options="area"
           placeholder="Área"
+          :disabled="file.tramitacion != 'Pendiente'"
         />
       </form-row>
       

@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Blueprint
 from flask import request,  jsonify
 from src.db import db, CaseFile, Station, TechMeasurement, technician_tech_measurement, technician_station, Technician, file_tracking, ma, User
-from sqlalchemy import exc, insert, delete, select
+from sqlalchemy import exc, insert, delete, select, update, func
 from src.technician import technicians_schema
 from src.station import station_schema, stations_schema
 from src.non_ionizing_radiation import delete_nir
@@ -127,7 +127,19 @@ def edit_file(id):
             latitud = request.json.get('latitud')
             longitud = request.json.get('longitud')
             informe = request.json.get('informe')
-            tramitacion = 'Pendiente'
+
+            if caseFile.tramitacion == 'Pendiente' and (fecha != caseFile.fecha or hora != caseFile.hora or area_asignada != caseFile.area_asignada):
+                usuario_id = get_jwt_identity()
+                checkUser = User.query.filter_by(id=usuario_id).first()
+                stmt_update = (update(file_tracking).where(file_tracking.c.file_id == caseFile.id).values(
+                    fecha=fecha,
+                    hora=hora,
+                    envia=checkUser.area,
+                    recibe=area_asignada,
+                    usuario=checkUser.usuario
+                    )
+                )
+                db.session.execute(stmt_update)
 
             caseFile.fecha = fecha
             caseFile.hora = hora
@@ -151,7 +163,6 @@ def edit_file(id):
             caseFile.latitud = latitud
             caseFile.longitud = longitud
             caseFile.informe = informe
-            caseFile.tramitacion = tramitacion
         
         
             db.session.commit()   

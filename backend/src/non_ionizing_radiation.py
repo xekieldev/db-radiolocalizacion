@@ -129,7 +129,7 @@ def get_nir_measurements_in_file(file_id):
         checkUser = User.query.filter_by(id=usuario_id).first()
 
         if checkUser.area != 'AGCCTYL':
-            all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(area_asignada=checkUser.area, file_id=file_id).all()
+            all_non_ionizing_radiations = NonIonizingRadiation.query.filter(CaseFile.area_asignada == checkUser.area, NonIonizingRadiation.file_id == file_id).all()
         else:
             all_non_ionizing_radiations = NonIonizingRadiation.query.filter_by(file_id=file_id).all()
 

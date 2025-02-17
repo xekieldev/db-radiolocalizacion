@@ -10,7 +10,7 @@ import MyButton from '../components/MyButton.vue'
 import FormNewActivity from '../components/FormNewActivity.vue'
 import FormMoveFile from '../components/FormMoveFile.vue'
 import FooterMain from '../components/FooterMain.vue'
-import { perfil } from '../composables/loginstatus'
+import { userData, perfil } from '../composables/loginstatus'
 
 
 const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, patchFile, getNIRMeasurementInFile } = useApi()
@@ -24,6 +24,9 @@ const nirMeasurement = reactive({})
 const items = ref([])
 const activities = ref([])
 const menu = ref(false)
+const user_area = ref('')
+
+user_area.value = userData.value.area
 
 function editItem(file_id, id) {
   if (items.value.find(station => station.id === id).frecuencia != null || items.value.find(station => station.id === id).frecuencia != undefined) {
@@ -38,6 +41,10 @@ function editItem(file_id, id) {
 async function deleteItem(file_id, id) {  
   await deleteStation(file_id, id)
   window.location.reload() 
+}
+
+function editFile(id) {
+  router.push(`/file/${id}/edit`) 
 }
 
 onBeforeMount(async () => {  
@@ -142,6 +149,12 @@ function closeDiv() {
 </script>
 <template>
   <div class="options-button">
+    <my-button
+      v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"
+      class="senary rigth"
+      label="Editar"
+      @on-tap="() => editFile(file.id)"
+    />
     <my-button
       v-if="perfil == 'coordinator'"
       tabindex="0"
