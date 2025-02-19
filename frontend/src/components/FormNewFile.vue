@@ -196,7 +196,7 @@ function getFileTypeOptions(user_area) {
           name="area_asignada"
           :options="area"
           placeholder="Área"
-          :disabled="file.tramitacion != 'Pendiente'"
+          :disabled="file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado'"
         />
       </form-row>
       

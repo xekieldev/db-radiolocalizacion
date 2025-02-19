@@ -83,7 +83,7 @@ async function searchFiles(textToSearch) {
         item.provincia = getNameByCode('province', item.provincia)
       }  
     })
-    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad'])
+    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','nota_inicio','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad'])
   } else {
       const data = await list(false, null)
       data.forEach((item) => {
