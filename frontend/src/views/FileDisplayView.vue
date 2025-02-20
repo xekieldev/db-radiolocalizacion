@@ -48,6 +48,9 @@ function editFile(id) {
 }
 
 onBeforeMount(async () => {  
+  console.log("finish")
+console.log(router.currentRoute.value.path.slice(6))
+
     const response = await getFile(router.currentRoute.value.path.slice(6))
     Object.assign(file, response.file)
     currentLocation.value = response.currentArea

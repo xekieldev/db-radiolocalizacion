@@ -1,7 +1,35 @@
 import csv
-from sqlalchemy import create_engine, null
+import json
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 from src.db import CaseFile, file_tracking, User  # Ajusta según tu estructura de proyecto
+
+# Cargar datos de provincias y localidades desde JSON
+with open("../../frontend/data/provincias.json", "r", encoding="utf-8") as file:
+    provinces_data = json.load(file)["provincias"]
+
+with open("../../frontend/data/localidades.json", "r", encoding="utf-8") as file:
+    cities_data = json.load(file)["localidades"]
+
+# Crear diccionarios para buscar códigos por nombre
+province_name_to_id = {p["nombre"].upper(): p["id"] for p in provinces_data}
+city_name_to_id = {c["nombre"].upper(): c["id"] for c in cities_data}
+
+# Función para obtener código desde el nombre
+def get_code_by_name(kind, name):
+    if not name:  # Evitar errores si el nombre es None o vacío
+        return None
+    name = name.upper()  # Convertir a mayúsculas para coincidencia
+    data = city_name_to_id if kind == "city" else province_name_to_id
+    return data.get(name, None)  # Retorna el código o None si no existe
+
+def format_date(date_str):
+    try:
+        return datetime.strptime(date_str, "%d/%m/%Y").strftime("%Y-%m-%d")
+    except ValueError:
+        return None  # Si el formato es incorrecto, devolvemos None
+
 
 # Configuración de la conexión a la base de datos
 DATABASE_URL = "sqlite:///../instance/sncte-db.sqlite"
@@ -13,22 +41,24 @@ def bulk_upload(csv_file):
     try:
         # Leer el archivo CSV
         with open(csv_file, 'r', encoding='utf-8') as file:
-            csv_data = csv.DictReader(file, delimiter =';')
-            
+            csv_data = csv.DictReader(file, delimiter=';')
+
             case_files = []
             file_trackings = []
 
-            # Suponiendo que estás simulando un usuario específico
-            usuario_id = 1  # Reemplaza con un ID válido
+            # Obtener usuario de prueba
+            usuario_id = 1  # Reemplazar con un ID válido
             checkUser = session.query(User).filter_by(id=usuario_id).first()
+            if not checkUser:
+                print("Error: Usuario no encontrado.")
+                return
 
             for row in csv_data:
-                # print(f"Procesando fila: {row}")
-                expediente = row.get('expediente')
-                print('frecuencia', row.get('frecuencia'))
-                print('latitud', row.get('latitud'))
-                print("Row: ",row)  
-                #               # Crear una instancia de CaseFile
+                # Convertir nombres en códigos
+                provincia_codigo = get_code_by_name("province", row.get("provincia"))
+                localidad_codigo = get_code_by_name("city", row.get("localidad"))
+
+                # Crear CaseFile
                 caseFile = CaseFile(
                     expediente=row.get('expediente'),
                     area_asignada=row.get('area_asignada'),
@@ -42,8 +72,8 @@ def bulk_upload(csv_file):
                     usuario=row.get('usuario'),
                     frecuencia=float(row.get('frecuencia')) if row.get('frecuencia') != 'NULL' else 0,
                     unidad=row.get('unidad'),
-                    provincia=row.get('provincia'),
-                    localidad=row.get('localidad'),
+                    provincia=provincia_codigo,  # Guardamos el código
+                    localidad=localidad_codigo,  # Guardamos el código
                     motivo=row.get('motivo'),
                     area_actual=row.get('area_asignada'),
                     fecha_fin=row.get('fecha_fin'),
@@ -56,41 +86,37 @@ def bulk_upload(csv_file):
                 )
                 case_files.append(caseFile)
                 session.add(caseFile)
-                session.commit()
 
-
-                # Preparar el tracking asociado
+                # Tracking
                 tracking = {
-                    "file_id": None,  # Se asignará después de guardar case_files
+                    "file_id": None,  # Se asignará después de guardar CaseFiles
                     "envia": checkUser.area,
                     "recibe": row.get('area_asignada'),
-                    "fecha": row.get('fecha'),
+                    "fecha": format_date(row.get('fecha')),
                     "hora": row.get('hora'),
                     "usuario": checkUser.usuario
                 }
                 file_trackings.append(tracking)
 
-            # Insertar CaseFile en la base de datos
-            session.bulk_save_objects(case_files)
+            # Guardar expedientes en la base de datos
             session.commit()
 
-            # Asignar IDs generados a los trackings
+            # Asignar los IDs generados a los trackings
             for i, caseFile in enumerate(case_files):
-                # import pdb; pdb.set_trace()
                 file_trackings[i]["file_id"] = caseFile.id
 
-            # Insertar tracking
+            # Insertar tracking en la base de datos
             stmt = file_tracking.insert().values(file_trackings)
             session.execute(stmt)
             session.commit()
 
-            print(f"{len(case_files)} expedientes cargados correctamente.")
+            print(f"{len(case_files)} expedientes cargados correctamente con tracking.")
     except Exception as e:
         session.rollback()
-        print(f"Error: {e}")
+        print(f"Error en bulk_upload: {e}")
     finally:
         session.close()
 
 # Ejecutar el script
-csv_file = 'exported-files.csv'
+csv_file = 'CCTEBA17-18-19.csv'
 bulk_upload(csv_file)
