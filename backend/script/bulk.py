@@ -41,7 +41,7 @@ def bulk_upload(csv_file):
     try:
         # Leer el archivo CSV
         with open(csv_file, 'r', encoding='utf-8') as file:
-            csv_data = csv.DictReader(file, delimiter=';')
+            csv_data = csv.DictReader(file, delimiter=',')
 
             case_files = []
             file_trackings = []
@@ -57,6 +57,9 @@ def bulk_upload(csv_file):
                 # Convertir nombres en códigos
                 provincia_codigo = get_code_by_name("province", row.get("provincia"))
                 localidad_codigo = get_code_by_name("city", row.get("localidad"))
+                print('frecuencia', row.get('frecuencia'))
+                print('latitud', row.get('latitud'))
+                print("Row: ",row)
 
                 # Crear CaseFile
                 caseFile = CaseFile(
@@ -92,7 +95,7 @@ def bulk_upload(csv_file):
                     "file_id": None,  # Se asignará después de guardar CaseFiles
                     "envia": checkUser.area,
                     "recibe": row.get('area_asignada'),
-                    "fecha": format_date(row.get('fecha')),
+                    "fecha": row.get('fecha'), #"fecha": format_date(row.get('fecha')),
                     "hora": row.get('hora'),
                     "usuario": checkUser.usuario
                 }
@@ -118,5 +121,5 @@ def bulk_upload(csv_file):
         session.close()
 
 # Ejecutar el script
-csv_file = 'CCTEBA17-18-19.csv'
+csv_file = 'BA2021-libre.csv'
 bulk_upload(csv_file)
