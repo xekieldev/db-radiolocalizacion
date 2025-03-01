@@ -9,6 +9,18 @@ import FooterMain from '../components/FooterMain.vue';
     <heading class="about-title">
       Sistema de Gestión de Expedientes<br/>Sistema Nacional de Comprobación Técnica de Emisiones (SNCTE)
     </heading>
+      <h3 class="version-titles">
+        Versión: 5.0
+      </h3>
+      <h4 class="version-titles">
+        En esta versión:
+      </h4>
+      <ul class="items-version">
+        <li>Se agregaron tablas que permiten ordenar los datos</li>
+        <li>Se mejoró la búsqueda</li>
+        <li>Mejoras visuales en diferentes componentes</li>
+        <li>Corrección de errores</li>
+      </ul><br>
     <div class="about-text">
       <h3 class="version-titles">
         Versión: 4.1
@@ -97,7 +109,9 @@ import FooterMain from '../components/FooterMain.vue';
 
 <style scoped>
 .about {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  /* text-align: center; */
   width: 100%;
   padding: 0 30px;
 }
@@ -108,7 +122,7 @@ import FooterMain from '../components/FooterMain.vue';
 
 
 .version-titles {
-  text-align: left;
+  align-items: left;
 }
 .items-version {
   text-align: left;
@@ -124,6 +138,8 @@ import FooterMain from '../components/FooterMain.vue';
 }
 .developer-name {
   /* position: sticky; */
+  text-align: center;
+  font-size: 12px;
   color: #2C3E50;
   bottom: 5px;
   left: 0; 

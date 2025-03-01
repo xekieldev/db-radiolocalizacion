@@ -8,6 +8,8 @@ import MyButton from '../components/MyButton.vue'
 import FormSearch from '../components/FormSearch.vue'
 import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
+import { exportFile, QBtn, QTable, QTd, QTh } from 'quasar'
+
 
 
 const { getAllNonIonizingRadiation, loading } = useApi()
@@ -32,7 +34,11 @@ onBeforeMount(async () => {
 
 async function searchNIRMeasurement(textoToSearch) {
   const data = await getAllNonIonizingRadiation()
-  items.value = search(data, textoToSearch, ['localidad', 'provincia'])  
+  data.forEach((item) => {   
+    item.localidad = getNameByCode('city', item.localidad)
+    item.provincia = getNameByCode('province', item.provincia)
+  })
+  items.value = search(data, textoToSearch, ['localidad', 'provincia']) 
 }
 
 function viewItem(file_id, item) {  
@@ -42,6 +48,20 @@ function viewItem(file_id, item) {
 function viewNirMap() {  
   router.push(`/nir_map`)
 }
+
+const columns = [
+  { name: 'id',
+    label: 'id', 
+    field: 'id', 
+    sortable: true, 
+    align: 'center'
+  },
+  { name: 'localidad', label: 'Localidad', field: 'localidad', sortable: true, align: 'center' },
+  { name: 'provincia', label: 'Provincia', field: 'provincia', sortable: true, align: 'center' },
+  { name: 'area', label: 'Área/CCTE', field: 'area_asignada', sortable: true, align: 'center' },
+  { name: 'cantidad', label: 'Cantidad de Mediciones', field: 'cantidad', sortable: true, align: 'center' },
+  { name: 'valor_maximo', label: 'Valor Máximo [%]', field: 'valor_maximo', sortable: true, align: 'center' },
+]
 
 </script>
 <template>
@@ -61,50 +81,34 @@ function viewNirMap() {
     </div> 
   </div>
   <div class="nir-measurements-container">
-    <table class="nir-table">
-      <tr>
-        <th>id</th>
-        <!-- <th>id Expediente</th> -->
-        <th>Localidad</th>
-        <th>Provincia</th>
-        <th>Área/CCTE</th>
-        <th>Cantidad de Mediciones</th>
-        <th>Valor Máximo [%]</th>
-        <!-- <th>Acciones</th> -->
-      </tr>
-      <tr
-        v-for="item in items"
-        :key="item"
-      >
-        <td>
-          <my-button
-            class="primary center"
-            :label="(item.id.toString())"
-            @on-tap="() => viewItem(item.file_id, item.id)"
-          />
-        </td> 
-        <!-- <td class="file-field">{{ item.file_id }}</td>  -->
-        <td>{{ item.localidad }}</td> 
-        <td>{{ item.provincia }}</td>
-        <td>{{ item.area_asignada }}</td>
-        <td>{{ item.cantidad }}</td>
-        <td>{{ item.valor_maximo }}</td>
-        <!-- <td>
+    <q-table
+      dense
+      flat
+      wrap-cells
+      :rows="items"
+      :columns="columns"
+      row-key="id"
+      :pagination="{ rowsPerPage: 15 }"
+      separator="vertical"
+      table-class="zebra"
+      table-header-style="height: 45px;"
+    >
+  
+      <template v-slot:header-cell="props">
+        <q-th :props="props">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:body-cell-id="props">
+          <q-td :props="props">
             <my-button
-              v-if="status[item.id]!=1"
-              class="primary center"
-              label="Borrar"
-              @on-tap="confirmar(item.id)"
+              class="primary center my-btn"
+              :label="props.row.id.toString()"
+              @on-tap="() => viewItem(props.row.file_id, props.row.id)"
             />
-            <my-button
-              v-if="status[item.id]===1"
-              class="tertiary center"
-              label="¿Confirmar?"
-              @on-tap="del(item.id)"
-            />
-          </td> -->
-      </tr>  
-    </table>
+          </q-td>
+        </template>
+    </q-table>
   </div>
   <div class="status">
     <span><strong>Loading:</strong> {{ loading }}</span>
@@ -113,6 +117,9 @@ function viewNirMap() {
 </template>
 
 <style scoped>
+
+:deep(div.zebra table tr:nth-child(even))
+{background-color: #ebeded;}
 
 .status{
   background-color: lightyellow;
@@ -167,5 +174,7 @@ tr:nth-child(odd) {
   flex-direction: row;
   gap: 10px;
 }
-
+.my-btn {
+  height: fit-content;
+}
 </style>

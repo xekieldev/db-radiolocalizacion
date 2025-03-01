@@ -11,6 +11,8 @@ import FormNewActivity from '../components/FormNewActivity.vue'
 import FormMoveFile from '../components/FormMoveFile.vue'
 import FooterMain from '../components/FooterMain.vue'
 import { userData, perfil } from '../composables/loginstatus'
+import { exportFile, QBtn, QTable, QTd, QTh, QTr, QIcon } from 'quasar'
+
 
 
 const { getFile, stationsPerFile, deleteStation, newActivity, getActivities, patchFile, getNIRMeasurementInFile } = useApi()
@@ -148,16 +150,27 @@ function closeDiv() {
   menu.value = false
 }
 
+const columns = [
+  { name: 'id',
+    label: 'id', 
+    field: 'id', 
+    sortable: true, 
+    align: 'center'
+  },
+  { name: 'identificación', label: 'Identificación', field: 'identificacion', sortable: true, align: 'center' },
+  { name: 'servicio', label: 'Servicio', field: 'servicio', sortable: true, align: 'center' },
+  { name: 'frecuencia', label: 'Frecuencia', field: row => row.frecuencia ? row.frecuencia +' '+ row.unidad : '---', sortable: true, align: 'center' },
+  { name: 'emplazamiento', label: 'Emplazamiento', field: 'emplazamiento', sortable: true, align: 'center' },
+  { name: 'domicilio', label: 'Domicilio', field: 'domicilio', sortable: true, align: 'center' },
+  { name: 'localidad', label: 'Localidad', field: 'localidad', sortable: true, align: 'center' },
+  { name: 'provincia', label: 'Provincia', field: 'provincia', sortable: true, align: 'center' },
+  { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'center' },
+
+]
 
 </script>
 <template>
   <div class="options-button">
-    <my-button
-      v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"
-      class="senary rigth"
-      label="Editar"
-      @on-tap="() => editFile(file.id)"
-    />
     <my-button
       v-if="perfil == 'coordinator'"
       tabindex="0"
@@ -176,7 +189,7 @@ function closeDiv() {
     {{ file.expediente }}
   </heading>
   <div class="menu-container">
-    <div class="left-options">
+    <div class="btns-options">
       <my-button
         v-if="file.tramitacion != 'Finalizado'"
         tabindex="0"
@@ -199,13 +212,23 @@ function closeDiv() {
         @on-tap="viewNirMeas(file.id, nirMeasurement.id)"
       />
     </div>
-    <my-button
-      v-if="perfil === 'coordinator' && file.tramitacion != 'Finalizado'"
-      tabindex="0"
-      class="primary options-menu"
-      label="Acciones"
-      @on-tap="openMenu"
-    />
+    <div class="btns-options">
+      <my-button
+        v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"
+        class="primary"
+        label="Editar"
+        @on-tap="() => editFile(file.id)"
+        style="margin-right: 0;"
+      />
+      <my-button
+        v-if="perfil === 'coordinator' && file.tramitacion != 'Finalizado'"
+        tabindex="0"
+        class="primary options-menu"
+        label="Acciones"
+        @on-tap="openMenu"
+      />
+    </div>
+    
   </div>
   <div
     v-if="menu == true"
@@ -395,71 +418,60 @@ function closeDiv() {
     <h2 class="file-titles">
       Estaciones relacionadas
     </h2>
-    <table class="stations-table">
-      <tr>
-        <th>id</th>
-        <th>Identificación</th>
-        <th>Servicio</th>
-        <th>Frecuencia</th>
-        <th>Emplazamiento</th>
-        <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
-        <th>Domicilio</th>
-        <th>Localidad</th>
-        <th>Provincia</th>
-        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          Status
-        </th>
-        <th v-if="file.tramitacion != 'Finalizado'">
-          Acciones
-        </th>
-      </tr>
-      <tr
-        v-for="item in items"
-        :key="item"
-      >
-        <td>
-          <my-button
-            class="primary center"
-            :label="(item.id.toString())"
-            @on-tap="() => viewItem(item.file_id, item.id)"
-          />
-        </td>
-        <!-- <td>{{ item.id }}</td> -->
-        <td>{{ item.identificacion }}</td> 
-        <td>{{ item.servicio }}</td> 
-        <td v-if="item.frecuencia">
-          {{ item.frecuencia +" "+item.unidad }}
-        </td>
-        <td v-else>
-          ---
-        </td>
-        <td>{{ item.emplazamiento }}</td>
-        <td>{{ item.domicilio }}</td>
-        <td>{{ item.localidad }} </td>
-        <td>{{ item.provincia }} </td>
-        <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
-        <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          {{ item.status }}
-        </td>
-        <td v-if="file.tramitacion != 'Finalizado'"> 
-          <div class="action-buttons-container">
+
+    <q-table
+      dense
+      flat
+      wrap-cells
+      :rows="items"
+      :columns="columns"
+      row-key="id"
+      :pagination="{ rowsPerPage: 0 }"
+      separator="vertical"
+      table-class="zebra"
+      table-header-style="height: 45px;"
+    >
+  
+      <template v-slot:header-cell="props">
+        <q-th :props="props">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-acciones="props">
+        <q-th :props="props" v-if="file.tramitacion != 'Finalizado'">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:body-cell-id="props">
+          <q-td :props="props">
             <my-button
+              class="primary center my-btn"
+              :label="props.row.id.toString()"
+              @on-tap="() => viewItem(props.row.file_id, props.row.id)"
+            />
+          </q-td>
+        </template>
+        <!-- Celdas personalizadas para las acciones -->
+        <template v-slot:body-cell-acciones="props">
+          <q-td :props="props" v-if="file.tramitacion != 'Finalizado'">
+            <div class="action-buttons-container">
+              <my-button
               v-if="file.tramitacion != 'Finalizado'"
               class="primary center"
               label="Editar"
-              @on-tap="() => editItem(item.file_id, item.id)"
+              @on-tap="() => editItem(props.row.file_id, props.row.id)"
             />
             <my-button
               v-if="file.tramitacion != 'Finalizado'"
               class="tertiary center"
               label="Borrar"
-              @on-tap="() => deleteItem(item.file_id, item.id)"
+              @on-tap="() => deleteItem(props.row.file_id, props.row.id)"
             />
-            <!-- <my-button @on-tap="() => deleteItem(item.id)" class="tertiary center" label="Borrar"/> -->
-          </div>
-        </td>
-      </tr>
-    </table>
+            </div>
+          </q-td>
+        </template>
+        
+    </q-table>
   </div>
   
   <div class="activities-container">
@@ -494,6 +506,9 @@ function closeDiv() {
 
 <style scoped>
 
+:deep(div.zebra table tr:nth-child(even))
+{background-color: #ebeded;}
+
 .file-container {
   display: flex;
   flex-direction: column;
@@ -524,7 +539,7 @@ function closeDiv() {
   padding: 0 30px;
 }
 
-.left-options {
+.btns-options {
   display: flex;
   flex-direction: row;
   gap: 5px;
@@ -554,7 +569,7 @@ th{
   font-weight: 700;
   background-color: #cbcdce;
   border-radius: 10px 0 0;
-
+  white-space: nowrap;
 }
 tr:nth-child(odd) {
   background-color: #ebeded;
@@ -573,7 +588,8 @@ tr:nth-child(odd) {
 }
 
 .file-titles {
-  padding-top: 10px;
+  padding: 10px;
+  font-size: 20px;
   align-self: center;
   font-weight: 500;
 }
@@ -643,5 +659,9 @@ tr:nth-child(odd) {
   display: flex;
   max-width: fit-content;
   margin-left: auto;
+}
+
+.my-btn {
+  height: fit-content;
 }
 </style>

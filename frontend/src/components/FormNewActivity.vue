@@ -65,7 +65,8 @@ function submitHandler(fields) {
   
 }
 .activity-title {
-  padding-top: 10px;
+  font-size: 20px;
+  padding: 10px;
   align-self: center;
   font-weight: 500;
 }

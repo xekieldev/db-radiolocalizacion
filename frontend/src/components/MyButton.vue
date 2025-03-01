@@ -65,6 +65,7 @@ function handleClick() {
 }
 .tertiary {
   border: 1px solid #DC3545;
+  background: white;
   font-weight: 500;  
   color: #DC3545;
   height: 100%;

@@ -107707,6 +107707,22 @@
                 "lon": -65.390594672862,
                 "lat": -26.7866671612729
             }
+        },
+        {
+            "id": "500007",
+            "nombre": "Mendoza",
+            "nombre_completo": "Municipio Mendoza",
+            "provincia": {
+                "id": "50",
+                "nombre": "Mendoza",
+                "interseccion": 0.0
+            },
+            "fuente": "IGN",
+            "categoria": "Municipio",
+            "centroide": {
+                "lon": -68.8936488018201,
+                "lat": -32.8828960440429
+            }
         }
     ],
     "total": 4142,
