@@ -9,6 +9,8 @@ import { useSearch } from '../composables/search'
 import FooterMain from '../components/FooterMain.vue'
 import { userData, perfil } from '../composables/loginstatus'
 import { useTerritory } from '../composables/territory'
+import { exportFile, QBtn, QTable, QTd, QTh, QTr, QIcon } from 'quasar'
+
 
 
 
@@ -139,6 +141,24 @@ watch(estado, async(newValue, oldValue) => {
   }
 })
 
+const columns = [
+  { name: 'id',
+    label: 'id', 
+    field: 'id', 
+    sortable: true, 
+    align: 'center'
+  },
+  { name: 'expediente', label: 'Expediente', field: 'expediente', sortable: true, align: 'center', style:'white-space: nowrap;' },
+  { name: 'area_asignada', label: 'Área asignada', field: 'area_asignada', sortable: true, align: 'center' },
+  { name: 'tipo', label: 'Tipo de trámite', field: 'tipo', sortable: true, align: 'center' },
+  { name: 'localidad', label: 'Localidad/Aeropuerto', field: row => row.tipo != 'Interferencias en Aeropuertos' ? row.localidad : row.aeropuerto, sortable: true, align: 'center' },
+  { name: 'provincia', label: 'Provincia', field: row => row.tipo != 'Interferencias en Aeropuertos' ? row.provincia : '---', sortable: true, align: 'center' },
+  { name: 'fecha', label: 'Fecha y hora', field: row => `${row.fecha} ${row.hora}`, sortable: true, align: 'center' },
+  { name: 'ubicacion', label: 'Ubicación actual', field: 'area_actual', sortable: true, align: 'center' },
+  { name: 'status', label: 'Estado', field: 'tramitacion', sortable: true, align: 'center' },
+  { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'center' },
+]
+ 
 </script>
 <template>
   <heading>Gestión de Expedientes</heading>
@@ -179,7 +199,91 @@ watch(estado, async(newValue, oldValue) => {
     </div>
   </div>
   <div class="list-container">
-    <table class="files-table">
+    <q-table
+      dense
+      flat
+      wrap-cells
+      sort-by="provincia"
+      :rows="items"
+      :columns="columns"
+      row-key="id"
+      :pagination="{ 
+        rowsPerPage: 15,
+        sortBy:'fecha',
+        descending: true
+       }"
+      separator="vertical"
+      table-class="zebra"
+      table-header-style="height: 45px;"
+    >
+      <!-- Encabezado de la tabla -->
+      <template v-slot:header-cell="props">
+        <q-th :props="props">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+
+      <template v-slot:header-cell-acciones="props">
+        <q-th :props="props" v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      
+      <!-- Celdas del cuerpo de la tabla -->
+      <template v-slot:body-cell-expediente="props">
+        <q-td :props="props">
+          {{ props.row.expediente }}
+          
+          <!-- Agregar el icono cuando se cumpla la condición -->
+          <q-icon
+            v-if="props.row.prioridad === 'Urgente' || props.row.tipo === 'Interferencias en Aeropuertos'"
+            name="warning"
+            color="negative"
+            size="xs"
+            class="q-ml-xs"
+          />
+        </q-td>
+      </template>
+
+      <!-- Celdas personalizadas para el id -->
+      <template v-slot:body-cell-id="props">
+        <q-td :props="props">
+          <my-button
+            class="primary center my-btn"
+            :label="props.row.id.toString()"
+            @on-tap="() => viewItem(props.row.id)"
+          />
+        </q-td>
+      </template>
+
+      <!-- Celdas personalizadas para las acciones -->
+      <template v-slot:body-cell-acciones="props">
+        <q-td :props="props" v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'">
+          <div class="action-buttons-container">
+            <my-button
+              class="primary center"
+              label="Editar"
+              @on-tap="() => editItem(props.row.id)"
+            />
+            <my-button
+              v-if="confirm_delete[props.row.id] !== 1"
+              class="tertiary center"
+              label="Borrar"
+              @on-tap="() => confirm(props.row.id)"
+            />
+            <my-button
+              v-if="confirm_delete[props.row.id] === 1"
+              class="tertiary center"
+              label="¿Confirmar?"
+              @on-tap="deleteItem(props.row.id)"
+            />
+          </div>
+        </q-td>
+      </template>
+
+    </q-table>
+
+    <!-- <table class="files-table">
       <tr>
         <th>id</th>
         <th>Expediente</th>
@@ -247,7 +351,7 @@ watch(estado, async(newValue, oldValue) => {
           </div>
         </td>
       </tr>      
-    </table>
+    </table> -->
     <div class="status">
       <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
@@ -256,6 +360,10 @@ watch(estado, async(newValue, oldValue) => {
 </template>
 
 <style scoped>
+
+:deep(div.zebra table tr:nth-child(even))
+{background-color: #ebeded;}
+
 .list-container{
   display: flex;
   flex-direction: column;
@@ -280,7 +388,7 @@ th{
   font-weight: 700;
   background-color: #cbcdce;
   border-radius: 10px 0 0;
-
+  white-space: nowrap;
 }
 tr:nth-child(odd) {
   background-color: #ebeded;
@@ -304,6 +412,7 @@ tr:nth-child(odd) {
 }
 .red-text {
   color: red;
+  font-weight: 700;
 }
 .list-sub-actions {
   display: flex;
@@ -314,6 +423,8 @@ tr:nth-child(odd) {
 .short-field {
   margin-bottom: 0;
 }
-
+.my-btn {
+  height: fit-content;
+}
 
 </style>

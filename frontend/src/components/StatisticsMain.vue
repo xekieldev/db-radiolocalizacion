@@ -349,7 +349,7 @@ watch(()=> props, async (newValue, oldValue) => {
   <heading>{{ title }} {{ selectedArea }} </heading>
   <div class="stat-container">
   <div class="stat-menu">
-    <h2 class="titles">Filtros</h2>
+    <h2 class="titles filters">Filtros</h2>
     <h4 class="titles">Seleccione tipo</h4>
     <div class="type-btns-container">
       <my-button
@@ -690,6 +690,9 @@ tr:nth-child(odd) {
   display: flex;
   justify-content: center;
   margin-bottom: 5px;
+}
+.filters {
+  font-size: 18px;
 }
 .screen {
   display: flex;

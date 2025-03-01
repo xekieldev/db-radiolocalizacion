@@ -132,7 +132,7 @@ async function searchFiles(textToSearch) {
       />
     </div>
     <div class="map-references">
-      <h2 class="heading">Mapa de Expedientes</h2>
+      <h2 class="heading map-heading">Mapa de Expedientes</h2><br>
       <h3 class="heading">Referencias</h3>
       <h4 class="reference-item">
         <img class="reference-icon" :src="getIconUrl('Interferencias en Aeropuertos')" alt="">
@@ -237,8 +237,9 @@ async function searchFiles(textToSearch) {
   z-index: 1;
 }
 .map-heading {
-  position: absolute;
-  z-index: 2;
+  font-size: 16px;
+  /* position: absolute;
+  z-index: 2; */
 }
 .map-references {
   /* display: flex;

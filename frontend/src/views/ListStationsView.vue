@@ -8,6 +8,7 @@ import { useTerritory } from '../composables/territory'
 import { useSearch } from '../composables/search'
 import FormSearch from '../components/FormSearch.vue'
 import FooterMain from '../components/FooterMain.vue'
+import { exportFile, QBtn, QTable, QTd, QTh } from 'quasar'
 
 
 const { listStations, loading } = useApi()
@@ -44,13 +45,32 @@ onBeforeMount(async () => {
 
 async function searchStations(textoToSearch) {
   const data = await listStations(false)
-  items.value = search(data, textoToSearch, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])  
+  items.value = search(data, textoToSearch, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])
+    for (const item in items.value) {
+        items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
+        items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
+      }
 }
 
 function viewMap() {  
   router.push(`/station_map`)
 }
 
+const columns = [
+  { name: 'id',
+    label: 'id', 
+    field: 'id', 
+    sortable: true, 
+    align: 'center'
+  },
+  { name: 'identificación', label: 'Identificación', field: 'identificacion', sortable: true, align: 'center' },
+  { name: 'servicio', label: 'Servicio', field: 'servicio', sortable: true, align: 'center' },
+  { name: 'frecuencia', label: 'Frecuencia', field: row => row.frecuencia ? row.frecuencia : '---', sortable: true, align: 'center' },
+  { name: 'emplazamiento', label: 'Emplazamiento', field: 'emplazamiento', sortable: true, align: 'center' },
+  { name: 'domicilio', label: 'Domicilio', field: 'domicilio', sortable: true, align: 'center' },
+  { name: 'localidad', label: 'Localidad', field: 'localidad', sortable: true, align: 'center' },
+  { name: 'provincia', label: 'Provincia', field: 'provincia', sortable: true, align: 'center' },
+]
 
 </script>
 <template>
@@ -72,73 +92,34 @@ function viewMap() {
 
   <div class="list-container">
     <!-- <my-button @on-tap="createItem" class="secondary right" label="Nueva Radiolocalización" /> -->
-    <table class="stations-table">
-      <tr>
-        <th>id</th>
-        <th>Identificación</th>
-        <th>Servicio</th>
-        <th>Frecuencia</th>
-        <th>Emplazamiento</th>
-        <!-- <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">Status</th> -->
-        <th>Domicilio</th>
-        <th>Localidad</th>
-        <th>Provincia</th>
-        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          Status
-        </th>
-        <!-- <th>Acciones</th> -->
-      </tr>
-      <tr
-        v-for="item in items"
-        :key="item"
-      >
-        <td>
-          <my-button
-            class="primary center"
-            :label="(item.id.toString())"
-            @on-tap="() => viewItem(item.file_id, item.id)"
-          />
-        </td>
-        <!-- <td>{{ item.id }}</td> -->
-        <td>{{ item.identificacion }}</td> 
-        <td>{{ item.servicio }}</td> 
-        <td v-if="item.frecuencia">
-          {{ item.frecuencia +" "+item.unidad }}
-        </td>
-        <td v-else>
-          ---
-        </td>
-        <td>{{ item.emplazamiento }}</td>
-        <td>{{ item.domicilio }}</td>
-        <td>{{ item.localidad }} </td>
-        <td>{{ item.provincia }} </td>
-        <!-- <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">{{ item.status }}</td> -->
-        <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          {{ item.status }}
-        </td>
-        <!-- <td> 
-          <div class="action-buttons-container">
+    <q-table
+      dense
+      flat
+      wrap-cells
+      :rows="items"
+      :columns="columns"
+      row-key="id"
+      :pagination="{ rowsPerPage: 15 }"
+      separator="vertical"
+      table-class="zebra"
+      table-header-style="height: 45px;"
+    >
+  
+      <template v-slot:header-cell="props">
+        <q-th :props="props">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:body-cell-id="props">
+          <q-td :props="props">
             <my-button
-              class="primary center"
-              label="Editar"
-              @on-tap="() => editItem(item.file_id, item.id)"
+              class="primary center my-btn"
+              :label="props.row.id.toString()"
+              @on-tap="() => viewItem(props.row.file_id, props.row.id)"
             />
-            <my-button
-              v-if="confirm_delete[item.id]!==1"
-              class="tertiary center"
-              label="Borrar"
-              @on-tap="() => confirm(item.id)"
-            />
-            <my-button
-              v-if="confirm_delete[item.id]===1"
-              class="tertiary center"
-              label="¿Confirmar?"
-              @on-tap="() => deleteItem(item.file_id, item.id)"
-            />
-          </div>
-        </td> -->
-      </tr>
-    </table>
+          </q-td>
+        </template>
+    </q-table>
     <div class="status">
       <span><strong>Loading:</strong> {{ loading }}</span>
     </div>
@@ -147,6 +128,10 @@ function viewMap() {
 </template>
 
 <style scoped>
+
+:deep(div.zebra table tr:nth-child(even))
+{background-color: #ebeded;}
+
 .list-container{
   display: flex;
   flex-direction: column;
@@ -154,6 +139,7 @@ function viewMap() {
   width: 100%;
   justify-content: center;
   /* font-size: 14px; */
+  margin-top: 10px;
   padding: 0 30px;
 }
 .status{
@@ -173,7 +159,7 @@ th{
   font-weight: 700;
   background-color: #cbcdce;
   border-radius: 10px 0 0;
-
+  white-space: nowrap;
 }
 tr:nth-child(odd) {
   background-color: #ebeded;
@@ -192,6 +178,9 @@ tr:nth-child(odd) {
   flex-direction: row;
   justify-content: space-between;
   padding: 0 30px;
+}
+.my-btn {
+  height: fit-content;
 }
 
 </style>
