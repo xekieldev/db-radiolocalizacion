@@ -158,6 +158,54 @@ const columns = [
   { name: 'status', label: 'Estado', field: 'tramitacion', sortable: true, align: 'center' },
   { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'center' },
 ]
+
+function wrapCsvValue (val, formatFn, row) {
+  let formatted = formatFn !== void 0
+    ? formatFn(val, row)
+    : val
+
+  formatted = formatted === void 0 || formatted === null
+    ? ''
+    : String(formatted)
+
+  formatted = formatted.split('"').join('""')
+  /**
+   * Excel accepts \n and \r in strings, but some other CSV parsers do not
+   * Uncomment the next two lines to escape new lines
+   */
+  // .split('\n').join('\\n')
+  // .split('\r').join('\\r')
+
+  return `"${formatted}"`
+}
+
+function exportTable () {
+        // naive encoding to csv format
+        const exportColumns = columns.filter(col => col.name !== 'acciones')
+        const content = [exportColumns.map(col => wrapCsvValue(col.label))].concat(
+          items.value.map(row => exportColumns.map(col => wrapCsvValue(
+            typeof col.field === 'function'
+              ? col.field(row)
+              : row[ col.field === void 0 ? col.name : col.field ],
+            col.format,
+            row
+          )).join(','))
+        ).join('\r\n')
+
+        const status = exportFile(
+          'SNCTE-DB-export.csv',
+          content,
+          'text/csv'
+        )
+
+        if (status !== true) {
+          notify({
+            message: 'Browser denied file download...',
+            color: 'negative',
+            icon: 'warning'
+          })
+        }
+      }
  
 </script>
 <template>
@@ -170,6 +218,11 @@ const columns = [
     />
     
     <div class="list-sub-actions">
+      <my-button
+        class="quinary"
+        label="Exportar a .csv"
+        @click="exportTable"
+        />
       <my-button
         class="secondary right view-map-button"
         label="Ver Mapa"
@@ -216,6 +269,7 @@ const columns = [
       table-class="zebra"
       table-header-style="height: 45px;"
     >
+    
       <!-- Encabezado de la tabla -->
       <template v-slot:header-cell="props">
         <q-th :props="props">

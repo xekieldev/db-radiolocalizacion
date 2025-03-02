@@ -17,6 +17,7 @@ import FooterMain from '../components/FooterMain.vue';
       </h4>
       <ul class="items-version">
         <li>Se agregaron tablas que permiten ordenar los datos</li>
+        <li>Se agregó función para exportar a .csv</li>
         <li>Se mejoró la búsqueda</li>
         <li>Mejoras visuales en diferentes componentes</li>
         <li>Corrección de errores</li>

@@ -95,6 +95,7 @@ function handleClick() {
 .quinary {
   border: 1px solid #b522ba;
   font-weight: 500;  
+  white-space: nowrap;
   color: #b522ba;
 }
 .quinary:hover {
