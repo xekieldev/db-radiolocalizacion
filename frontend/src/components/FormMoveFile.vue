@@ -16,8 +16,9 @@ function submitHandler(fields) {
   emits('onSubmit', fields)
 }
 
-defineProps({
+const props = defineProps({
   context: String,
+  fileType: String,
   fileNumber: String,
   location: String,
   informe: String,
@@ -47,7 +48,7 @@ function getAreasOptions(user_area) {
           inner-class="field--report"
         />
         <form-kit
-          v-if="fileNumber !== 'A definir' && (informe === undefined || informe === null || informe === '')"
+          v-if="fileNumber !== 'A definir' && (informe === undefined || informe === null || informe === '') && fileType !=='Descargo'"
           type="text"
           label="Informe" 
           name="informe" 

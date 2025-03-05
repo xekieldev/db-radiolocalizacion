@@ -261,7 +261,7 @@ def delete_file(id):
         return response, 400
 
 
-@bp.route('/file/<id>', methods = ['PATCH'])
+@bp.route('/file/<id>', methods=['PATCH'])
 @jwt_required()
 def patch_file(id):
     try:
@@ -269,47 +269,59 @@ def patch_file(id):
         expediente = request.json.get('expediente')
         informe = request.json.get('informe')
         area_destino = request.json.get('area_destino')
+
         if caseFile and area_destino and caseFile.expediente != 'A definir':
-            if area_destino == 'AGCCTYL':
-                caseFile.tramitacion = 'Informado'
-                caseFile.informe = informe
-            elif area_destino != caseFile.area_asignada:
-                caseFile.tramitacion = 'Finalizado'
-                caseFile.fecha_fin = datetime.today().strftime('%Y-%m-%d')
-                caseFile.hora_fin = datetime.today().strftime('%H:%M')
-                if caseFile.tipo == 'Interferencias en Aeropuertos':
-                    nota_fin = request.json.get('nota_fin')
-                    caseFile.nota_fin = nota_fin
-            else:
-                caseFile.tramitacion = 'Pendiente'
+            usuario_id = get_jwt_identity()
+            checkUser = User.query.filter_by(id=usuario_id).first()
+            session = db.session
             
-            # caseFile.informe = informe
-            caseFile.area_actual = area_destino
-            db.session.commit()
+            # Si es "Descargo" y el destino es "Guarda Temporal", ejecutamos dos veces
+            area_destinos = ['AGCCTYL', 'Guarda Temporal'] if caseFile.tipo == 'Descargo' and area_destino == 'Guarda Temporal' else [area_destino]
 
-            stmt = select(file_tracking).where(file_tracking.c.file_id == id).order_by(file_tracking.c.fecha.desc(), file_tracking.c.hora.desc())
-            session = db.session
-            currentArea = session.execute(stmt).first()
+            for i, destino in enumerate(area_destinos):
+                if destino == 'AGCCTYL':
+                    caseFile.tramitacion = 'Informado'
+                    caseFile.informe = informe
+                elif destino != caseFile.area_asignada:
+                    caseFile.tramitacion = 'Finalizado'
+                    caseFile.fecha_fin = datetime.today().strftime('%Y-%m-%d')
+                    caseFile.hora_fin = datetime.today().strftime('%H:%M')
+                    if caseFile.tipo == 'Interferencias en Aeropuertos':
+                        caseFile.nota_fin = request.json.get('nota_fin')
+                else:
+                    caseFile.tramitacion = 'Pendiente'
 
-            usuario_id = get_jwt_identity()      
-            checkUser= User.query.filter_by(id = usuario_id).first()
-            stmt1 = (insert(file_tracking).values(file_id = caseFile.id, envia = currentArea.recibe, recibe = area_destino, fecha = request.json.get('fecha'), hora = request.json.get('hora'), usuario = checkUser.usuario))
-            session = db.session
-            session.execute(stmt1)
-            session.commit()
+                caseFile.area_actual = destino
+                session.commit()
 
-        elif caseFile and caseFile.expediente == 'A definir':         
+                if i == 0:
+                    session.refresh(caseFile)  # Refresca los valores en SQLAlchemy
+
+                stmt = select(file_tracking).where(file_tracking.c.file_id == id).order_by(file_tracking.c.fecha.desc(), file_tracking.c.hora.desc())
+                currentArea = session.execute(stmt).first()
+
+                stmt1 = insert(file_tracking).values(
+                    file_id=caseFile.id,
+                    envia=currentArea.recibe if currentArea else None, 
+                    recibe=destino,
+                    fecha=request.json.get('fecha'),
+                    hora=request.json.get('hora'),
+                    usuario=checkUser.usuario
+                )
+                session.execute(stmt1)
+                session.commit()
+
+        elif caseFile and caseFile.expediente == 'A definir':
             caseFile.expediente = expediente
             db.session.commit()
-
         else:
             return {"error": "id not found/area_destino not valid/not allow action"}, 404
 
-        response = {"id": caseFile.id }
-        return response, 201 
-    except:
-        response = {"message": "input error"}
-        return response, 400
+        return {"id": caseFile.id}, 201
+
+    except Exception as e:
+        print(f"Error: {e}") 
+        return {"message": "input error"}, 400
 
 @bp.route('/statistics', methods = ['GET'])
 @jwt_required()
