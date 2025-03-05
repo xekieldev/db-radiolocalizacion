@@ -244,6 +244,7 @@ const columns = [
     <div class="actions-menu">
       <form-move-file
         :context="tipoTramite"
+        :file-type="file.tipo"
         :file-number="file.expediente"
         :location="file.area_actual"
         :informe="file.informe"
