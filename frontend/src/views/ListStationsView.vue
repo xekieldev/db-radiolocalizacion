@@ -45,11 +45,11 @@ onBeforeMount(async () => {
 
 async function searchStations(textoToSearch) {
   const data = await listStations(false)
+  data.forEach(item => {
+    item.localidad = getNameByCode("city", item.localidad)
+    item.provincia = getNameByCode("province", item.provincia)
+  })
   items.value = search(data, textoToSearch, ['identificacion','servicio', 'frecuencia', 'domicilio', 'localidad', 'provincia', 'emplazamiento'])
-    for (const item in items.value) {
-        items.value[item].localidad = getNameByCode("city", items.value[item].localidad)
-        items.value[item].provincia = getNameByCode("province", items.value[item].provincia)
-      }
 }
 
 function viewMap() {  

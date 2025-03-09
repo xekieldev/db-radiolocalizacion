@@ -121,5 +121,5 @@ def bulk_upload(csv_file):
         session.close()
 
 # Ejecutar el script
-csv_file = 'BA2021-libre.csv'
+csv_file = 'BA2023.csv'
 bulk_upload(csv_file)
