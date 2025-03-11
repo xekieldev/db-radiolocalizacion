@@ -79,22 +79,22 @@ onBeforeMount(async () => {
 async function searchFiles(textToSearch) {
   if(estado.value != 'Todos') {
     const data = await list(false, estado.value)
-    data.forEach((item) => {
+    data.forEach(item => {
       if (item.tipo !== 'Interferencias en Aeropuertos') {      
         item.localidad = getNameByCode('city', item.localidad)
         item.provincia = getNameByCode('province', item.provincia)
       }  
     })
-    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','nota_inicio','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad'])
+    items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','nota_inicio','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad','motivo'])
   } else {
       const data = await list(false, null)
-      data.forEach((item) => {
+      data.forEach(item => {
         if (item.tipo !== 'Interferencias en Aeropuertos') {      
           item.localidad = getNameByCode('city', item.localidad)
           item.provincia = getNameByCode('province', item.provincia)
         }  
       })
-      items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad'])
+      items.value = search(data, textToSearch, ['area_asignada','tipo','fecha','nota_inicio','expediente', 'area_actual','localidad','provincia','aeropuerto','prioridad','motivo'])
   }
   
 }
