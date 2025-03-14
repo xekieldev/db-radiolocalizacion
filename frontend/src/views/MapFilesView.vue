@@ -54,6 +54,7 @@ onBeforeMount(async() => {
         } else {
             data = await list(true, estado.value)
         }  
+        files.value = []
         files.value.push(...data)
         files.value = files.value.map(item => {
           if (item.tipo !== 'Interferencias en Aeropuertos') {
