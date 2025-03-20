@@ -107723,6 +107723,22 @@
                 "lon": -68.8936488018201,
                 "lat": -32.8828960440429
             }
+        },
+        {
+            "id": "900112",
+            "nombre": "Las Talitas",
+            "nombre_completo": "Municipio Las Talitas",
+            "provincia": {
+                "id": "90",
+                "nombre": "Tucumán",
+                "interseccion": 0.0
+            },
+            "fuente": "IGN",
+            "categoria": "Municipio",
+            "centroide": {
+                "lon": -65.1861111989092,
+                "lat": -26.7624336434667
+            }
         }
     ],
     "total": 4142,
