@@ -402,7 +402,7 @@ const columns = [
         :value="currentLocation"
       />
       <prop-value
-        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.nota_fin && file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado'"
+        v-if="tipoTramite == 'Interferencias en Aeropuertos' && file.nota_fin && file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado' && file.nota_fin "
         class="prop"
         label="Nota de Fin"
         :value="file.nota_fin"

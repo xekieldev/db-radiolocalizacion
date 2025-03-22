@@ -3,6 +3,7 @@ import FormRow from './FormRow.vue'
 import { useArea } from '../composables/area'
 import { useExternalArea } from '../composables/externalareas'
 import { userData } from '../composables/loginstatus'
+import { useFileValidation } from '../composables/filevalidation'
 
 
 const emits = defineEmits(['onSubmit'])
@@ -11,6 +12,7 @@ const { externalArea } = useExternalArea()
 const centrosAllowedAreas = [{ value: 'AGCCTYL', label: 'AGCCTYL'}, { value: 'Guarda Temporal', label: 'Guarda Temporal'}]
 // const areasExternas = [{value:'ACRA#ENACOM', label:'ACRA#ENACOM'},{value: 'DNSA#ENACOM', label: 'DNSA#ENACOM'}]
 const userArea = userData.value.area
+const { validateFile } = useFileValidation()
 
 function submitHandler(fields) {
   emits('onSubmit', fields)
@@ -46,6 +48,18 @@ function getAreasOptions(user_area) {
           name="nota_fin"
           outer-class="field-report"
           inner-class="field--report"
+          validation="required | validateFile"
+          :validation-rules="{ validateFile }"
+        />
+        <form-kit
+          v-if="context == 'Medición de Radiaciones No Ionizantes' && fileNumber != 'A definir' && location == 'AGCCTYL'"
+          type="text"
+          label="Nota de Fin" 
+          name="nota_fin"
+          outer-class="field-report"
+          inner-class="field--report"
+          validation="required | validateFile"
+          :validation-rules="{ validateFile }"
         />
         <form-kit
           v-if="fileNumber !== 'A definir' && (informe === undefined || informe === null || informe === '') && fileType !=='Descargo'"
@@ -53,6 +67,8 @@ function getAreasOptions(user_area) {
           label="Informe" 
           name="informe" 
           outer-class="field-report"
+          validation="required | validateFile"
+          :validation-rules="{ validateFile }"
         />
         <form-kit
           v-if="fileNumber != 'A definir'"
@@ -69,6 +85,8 @@ function getAreasOptions(user_area) {
           label="Expediente" 
           name="expediente" 
           outer-class="field-report"
+          validation="required | validateFile"
+          :validation-rules="{ validateFile }"
         />
         <button
           v-if="fileNumber != 'A definir'"

@@ -286,7 +286,7 @@ def patch_file(id):
                     caseFile.tramitacion = 'Finalizado'
                     caseFile.fecha_fin = datetime.today().strftime('%Y-%m-%d')
                     caseFile.hora_fin = datetime.today().strftime('%H:%M')
-                    if caseFile.tipo == 'Interferencias en Aeropuertos':
+                    if caseFile.tipo == 'Interferencias en Aeropuertos' or caseFile.tipo =='Medición de Radiaciones No Ionizantes':
                         caseFile.nota_fin = request.json.get('nota_fin')
                 else:
                     caseFile.tramitacion = 'Pendiente'
