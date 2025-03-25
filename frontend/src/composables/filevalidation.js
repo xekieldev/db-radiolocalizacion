@@ -6,7 +6,7 @@ export function useFileValidation() {
     const fileRegEx4 = /^[A-Z]{5,20}\s?E?\s?\s\d{1,8}\/\d{4}$/
     const fileRegEx5 = /^A\s{1}definir$/
     const fileRegEx6 = /^No\s{1}aplica$/
-    const fileRegEx7 = /^PV-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{2,5}#[A-Z]{6}$/
+    const fileRegEx7 = /^PV-\d{4}-\d{8}-[A-Z]{3}-[A-Z]{2,7}#[A-Z]{6}$/
 
 
     const getComposedRegex = (...regexes) => new RegExp(regexes.map(regex => regex.source).join("|"))
