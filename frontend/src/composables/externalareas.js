@@ -42,6 +42,10 @@ export function useExternalArea() {
       {
         value: 'AARCYATLRYST#ENACOM',
         label: 'AARCYATLRYST#ENACOM'
+      },
+      {
+        value: 'AAYL#ENACOM',
+        label: 'AAYL#ENACOM'
       }]
 
     return { externalArea }
