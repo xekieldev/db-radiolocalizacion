@@ -18,6 +18,14 @@
       draggable="false"
       dragging="false"
     >
+      <l-control-layers/>
+      <l-tile-layer
+        layer-type="base"
+        name="GoogleMap"
+        url="https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+        :subdomains="['mt0','mt1','mt2','mt3']"
+        :max-zoom="20"
+      />
       <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
@@ -92,7 +100,7 @@
 <script setup>
 import L from 'leaflet'
 // globalThis.L = L
-import { LMap, LTileLayer, LIcon, LPopup, LMarker } from '@vue-leaflet/vue-leaflet'
+import { LMap, LTileLayer, LIcon, LPopup, LMarker, LControlLayers } from '@vue-leaflet/vue-leaflet'
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import 'leaflet/dist/leaflet.css'
 import 'vue-leaflet-markercluster/dist/style.css'
