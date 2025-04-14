@@ -27,6 +27,13 @@
         :max-zoom="20"
       />
       <l-tile-layer
+        layer-type="base"
+        name="Satellite"
+        url="https://mt1.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+        attribution="Map data ©2024 Google"
+        :z-index="1"
+      />
+      <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
         name="OpenStreetMap"

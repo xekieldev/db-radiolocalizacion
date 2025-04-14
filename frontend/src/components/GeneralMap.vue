@@ -16,7 +16,14 @@
         name="GoogleMap"
         url="https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
         :subdomains="['mt0','mt1','mt2','mt3']"
-        :max-zoom="20"
+        :max-zoom="19"
+      />
+      <l-tile-layer
+        layer-type="base"
+        name="Satellite"
+        url="https://mt1.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+        attribution="Map data ©2024 Google"
+        :z-index="1"
       />
       <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -24,6 +31,7 @@
         name="OpenStreetMap"
         :max-zoom="19"
       />
+
       <l-marker-cluster-group>
         <l-marker 
           v-for="item in files"

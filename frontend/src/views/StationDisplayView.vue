@@ -20,6 +20,7 @@ const file = reactive({})
 const station = reactive({})
 const technicians = reactive({})
 const currentPath = ref('')
+const selectedTile = ref('OpenStreetMap')
 
 const redirectToCreate = () => {
   currentPath.value = router.currentRoute.value.path
@@ -87,6 +88,14 @@ watch(
     station.localidad = getNameByCode("city", response.station.localidad)  
   }
 )
+
+const showSelect = ref(false)
+const toggleSelect = () => {
+  showSelect.value = !showSelect.value
+}
+const handleTileChange = () => {
+  showSelect.value = false // Oculta el selector al elegir una capa
+}
 
 </script>
 <template>
@@ -336,16 +345,27 @@ watch(
         class="mapa"
         :position="[ station.latitud, station.longitud ]"
       /> -->
-      <mapa
-        v-if="station.latitud && !printFlag.isActive"
-        class="mapa"
-        :position="[ station.latitud, station.longitud ]"
-      />
-      <mapa
-        v-else
-        class="mapa"
-        :position="[ station.latitud, station.longitud ]"
-      />
+      <div class="map-container" >
+        <button class="selectLayerImg"><img src="../../img/layerBtn.png" alt="" class="buttonImg" @mouseover="toggleSelect" v-if="!printFlag.isActive"></button>
+        <select name="tileSelect" id="" class="selectLayer" v-model="selectedTile" v-if="showSelect" @change="handleTileChange" size="3" @mouseleave="toggleSelect">
+          <option value="OpenStreetMap">OpenStreetMap</option>
+          <option value="GoogleMap">GoogleMap</option>
+          <option value="Satellite">Satellite</option>
+        </select>
+        <mapa
+          v-if="station.latitud && !printFlag.isActive"
+          class="mapa"
+          :position="[ station.latitud, station.longitud ]"
+          :selectedTile="selectedTile"
+        />
+        <mapa
+          v-else
+          class="mapa"
+          :position="[ station.latitud, station.longitud ]"
+          :selectedTile="selectedTile"
+        />
+      </div>
+      
       <display-row>
         <prop-value
           v-for="value, index in technicians"
@@ -488,6 +508,34 @@ watch(
 .logo {
   height: 90px;
   padding-bottom: 1px;
+}
+.map-container {
+  height: 600px;
+  width: 100%;
+}
+.selectLayer {
+  position: absolute;
+  z-index: 1000;
+  left: auto;
+  right: 5px;
+  top: 5px;
+}
+.selectLayerImg {
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  left: auto;
+  right: 5px;
+  top: 5px;
+  border: solid 1px;
+  border-color: rgb(158, 157, 157);
+  border-radius: 3px;
+  padding: 0;
+}
+.buttonImg {
+  height: 30px;
+  padding: 2px 5px 0 5px;
+
 }
 
 </style>
