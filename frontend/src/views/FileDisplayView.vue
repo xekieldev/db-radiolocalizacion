@@ -393,8 +393,20 @@ const columns = [
       <prop-value
         v-if="file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado'"
         class="prop"
+        label="Fecha informe"
+        :value="file.fecha_informe ? file.fecha_informe : '---'"
+      />
+      <prop-value
+        v-if="file.tramitacion == 'Informado' || file.tramitacion == 'Finalizado'"
+        class="prop"
         label="Informe"
         :value="file.informe"
+      />
+      <prop-value
+        v-if="file.tramitacion == 'Finalizado'"
+        class="prop"
+        label="Fecha fin"
+        :value="file.fecha_fin"
       />
       <prop-value
         class="prop"

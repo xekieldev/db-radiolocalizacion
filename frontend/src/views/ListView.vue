@@ -153,7 +153,9 @@ const columns = [
   { name: 'tipo', label: 'Tipo de trámite', field: 'tipo', sortable: true, align: 'center' },
   { name: 'localidad', label: 'Localidad/Aeropuerto', field: row => row.tipo != 'Interferencias en Aeropuertos' ? row.localidad : row.aeropuerto, sortable: true, align: 'center' },
   { name: 'provincia', label: 'Provincia', field: row => row.tipo != 'Interferencias en Aeropuertos' ? row.provincia : '---', sortable: true, align: 'center' },
-  { name: 'fecha', label: 'Fecha y hora', field: row => `${row.fecha} ${row.hora}`, sortable: true, align: 'center' },
+  { name: 'fecha', label: 'Fecha ingreso', field: row => `${row.fecha} ${row.hora}`, sortable: true, align: 'center' },
+  { name: 'fecha_informe', label: 'Fecha informe', field: row => `${row.fecha_informe} ${row.hora_informe}`, sortable: true, align: 'center' },
+  { name: 'fecha_fin', label: 'Fecha fin', field: row => `${row.fecha_fin}`, sortable: true, align: 'center' },
   { name: 'ubicacion', label: 'Ubicación actual', field: 'area_actual', sortable: true, align: 'center' },
   { name: 'status', label: 'Estado', field: 'tramitacion', sortable: true, align: 'center' },
   { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'center' },
@@ -261,7 +263,7 @@ function exportTable () {
       :columns="columns"
       row-key="id"
       :pagination="{ 
-        rowsPerPage: 15,
+        rowsPerPage: 30,
         sortBy:'fecha',
         descending: true
        }"
@@ -282,6 +284,18 @@ function exportTable () {
           {{ props.col.label }}
         </q-th>
       </template>
+
+      <template v-slot:header-cell-fecha_informe="props">
+        <q-th :props="props" v-if="estado == 'Informado' || estado == 'Finalizado' || estado == 'Todos'">
+          {{ props.col.label }}
+        </q-th>
+      </template>
+
+      <template v-slot:header-cell-fecha_fin="props">
+        <q-th :props="props" v-if="estado == 'Finalizado' || estado == 'Todos'">
+          {{ props.col.label }}
+        </q-th>
+      </template>
       
       <!-- Celdas del cuerpo de la tabla -->
       <template v-slot:body-cell-expediente="props">
@@ -296,6 +310,24 @@ function exportTable () {
             size="xs"
             class="q-ml-xs"
           />
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-fecha_informe="props">
+        <q-td :props="props" v-if="estado == 'Informado' || estado == 'Finalizado' || estado == 'Todos'">
+          <span v-if="props.row.fecha_informe">
+            {{ props.row.fecha_informe }} {{ props.row.hora_informe || '' }}
+          </span>
+          <span v-else>---</span>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-fecha_fin="props">
+        <q-td :props="props" v-if="estado == 'Finalizado' || estado == 'Todos'">
+          <span v-if="props.row.fecha_fin">
+            {{ props.row.fecha_fin }} {{ props.row.hora_fin || '' }}
+          </span>
+          <span v-else>---</span>
         </q-td>
       </template>
 
@@ -336,76 +368,6 @@ function exportTable () {
       </template>
 
     </q-table>
-
-    <!-- <table class="files-table">
-      <tr>
-        <th>id</th>
-        <th>Expediente</th>
-        <th>Área asignada</th>
-        <th>Tipo de trámite</th>
-        <th>Localidad/Aeropuerto</th>
-        <th>Provincia</th>
-        <th>Fecha y hora</th>
-        <th v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          Status
-        </th>
-        <th>Ubicación actual</th>
-        <th>Estado</th>
-        <th
-          v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"
-          class="action-column"
-        >
-          Acciones
-        </th>
-      </tr>
-      <tr
-        v-for="item in items"
-        :key="item"
-        :class="{ 'red-text': item.prioridad == 'Urgente' || item.tipo === 'Interferencias en Aeropuertos'}"
-      >
-        <td>
-          <my-button
-            class="primary center"
-            :label="(item.id.toString())"
-            @on-tap="() => viewItem(item.id)"
-          />
-        </td>
-        <td>{{ item.expediente }}</td> 
-        <td>{{ item.area_asignada }}</td> 
-        <td>{{ item.tipo }}</td> 
-        <td v-if="item.tipo != 'Interferencias en Aeropuertos'">{{ item.localidad }}</td> 
-        <td v-else>{{ item.aeropuerto }}</td> 
-        <td v-if="item.tipo != 'Interferencias en Aeropuertos'">{{ item.provincia }}</td> 
-        <td v-else>---</td> 
-        <td>{{ item.fecha +" "+item.hora }}</td> 
-        <td v-if="router.currentRoute.value.query.includeDeleted === 'true'">
-          {{ item.status }}
-        </td>
-        <td>{{ item.area_actual }}</td> 
-        <td>{{ item.tramitacion }}</td> 
-        <td v-if="user_area == 'AGCCTYL' && perfil == 'coordinator'"> 
-          <div class="action-buttons-container">
-            <my-button
-              class="primary center"
-              label="Editar"
-              @on-tap="() => editItem(item.id)"
-            />
-            <my-button
-              v-if="confirm_delete[item.id]!==1"
-              class="tertiary center"
-              label="Borrar"
-              @on-tap="() => confirm(item.id)"
-            />
-            <my-button
-              v-if="confirm_delete[item.id]===1"
-              class="tertiary center"
-              label="¿Confirmar?"
-              @on-tap="deleteItem(item.id)"
-            />
-          </div>
-        </td>
-      </tr>      
-    </table> -->
     <div class="status">
       <span><strong>Loading:</strong> {{ loading }}</span>
     </div>

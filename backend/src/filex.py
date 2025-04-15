@@ -37,7 +37,7 @@ bp = Blueprint("case_file", __name__)
 class CaseFileSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "fecha", "hora", "expediente", "tipo", "area_asignada", "prioridad", "nota_inicio", "nota_fin", "aeropuerto", "usuario", "frecuencia", "unidad", "provincia", "localidad", "motivo","domicilio", "latitud", "longitud", "area_actual", "informe", "tramitacion", "status")
+        fields = ("id", "fecha", "hora", "expediente", "tipo", "area_asignada", "prioridad", "nota_inicio", "nota_fin", "aeropuerto", "usuario", "frecuencia", "unidad", "provincia", "localidad", "motivo","domicilio", "latitud", "longitud", "area_actual", "informe", "fecha_informe", "hora_informe", "fecha_fin", "hora_fin", "tramitacion", "status")
 
 case_file_schema = CaseFileSchema()
 case_files_schema = CaseFileSchema( many = True )
@@ -72,6 +72,8 @@ def case_file():
         motivo = request.json.get('motivo')
         fecha_fin = request.json.get('fecha_fin')
         hora_fin = request.json.get('hora_fin')
+        fecha_informe = request.json.get('fecha_informe')
+        hora_informe = request.json.get('hora_informe')
         area_actual = request.json.get('area_asignada')
         domicilio = request.json.get('domicilio')
         latitud = request.json.get('latitud')
@@ -79,7 +81,7 @@ def case_file():
         informe = request.json.get('informe')
         tramitacion = 'Pendiente'
         
-        caseFile = CaseFile(expediente = expediente, area_asignada = area_asignada, fecha = fecha, hora = hora, tipo = tipo, prioridad = prioridad, nota_inicio = nota_inicio, nota_fin = nota_fin, aeropuerto = aeropuerto, usuario = usuario, frecuencia = frecuencia, unidad = unidad, provincia = provincia, localidad = localidad, motivo = motivo, area_actual = area_actual, fecha_fin = fecha_fin, hora_fin = hora_fin, domicilio = domicilio, latitud = latitud, longitud = longitud, informe = informe, tramitacion = tramitacion)
+        caseFile = CaseFile(expediente = expediente, area_asignada = area_asignada, fecha = fecha, hora = hora, tipo = tipo, prioridad = prioridad, nota_inicio = nota_inicio, nota_fin = nota_fin, aeropuerto = aeropuerto, usuario = usuario, frecuencia = frecuencia, unidad = unidad, provincia = provincia, localidad = localidad, motivo = motivo, area_actual = area_actual, fecha_fin = fecha_fin, hora_fin = hora_fin, fecha_informe = fecha_informe, hora_informe = hora_informe, domicilio = domicilio, latitud = latitud, longitud = longitud, informe = informe, tramitacion = tramitacion)
         db.session.add(caseFile)
         db.session.commit()
 
@@ -122,6 +124,8 @@ def edit_file(id):
             motivo = request.json.get('motivo')
             fecha_fin = request.json.get('fecha_fin')
             hora_fin = request.json.get('hora_fin')
+            fecha_informe = request.json.get('fecha_informe')
+            hora_informe = request.json.get('hora_informe')
             area_actual = request.json.get('area_asignada')
             domicilio = request.json.get('domicilio')
             latitud = request.json.get('latitud')
@@ -158,6 +162,8 @@ def edit_file(id):
             caseFile.motivo = motivo
             caseFile.fecha_fin = fecha_fin
             caseFile.hora_fin = hora_fin
+            caseFile.fecha_informe = fecha_informe
+            caseFile.hora_informe = hora_informe
             caseFile.area_actual = area_actual
             caseFile.domicilio = domicilio
             caseFile.latitud = latitud
@@ -281,6 +287,8 @@ def patch_file(id):
             for i, destino in enumerate(area_destinos):
                 if destino == 'AGCCTYL':
                     caseFile.tramitacion = 'Informado'
+                    caseFile.fecha_informe = datetime.today().strftime('%Y-%m-%d')
+                    caseFile.hora_informe = datetime.today().strftime('%H:%M')
                     caseFile.informe = informe
                 elif destino != caseFile.area_asignada:
                     caseFile.tramitacion = 'Finalizado'
