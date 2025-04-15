@@ -158,6 +158,8 @@ function viewItem(file_id) {
 
 .popup-title {
   font-weight: 700;
+  font-size: 12px;
+  align-self: center;
 }
 
 .prop {
@@ -165,7 +167,11 @@ function viewItem(file_id) {
 }
 
 .popup-content {
-  font-size: 10px;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  gap: 5px;
 }
 .view-button {
   margin-top: 5px;

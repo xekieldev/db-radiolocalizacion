@@ -86,6 +86,8 @@ class CaseFile(db.Model):   # la clase Producto hereda de db.Model
     motivo = db.Column(db.String(300))
     fecha_fin = db.Column(db.String(10))
     hora_fin = db.Column(db.String(10))
+    fecha_informe = db.Column(db.String(10))
+    hora_informe = db.Column(db.String(10))
     area_actual = db.Column(db.String(25))
     domicilio = db.Column(db.String(50))
     latitud = db.Column(db.Float, nullable=True)

@@ -64,8 +64,10 @@ const columns = [
     align: 'center'
   },
   { name: 'identificación', label: 'Identificación', field: 'identificacion', sortable: true, align: 'center' },
+  { name: 'fecha', label: 'Fecha', field: row => `${row.fecha} ${row.hora}`, sortable: true, align: 'center' },
+  { name: 'area_asignada', label: 'CCTE/Área', field: 'area', sortable: true, align: 'center' },
   { name: 'servicio', label: 'Servicio', field: 'servicio', sortable: true, align: 'center' },
-  { name: 'frecuencia', label: 'Frecuencia', field: row => row.frecuencia ? row.frecuencia : '---', sortable: true, align: 'center' },
+  { name: 'frecuencia', label: 'Frecuencia', field: row => (row.frecuencia && row.unidad) ? `${row.frecuencia} ${row.unidad}` : '---', sortable: true, align: 'center' },
   { name: 'emplazamiento', label: 'Emplazamiento', field: 'emplazamiento', sortable: true, align: 'center' },
   { name: 'domicilio', label: 'Domicilio', field: 'domicilio', sortable: true, align: 'center' },
   { name: 'localidad', label: 'Localidad', field: 'localidad', sortable: true, align: 'center' },
@@ -99,7 +101,11 @@ const columns = [
       :rows="items"
       :columns="columns"
       row-key="id"
-      :pagination="{ rowsPerPage: 15 }"
+      :pagination="{ 
+        rowsPerPage: 30,
+        sortBy:'fecha',
+        descending: true
+      }"
       separator="vertical"
       table-class="zebra"
       table-header-style="height: 45px;"
