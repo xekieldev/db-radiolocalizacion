@@ -9,7 +9,7 @@ export function useSearch() {
           const prop = twoParamsText[0]
           const twoParamsSearchResult = data.filter((item) => {
             if (!item[prop]) return false
-            return item[prop].toLowerCase() === twoParamsText[1].toLowerCase()
+            return String(item[prop]).toLowerCase() === String(twoParamsText[1]).toLowerCase()
             }) 
             let result = twoParamsSearchResult            
             return result
